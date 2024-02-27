@@ -1,0 +1,37 @@
+Program:
+  closures+=Closure
+;
+
+Closure:
+  "CLOSURE:" name=STRING
+    commands+=Command
+  "END"
+;
+
+Command:
+  Ratio | Note | Ingredient | Tool | Add
+;
+
+Ratio:
+  "RATIO:" name=STRING
+;
+
+Note:
+  "NOTE:" text=STRING
+;
+
+Ingredient:
+  "INGREDIENT" symbol=ID ":" text=STRING 
+;
+
+Tool:
+  "TOOL" symbol=ID ":" text=STRING 
+;
+
+Add:
+  "ADD" symbol=ID (":" modifier=STRING)?
+;
+
+Comment:
+  /\/\/.*$/
+;

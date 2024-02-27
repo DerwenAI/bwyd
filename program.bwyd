@@ -1,0 +1,11 @@
+// make some yummy closures
+
+CLOSURE: "prepare dough"
+    RATIO: "dough"
+    NOTE: "best to work with cold ingredients and chilled utensils"
+
+    INGREDIENT egg: "1 large chicken egg"
+    TOOL spatula: "silcone spatula"
+    ADD egg: "briskly"
+
+END
