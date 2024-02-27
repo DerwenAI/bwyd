@@ -2,7 +2,7 @@
 
 ## Abstract
 
-Goal: make it simpler to define good recipes rapidly while using computed tools to catch errors and inconsistencies
+Goal: make it simpler to define good recipes rapidly while using computational tools to catch errors and inconsistencies
 
 Premise: what if the human cook behaved like a robot, following recipe instructions?
 

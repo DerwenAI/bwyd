@@ -48,7 +48,7 @@ Process interpreter for one Closure.
 
             match cmd.__class__.__name__:
                 case "Ratio":
-                    ic(cmd.name)
+                    ic(cmd.name, cmd.components)
                 case "Note":
                     ic(cmd.text)
                 case "Container":

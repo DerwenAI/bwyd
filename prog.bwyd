@@ -1,10 +1,13 @@
 // make some yummy closures
 
 CLOSURE: "prepare dough"
-    RATIO: "dough"
     NOTE: "best to work with cold ingredients and chilled utensils"
 
+    INGREDIENT starch: "root veggie purée"
     INGREDIENT egg: "large chicken egg"
+
+    RATIO: "dough" starch, egg
+
     CONTAINER bowl: "chilled mixing bowl"
 
     FOCUS bowl

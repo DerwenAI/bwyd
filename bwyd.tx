@@ -13,7 +13,7 @@ Command:
 ;
 
 Ratio:
-  "RATIO:" name=STRING
+  "RATIO:" name=STRING (components+=ID[','])
 ;
 
 Note:
