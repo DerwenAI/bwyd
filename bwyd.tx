@@ -9,7 +9,7 @@ Closure:
 ;
 
 Command:
-  Ratio | Note | Ingredient | Tool | Add
+  Ratio | Note | Container | Ingredient | Focus | Tool | Add | Action
 ;
 
 Ratio:
@@ -20,8 +20,16 @@ Note:
   "NOTE:" text=STRING
 ;
 
+Container:
+  "CONTAINER" symbol=ID ":" text=STRING 
+;
+
 Ingredient:
-  "INGREDIENT" symbol=ID ":" text=STRING 
+  "INGREDIENT" symbol=ID ":" text=STRING
+;
+
+Focus:
+  "FOCUS" symbol=ID
 ;
 
 Tool:
@@ -29,8 +37,13 @@ Tool:
 ;
 
 Add:
-  "ADD" symbol=ID (":" modifier=STRING)?
+  "ADD" symbol=ID quantity=STRING (":" modifier=STRING)?
 ;
+
+Action:
+  "ACTION" symbol=ID (":" modifier=STRING)? "UNTIL:" until=STRING "TIME:" time=STRING
+;
+
 
 Comment:
   /\/\/.*$/

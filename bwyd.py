@@ -43,20 +43,26 @@ String representation.
         """
 Process interpreter for one Closure.
         """
-        for command in closure.commands:
-            ic(command)
+        for cmd in closure.commands:
+            ic(cmd)
 
-            match command.__class__.__name__:
+            match cmd.__class__.__name__:
                 case "Ratio":
-                    print("ratio")
+                    ic(cmd.name)
                 case "Note":
-                    ic(command.text)
+                    ic(cmd.text)
+                case "Container":
+                    ic(cmd.symbol, cmd.text)
                 case "Ingredient":
-                    ic(command.symbol, command.text)
-                case "Tool":
-                    ic(command.symbol, command.text)
+                    ic(cmd.symbol, cmd.text)
+                case "Focus":
+                    ic(cmd.symbol)
                 case "Add":
-                    ic(command.symbol, command.modifier)
+                    ic(cmd.symbol, cmd.quantity, cmd.modifier)
+                case "Tool":
+                    ic(cmd.symbol, cmd.text)
+                case "Action":
+                    ic(cmd.symbol, cmd.modifier, cmd.until, cmd.time)
 
 
     def interpret_program (
@@ -76,7 +82,7 @@ if __name__ == "__main__":
         debug = False, # True
     )
 
-    program_file: pathlib.Path = pathlib.Path("program.bwyd")
+    program_file: pathlib.Path = pathlib.Path("prog.bwyd")
 
     bwyd_program = bwyd_mm.model_from_file(
         program_file,

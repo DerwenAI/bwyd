@@ -1,0 +1,16 @@
+// make some yummy closures
+
+CLOSURE: "prepare dough"
+    RATIO: "dough"
+    NOTE: "best to work with cold ingredients and chilled utensils"
+
+    INGREDIENT egg: "large chicken egg"
+    CONTAINER bowl: "chilled mixing bowl"
+
+    FOCUS bowl
+    ADD egg "1"
+    TOOL fork: "small fork or whisk"
+    ACTION fork: "gently"
+        UNTIL: "egg is beaten lightly"
+	TIME: "30 seconds"
+END
