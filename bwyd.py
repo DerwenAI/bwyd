@@ -5,7 +5,9 @@
 DSL implementing the Bwyd language.
 """
 
+from collections import OrderedDict
 import pathlib
+import typing
 
 from icecream import ic
 import textx
@@ -22,9 +24,7 @@ Parse and interpret the Bwyd language.
         """
 Constructor.
         """
-        # initial position is (0,0)
-        self.x = 0
-        self.y = 0
+        self.ingredients: typing.Dict[ str, str ] = OrderedDict()
 
 
     def __str__ (
@@ -33,47 +33,75 @@ Constructor.
         """
 String representation.
         """
-        return f"position {self.x}, {self.y}."
+        return str(self.ingredients)
 
 
     def interpret_closure (
         self,
         closure,
+        *,
+        debug: bool = False,
         ) -> None:
         """
 Process interpreter for one Closure.
         """
         for cmd in closure.commands:
-            ic(cmd)
+            if debug:
+                ic(cmd)
 
             match cmd.__class__.__name__:
-                case "Ratio":
-                    ic(cmd.name, cmd.components)
-                case "Note":
-                    ic(cmd.text)
                 case "Container":
-                    ic(cmd.symbol, cmd.text)
-                case "Ingredient":
-                    ic(cmd.symbol, cmd.text)
-                case "Focus":
-                    ic(cmd.symbol)
-                case "Add":
-                    ic(cmd.symbol, cmd.quantity, cmd.modifier)
+                    if debug:
+                        ic(cmd.symbol, cmd.text)
+
                 case "Tool":
-                    ic(cmd.symbol, cmd.text)
+                    if debug:
+                        ic(cmd.symbol, cmd.text)
+
+                case "Ingredient":
+                    if debug:
+                        ic(cmd.symbol, cmd.text)
+
+                    self.ingredients[cmd.symbol] = cmd.text
+
+                case "Ratio":
+                    if debug:
+                        ic(cmd.name, [ (e.name, e.components) for e in cmd.elements ])
+
+                case "Focus":
+                    if debug:
+                        ic(cmd.symbol)
+
+                case "Add":
+                    if debug:
+                        ic(cmd.symbol, cmd.quantity, cmd.modifier)
+
+                    if cmd.symbol not in self.ingredients:
+                        print(f"INGREDIENT: {cmd.symbol} not found")
+
+                case "Note":
+                    if debug:
+                        ic(cmd.text)
+
                 case "Action":
-                    ic(cmd.symbol, cmd.modifier, cmd.until, cmd.time)
+                    if debug:
+                        ic(cmd.symbol, cmd.modifier, cmd.until, cmd.time)
 
 
     def interpret_program (
         self,
         program,
+        *,
+        debug: bool = False,
         ) -> None:
         """
 Process interpreter for once instance of a Bwyd program.
         """
         for closure in program.closures:
-            self.interpret_closure(closure)
+            self.interpret_closure(
+                closure,
+                debug = debug,
+            )
 
 
 if __name__ == "__main__":
@@ -83,11 +111,15 @@ if __name__ == "__main__":
     )
 
     program_file: pathlib.Path = pathlib.Path("prog.bwyd")
-
-    bwyd_program = bwyd_mm.model_from_file(
+    parsed_program = bwyd_mm.model_from_file(
         program_file,
         debug = False, # True
     )
 
     bwyd: Bwyd = Bwyd()
-    bwyd.interpret_program(bwyd_program)
+    bwyd.interpret_program(
+        parsed_program,
+        debug = False, # True
+    )
+
+    print(bwyd)

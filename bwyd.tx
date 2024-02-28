@@ -13,7 +13,11 @@ Command:
 ;
 
 Ratio:
-  "RATIO:" name=STRING (components+=ID[','])
+  "RATIO:" name=ID "=" (elements+=RatioElement[','])
+;
+
+RatioElement:
+    name=ID ('[' components+=ID ']')?
 ;
 
 Note:
@@ -37,7 +41,7 @@ Tool:
 ;
 
 Add:
-  "ADD" symbol=ID quantity=STRING (":" modifier=STRING)?
+  "ADD" symbol=ID ":" quantity=STRING (modifier=STRING)?
 ;
 
 Action:

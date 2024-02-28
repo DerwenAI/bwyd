@@ -1,19 +1,50 @@
-// make some yummy closures
+// make some yummy gnocchi
 
 CLOSURE: "prepare dough"
     NOTE: "best to work with cold ingredients and chilled utensils"
 
-    INGREDIENT starch: "root veggie purée"
-    INGREDIENT egg: "large chicken egg"
-
-    RATIO: "dough" starch, egg
-
     CONTAINER bowl: "chilled mixing bowl"
+    TOOL fork: "small fork or whisk"
+    TOOL spatula: "silicone spatula"
+
+    INGREDIENT puree: "reduced veggie purée"
+    INGREDIENT flour: "flour: rice, oat, etc."
+    INGREDIENT egg: "large chicken egg"
+    INGREDIENT ricotta: "whole milk ricotta"
+    INGREDIENT parmesan: "grated parmesan"
+    INGREDIENT nutmeg: "freshly grated nutmeg"
+
+    RATIO: dough =
+    	   starch [ puree flour ],
+	   egg
 
     FOCUS bowl
-    ADD egg "1"
-    TOOL fork: "small fork or whisk"
+    ADD egg: "1"
+
     ACTION fork: "gently"
-        UNTIL: "egg is beaten lightly"
+        UNTIL: "lightly beaten"
 	TIME: "30 seconds"
+
+    ADD ricotta: "250 ml"
+    ADD parmesan: "50 g"
+    ADD nutmeg: "1 g"
+
+    ACTION spatula
+        UNTIL: "well mixed"
+	TIME: "30 seconds"
+
+    ADD puree: "1 cup"
+
+    ACTION spatula: "fold"
+        UNTIL: "lightly blended"
+	TIME: "30 seconds"
+
+    NOTE: "only add flour until the dough becomes not sticky"
+
+    ADD flour: "240 g"
+
+    ACTION spatula: "mix"
+	UNTIL: "dough just becomes smooth"
+	TIME: "90 seconds"
+
 END
