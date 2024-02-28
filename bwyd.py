@@ -6,6 +6,7 @@ DSL implementing the Bwyd language.
 """
 
 from collections import OrderedDict
+import json
 import pathlib
 import typing
 
@@ -24,16 +25,20 @@ Parse and interpret the Bwyd language.
         """
 Constructor.
         """
+        self.equipment: typing.Dict[ str, str ] = OrderedDict()
         self.ingredients: typing.Dict[ str, str ] = OrderedDict()
 
 
-    def __str__ (
+    def as_json (
         self,
-        ) -> str:
+        ) -> dict:
         """
-String representation.
+Return a JSON-friendly dictionary representation.
         """
-        return str(self.ingredients)
+        return {
+            "equipment": self.equipment,
+            "ingredients": self.ingredients,
+        }
 
 
     def interpret_closure (
@@ -54,9 +59,27 @@ Process interpreter for one Closure.
                     if debug:
                         ic(cmd.symbol, cmd.text)
 
+                    self.equipment[cmd.symbol] = cmd.text
+
+                case "Focus":
+                    if debug:
+                        ic(cmd.symbol)
+
+                    if cmd.symbol not in self.equipment:
+                        print(f"CONTAINER: {cmd.symbol} not found")
+
                 case "Tool":
                     if debug:
                         ic(cmd.symbol, cmd.text)
+
+                    self.equipment[cmd.symbol] = cmd.text
+
+                case "Action":
+                    if debug:
+                        ic(cmd.symbol, cmd.modifier, cmd.until, cmd.time)
+
+                    if cmd.symbol not in self.equipment:
+                        print(f"TOOL: {cmd.symbol} not found")
 
                 case "Ingredient":
                     if debug:
@@ -68,10 +91,6 @@ Process interpreter for one Closure.
                     if debug:
                         ic(cmd.name, [ (e.name, e.components) for e in cmd.elements ])
 
-                case "Focus":
-                    if debug:
-                        ic(cmd.symbol)
-
                 case "Add":
                     if debug:
                         ic(cmd.symbol, cmd.quantity, cmd.modifier)
@@ -82,10 +101,6 @@ Process interpreter for one Closure.
                 case "Note":
                     if debug:
                         ic(cmd.text)
-
-                case "Action":
-                    if debug:
-                        ic(cmd.symbol, cmd.modifier, cmd.until, cmd.time)
 
 
     def interpret_program (
@@ -110,11 +125,15 @@ if __name__ == "__main__":
         debug = False, # True
     )
 
+    # parse a program
+
     program_file: pathlib.Path = pathlib.Path("prog.bwyd")
     parsed_program = bwyd_mm.model_from_file(
         program_file,
         debug = False, # True
     )
+
+    # interpret the parsed program
 
     bwyd: Bwyd = Bwyd()
     bwyd.interpret_program(
@@ -122,4 +141,10 @@ if __name__ == "__main__":
         debug = False, # True
     )
 
-    print(bwyd)
+    # make a summary report
+
+    print(json.dumps(
+        bwyd.as_json(),
+        indent = 2,
+        sort_keys = True,
+    ))
