@@ -13,11 +13,11 @@ Command:
 ;
 
 Ratio:
-  "RATIO:" name=ID "=" (elements+=RatioElement[','])
+  "RATIO:" name=STRING "=" (elements+=RatioElement[','])
 ;
 
 RatioElement:
-    name=ID ('[' components+=ID ']')?
+    name=ID ('[' components+=ID[','] ']')?
 ;
 
 Note:

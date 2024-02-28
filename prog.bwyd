@@ -1,9 +1,9 @@
-// make some yummy gnocchi
+// make some yummy gnocchi from root veggies
 
-CLOSURE: "prepare dough"
+CLOSURE: "prepare gnocchi dough"
     NOTE: "best to work with cold ingredients and chilled utensils"
-
     CONTAINER bowl: "chilled mixing bowl"
+
     TOOL fork: "small fork or whisk"
     TOOL spatula: "silicone spatula"
 
@@ -14,8 +14,8 @@ CLOSURE: "prepare dough"
     INGREDIENT parmesan: "grated parmesan"
     INGREDIENT nutmeg: "freshly grated nutmeg"
 
-    RATIO: dough =
-    	   starch [ puree flour ],
+    RATIO: "gnocchi dough" =
+    	   starch [ puree, flour ],
 	   egg
 
     FOCUS bowl
@@ -40,7 +40,6 @@ CLOSURE: "prepare dough"
 	TIME: "30 seconds"
 
     NOTE: "only add flour until the dough becomes no longer sticky"
-
     ADD flour: "240 g"
 
     ACTION spatula: "mix"
