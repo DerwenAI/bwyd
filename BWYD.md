@@ -1,16 +1,3 @@
-# Bwyd programming language
-
-## Abstract
-
-Goal: make it simpler to define good recipes rapidly while using computational tools to catch errors and inconsistencies
-
-Premise: what if the human cook behaved like a robot, following recipe instructions?
-
-What if cooking instructions could be expressed in a way that was computable, and independent of specific human languages? In other words, as software.
-
-This is an application of contemporary software engineering to how people in professional kitchens think about their work. Programs written in the **Bwyd** language represent the "structure" and "art" of cooking, which can then be parameterized and rendered as text to generate "recipes" for a broader audience of home cooks.
-
-
 ## Taxonomy
 
 At the core, the configuration of the **Bwyd** language is based on a _knowledge graph_.

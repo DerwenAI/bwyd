@@ -25,6 +25,7 @@ Parse and interpret the Bwyd language.
         """
 Constructor.
         """
+        self.closure = None
         self.equipment: typing.Dict[ str, str ] = OrderedDict()
         self.ingredients: typing.Dict[ str, str ] = OrderedDict()
 
@@ -36,6 +37,8 @@ Constructor.
 Return a JSON-friendly dictionary representation.
         """
         return {
+            "closure": self.closure.name,
+            "yields": self.closure.yields,
             "equipment": self.equipment,
             "ingredients": self.ingredients,
         }
@@ -50,8 +53,11 @@ Return a JSON-friendly dictionary representation.
         """
 Process interpreter for one Closure.
         """
+        self.closure = closure
+
         for cmd in closure.commands:
             if debug:
+                #ic(dir(closure))
                 ic(cmd)
 
             match cmd.__class__.__name__:
@@ -138,7 +144,7 @@ if __name__ == "__main__":
     bwyd: Bwyd = Bwyd()
     bwyd.interpret_program(
         parsed_program,
-        debug = False, # True
+        debug = True, # False
     )
 
     # make a summary report

@@ -5,7 +5,7 @@ Program:
 Closure:
   "CLOSURE:" name=STRING
     commands+=Command
-  "END"
+  "YIELD:" yields=STRING
 ;
 
 Command:

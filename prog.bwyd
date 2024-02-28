@@ -25,7 +25,7 @@ CLOSURE: "prepare gnocchi dough"
         UNTIL: "lightly beaten"
 	TIME: "30 seconds"
 
-    ADD ricotta: "250 ml"
+    ADD ricotta: "250 g"
     ADD parmesan: "50 g"
     ADD nutmeg: "1 g"
 
@@ -33,7 +33,7 @@ CLOSURE: "prepare gnocchi dough"
         UNTIL: "well mixed"
 	TIME: "30 seconds"
 
-    ADD puree: "1 cup"
+    ADD puree: "210 g"
 
     ACTION spatula: "fold"
         UNTIL: "lightly blended"
@@ -46,4 +46,4 @@ CLOSURE: "prepare gnocchi dough"
 	UNTIL: "dough just becomes smooth"
 	TIME: "90 seconds"
 
-END
+YIELD: "750 g"
