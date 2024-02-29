@@ -6,12 +6,27 @@ DSL implementing the Bwyd language.
 """
 
 from collections import OrderedDict
+from dataclasses import dataclass, field
 import json
 import pathlib
 import typing
 
 from icecream import ic
 import textx
+
+
+######################################################################
+## class definitions                                                                                                                        
+
+@dataclass(order=False, frozen=False)
+class Closure:  # pylint: disable=R0902                                                                                                  
+    """
+A data class representing one parsed Closure object.
+    """
+    name: str
+    obj: typing.Any
+    equipment: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())
+    ingredients: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())
 
 
 class Bwyd:
@@ -25,22 +40,24 @@ Parse and interpret the Bwyd language.
         """
 Constructor.
         """
-        self.closures: typing.Set[ str ] = set()
-        self.equipment: typing.Dict[ str, str ] = OrderedDict()
-        self.ingredients: typing.Dict[ str, str ] = OrderedDict()
+        self.closures: typing.Dict[ str, Closure ] = {}
 
 
     def as_json (
         self,
-        ) -> dict:
+        ) -> typing.List[dict]:
         """
-Return a JSON-friendly dictionary representation.
+Return a list of JSON-friendly dictionary representations, one for
+each parsed Closure.
         """
-        return {
-            "closures": list(self.closures),
-            "equipment": self.equipment,
-            "ingredients": self.ingredients,
-        }
+        return [
+            {
+                "name": name,
+                "equipment": clos_obj.equipment,
+                "ingredients": clos_obj.ingredients,
+            }
+            for name, clos_obj in self.closures.items()
+        ]
 
 
     def interpret_closure (
@@ -48,11 +65,14 @@ Return a JSON-friendly dictionary representation.
         closure,
         *,
         debug: bool = False,
-        ) -> None:
+        ) -> Closure:
         """
 Process interpreter for one Closure.
         """
-        self.closures.add(closure.name)
+        clos_obj: Closure = Closure(
+            name = closure.name,
+            obj = closure,
+        )
 
         for cmd in closure.commands:
             if debug:
@@ -64,33 +84,33 @@ Process interpreter for one Closure.
                     if debug:
                         ic(cmd.symbol, cmd.text)
 
-                    self.equipment[cmd.symbol] = cmd.text
+                    clos_obj.equipment[cmd.symbol] = cmd.text
 
                 case "Focus":
                     if debug:
                         ic(cmd.symbol)
 
-                    if cmd.symbol not in self.equipment:
+                    if cmd.symbol not in clos_obj.equipment:
                         print(f"CONTAINER: {cmd.symbol} not found")
 
                 case "Tool":
                     if debug:
                         ic(cmd.symbol, cmd.text)
 
-                    self.equipment[cmd.symbol] = cmd.text
+                    clos_obj.equipment[cmd.symbol] = cmd.text
 
                 case "Action":
                     if debug:
                         ic(cmd.symbol, cmd.modifier, cmd.until, cmd.time)
 
-                    if cmd.symbol not in self.equipment:
+                    if cmd.symbol not in clos_obj.equipment:
                         print(f"TOOL: {cmd.symbol} not found")
 
                 case "Ingredient":
                     if debug:
                         ic(cmd.symbol, cmd.text)
 
-                    self.ingredients[cmd.symbol] = cmd.text
+                    clos_obj.ingredients[cmd.symbol] = cmd.text
 
                 case "Ratio":
                     if debug:
@@ -100,14 +120,14 @@ Process interpreter for one Closure.
                     if debug:
                         ic(cmd.symbol, cmd.quantity, cmd.modifier)
 
-                    if cmd.symbol not in self.ingredients:
+                    if cmd.symbol not in clos_obj.ingredients:
                         print(f"INGREDIENT: {cmd.symbol} not found")
 
                 case "Use":
                     if debug:
                         ic(cmd.symbol, cmd.name)
 
-                    self.ingredients[cmd.symbol] = cmd.name
+                    clos_obj.ingredients[cmd.symbol] = cmd.name
 
                     if cmd.name not in self.closures:
                         print(f"CLOSURE: {cmd.name} not found")
@@ -115,6 +135,8 @@ Process interpreter for one Closure.
                 case "Note":
                     if debug:
                         ic(cmd.text)
+
+        return clos_obj
 
 
     def interpret_program (
@@ -127,7 +149,7 @@ Process interpreter for one Closure.
 Process interpreter for once instance of a Bwyd program.
         """
         for closure in program.closures:
-            self.interpret_closure(
+            self.closures[closure.name] = self.interpret_closure(
                 closure,
                 debug = debug,
             )
@@ -157,5 +179,5 @@ if __name__ == "__main__":
     print(json.dumps(
         bwyd.as_json(),
         indent = 2,
-        sort_keys = True,
+        sort_keys = False,
     ))
