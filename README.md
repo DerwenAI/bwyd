@@ -60,10 +60,9 @@ describing yields produced, while consuming recursively from other
 `Closure` definitions within a personalized library.
 
 ```
-  `CLOSURE: "foo bar"
-    _commands_
-    ...
-  `YIELD` (20 g)
+  CLOSURE: "foo bar"
+    _commands..._
+  YIELD (100 g)
 ```
 
 Process defines the "art" of cooking.
@@ -75,11 +74,11 @@ planning within in a professional kitchen work environment.
 These represent the experienced end-consumer of a graph of
 parameterized `Closure` objects, for a particular event.
 
-A close programming analogy would be _logs for one pipeline
-instance_ where ops data gets collected and feedback may
-suggest and guide subsequent modifications of the `Closure`
-definitions which were employed.
+A close programming analogy would be _logs_ for one CI pipeline
+instance, where ops data gets collected and feedback may be
+used to guide subsequent modifications of the `Closure`
+definitions which were invoked.
 
 Experience defines the shared  "communication" of cooking.
-In practice, `Observable` objects collect annotations (photos,
-comments, stories, successs/failures) for a recipe.
+In practice, `Observable` objects collect audience annotations
+(photos, comments, stories, successs/failures) for recipes.
