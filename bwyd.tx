@@ -5,7 +5,7 @@ Program:
 Closure:
   "CLOSURE:" name=STRING
     commands+=Command
-  "YIELD:" yields=STRING
+  "YIELD" yields=Measure
 ;
 
 Command:
@@ -17,7 +17,7 @@ Ratio:
 ;
 
 RatioElement:
-    name=ID ('[' components+=ID[','] ']')?
+    symbol=ID ('[' components+=ID[','] ']')?
 ;
 
 Note:
@@ -25,7 +25,7 @@ Note:
 ;
 
 Container:
-  "CONTAINER" symbol=ID ":" text=STRING 
+  "CONTAINER" symbol=ID ":" text=STRING
 ;
 
 Ingredient:
@@ -40,18 +40,33 @@ Tool:
   "TOOL" symbol=ID ":" text=STRING 
 ;
 
-Add:
-  "ADD" symbol=ID ":" quantity=STRING (modifier=STRING)?
+Action:
+  "ACTION" symbol=ID (":" modifier=STRING)? "UNTIL:" until=STRING "TIME" duration=Duration
+;
+
+Duration:
+  "(" amount=NUMBER units=DurationUnits ")"
+;
+
+DurationUnits:
+  "sec" | "min" | "hrs"
 ;
 
 Use:
   "USE" symbol=ID ":" name=STRING
 ;
 
-Action:
-  "ACTION" symbol=ID (":" modifier=STRING)? "UNTIL:" until=STRING "TIME:" time=STRING
+Add:
+  "ADD" symbol=ID measure=Measure (":" text=STRING)?
 ;
 
+Measure:
+  "(" amount=NUMBER (units=MeasureUnits)? ")"
+;
+
+MeasureUnits:
+  "g" | "kg" | "ml" | "l"
+;
 
 Comment:
   /\/\/.*$/

@@ -59,6 +59,13 @@ specifying parameterizations (scale, ingredient substitutions) and
 describing yields produced, while consuming recursively from other
 `Closure` definitions within a personalized library.
 
+```
+  `CLOSURE: "foo bar"
+    _commands_
+    ...
+  `YIELD` (20 g)
+```
+
 Process defines the "art" of cooking.
 In practice, `Closure` objects allow for team collaboration and
 planning within in a professional kitchen work environment.

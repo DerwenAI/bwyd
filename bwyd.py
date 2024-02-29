@@ -19,14 +19,36 @@ import textx
 ## class definitions                                                                                                                        
 
 @dataclass(order=False, frozen=False)
+class Measure:  # pylint: disable=R0902
+    """
+A data class representing one parsed Measure object.
+    """
+    amount: float
+    units: str
+
+
+@dataclass(order=False, frozen=False)
+class Duration:  # pylint: disable=R0902
+    """
+A data class representing one parsed Duration object.
+    """
+    amount: float
+    units: str
+
+
+@dataclass(order=False, frozen=False)
 class Closure:  # pylint: disable=R0902                                                                                                  
     """
 A data class representing one parsed Closure object.
     """
     name: str
     obj: typing.Any
-    equipment: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())
+    yields: Measure
+    notes: typing.List[ str ] = field(default_factory = lambda: [])
+    tools: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())
+    containers: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())
     ingredients: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())
+    foci: typing.List[ str ] = field(default_factory = lambda: [])
 
 
 class Bwyd:
@@ -53,8 +75,12 @@ each parsed Closure.
         return [
             {
                 "name": name,
-                "equipment": clos_obj.equipment,
+                "yields": str(clos_obj.yields),
+                "notes": clos_obj.notes,
+                "tools": clos_obj.tools,
+                "containers": clos_obj.containers,
                 "ingredients": clos_obj.ingredients,
+                "foci": clos_obj.foci,
             }
             for name, clos_obj in self.closures.items()
         ]
@@ -72,6 +98,10 @@ Process interpreter for one Closure.
         clos_obj: Closure = Closure(
             name = closure.name,
             obj = closure,
+            yields = Measure(
+                amount = closure.yields.amount,
+                units = closure.yields.units,
+            ),
         )
 
         for cmd in closure.commands:
@@ -84,26 +114,33 @@ Process interpreter for one Closure.
                     if debug:
                         ic(cmd.symbol, cmd.text)
 
-                    clos_obj.equipment[cmd.symbol] = cmd.text
+                    clos_obj.containers[cmd.symbol] = cmd.text
 
                 case "Focus":
                     if debug:
                         ic(cmd.symbol)
 
-                    if cmd.symbol not in clos_obj.equipment:
+                    if cmd.symbol not in clos_obj.containers:
                         print(f"CONTAINER: {cmd.symbol} not found")
+
+                    clos_obj.foci.append(cmd.symbol)
 
                 case "Tool":
                     if debug:
                         ic(cmd.symbol, cmd.text)
 
-                    clos_obj.equipment[cmd.symbol] = cmd.text
+                    clos_obj.tools[cmd.symbol] = cmd.text
 
                 case "Action":
-                    if debug:
-                        ic(cmd.symbol, cmd.modifier, cmd.until, cmd.time)
+                    duration: Duration = Duration(
+                        amount = cmd.duration.amount,
+                        units = cmd.duration.units,
+                    )
 
-                    if cmd.symbol not in clos_obj.equipment:
+                    if debug:
+                        ic(cmd.symbol, cmd.modifier, cmd.until, duration)
+
+                    if cmd.symbol not in clos_obj.tools:
                         print(f"TOOL: {cmd.symbol} not found")
 
                 case "Ingredient":
@@ -114,11 +151,20 @@ Process interpreter for one Closure.
 
                 case "Ratio":
                     if debug:
-                        ic(cmd.name, [ (e.name, e.components) for e in cmd.elements ])
+                        ic(cmd.name, [ (elem.symbol, elem.components) for elem in cmd.elements ])
+
+                        for elem in cmd.elements:
+                            if elem.symbol not in clos_obj.ingredients:
+                                print(f"RATIO component: {elem.symbol} not found")
 
                 case "Add":
+                    measure: Measure = Measure(
+                        amount = cmd.measure.amount,
+                        units = cmd.measure.units,
+                    )
+
                     if debug:
-                        ic(cmd.symbol, cmd.quantity, cmd.modifier)
+                        ic(cmd.symbol, measure, cmd.text)
 
                     if cmd.symbol not in clos_obj.ingredients:
                         print(f"INGREDIENT: {cmd.symbol} not found")
@@ -129,12 +175,11 @@ Process interpreter for one Closure.
 
                     clos_obj.ingredients[cmd.symbol] = cmd.name
 
-                    if cmd.name not in self.closures:
-                        print(f"CLOSURE: {cmd.name} not found")
-
                 case "Note":
                     if debug:
                         ic(cmd.text)
+
+                    clos_obj.notes.append(cmd.text)
 
         return clos_obj
 
