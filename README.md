@@ -61,7 +61,9 @@ describing yields produced, while consuming recursively from other
 
 ```
   CLOSURE: "foo bar"
-    _commands..._
+
+    commands...
+
   YIELD (100 g)
 ```
 
