@@ -7,26 +7,11 @@ At the core, the configuration of the **Bwyd** language is based on a _knowledge
   - technique
   - tool
 
-
-## Constructs
-
-  - craft: **Ratio** (dimensionless, abstract types, unpopulated frames): the _truth_ of cooking, all that is unchanging, fixed, elemental
-
-  - art: **Closure** (process, based on Ratios, one step in cooking, with yields; generators): specifying the substitutions (parameterizations), and behaving like one step in a Petri net with pre/post conditions
-
-  - experience: **Observable** (end consumer of a chain of parameterized Closure objects) describes on instance and its observed experiences
-
 within Closure implies "ADD TO FOCUS MENTIONED MOST RECENTLY"
 
 within Closure implies "USE TOOL MENTIONED MOST RECENTLY"
 
-> "Everything said is said by an observer." – Maturana and Varela, _Autopoiesis_
-
-
 Then a LLM renders the text for a parameterized recipe.
-
-Observable objects annotate (photos, notes) one experienced instance for a recipe.
-
 
 ---
 
