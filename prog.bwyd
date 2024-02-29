@@ -1,6 +1,6 @@
 // make some yummy gnocchi from root veggies
 
-CLOSURE: "prepare gnocchi dough"
+CLOSURE: "gnocchi dough"
     NOTE: "best to work with cold ingredients and chilled utensils"
     CONTAINER bowl: "chilled mixing bowl"
 
@@ -33,7 +33,7 @@ CLOSURE: "prepare gnocchi dough"
         UNTIL: "well mixed"
 	TIME: "30 seconds"
 
-    ADD puree: "210 g"
+    ADD puree: "250 g"
 
     ACTION spatula: "fold"
         UNTIL: "lightly blended"
@@ -46,4 +46,35 @@ CLOSURE: "prepare gnocchi dough"
 	UNTIL: "dough just becomes smooth"
 	TIME: "90 seconds"
 
-YIELD: "750 g"
+YIELD: "800 g"
+
+
+CLOSURE: "raw gnocchi dumplings"
+    NOTE: "divide dough into 8 pieces, rolling out one at a time"
+    CONTAINER mat: "floured rolling surface"
+
+    TOOL hand: "clean hands"
+    TOOL spoon: "large spoon"
+    TOOL fork: "fork"
+
+    USE dough: "gnocchi dough"
+    INGREDIENT flour: "rice, semolina, etc."
+
+    FOCUS mat
+    ADD flour: "10 g"
+
+    ACTION spoon: "spread"
+        UNTIL: "evenly floured"
+	TIME: "30 seconds"
+
+    ADD dough: "200 g"
+
+    ACTION hand: "roll carefully into a rope"
+        UNTIL: "2 cm diameter"
+	TIME: "60 seconds"
+
+    ACTION fork: "cut into 1 cm dumplings pieces, resembling little pillows"
+        UNTIL: "entire rope is cut"
+	TIME: "30 seconds"
+
+YIELD: "20"

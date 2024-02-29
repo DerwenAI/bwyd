@@ -25,7 +25,7 @@ Parse and interpret the Bwyd language.
         """
 Constructor.
         """
-        self.closure = None
+        self.closures: typing.Set[ str ] = set()
         self.equipment: typing.Dict[ str, str ] = OrderedDict()
         self.ingredients: typing.Dict[ str, str ] = OrderedDict()
 
@@ -37,8 +37,7 @@ Constructor.
 Return a JSON-friendly dictionary representation.
         """
         return {
-            "closure": self.closure.name,
-            "yields": self.closure.yields,
+            "closures": list(self.closures),
             "equipment": self.equipment,
             "ingredients": self.ingredients,
         }
@@ -53,7 +52,7 @@ Return a JSON-friendly dictionary representation.
         """
 Process interpreter for one Closure.
         """
-        self.closure = closure
+        self.closures.add(closure.name)
 
         for cmd in closure.commands:
             if debug:
@@ -104,6 +103,15 @@ Process interpreter for one Closure.
                     if cmd.symbol not in self.ingredients:
                         print(f"INGREDIENT: {cmd.symbol} not found")
 
+                case "Use":
+                    if debug:
+                        ic(cmd.symbol, cmd.name)
+
+                    self.ingredients[cmd.symbol] = cmd.name
+
+                    if cmd.name not in self.closures:
+                        print(f"CLOSURE: {cmd.name} not found")
+
                 case "Note":
                     if debug:
                         ic(cmd.text)
@@ -131,24 +139,21 @@ if __name__ == "__main__":
         debug = False, # True
     )
 
-    # parse a program
-
+    ## parse a program
     program_file: pathlib.Path = pathlib.Path("prog.bwyd")
     parsed_program = bwyd_mm.model_from_file(
         program_file,
         debug = False, # True
     )
 
-    # interpret the parsed program
-
+    ## interpret the parsed program
     bwyd: Bwyd = Bwyd()
     bwyd.interpret_program(
         parsed_program,
         debug = True, # False
     )
 
-    # make a summary report
-
+    ## make a summary report
     print(json.dumps(
         bwyd.as_json(),
         indent = 2,

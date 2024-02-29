@@ -9,7 +9,7 @@ Closure:
 ;
 
 Command:
-  Ratio | Note | Container | Ingredient | Focus | Tool | Add | Action
+  Ratio | Note | Container | Ingredient | Focus | Tool | Add | Action | Use
 ;
 
 Ratio:
@@ -42,6 +42,10 @@ Tool:
 
 Add:
   "ADD" symbol=ID ":" quantity=STRING (modifier=STRING)?
+;
+
+Use:
+  "USE" symbol=ID ":" name=STRING
 ;
 
 Action:
