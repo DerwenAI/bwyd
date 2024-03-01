@@ -1,9 +1,21 @@
+## Verbs
+
+mix
+fold
+cut
+spread
+whisk
+beat
+roll
+
+
 ## Ideation
 
 Could possibly use the recent code-completion API in Jupyter notebooks, working with a Bwyd kernel?
 
   - https://medium.com/jupyter-blog/jupyterlab-4-1-and-notebook-7-1-are-here-20bfc3c10217
   - https://github.com/jupyterlab/jupyter-ai
+  - https://ipython-books.github.io/16-creating-a-simple-kernel-for-jupyter/
   - https://jupyter-client.readthedocs.io/en/stable/wrapperkernels.html
   - https://stackoverflow.com/questions/35950433/getting-pygments-to-work-for-my-cell-results
   - https://pygments.org/docs/lexerdevelopment/
@@ -11,7 +23,6 @@ Could possibly use the recent code-completion API in Jupyter notebooks, working 
 Could link the _verb_ references in `Action` objects to tutorials via the internal KG?
 
 A saved notebook could encapsulate an `Observable` session?
-
 
 
 ## Taxonomy
