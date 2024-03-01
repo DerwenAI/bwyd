@@ -1,9 +1,17 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+"""
+Jupyter wrapper kernel for Bwyd
+"""
 
 from ipykernel.kernelbase import Kernel
 
 
 class BwydKernel (Kernel):
+    """
+Jupyter wrapper kernel
+    """
     banner = "Bwyd kernel -- kitchen engineering"
 
     implementation_version = "0.1"

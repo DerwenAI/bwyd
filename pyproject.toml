@@ -1,0 +1,84 @@
+[build-system]
+
+build-backend = "setuptools.build_meta"
+
+requires = [
+    "setuptools >= 69.0",
+    "setuptools_scm[toml] >= 6.2",
+    "wheel >= 0.42",
+]
+
+
+[tool.setuptools]
+
+packages = [ "bwyd" ]
+
+
+[tool.setuptools_scm]
+
+# required section; empty contents is fine
+
+
+[project.urls]
+
+code = "https://github.com/DerwenAI/bwyd"
+
+
+[project]
+
+name = "bwyd"
+dynamic = ["version"]
+
+authors = [
+    { name = "derwen.ai", email = "info@derwen.ai" },
+]
+
+description = "Bwyd DSL for kitchen engineering"
+readme = "README.md"
+license = { file = "LICENSE" }
+
+requires-python = ">=3.10"
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Human Machine Interfaces",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Indexing",
+    "Topic :: Text Processing :: Linguistic",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+]
+
+dependencies = [
+    "icecream >= 2.1",
+    "jupyterlab >= 4.1",
+    "textX >= 4.0",
+]
+
+
+[project.optional-dependencies]
+
+dev = [
+    "build >= 1.0",
+    "Flask >= 3.0",
+    "mkdocs-git-revision-date-plugin >= 0.3",
+    "mkdocs-material >= 9.5",
+    "mknotebooks >= 0.8",
+    "pre-commit >= 3.5",
+    "selenium >= 4.16",
+    "twine >= 4.0",
+]
+
+test = [
+    "pytest >= 7.4",
+]

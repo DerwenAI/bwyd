@@ -1,6 +1,11 @@
 ## requirements
 
-  * Python 3.10+
+ - Python 3.10+
+
+
+## dependencies
+
+  - [`textX`](https://textx.github.io/textX/)
 
 
 ## prepare a virtual environment
@@ -28,4 +33,3 @@ python3 -m pip install -U pip wheel setuptools
 
   - `gnocchi.ipynb`: example Gnocchi recipe in Bwyd, as a notebook
   - `gnocchi.bwyd`: example Gnocchi recipe in Bwyd, as a script
-

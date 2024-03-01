@@ -14,6 +14,8 @@ import typing
 from icecream import ic
 import textx
 
+__version__ = "0.1"
+
 
 ######################################################################
 ## class definitions                                                                                                                        
