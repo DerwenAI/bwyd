@@ -1,3 +1,19 @@
+## Ideation
+
+Could possibly use the recent code-completion API in Jupyter notebooks, working with a Bwyd kernel?
+
+  - https://medium.com/jupyter-blog/jupyterlab-4-1-and-notebook-7-1-are-here-20bfc3c10217
+  - https://github.com/jupyterlab/jupyter-ai
+  - https://jupyter-client.readthedocs.io/en/stable/wrapperkernels.html
+  - https://stackoverflow.com/questions/35950433/getting-pygments-to-work-for-my-cell-results
+  - https://pygments.org/docs/lexerdevelopment/
+
+Could link the _verb_ references in `Action` objects to tutorials via the internal KG?
+
+A saved notebook could encapsulate an `Observable` session?
+
+
+
 ## Taxonomy
 
 At the core, the configuration of the **Bwyd** language is based on a _knowledge graph_.

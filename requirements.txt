@@ -1,2 +1,3 @@
 icecream >= 2.1
+jupyterlab >= 4.1
 textX >= 4.0
