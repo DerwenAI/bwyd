@@ -1,4 +1,5 @@
 {
-  "argv": [ "python", "-m", "bwyd/kernel", "-f", "{connection_file}" ],
-  "display_name": "Bwyd"
+    "argv": [ "python", "-m", "kernel", "-f", "{connection_file}" ],
+    "display_name": "Bwyd",
+    "language": "Bwyd"
 }

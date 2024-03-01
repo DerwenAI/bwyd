@@ -30,6 +30,6 @@ python3 -m pip install -U pip wheel setuptools
   - `bwyd/kernel.json`: Jupyter kernel spec
   - `bwyd/kernel.py`: Jupyter wrapper kernel
 
-  - `gnocchi.ipynb`: example Gnocchi recipe in Bwyd, as a notebook
-  - `gnocchi.bwyd`: example Gnocchi recipe in Bwyd, as a script
   - `demo.py`: Python demo app
+  - `examples/gnocchi.bwyd`: example Gnocchi recipe in Bwyd, as a script
+  - `examples/gnocchi.ipynb`: example Gnocchi recipe in Bwyd, as a Jupyter notebook

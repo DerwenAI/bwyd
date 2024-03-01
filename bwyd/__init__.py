@@ -6,6 +6,8 @@ Package definitions for the `bwyd` library.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
+from .kernel import BwydKernel
+
 from .parser import Bwyd
 
 __version__ = "0.1"

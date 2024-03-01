@@ -18,7 +18,7 @@ if __name__ == "__main__":
     ic(bwyd_int)
 
     prog = bwyd_int.parse(
-        pathlib.Path("gnocchi.bwyd"),
+        pathlib.Path("examples/gnocchi.bwyd"),
         debug = False, # True
     )
 
