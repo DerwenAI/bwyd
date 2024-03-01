@@ -18,7 +18,7 @@ __version__ = "0.1"
 
 
 ######################################################################
-## class definitions                                                                                                                        
+## language object definitions
 
 @dataclass(order=False, frozen=False)
 class Measure:  # pylint: disable=R0902
@@ -180,10 +180,20 @@ Append one operation to the active Focus.
             self.active_focus.ops.append(op)
 
 
+######################################################################
+## parser/interpreter definition
+
 class Bwyd:
     """
-Parse and interpret the Bwyd language.
+Bwyd DSL parser/interpreter.
     """
+    GRAMMAR: str = "bwyd.tx"
+
+    META_MODEL: textx.metamodel.TextXMetaModel = textx.metamodel_from_file(
+        GRAMMAR,
+        debug = False, # True
+    )
+
 
     def __init__ (
         self,
@@ -198,8 +208,8 @@ Constructor.
         self,
         ) -> typing.List[dict]:
         """
-Return a list of JSON-friendly dictionary representations, one for
-each parsed Closure.
+Return a list of JSON-friendly dictionary representations,
+one for each parsed Closure.
         """
         return [
             {
@@ -213,6 +223,21 @@ each parsed Closure.
             }
             for name, clos_obj in self.closures.items()
         ]
+
+
+    def parse (
+        self,
+        script: pathlib.Path,
+        *,
+        debug: bool = False,
+        ) -> typing.Any:
+        """
+Parse one script.
+        """
+        return self.META_MODEL.model_from_file(
+            script,
+            debug = debug,
+        )
 
 
     def interpret_closure (
@@ -344,9 +369,9 @@ Process interpreter for one Closure.
         return clos_obj
 
 
-    def interpret_program (
+    def interpret (
         self,
-        program,
+        program: typing.Any,
         *,
         debug: bool = False,
         ) -> None:
@@ -361,24 +386,17 @@ Process interpreter for once instance of a Bwyd program.
 
 
 if __name__ == "__main__":
-    bwyd_mm: textx.metamodel.TextXMetaModel = textx.metamodel_from_file(
-        "bwyd.tx",
-        debug = False, # True
-    )
-
-    ## parse a program
-    program_file: pathlib.Path = pathlib.Path("prog.bwyd")
-
-    parsed_program = bwyd_mm.model_from_file(
-        program_file,
-        debug = False, # True
-    )
-
-    ## interpret the parsed program
+    ## parse an example Bwyd program
     bwyd: Bwyd = Bwyd()
 
-    bwyd.interpret_program(
-        parsed_program,
+    prog = bwyd.parse(
+        pathlib.Path("gnocchi.bwyd"),
+        debug = False, # True
+    )
+
+    ## interpret the parsed Bwyd program
+    bwyd.interpret(
+        prog,
         debug = True, # False
     )
 
