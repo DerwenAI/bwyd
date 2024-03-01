@@ -25,11 +25,11 @@ python3 -m pip install -U pip wheel setuptools
 
 ## files
 
-  - `bwyd.py`: Bwyd language parser/simulator
-  - `bwyd.tx`: Bwyd language grammar in `textX`
-
+  - `bwyd/parser.py`: Bwyd language parser/simulator
+  - `bwyd/bwyd.tx`: Bwyd language grammar in `textX`
   - `bwyd/kernel.json`: Jupyter kernel spec
-  - `kernel.py`: Jupyter wrapper kernel
+  - `bwyd/kernel.py`: Jupyter wrapper kernel
 
   - `gnocchi.ipynb`: example Gnocchi recipe in Bwyd, as a notebook
   - `gnocchi.bwyd`: example Gnocchi recipe in Bwyd, as a script
+  - `demo.py`: Python demo app

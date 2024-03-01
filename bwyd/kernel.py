@@ -3,6 +3,7 @@
 
 """
 Jupyter wrapper kernel for Bwyd
+see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
 from ipykernel.kernelbase import Kernel

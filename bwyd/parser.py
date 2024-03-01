@@ -3,18 +3,18 @@
 
 """
 DSL implementing the Bwyd language.
+see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
 from collections import OrderedDict
 from dataclasses import dataclass, field
-import json
+from os.path import abspath, dirname
 import pathlib
+import sys
 import typing
 
 from icecream import ic
 import textx
-
-__version__ = "0.1"
 
 
 ######################################################################
@@ -181,13 +181,13 @@ Append one operation to the active Focus.
 
 
 ######################################################################
-## parser/interpreter definition
+## parser/interpreter definitions
 
 class Bwyd:
     """
 Bwyd DSL parser/interpreter.
     """
-    GRAMMAR: str = "bwyd.tx"
+    GRAMMAR: str = pathlib.Path(dirname(abspath(__file__))) / "bwyd.tx"
 
     META_MODEL: textx.metamodel.TextXMetaModel = textx.metamodel_from_file(
         GRAMMAR,
@@ -383,26 +383,3 @@ Process interpreter for once instance of a Bwyd program.
                 closure,
                 debug = debug,
             )
-
-
-if __name__ == "__main__":
-    ## parse an example Bwyd program
-    bwyd: Bwyd = Bwyd()
-
-    prog = bwyd.parse(
-        pathlib.Path("gnocchi.bwyd"),
-        debug = False, # True
-    )
-
-    ## interpret the parsed Bwyd program
-    bwyd.interpret(
-        prog,
-        debug = True, # False
-    )
-
-    ## make a summary report
-    print(json.dumps(
-        bwyd.to_json(),
-        indent = 2,
-        sort_keys = False,
-    ))
