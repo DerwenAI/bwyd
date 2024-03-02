@@ -11,7 +11,7 @@ from .kernel import BwydKernel
 from .parser import Bwyd
 
 from .objects import Duration, Measure, \
-    OpAction, OpAdd, OpUse, \
+    OpAction, OpAdd, OpChill, OpUse, OpsTypes, \
     Closure, Focus
 
 

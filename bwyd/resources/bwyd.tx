@@ -9,7 +9,7 @@ Closure:
 ;
 
 Command:
-  Ratio | Note | Container | Ingredient | Focus | Tool | Add | Action | Use
+  Ratio | Note | Container | Use | Ingredient | Focus | Tool | Add | Action | Chill
 ;
 
 Ratio:
@@ -28,6 +28,10 @@ Container:
   "CONTAINER" symbol=ID ":" text=STRING
 ;
 
+Use:
+  "USE" symbol=ID ":" name=STRING
+;
+
 Ingredient:
   "INGREDIENT" symbol=ID ":" text=STRING
 ;
@@ -38,6 +42,18 @@ Focus:
 
 Tool:
   "TOOL" symbol=ID ":" text=STRING
+;
+
+Add:
+  "ADD" symbol=ID measure=Measure (":" text=STRING)?
+;
+
+Measure:
+  "(" amount=NUMBER (units=MeasureUnits)? ")"
+;
+
+MeasureUnits:
+  "g" | "kg" | "ml" | "l"
 ;
 
 Action:
@@ -52,20 +68,8 @@ DurationUnits:
   "sec" | "min" | "hrs"
 ;
 
-Use:
-  "USE" symbol=ID ":" name=STRING
-;
-
-Add:
-  "ADD" symbol=ID measure=Measure (":" text=STRING)?
-;
-
-Measure:
-  "(" amount=NUMBER (units=MeasureUnits)? ")"
-;
-
-MeasureUnits:
-  "g" | "kg" | "ml" | "l"
+Chill:
+  "CHILL" symbol=ID (":" modifier=STRING)? "UNTIL:" until=STRING "TIME" duration=Duration
 ;
 
 Comment:

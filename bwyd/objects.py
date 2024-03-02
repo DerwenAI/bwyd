@@ -103,7 +103,7 @@ class OpAction:  # pylint: disable=R0902
     """
 A data class representing one Action object.
     """
-    symbol: str
+    tool: str
     modifier: str
     until: str
     duration: Duration
@@ -116,7 +116,7 @@ Serializable representation for JSON.
         """
         return {
             "op": "action",
-            "symbol": self.symbol,
+            "tool": self.tool,
             "modifier": self.modifier,
             "until": self.until,
             "duration": self.duration.to_json(),
@@ -124,12 +124,14 @@ Serializable representation for JSON.
 
 
 @dataclass(order=False, frozen=False)
-class Focus:  # pylint: disable=R0902
+class OpChill:  # pylint: disable=R0902
     """
-A data class representing a parsed Focus object.
+A data class representing one Chill object.
     """
-    symbol: str
-    ops: typing.List[typing.Union[ OpAdd, OpUse, OpAction ]] = field(default_factory = lambda: [])
+    container: str
+    modifier: str
+    until: str
+    duration: Duration
 
     def to_json (
         self
@@ -138,7 +140,33 @@ A data class representing a parsed Focus object.
 Serializable representation for JSON.
         """
         return {
-            "symbol": self.symbol,
+            "op": "chill",
+            "container": self.container,
+            "modifier": self.modifier,
+            "until": self.until,
+            "duration": self.duration.to_json(),
+        }
+
+
+OpsTypes = typing.Union[ OpAdd, OpUse, OpAction, OpChill ]
+
+
+@dataclass(order=False, frozen=False)
+class Focus:  # pylint: disable=R0902
+    """
+A data class representing a parsed Focus object.
+    """
+    container: str
+    ops: typing.List[ OpsTypes ] = field(default_factory = lambda: [])
+
+    def to_json (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "container": self.container,
             "ops": [ op.to_json() for op in self.ops ],
         }
 
@@ -161,7 +189,7 @@ A data class representing one parsed Closure object.
     def focus_op (
         self,
         cmd: typing.Any,
-        op_obj: typing.Union[ OpAdd, OpUse, OpAction ],
+        op_obj: OpsTypes,
         ) -> None:
         """
 Append one operation to the active Focus.

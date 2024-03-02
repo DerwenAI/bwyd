@@ -13,7 +13,7 @@ from icecream import ic  # pylint: disable=E0401
 import textx  # pylint: disable=E0401
 
 from .objects import Duration, Measure, \
-    OpAction, OpAdd, OpUse, \
+    OpAction, OpAdd, OpChill, OpUse, \
     Closure, Focus
 
 
@@ -102,11 +102,51 @@ Process interpreter for one Closure.
 
             cmd_class_name: str = cmd.__class__.__name__
 
-            if cmd_class_name == "Container":
+            if cmd_class_name == "Ratio":
+                if debug:
+                    ic(cmd.name, [ (elem.symbol, elem.components) for elem in cmd.elements ])
+
+                    for elem in cmd.elements:
+                        if elem.symbol not in clos_obj.ingredients:
+                            print(f"RATIO component: {elem.symbol} not found")
+
+            elif cmd_class_name == "Note":
+                if debug:
+                    ic(cmd.text)
+
+                clos_obj.notes.append(cmd.text)
+
+            elif cmd_class_name == "Container":
                 if debug:
                     ic(cmd.symbol, cmd.text)
 
                 clos_obj.containers[cmd.symbol] = cmd.text
+
+            elif cmd_class_name == "Tool":
+                if debug:
+                    ic(cmd.symbol, cmd.text)
+
+                clos_obj.tools[cmd.symbol] = cmd.text
+
+            elif cmd_class_name == "Use":
+                if debug:
+                    ic(cmd.symbol, cmd.name)
+
+                clos_obj.ingredients[cmd.symbol] = cmd.name
+
+                clos_obj.focus_op(
+                    cmd,
+                    OpUse(
+                        symbol = cmd.symbol,
+                        name = cmd.name,
+                    ),
+                )
+
+            elif cmd_class_name == "Ingredient":
+                if debug:
+                    ic(cmd.symbol, cmd.text)
+
+                clos_obj.ingredients[cmd.symbol] = cmd.text
 
             elif cmd_class_name == "Focus":
                 if debug:
@@ -116,30 +156,10 @@ Process interpreter for one Closure.
                     print(f"CONTAINER: {cmd.symbol} not found")
 
                 clos_obj.active_focus = Focus(
-                    symbol = cmd.symbol,
+                    container = cmd.symbol,
                 )
 
                 clos_obj.foci.append(clos_obj.active_focus)
-
-            elif cmd_class_name == "Tool":
-                if debug:
-                    ic(cmd.symbol, cmd.text)
-
-                clos_obj.tools[cmd.symbol] = cmd.text
-
-            elif cmd_class_name == "Ingredient":
-                if debug:
-                    ic(cmd.symbol, cmd.text)
-
-                clos_obj.ingredients[cmd.symbol] = cmd.text
-
-            elif cmd_class_name == "Ratio":
-                if debug:
-                    ic(cmd.name, [ (elem.symbol, elem.components) for elem in cmd.elements ])
-
-                    for elem in cmd.elements:
-                        if elem.symbol not in clos_obj.ingredients:
-                            print(f"RATIO component: {elem.symbol} not found")
 
             elif cmd_class_name == "Add":
                 measure: Measure = Measure(
@@ -162,20 +182,6 @@ Process interpreter for one Closure.
                     ),
                 )
 
-            elif cmd_class_name == "Use":
-                if debug:
-                    ic(cmd.symbol, cmd.name)
-
-                clos_obj.ingredients[cmd.symbol] = cmd.name
-
-                clos_obj.focus_op(
-                    cmd,
-                    OpUse(
-                        symbol = cmd.symbol,
-                        name = cmd.name,
-                    ),
-                )
-
             elif cmd_class_name == "Action":
                 duration: Duration = Duration(
                     amount = cmd.duration.amount,
@@ -191,18 +197,34 @@ Process interpreter for one Closure.
                 clos_obj.focus_op(
                     cmd,
                     OpAction(
-                        symbol = cmd.symbol,
+                        tool = cmd.symbol,
                         modifier = cmd.modifier,
                         until = cmd.until,
                         duration = duration,
                     ),
                 )
 
-            elif cmd_class_name == "Note":
-                if debug:
-                    ic(cmd.text)
+            elif cmd_class_name == "Chill":
+                duration = Duration(
+                    amount = cmd.duration.amount,
+                    units = cmd.duration.units,
+                )
 
-                clos_obj.notes.append(cmd.text)
+                if debug:
+                    ic(cmd.symbol, cmd.modifier, cmd.until, duration)
+
+                if cmd.symbol not in clos_obj.containers:
+                    print(f"TOOL: {cmd.symbol} not found")
+
+                clos_obj.focus_op(
+                    cmd,
+                    OpChill(
+                        container = cmd.symbol,
+                        modifier = cmd.modifier,
+                        until = cmd.until,
+                        duration = duration,
+                    ),
+                )
 
         return clos_obj
 

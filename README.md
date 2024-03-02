@@ -60,9 +60,9 @@ describing yields produced, while consuming recursively from other
 `Closure` definitions within a personalized library.
 
 ```
-  CLOSURE: "foo bar"
+  CLOSURE: "cookie dough"
 
-    commands...
+    // commands...
 
   YIELD (100 g)
 ```

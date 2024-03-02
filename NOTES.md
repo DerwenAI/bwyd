@@ -1,5 +1,7 @@
 ## Verbs
 
+Could link the _verb_ references in `Action` objects to tutorials via the internal KG?
+
 mix
 fold
 cut
@@ -19,8 +21,6 @@ Could possibly use the recent code-completion API in Jupyter notebooks, working 
   - https://jupyter-client.readthedocs.io/en/stable/wrapperkernels.html
   - https://stackoverflow.com/questions/35950433/getting-pygments-to-work-for-my-cell-results
   - https://pygments.org/docs/lexerdevelopment/
-
-Could link the _verb_ references in `Action` objects to tutorials via the internal KG?
 
 A saved notebook could encapsulate an `Observable` session?
 
@@ -58,7 +58,7 @@ ACTION: using (TOOL: small whisk or a fork)
 	(UNTIL: egg is beaten lightly)
 	(TIME: 30 sec)
 
-ADD (INGREDIENT: 250 ml whole milk ricotta), (INGREDIENT: 50 g grated parmesan), (INGREDIENT: 1 g freshly grated nutmeg) 
+ADD (INGREDIENT: 250 ml whole milk ricotta), (INGREDIENT: 50 g grated parmesan), (INGREDIENT: 1 g freshly grated nutmeg)
 
 STIR using (TOOL: spatula)
 	(UNTIL: well mixed)
