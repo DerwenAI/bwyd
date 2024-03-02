@@ -6,178 +6,15 @@ DSL implementing the Bwyd language.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
-from collections import OrderedDict
-from dataclasses import dataclass, field
-from os.path import abspath, dirname
 import pathlib
-import sys
 import typing
 
-from icecream import ic
-import textx
+from icecream import ic  # pylint: disable=E0401
+import textx  # pylint: disable=E0401
 
-
-######################################################################
-## language object definitions
-
-@dataclass(order=False, frozen=False)
-class Measure:  # pylint: disable=R0902
-    """
-A data class representing one parsed Measure object.
-    """
-    amount: float
-    units: str
-
-    def to_json (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "amount": self.amount,
-            "units": self.units,
-        }
-
-
-@dataclass(order=False, frozen=False)
-class Duration:  # pylint: disable=R0902
-    """
-A data class representing one parsed Duration object.
-    """
-    amount: float
-    units: str
-
-    def to_json (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "amount": self.amount,
-            "units": self.units,
-        }
-
-
-@dataclass(order=False, frozen=False)
-class OpAdd:  # pylint: disable=R0902
-    """
-A data class representing one Add object.
-    """
-    symbol: str
-    measure: Measure
-    text: str
-
-    def to_json (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "op": "add",
-            "symbol": self.symbol,
-            "measure": self.measure.to_json(),
-            "text": self.text,
-        }
-
-
-@dataclass(order=False, frozen=False)
-class OpUse:  # pylint: disable=R0902
-    """
-A data class representing one Use object.
-    """
-    symbol: str
-    name: str
-
-    def to_json (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "op": "use",
-            "symbol": self.symbol,
-            "name": self.name,
-        }
-
-
-@dataclass(order=False, frozen=False)
-class OpAction:  # pylint: disable=R0902
-    """
-A data class representing one Action object.
-    """
-    symbol: str
-    modifier: str
-    until: str
-    duration: Duration
-
-    def to_json (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "op": "action",
-            "symbol": self.symbol,
-            "modifier": self.modifier,
-            "until": self.until,
-            "duration": self.duration.to_json(),
-        }
-
-
-@dataclass(order=False, frozen=False)
-class Focus:  # pylint: disable=R0902
-    """
-A data class representing a parsed Focus object.
-    """
-    symbol: str
-    ops: typing.List[typing.Union[ OpAdd, OpUse, OpAction ]] = field(default_factory = lambda: [])    
-
-    def to_json (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "symbol": self.symbol,
-            "ops": [ op.to_json() for op in self.ops ],
-        }
-
-
-@dataclass(order=False, frozen=False)
-class Closure:  # pylint: disable=R0902
-    """
-A data class representing one parsed Closure object.
-    """
-    name: str
-    obj: typing.Any
-    yields: Measure
-    notes: typing.List[ str ] = field(default_factory = lambda: [])
-    tools: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())
-    containers: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())
-    ingredients: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())
-    foci: typing.List[ Focus ] = field(default_factory = lambda: [])
-    active_focus: typing.Optional[ Focus ] = None
-
-    def focus_op (
-        self,
-        cmd,
-        op: typing.Union[ OpAdd, OpUse, OpAction ],
-        ) -> None:
-        """
-Append one operation to the active Focus.        
-        """
-        print(type(cmd))
-
-        if self.active_focus is None:
-            print(f"FOCUS: not defined yet for {cmd.symbol}")
-        else:
-            self.active_focus.ops.append(op)
+from .objects import Duration, Measure, \
+    OpAction, OpAdd, OpUse, \
+    Closure, Focus
 
 
 ######################################################################
@@ -187,7 +24,7 @@ class Bwyd:
     """
 Bwyd DSL parser/interpreter.
     """
-    GRAMMAR: str = pathlib.Path(dirname(abspath(__file__))) / "bwyd.tx"
+    GRAMMAR: pathlib.Path = pathlib.Path(__file__).resolve().parent / "resources" / "bwyd.tx"
 
     META_MODEL: textx.metamodel.TextXMetaModel = textx.metamodel_from_file(
         GRAMMAR,
@@ -240,9 +77,9 @@ Parse one script.
         )
 
 
-    def interpret_closure (
+    def interpret_closure (  # pylint: disable=R0912,R0915
         self,
-        closure,
+        closure: typing.Any,
         *,
         debug: bool = False,
         ) -> Closure:
@@ -263,108 +100,109 @@ Process interpreter for one Closure.
                 #ic(dir(closure))
                 ic(cmd)
 
-            match cmd.__class__.__name__:
-                case "Container":
-                    if debug:
-                        ic(cmd.symbol, cmd.text)
+            cmd_class_name: str = cmd.__class__.__name__
 
-                    clos_obj.containers[cmd.symbol] = cmd.text
+            if cmd_class_name == "Container":
+                if debug:
+                    ic(cmd.symbol, cmd.text)
 
-                case "Focus":
-                    if debug:
-                        ic(cmd.symbol)
+                clos_obj.containers[cmd.symbol] = cmd.text
 
-                    if cmd.symbol not in clos_obj.containers:
-                        print(f"CONTAINER: {cmd.symbol} not found")
+            elif cmd_class_name == "Focus":
+                if debug:
+                    ic(cmd.symbol)
 
-                    clos_obj.active_focus = Focus(
+                if cmd.symbol not in clos_obj.containers:
+                    print(f"CONTAINER: {cmd.symbol} not found")
+
+                clos_obj.active_focus = Focus(
+                    symbol = cmd.symbol,
+                )
+
+                clos_obj.foci.append(clos_obj.active_focus)
+
+            elif cmd_class_name == "Tool":
+                if debug:
+                    ic(cmd.symbol, cmd.text)
+
+                clos_obj.tools[cmd.symbol] = cmd.text
+
+            elif cmd_class_name == "Ingredient":
+                if debug:
+                    ic(cmd.symbol, cmd.text)
+
+                clos_obj.ingredients[cmd.symbol] = cmd.text
+
+            elif cmd_class_name == "Ratio":
+                if debug:
+                    ic(cmd.name, [ (elem.symbol, elem.components) for elem in cmd.elements ])
+
+                    for elem in cmd.elements:
+                        if elem.symbol not in clos_obj.ingredients:
+                            print(f"RATIO component: {elem.symbol} not found")
+
+            elif cmd_class_name == "Add":
+                measure: Measure = Measure(
+                    amount = cmd.measure.amount,
+                    units = cmd.measure.units,
+                )
+
+                if debug:
+                    ic(cmd.symbol, measure, cmd.text)
+
+                if cmd.symbol not in clos_obj.ingredients:
+                    print(f"INGREDIENT: {cmd.symbol} not found")
+
+                clos_obj.focus_op(
+                    cmd,
+                    OpAdd(
                         symbol = cmd.symbol,
-                    )
+                        measure = measure,
+                        text = cmd.text,
+                    ),
+                )
 
-                    clos_obj.foci.append(clos_obj.active_focus)
+            elif cmd_class_name == "Use":
+                if debug:
+                    ic(cmd.symbol, cmd.name)
 
-                case "Tool":
-                    if debug:
-                        ic(cmd.symbol, cmd.text)
+                clos_obj.ingredients[cmd.symbol] = cmd.name
 
-                    clos_obj.tools[cmd.symbol] = cmd.text
+                clos_obj.focus_op(
+                    cmd,
+                    OpUse(
+                        symbol = cmd.symbol,
+                        name = cmd.name,
+                    ),
+                )
 
-                case "Ingredient":
-                    if debug:
-                        ic(cmd.symbol, cmd.text)
+            elif cmd_class_name == "Action":
+                duration: Duration = Duration(
+                    amount = cmd.duration.amount,
+                    units = cmd.duration.units,
+                )
 
-                    clos_obj.ingredients[cmd.symbol] = cmd.text
+                if debug:
+                    ic(cmd.symbol, cmd.modifier, cmd.until, duration)
 
-                case "Ratio":
-                    if debug:
-                        ic(cmd.name, [ (elem.symbol, elem.components) for elem in cmd.elements ])
+                if cmd.symbol not in clos_obj.tools:
+                    print(f"TOOL: {cmd.symbol} not found")
 
-                        for elem in cmd.elements:
-                            if elem.symbol not in clos_obj.ingredients:
-                                print(f"RATIO component: {elem.symbol} not found")
+                clos_obj.focus_op(
+                    cmd,
+                    OpAction(
+                        symbol = cmd.symbol,
+                        modifier = cmd.modifier,
+                        until = cmd.until,
+                        duration = duration,
+                    ),
+                )
 
-                case "Add":
-                    measure: Measure = Measure(
-                        amount = cmd.measure.amount,
-                        units = cmd.measure.units,
-                    )
+            elif cmd_class_name == "Note":
+                if debug:
+                    ic(cmd.text)
 
-                    if debug:
-                        ic(cmd.symbol, measure, cmd.text)
-
-                    if cmd.symbol not in clos_obj.ingredients:
-                        print(f"INGREDIENT: {cmd.symbol} not found")
-
-                    clos_obj.focus_op(
-                        cmd,
-                        OpAdd(
-                            symbol = cmd.symbol,
-                            measure = measure,
-                            text = cmd.text,
-                        )
-                    )
-
-                case "Use":
-                    if debug:
-                        ic(cmd.symbol, cmd.name)
-
-                    clos_obj.ingredients[cmd.symbol] = cmd.name
-
-                    clos_obj.focus_op(
-                        cmd,
-                        OpUse(
-                            symbol = cmd.symbol,
-                            name = cmd.name,
-                        )
-                    )
-
-                case "Action":
-                    duration: Duration = Duration(
-                        amount = cmd.duration.amount,
-                        units = cmd.duration.units,
-                    )
-
-                    if debug:
-                        ic(cmd.symbol, cmd.modifier, cmd.until, duration)
-
-                    if cmd.symbol not in clos_obj.tools:
-                        print(f"TOOL: {cmd.symbol} not found")
-
-                    clos_obj.focus_op(
-                        cmd,
-                        OpAction(
-                            symbol = cmd.symbol,
-                            modifier = cmd.modifier,
-                            until = cmd.until,
-                            duration = duration,
-                        )
-                    )
-
-                case "Note":
-                    if debug:
-                        ic(cmd.text)
-
-                    clos_obj.notes.append(cmd.text)
+                clos_obj.notes.append(cmd.text)
 
         return clos_obj
 

@@ -6,10 +6,11 @@ Jupyter wrapper kernel for Bwyd
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
-from ipykernel.kernelbase import Kernel
+from ipykernel.kernelapp import IPKernelApp  # pylint: disable=E0401
+from ipykernel.kernelbase import Kernel  # pylint: disable=E0401
 
 
-class BwydKernel (Kernel):
+class BwydKernel (Kernel):  # pylint: disable=R0903
     """
 Jupyter wrapper kernel
     """
@@ -28,13 +29,13 @@ Jupyter wrapper kernel
     }
 
 
-    def do_execute (
+    def do_execute (  # pylint: disable=R0913
         self,
         code,
         silent,
-        store_history = True,
-        user_expressions = None,
-        allow_stdin = False,
+        store_history = True,  # pylint: disable=W0613
+        user_expressions = None,  # pylint: disable=W0613
+        allow_stdin = False,  # pylint: disable=W0613
         ) -> dict:
         """
 Simply echo any given input to `stdout`
@@ -42,7 +43,7 @@ Simply echo any given input to `stdout`
         if not silent:
             self.send_response(
                 self.iopub_socket,
-                "stream", 
+                "stream",
                 {
                     "name": "stdout",
                     "text": code,
@@ -58,5 +59,4 @@ Simply echo any given input to `stdout`
 
 
 if __name__ == "__main__":
-    from ipykernel.kernelapp import IPKernelApp
     IPKernelApp.launch_instance(kernel_class = BwydKernel)
