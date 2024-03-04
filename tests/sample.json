@@ -1,0 +1,273 @@
+[
+  {
+    "name": "gnocchi dough",
+    "yields": {
+      "amount": 800,
+      "units": "g"
+    },
+    "notes": [
+      "best to work with cold ingredients and chilled utensils"
+    ],
+    "tools": {
+      "fork": "small fork or whisk",
+      "spatula": "silicone spatula"
+    },
+    "containers": {
+      "bowl": "chilled mixing bowl"
+    },
+    "ingredients": {
+      "puree": "reduced veggie pur\u00e9e",
+      "flour": "flour: rice, oat, etc.",
+      "egg": "large chicken egg",
+      "ricotta": "whole milk ricotta",
+      "parmesan": "grated parmesan",
+      "nutmeg": "freshly grated nutmeg"
+    },
+    "foci": [
+      {
+        "container": "bowl",
+        "ops": [
+          {
+            "op": "add",
+            "symbol": "egg",
+            "measure": {
+              "amount": 1,
+              "units": null
+            },
+            "text": ""
+          },
+          {
+            "op": "action",
+            "tool": "fork",
+            "modifier": "gently",
+            "until": "lightly beaten",
+            "duration": {
+              "amount": 30,
+              "units": "sec"
+            }
+          },
+          {
+            "op": "add",
+            "symbol": "ricotta",
+            "measure": {
+              "amount": 250,
+              "units": "g"
+            },
+            "text": ""
+          },
+          {
+            "op": "add",
+            "symbol": "parmesan",
+            "measure": {
+              "amount": 50,
+              "units": "g"
+            },
+            "text": ""
+          },
+          {
+            "op": "add",
+            "symbol": "nutmeg",
+            "measure": {
+              "amount": 1,
+              "units": "g"
+            },
+            "text": ""
+          },
+          {
+            "op": "action",
+            "tool": "spatula",
+            "modifier": "",
+            "until": "well mixed",
+            "duration": {
+              "amount": 30,
+              "units": "sec"
+            }
+          },
+          {
+            "op": "add",
+            "symbol": "puree",
+            "measure": {
+              "amount": 250,
+              "units": "g"
+            },
+            "text": ""
+          },
+          {
+            "op": "action",
+            "tool": "spatula",
+            "modifier": "fold",
+            "until": "lightly blended",
+            "duration": {
+              "amount": 30,
+              "units": "sec"
+            }
+          },
+          {
+            "op": "add",
+            "symbol": "flour",
+            "measure": {
+              "amount": 240,
+              "units": "g"
+            },
+            "text": "only until the dough becomes no longer sticky"
+          },
+          {
+            "op": "action",
+            "tool": "spatula",
+            "modifier": "mix",
+            "until": "dough just becomes smooth",
+            "duration": {
+              "amount": 90,
+              "units": "sec"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "raw gnocchi dumplings",
+    "yields": {
+      "amount": 20,
+      "units": null
+    },
+    "notes": [
+      "divide dough into 8 pieces, rolling out one at a time"
+    ],
+    "tools": {
+      "hand": "clean hands",
+      "spoon": "large spoon",
+      "fork": "fork"
+    },
+    "containers": {
+      "mat": "floured rolling surface"
+    },
+    "ingredients": {
+      "dough": "gnocchi dough",
+      "flour": "rice, semolina, etc."
+    },
+    "foci": [
+      {
+        "container": "mat",
+        "ops": [
+          {
+            "op": "use",
+            "symbol": "dough",
+            "name": "gnocchi dough"
+          },
+          {
+            "op": "add",
+            "symbol": "flour",
+            "measure": {
+              "amount": 10,
+              "units": "g"
+            },
+            "text": ""
+          },
+          {
+            "op": "action",
+            "tool": "spoon",
+            "modifier": "spread",
+            "until": "evenly floured",
+            "duration": {
+              "amount": 30,
+              "units": "sec"
+            }
+          },
+          {
+            "op": "add",
+            "symbol": "dough",
+            "measure": {
+              "amount": 200,
+              "units": "g"
+            },
+            "text": ""
+          },
+          {
+            "op": "action",
+            "tool": "hand",
+            "modifier": "roll carefully into a rope",
+            "until": "2 cm diameter",
+            "duration": {
+              "amount": 60,
+              "units": "sec"
+            }
+          },
+          {
+            "op": "action",
+            "tool": "fork",
+            "modifier": "cut into 1 cm dumplings pieces, resembling little pillows",
+            "until": "entire rope is cut",
+            "duration": {
+              "amount": 30,
+              "units": "sec"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "frozen gnocchi dumplings",
+    "yields": {
+      "amount": 20,
+      "units": null
+    },
+    "notes": [
+      "add layers of dumplings to fill depth of baking dish"
+    ],
+    "tools": {
+      "hand": "clean hands",
+      "board": "gnocchi board or a fork"
+    },
+    "containers": {
+      "dish": "baking dish"
+    },
+    "ingredients": {
+      "parchment": "cut parchment paper",
+      "raw": "raw gnocchi dumplings"
+    },
+    "foci": [
+      {
+        "container": "dish",
+        "ops": [
+          {
+            "op": "action",
+            "tool": "hand",
+            "modifier": "line dish with parchment paper",
+            "until": "fully lined",
+            "duration": {
+              "amount": 30,
+              "units": "sec"
+            }
+          },
+          {
+            "op": "use",
+            "symbol": "raw",
+            "name": "raw gnocchi dumplings"
+          },
+          {
+            "op": "action",
+            "tool": "board",
+            "modifier": "role dumplings (create edges) onto parchment paper; arrange without touching other dumplings",
+            "until": "layer is filled",
+            "duration": {
+              "amount": 10,
+              "units": "sec"
+            }
+          },
+          {
+            "op": "chill",
+            "container": "dish",
+            "modifier": "freeze",
+            "until": "dumplings are frozen solid",
+            "duration": {
+              "amount": 2,
+              "units": "hrs"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

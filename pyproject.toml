@@ -81,5 +81,6 @@ dev = [
 ]
 
 test = [
-    "pytest >= 7.4",
+    "deepdiff >= 6.7",
+    "pytest >= 8.0",
 ]

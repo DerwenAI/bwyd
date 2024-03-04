@@ -1,0 +1,109 @@
+// make some yummy gnocchi from root veggies
+
+CLOSURE: "gnocchi dough"
+    NOTE: "best to work with cold ingredients and chilled utensils"
+    CONTAINER bowl: "chilled mixing bowl"
+
+    FOCUS bowl
+
+    TOOL fork: "small fork or whisk"
+    TOOL spatula: "silicone spatula"
+
+    INGREDIENT puree: "reduced veggie purée"
+    INGREDIENT flour: "flour: rice, oat, etc."
+    INGREDIENT egg: "large chicken egg"
+    INGREDIENT ricotta: "whole milk ricotta"
+    INGREDIENT parmesan: "grated parmesan"
+    INGREDIENT nutmeg: "freshly grated nutmeg"
+
+    RATIO: "gnocchi dough" =
+    	   starch [ puree, flour ],
+	   egg
+
+    ADD egg (1)
+
+    ACTION fork: "gently"
+        UNTIL: "lightly beaten"
+	TIME (30 sec)
+
+    ADD ricotta (250 g)
+    ADD parmesan (50 g)
+    ADD nutmeg (1 g)
+
+    ACTION spatula
+        UNTIL: "well mixed"
+	TIME (30 sec)
+
+    ADD puree (250 g)
+
+    ACTION spatula: "fold"
+        UNTIL: "lightly blended"
+	TIME (30 sec)
+
+    ADD flour (240 g) : "only until the dough becomes no longer sticky"
+
+    ACTION spatula: "mix"
+	UNTIL: "dough just becomes smooth"
+	TIME (90 sec)
+
+YIELD (800 g)
+
+
+CLOSURE: "raw gnocchi dumplings"
+    NOTE: "divide dough into 8 pieces, rolling out one at a time"
+    CONTAINER mat: "floured rolling surface"
+
+    FOCUS mat
+
+    TOOL hand: "clean hands"
+    TOOL spoon: "large spoon"
+    TOOL fork: "fork"
+
+    USE dough: "gnocchi dough"
+    INGREDIENT flour: "rice, semolina, etc."
+
+    ADD flour (10 g)
+
+    ACTION spoon: "spread"
+        UNTIL: "evenly floured"
+	TIME (30 sec)
+
+    ADD dough (200 g)
+
+    ACTION hand: "roll carefully into a rope"
+        UNTIL: "2 cm diameter"
+	TIME (60 sec)
+
+    ACTION fork: "cut into 1 cm dumplings pieces, resembling little pillows"
+        UNTIL: "entire rope is cut"
+	TIME (30 sec)
+
+YIELD (20)
+
+
+CLOSURE: "frozen gnocchi dumplings"
+    NOTE: "add layers of dumplings to fill depth of baking dish"
+    CONTAINER dish: "baking dish"
+
+    FOCUS dish
+
+    TOOL hand: "clean hands"
+    TOOL board: "gnocchi board or a fork"
+
+    INGREDIENT parchment: "cut parchment paper"
+
+    ACTION hand: "line dish with parchment paper"
+        UNTIL: "fully lined"
+	TIME (30 sec)
+
+    USE raw: "raw gnocchi dumplings"
+
+    ACTION board: "role dumplings (create edges) onto parchment paper; arrange without touching other dumplings"
+        UNTIL: "layer is filled"
+	TIME (10 sec)
+
+    CHILL dish: "freeze"
+        UNTIL: "dumplings are frozen solid"
+        TIME (2 hrs)
+
+YIELD (20)

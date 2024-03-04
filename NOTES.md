@@ -23,6 +23,8 @@ Could possibly use the recent code-completion API in Jupyter notebooks, working 
   - https://pygments.org/docs/lexerdevelopment/
 
 A saved notebook could encapsulate an `Observable` session?
+  - use ipywidgets for search, scaling, equipment list, etc., ?
+  - https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20Custom.html
 
 
 ## Taxonomy
