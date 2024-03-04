@@ -5,7 +5,9 @@ include bwyd/kernel.json
 include bwyd/*.py
 include pyproject.toml
 include requirements.txt
+include requirements-dev.txt
 include setup.py
+include tests/*
 prune .ipynb_checkpoints
 prune docs
 prune venv

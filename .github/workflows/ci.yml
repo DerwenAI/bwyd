@@ -3,22 +3,13 @@ name: CI
 on: [pull_request, workflow_dispatch]
 
 jobs:
-#  pre-commit:
-#    name: Run pre-commit
-#    runs-on: ubuntu-latest
-#    steps:
-#    - uses: actions/checkout@v3
-#    - uses: actions/setup-python@v3
-#    - uses: pre-commit/action@v3.0.0
-
   test:
     name: Tests for Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.10']
+        python-version: [ "3.10" ]
       fail-fast: false
-#    needs: pre-commit
 
     steps:
       - uses: actions/checkout@v3
@@ -31,6 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -e .
+          pip install -r requirements-dev.txt
 
       - name: Run tests
         run: |

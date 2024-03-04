@@ -31,8 +31,9 @@ readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 
+description = "The seed crazy idea behind the scenes here is to consider how human cooks behave somewhat like robots, following recipes as instructions."
+
 dynamic = [
-    "description",
     "version"
 ]
 
