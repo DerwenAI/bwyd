@@ -35,6 +35,13 @@ python3 -m pip uninstall bwyd
 ```
 
 
+## set up the developer environment
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+```
+
+
 ## run unit tests
 
 ```bash
