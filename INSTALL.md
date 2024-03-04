@@ -19,17 +19,26 @@ python3 -m pip install -U pip wheel setuptools
 ```
 
 
-## install the Jupyter kernel
+## install
 
 ```bash
+python3 -m pip install -e .
 python3 -m bwyd.install
 ```
 
 
-## uninstall the Jupyter kernel
+## uninstall
 
 ```bash
 ./venv/bin/jupyter kernelspec uninstall bwyd
+python3 -m pip uninstall bwyd
+```
+
+
+## run unit tests
+
+```bash
+python3 -m pytest
 ```
 
 
@@ -44,3 +53,5 @@ python3 -m bwyd.install
   - `demo.py`: Python demo app
   - `examples/gnocchi.bwyd`: example Gnocchi recipe in Bwyd, as a script
   - `examples/gnocchi.ipynb`: example Gnocchi recipe in Bwyd, as a Jupyter notebook
+
+  - `tests/*.py`: unit tests
