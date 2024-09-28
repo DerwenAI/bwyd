@@ -69,7 +69,7 @@ describing yields produced, while consuming recursively from other
 
 Process defines the "art" of cooking.
 In practice, `Closure` objects allow for team collaboration and
-planning within in a professional kitchen work environment.
+planning within a professional kitchen work environment.
 
 ### `Observable`
 
