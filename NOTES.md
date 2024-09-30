@@ -11,7 +11,21 @@ beat
 roll
 
 
+## Research
+
+  * <https://huggingface.co/collections/pacoid/bwyd-66fa446360ff0bbc5deddd59>
+
+
 ## Ideation
+
+Each recipe is a causal graph, with steps as the intermediate outcomes.
+
+Underlying graph produces:
+
+  * format recipe for publication
+  * scale based on desired yield
+  * determine a causal graph to test substitutions as interventions
+  * track results of instance (collecting data for CSM, see above)
 
 Could possibly use the recent code-completion API in Jupyter notebooks, working with a Bwyd kernel?
 
