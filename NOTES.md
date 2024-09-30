@@ -26,6 +26,7 @@ Underlying graph produces:
   * scale based on desired yield
   * determine a causal graph to test substitutions as interventions
   * track results of instance (collecting data for CSM, see above)
+  * plan with required equipment, ingredients, and timing
 
 Could possibly use the recent code-completion API in Jupyter notebooks, working with a Bwyd kernel?
 
