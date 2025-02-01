@@ -8,12 +8,6 @@ _knowledge graph_.
   - technique
   - tool
 
-within Closure implies "ADD TO FOCUS MENTIONED MOST RECENTLY"
-
-within Closure implies "USE TOOL MENTIONED MOST RECENTLY"
-
-Then a language model can render text for a parameterized recipe.
-
 
 ## Research
 
@@ -46,6 +40,14 @@ composed of _places_, _transitions_, and _arcs_, where:
 
   * ingredients getting transformed into `Yields` correspond to _tokens_
   * measurable states correspond to _guard expressions_
+
+
+References to other elements within a `Closure` imply:
+
+  * "ADD TO FOCUS MENTIONED MOST RECENTLY"
+  * "USE TOOL MENTIONED MOST RECENTLY"
+
+Then a language model could render text from any parameterized recipe.
 
 
 ## Questions
