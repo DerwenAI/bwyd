@@ -1,12 +1,40 @@
+## Taxonomy
+
+At the core, the configuration of the **Bwyd** language is based on a
+_knowledge graph_.
+
+  - ratio
+  - ingredient
+  - technique
+  - tool
+
+within Closure implies "ADD TO FOCUS MENTIONED MOST RECENTLY"
+
+within Closure implies "USE TOOL MENTIONED MOST RECENTLY"
+
+Then a language model can render text for a parameterized recipe.
+
+
+## Research
+
+  * <https://huggingface.co/collections/pacoid/bwyd-66fa446360ff0bbc5deddd59>
+
+
+---
+
 ## Ideation
 
 Other language constructs to be added are `Substitutions` and `Pairings`,
 per Niki Segnit, [_The Flavor Thesaurus_](https://www.nikisegnit.com/the-flavour-thesaurus)
 and the concepts of _lateral cooking_ which she's explored.
 
-Each recipe is by definition a 
+Each `Closure` of a recipe is by definition a 
 [_causal graph_](https://medium.com/@gxyang13/close-back-door-for-causal-models-a-guide-to-causal-graph-d4483cd5a276),
-where the `Yields` of a `Closure` represent intermediate _outcomes_.
+where:
+
+  * `Yields` represent intermediate _outcomes_
+  * substitutions/pivots correspond to _interventions_
+
 
 Each `Step` within a `Closure` specifies its required ingredients in
 specific ratios and the tools which must be available, applying
@@ -67,29 +95,6 @@ content?
 Q: Can we use AI building blocks (e.g., language models, causal
 graphs, reinforcement learning, etc.) to restate sequences of `Step`
 procedures, i.e., to improve recipes?
-
-
-
-## Taxonomy
-
-At the core, the configuration of the **Bwyd** language is based on a
-_knowledge graph_.
-
-  - ratio
-  - ingredient
-  - technique
-  - tool
-
-within Closure implies "ADD TO FOCUS MENTIONED MOST RECENTLY"
-
-within Closure implies "USE TOOL MENTIONED MOST RECENTLY"
-
-Then a language model can render text for a parameterized recipe.
-
-
-## Research
-
-  * <https://huggingface.co/collections/pacoid/bwyd-66fa446360ff0bbc5deddd59>
 
 
 ---
