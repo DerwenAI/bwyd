@@ -36,9 +36,10 @@ Clearly the bulk of free recipes online (circa 2025) are intended and
 structured as click-bait, and a growing protion of that content simply
 does not work in a kitchen.
 Now the popular services of 
-["Today's AI"](https://pangaro.com/designconversation/2021/08/newmacy-in-2021-pandemics-ai/),
-which are intended to provide _abstractive summarization_, have begun to show
-indications of leveraging that degraded content.
+["Today's AI"](https://pangaro.com/designconversation/2021/08/newmacy-in-2021-pandemics-ai/)
+-- which are intended to provide _abstractive summarization_ --
+are beginning to show indications of republishing that degraded content.
+A positive feedback loop follows, and it won't be pretty.
 
 Consequently this project is an application of contemporary software
 engineering into the process of how people in professional kitchens
