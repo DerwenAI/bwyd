@@ -41,8 +41,8 @@ via an internal KG?
 `mix`, `fold`, `cut`, `spread`, `whisk`, `beat`, `roll`
 
 
-Q: Can we use the recent code-completion API in Jupyter notebooks,
-working with a Bwyd kernel?
+Q: Can the recent code-completion API in Jupyter notebooks be used
+with a **Bwyd** kernel?
 
   - <https://medium.com/jupyter-blog/jupyterlab-4-1-and-notebook-7-1-are-here-20bfc3c10217>
   - <https://github.com/jupyterlab/jupyter-ai>
@@ -56,9 +56,18 @@ Q: Can a saved notebook encapsulate an `Observable` session?
   - use ipywidgets for search, scaling, equipment list, etc., ?
   - https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20Custom.html
 
-Q: Can the new `skrub.GapEncoder` be used to parse online recipe content?
+Q: Can `SetFit` and the new `skrub.GapEncoder` be used to parse the
+relatively unstructured text from (public domain) online recipes
+content?
 
+  - i.e., _transduce_ existing online recipes into a known DSL
   - <https://skrub-data.org/stable/reference/generated/skrub.GapEncoder.html>
+  - <https://huggingface.co/docs/setfit/index>
+
+Q: Can we use AI building blocks (e.g., language models, causal
+graphs, reinforcement learning, etc.) to restate sequences of `Step`
+procedures, i.e., to improve recipes?
+
 
 
 ## Taxonomy
