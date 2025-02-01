@@ -7,6 +7,7 @@
 
   - [`icecream`](https://github.com/gruns/icecream)
   - [`jupyterlab`](https://jupyter.org/)
+  - [`pydantic-graph`](https://ai.pydantic.dev/graph/#graph-types)
   - [`textX`](https://textx.github.io/textX/)
 
 
