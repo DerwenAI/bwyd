@@ -61,7 +61,7 @@ while ensuring the quality required by use in professional kitchens.
 
 ## Documentation
 
-  * priject set up: [INSTALL.md](https://github.com/DerwenAI/bwyd/blob/main/INSTALL.md)
+  * how to install: [INSTALL.md](https://github.com/DerwenAI/bwyd/blob/main/INSTALL.md)
   * project notes: [NOTES.md](https://github.com/DerwenAI/bwyd/blob/main/NOTES.md)
 
 
