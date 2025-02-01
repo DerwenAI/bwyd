@@ -42,10 +42,11 @@ are beginning to show indications of republishing that degraded content.
 A positive feedback loop follows, and it won't be pretty.
 
 Consequently this project is an application of contemporary software
-engineering into the process of how people in professional kitchens
-think about their work.
-Think of this as a domain specific language for authoring and navigating
-cookbooks, customized for use with large language models.
+engineering -- particularly drawn from _functional programming_ --
+into the process of how people in professional kitchens think about
+their work.
+Think of this project as a domain specific language for authoring and
+navigating cookbooks, customized for use with large language models.
 
 Code in **Bwyd** language represents the "structure" and "art" of cooking,
 which can then be parameterized and rendered as text to generate recipes
@@ -60,15 +61,16 @@ quality required by use in professional kitchens.
 
 ### `Ratio`
 
-These represent dimensionless structures, as the ratios (by weight) of key
+These dimensionless relations represent the ratios (by weight) of key
 components in cooking.
 
 A close programming analogy would be _abstract classes_.
 Per author Michael Ruhlman, `Ratios` represent
-"the _truth_ of cooking, all that is unchanging, fixed, elemental.
+"the _truth_ of cooking, all that is unchanging, fixed, elemental."
+Meanwhile the structure in recipes defines the "craft" of cooking.
 
-Structure defines the "craft" of cooking.
-In practice, `Ratio` objects allow for scaling recipes.
+**In practice**: `Ratio` objects allow for scaling recipes.
+
 
 ### `Closure`
 
@@ -94,8 +96,10 @@ describing yields produced, while consuming recursively from other
 ```
 
 Process defines the "art" of cooking.
-In practice, `Closure` objects allow for team collaboration and
+
+**In practice**: `Closure` objects allow for team collaboration and
 planning within a professional kitchen work environment.
+
 
 ### `Observable`
 
@@ -108,5 +112,6 @@ used to guide subsequent modifications of the `Closure`
 definitions which were invoked.
 
 Experience defines the shared  "communication" of cooking.
-In practice, `Observable` objects collect audience annotations
+
+**In practice**: `Observable` objects collect audience annotations
 (photos, comments, stories, successs/failures) for recipes.
