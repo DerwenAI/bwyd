@@ -2,13 +2,12 @@
 
 Could link the _verb_ references in `Action` objects to tutorials via the internal KG?
 
-mix
-fold
-cut
-spread
-whisk
-beat
-roll
+`mix`, `fold`, `cut`, `spread`, `whisk`, `beat`, `roll`
+
+
+Other language constructs to be added are `Substitutions` and `Pairings`,
+per Niki Segnit, [_The Flavor Thesaurus_](https://www.nikisegnit.com/the-flavour-thesaurus)
+and the concepts of _lateral cooking_ which she's explored.
 
 
 ## Research
@@ -18,7 +17,8 @@ roll
 
 ## Ideation
 
-Each recipe is a causal graph, with steps as the intermediate outcomes.
+Each recipe is a _causal graph_, with the yields of each step as
+intermediate outcomes.
 
 Underlying graph produces:
 

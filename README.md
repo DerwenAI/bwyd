@@ -46,15 +46,17 @@ engineering -- particularly drawn from _functional programming_ --
 into the process of how people in professional kitchens think about
 their work.
 Think of this project as a domain specific language for authoring and
-navigating cookbooks, customized for use with large language models.
+navigating cookbooks, customized for use with language models, causal
+graphs, neurosymbolic reasoning, and other building blocks for AI
+applications.
 
 Code in **Bwyd** language represents the "structure" and "art" of cooking,
 which can then be parameterized and rendered as text to generate recipes
 for a broader audience of home cooks.
 
 A secondary use for **Bwyd** as a DSL is to provide an intermediate
-form for leveraging _Generative AI_ to manipulate recipes with the
-quality required by use in professional kitchens.
+form for leveraging _generative_ approaches to manipulate recipes
+while ensuring the quality required by use in professional kitchens.
 
 
 ## Language Constructs
