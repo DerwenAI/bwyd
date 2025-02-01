@@ -59,20 +59,10 @@ form for leveraging _generative_ approaches to manipulate recipes
 while ensuring the quality required by use in professional kitchens.
 
 
-## Set up
+## Documentation
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
-
-python3 -m pip install -U pip wheel
-python3 -m pip install -r requirements.txt
-python3 -m pip install -r requirements-dev.txt
-
-python3 tests/test_load.py
-
-python3 demo.py
-```
+  * priject set up: [INSTALL.md](https://github.com/DerwenAI/bwyd/blob/main/INSTALL.md)
+  * project notes: [NOTES.md](https://github.com/DerwenAI/bwyd/blob/main/NOTES.md)
 
 
 ## Language constructs
