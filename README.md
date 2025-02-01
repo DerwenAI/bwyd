@@ -1,6 +1,7 @@
 # Bwyd cooking DSL
 
-> "Everything said is said by an observer." – Maturana and Varela, _Autopoiesis_
+> "Everything said is said by an observer." –
+Maturana and Varela, [_Autopoiesis_](https://www.researchgate.net/publication/232231194_Autopoiesis_40_years_Later_A_Review_and_a_Reformulation)
 
 > "I predict that in the future we will increasingly see cookbooks doing what books do best, tell stories and inspire." –
 [Michael Ruhlman](https://ruhlman.substack.com/p/on-cookbooks-and-writing?publication_id=218241&post_id=154625487)
@@ -8,9 +9,10 @@
 
 ## Abstract
 
-Goal: _Implement a DSL to simplify means for defining good recipes rapidly,
-while using computational tools to catch errors and inconsistencies, scale
-portions, calculate yields, and so on._
+Goal: _Implement a DSL (domain specific language) to simplify means
+for defining good recipes rapidly, while using computational tools to
+catch errors and inconsistencies, scale portions, calculate yields,
+and so on._
 
 The seed crazy idea behind the scenes here is to consider how cooks
 behave somewhat like robots, following recipes as instructions.
@@ -27,6 +29,8 @@ attached into the process?
 This project is an application of contemporary software engineering
 into the process of how people in professional kitchens think about
 their work.
+Think of this as a domain specific language for authoring and navigating
+cookbooks, customized for use with large language models.
 
 Code in **Bwyd** language represents the "structure" and "art" of cooking,
 which can then be parameterized and rendered as text to generate recipes
