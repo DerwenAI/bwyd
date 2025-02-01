@@ -10,25 +10,39 @@ Maturana and Varela, [_Autopoiesis_](https://www.researchgate.net/publication/23
 ## Abstract
 
 Goal: _Implement a DSL (domain specific language) to simplify means
-for defining good recipes rapidly, while using computational tools to
-catch errors and inconsistencies, scale portions, calculate yields,
-and so on._
+for defining reliable recipes rapidly, while leveraging computational
+tools to catch errors and inconsistencies, scale portions, calculate
+yields, and so on._
 
-The seed crazy idea behind the scenes here is to consider how cooks
-behave somewhat like robots, following recipes as instructions.
+The "seed crazy idea" behind the scenes here is to consider how cooks
+behave somewhat like robots, following recipes as step-by-step
+instructions.
 Recipes make cooks "programmable" to some extent.
 
-Conversely, what if detailed cooking instructions could be expressed in a way
-that was computable and represented independently of specific human languages?
-In other words, representing the processes of cooking as source code plus
-semi-structured data?
+Conversely, what if detailed cooking instructions could be expressed
+in a way that was computable and represented independently of specific
+human languages?
+In other words, representing the processes of cooking as source code
+plus semi-structured data?
 
-Moreover, where do stories that inspire and human domain expertise get
-attached into the process?
+To this point also consider: where do the stories which inspire and
+the associated human domain expertise get attached into the process of
+defining robust recipes?
 
-This project is an application of contemporary software engineering
-into the process of how people in professional kitchens think about
-their work.
+
+## Motivations
+
+Clearly the bulk of free recipes online (circa 2025) are intended and
+structured as click-bait, and a growing protion of that content simply
+does not work in a kitchen.
+Now the popular services of 
+["Today's AI"](https://pangaro.com/designconversation/2021/08/newmacy-in-2021-pandemics-ai/),
+which are intended to provide _abstractive summarization_, have begun to show
+indications of leveraging that degraded content.
+
+Consequently this project is an application of contemporary software
+engineering into the process of how people in professional kitchens
+think about their work.
 Think of this as a domain specific language for authoring and navigating
 cookbooks, customized for use with large language models.
 
@@ -36,9 +50,9 @@ Code in **Bwyd** language represents the "structure" and "art" of cooking,
 which can then be parameterized and rendered as text to generate recipes
 for a broader audience of home cooks.
 
-A secondary use for **Bwyd** as a DSL is to provide an intermediate for
-leveraging _Generative AI_ to manipulate recipes with the quality required
-by use in professional kitchens.
+A secondary use for **Bwyd** as a DSL is to provide an intermediate
+form for leveraging _Generative AI_ to manipulate recipes with the
+quality required by use in professional kitchens.
 
 
 ## Language Constructs
