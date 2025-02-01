@@ -95,133 +95,133 @@ Process interpreter for one Closure.
             ),
         )
 
-        for cmd in closure.commands:
+        for step in closure.steps:
             if debug:
                 #ic(dir(closure))
-                ic(cmd)
+                ic(step)
 
-            cmd_class_name: str = cmd.__class__.__name__
+            step_class_name: str = step.__class__.__name__
 
-            if cmd_class_name == "Ratio":
+            if step_class_name == "Ratio":
                 if debug:
-                    ic(cmd.name, [ (elem.symbol, elem.components) for elem in cmd.elements ])
+                    ic(step.name, [ (elem.symbol, elem.components) for elem in step.elements ])
 
-                    for elem in cmd.elements:
+                    for elem in step.elements:
                         if elem.symbol not in clos_obj.ingredients:
                             print(f"RATIO component: {elem.symbol} not found")
 
-            elif cmd_class_name == "Note":
+            elif step_class_name == "Note":
                 if debug:
-                    ic(cmd.text)
+                    ic(step.text)
 
-                clos_obj.notes.append(cmd.text)
+                clos_obj.notes.append(step.text)
 
-            elif cmd_class_name == "Container":
+            elif step_class_name == "Container":
                 if debug:
-                    ic(cmd.symbol, cmd.text)
+                    ic(step.symbol, step.text)
 
-                clos_obj.containers[cmd.symbol] = cmd.text
+                clos_obj.containers[step.symbol] = step.text
 
-            elif cmd_class_name == "Tool":
+            elif step_class_name == "Tool":
                 if debug:
-                    ic(cmd.symbol, cmd.text)
+                    ic(step.symbol, step.text)
 
-                clos_obj.tools[cmd.symbol] = cmd.text
+                clos_obj.tools[step.symbol] = step.text
 
-            elif cmd_class_name == "Use":
+            elif step_class_name == "Use":
                 if debug:
-                    ic(cmd.symbol, cmd.name)
+                    ic(step.symbol, step.name)
 
-                clos_obj.ingredients[cmd.symbol] = cmd.name
+                clos_obj.ingredients[step.symbol] = step.name
 
                 clos_obj.focus_op(
-                    cmd,
+                    step,
                     OpUse(
-                        symbol = cmd.symbol,
-                        name = cmd.name,
+                        symbol = step.symbol,
+                        name = step.name,
                     ),
                 )
 
-            elif cmd_class_name == "Ingredient":
+            elif step_class_name == "Ingredient":
                 if debug:
-                    ic(cmd.symbol, cmd.text)
+                    ic(step.symbol, step.text)
 
-                clos_obj.ingredients[cmd.symbol] = cmd.text
+                clos_obj.ingredients[step.symbol] = step.text
 
-            elif cmd_class_name == "Focus":
+            elif step_class_name == "Focus":
                 if debug:
-                    ic(cmd.symbol)
+                    ic(step.symbol)
 
-                if cmd.symbol not in clos_obj.containers:
-                    print(f"CONTAINER: {cmd.symbol} not found")
+                if step.symbol not in clos_obj.containers:
+                    print(f"CONTAINER: {step.symbol} not found")
 
                 clos_obj.active_focus = Focus(
-                    container = cmd.symbol,
+                    container = step.symbol,
                 )
 
                 clos_obj.foci.append(clos_obj.active_focus)
 
-            elif cmd_class_name == "Add":
+            elif step_class_name == "Add":
                 measure: Measure = Measure(
-                    amount = cmd.measure.amount,
-                    units = cmd.measure.units,
+                    amount = step.measure.amount,
+                    units = step.measure.units,
                 )
 
                 if debug:
-                    ic(cmd.symbol, measure, cmd.text)
+                    ic(step.symbol, measure, step.text)
 
-                if cmd.symbol not in clos_obj.ingredients:
-                    print(f"INGREDIENT: {cmd.symbol} not found")
+                if step.symbol not in clos_obj.ingredients:
+                    print(f"INGREDIENT: {step.symbol} not found")
 
                 clos_obj.focus_op(
-                    cmd,
+                    step,
                     OpAdd(
-                        symbol = cmd.symbol,
+                        symbol = step.symbol,
                         measure = measure,
-                        text = cmd.text,
+                        text = step.text,
                     ),
                 )
 
-            elif cmd_class_name == "Action":
+            elif step_class_name == "Action":
                 duration: Duration = Duration(
-                    amount = cmd.duration.amount,
-                    units = cmd.duration.units,
+                    amount = step.duration.amount,
+                    units = step.duration.units,
                 )
 
                 if debug:
-                    ic(cmd.symbol, cmd.modifier, cmd.until, duration)
+                    ic(step.symbol, step.modifier, step.until, duration)
 
-                if cmd.symbol not in clos_obj.tools:
-                    print(f"TOOL: {cmd.symbol} not found")
+                if step.symbol not in clos_obj.tools:
+                    print(f"TOOL: {step.symbol} not found")
 
                 clos_obj.focus_op(
-                    cmd,
+                    step,
                     OpAction(
-                        tool = cmd.symbol,
-                        modifier = cmd.modifier,
-                        until = cmd.until,
+                        tool = step.symbol,
+                        modifier = step.modifier,
+                        until = step.until,
                         duration = duration,
                     ),
                 )
 
-            elif cmd_class_name == "Chill":
+            elif step_class_name == "Chill":
                 duration = Duration(
-                    amount = cmd.duration.amount,
-                    units = cmd.duration.units,
+                    amount = step.duration.amount,
+                    units = step.duration.units,
                 )
 
                 if debug:
-                    ic(cmd.symbol, cmd.modifier, cmd.until, duration)
+                    ic(step.symbol, step.modifier, step.until, duration)
 
-                if cmd.symbol not in clos_obj.containers:
-                    print(f"TOOL: {cmd.symbol} not found")
+                if step.symbol not in clos_obj.containers:
+                    print(f"TOOL: {step.symbol} not found")
 
                 clos_obj.focus_op(
-                    cmd,
+                    step,
                     OpChill(
-                        container = cmd.symbol,
-                        modifier = cmd.modifier,
-                        until = cmd.until,
+                        container = step.symbol,
+                        modifier = step.modifier,
+                        until = step.until,
                         duration = duration,
                     ),
                 )

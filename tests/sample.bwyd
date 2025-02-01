@@ -1,4 +1,4 @@
-// make some yummy gnocchi from root veggies
+// Make some yummy gnocchi from root veggies
 
 CLOSURE: "gnocchi dough"
     NOTE: "best to work with cold ingredients and chilled utensils"
@@ -46,7 +46,7 @@ CLOSURE: "gnocchi dough"
 	UNTIL: "dough just becomes smooth"
 	TIME (90 sec)
 
-YIELD (800 g)
+YIELDS (800 g)
 
 
 CLOSURE: "raw gnocchi dumplings"
@@ -78,7 +78,7 @@ CLOSURE: "raw gnocchi dumplings"
         UNTIL: "entire rope is cut"
 	TIME (30 sec)
 
-YIELD (20)
+YIELDS (20)
 
 
 CLOSURE: "frozen gnocchi dumplings"
@@ -106,4 +106,4 @@ CLOSURE: "frozen gnocchi dumplings"
         UNTIL: "dumplings are frozen solid"
         TIME (2 hrs)
 
-YIELD (20)
+YIELDS (20)

@@ -4,11 +4,11 @@ Program:
 
 Closure:
   "CLOSURE:" name=STRING
-    commands+=Command
-  "YIELD" yields=Measure
+    steps+=Step
+  "YIELDS" yields=Measure
 ;
 
-Command:
+Step:
   Ratio | Note | Container | Use | Ingredient | Focus | Tool | Add | Action | Chill
 ;
 

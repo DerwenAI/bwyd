@@ -59,7 +59,23 @@ form for leveraging _generative_ approaches to manipulate recipes
 while ensuring the quality required by use in professional kitchens.
 
 
-## Language Constructs
+## Set up
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+
+python3 -m pip install -U pip wheel
+python3 -m pip install -r requirements.txt
+python3 -m pip install -r requirements-dev.txt
+
+python3 tests/test_load.py
+
+python3 demo.py
+```
+
+
+## Language constructs
 
 ### `Ratio`
 
@@ -80,21 +96,23 @@ These define process, based on `Ratios`, for how to use ingredients,
 equipment, and techniques to make specific products.
 
 A close programming analogy would be _generators_, and internally
-these behave similar to Petri nets with pre- and post- conditions.
+these behave similar to Petri nets with _guard expressions_ as pre-
+and post- conditions.
 Recalling "Old School" AI from the 1980s, these function much like
-unpopulated frames.
+unpopulated frames in _frame representation_.
 
-Codifying the practice, `Closure` objects describe steps in cooking,
-specifying parameterizations (scale, ingredient substitutions) and
-describing yields produced, while consuming recursively from other
-`Closure` definitions within a personalized library.
+Codifying the practice, `Closure` objects describe sequences of
+`Steps` used in cooking.
+These specify parameterizations (scale, ingredient substitutions) and
+describing the `Yields` produced, while consuming recursively from
+other `Closure` definitions drawn from a personalized library.
 
 ```
   CLOSURE: "cookie dough"
 
-    // commands...
+    // steps ...
 
-  YIELD (100 g)
+  YIELDS (100 g)
 ```
 
 Process defines the "art" of cooking.
