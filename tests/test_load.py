@@ -45,7 +45,7 @@ Load a sample file to ensure the parser works correctly.
     exp_data: dict = json.load(open(TEST_DIR / "sample.json", "r", encoding = "utf-8"))  # pylint: disable=R1732
 
     # compare
-    assert obs_data[0].keys() == exp_data[0].keys()
+    assert sorted(obs_data.items()) == sorted(exp_data.items())
 
 
 if __name__ == "__main__":

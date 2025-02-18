@@ -6,6 +6,7 @@ DSL implementing the Bwyd language.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
+from urllib.parse import ParseResult, urlparse
 import pathlib
 import typing
 
@@ -38,17 +39,18 @@ Bwyd DSL parser/interpreter.
         """
 Constructor.
         """
+        self.sources: typing.List[ str ] = []
         self.closures: typing.Dict[ str, Closure ] = {}
 
 
     def to_json (
         self,
-        ) -> typing.List[dict]:
+        ) -> typing.Dict[ str, list ]:
         """
 Return a list of JSON-friendly dictionary representations,
 one for each parsed Closure.
         """
-        return [
+        clos_list: typing.List[ dict ] = [
             {
                 "title": clos_obj.title,
                 "name": name,
@@ -61,6 +63,11 @@ one for each parsed Closure.
             }
             for name, clos_obj in self.closures.items()
         ]
+
+        return {
+            "sources": self.sources,
+            "closures": clos_list,
+        }
 
 
     def parse (
@@ -274,6 +281,16 @@ Process interpreter for one Closure.
         """
 Process interpreter for once instance of a Bwyd program.
         """
+        for source in program.sources:
+            try:
+                result: ParseResult = urlparse(source.url)
+
+                if result.scheme not in [ "http", "https" ]:
+                    raise Exception(f"badly formatted URL: {source.url}")
+                    self.sources.append(source.url)
+            except Exception as ex:
+                print(ex)
+
         for closure in program.closures:
             self.closures[closure.name] = self.interpret_closure(
                 closure,
