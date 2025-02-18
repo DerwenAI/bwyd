@@ -12,8 +12,8 @@ import typing
 from icecream import ic  # pylint: disable=E0401
 import textx  # pylint: disable=E0401
 
-from .objects import Duration, Measure, \
-    OpAction, OpAdd, OpChill, OpUse, \
+from .objects import Duration, Measure, Temperature, \
+    OpAction, OpAdd, OpBake, OpChill, OpUse, \
     Closure, Focus
 
 
@@ -50,6 +50,7 @@ one for each parsed Closure.
         """
         return [
             {
+                "title": clos_obj.title,
                 "name": name,
                 "yields": clos_obj.yields.to_json(),
                 "notes": clos_obj.notes,
@@ -86,6 +87,12 @@ Parse one script.
         """
 Process interpreter for one Closure.
         """
+        # ensure that "null" titles keep their anonymous semantics
+        title: typing.Optional[ str ] = closure.title
+
+        if title is not None and len(title) < 1:
+            title = None
+
         clos_obj: Closure = Closure(
             name = closure.name,
             obj = closure,
@@ -93,6 +100,7 @@ Process interpreter for one Closure.
                 amount = closure.yields.amount,
                 units = closure.yields.units,
             ),
+            title = title,
         )
 
         for step in closure.steps:
@@ -104,33 +112,33 @@ Process interpreter for one Closure.
 
             if step_class_name == "Ratio":
                 if debug:
-                    ic(step.name, [ (elem.symbol, elem.components) for elem in step.elements ])
+                    ic(step_class_name, step.name, [ (part.symbol, part.components) for part in step.parts ])
 
-                    for elem in step.elements:
-                        if elem.symbol not in clos_obj.ingredients:
-                            print(f"RATIO component: {elem.symbol} not found")
+                    for part in step.parts:
+                        if len(part.components) < 1 and part.symbol not in clos_obj.ingredients:
+                            print(f"RATIO part: {part.symbol} not found")
 
             elif step_class_name == "Note":
                 if debug:
-                    ic(step.text)
+                    ic(step_class_name, step.text)
 
                 clos_obj.notes.append(step.text)
 
             elif step_class_name == "Container":
                 if debug:
-                    ic(step.symbol, step.text)
+                    ic(step_class_name, step.symbol, step.text)
 
                 clos_obj.containers[step.symbol] = step.text
 
             elif step_class_name == "Tool":
                 if debug:
-                    ic(step.symbol, step.text)
+                    ic(step_class_name, step.symbol, step.text)
 
                 clos_obj.tools[step.symbol] = step.text
 
             elif step_class_name == "Use":
                 if debug:
-                    ic(step.symbol, step.name)
+                    ic(step_class_name, step.symbol, step.name)
 
                 clos_obj.ingredients[step.symbol] = step.name
 
@@ -144,16 +152,16 @@ Process interpreter for one Closure.
 
             elif step_class_name == "Ingredient":
                 if debug:
-                    ic(step.symbol, step.text)
+                    ic(step_class_name, step.symbol, step.text)
 
                 clos_obj.ingredients[step.symbol] = step.text
 
             elif step_class_name == "Focus":
                 if debug:
-                    ic(step.symbol)
+                    ic(step_class_name, step.symbol)
 
                 if step.symbol not in clos_obj.containers:
-                    print(f"CONTAINER: {step.symbol} not found")
+                    print(f"CHILL CONTAINER: {step.symbol} not found")
 
                 clos_obj.active_focus = Focus(
                     container = step.symbol,
@@ -168,7 +176,7 @@ Process interpreter for one Closure.
                 )
 
                 if debug:
-                    ic(step.symbol, measure, step.text)
+                    ic(step_class_name, step.symbol, measure, step.text)
 
                 if step.symbol not in clos_obj.ingredients:
                     print(f"INGREDIENT: {step.symbol} not found")
@@ -189,10 +197,10 @@ Process interpreter for one Closure.
                 )
 
                 if debug:
-                    ic(step.symbol, step.modifier, step.until, duration)
+                    ic(step_class_name, step.symbol, step.modifier, step.until, duration)
 
-                if step.symbol not in clos_obj.tools:
-                    print(f"TOOL: {step.symbol} not found")
+                if step.symbol not in clos_obj.tools and step.symbol not in clos_obj.containers:
+                    print(f"ACTION OBJECT: {step.symbol} not found")
 
                 clos_obj.focus_op(
                     step,
@@ -204,6 +212,34 @@ Process interpreter for one Closure.
                     ),
                 )
 
+            elif step_class_name == "Bake":
+                temperature = Temperature(
+                    degrees = step.temperature.degrees,
+                    units = step.temperature.units,
+                )
+
+                duration = Duration(
+                    amount = step.duration.amount,
+                    units = step.duration.units,
+                )
+
+                if debug:
+                    ic(step_class_name, step.symbol, step.modifier, step.until, temperature, duration)
+
+                if step.symbol not in clos_obj.containers:
+                    print(f"BAKE CONTAINER: {step.symbol} not found")
+
+                clos_obj.focus_op(
+                    step,
+                    OpBake(
+                        container = step.symbol,
+                        modifier = step.modifier,
+                        until = step.until,
+                        duration = duration,
+                        temperature = temperature,
+                    ),
+                )
+
             elif step_class_name == "Chill":
                 duration = Duration(
                     amount = step.duration.amount,
@@ -211,10 +247,10 @@ Process interpreter for one Closure.
                 )
 
                 if debug:
-                    ic(step.symbol, step.modifier, step.until, duration)
+                    ic(step_class_name, step.symbol, step.modifier, step.until, duration)
 
                 if step.symbol not in clos_obj.containers:
-                    print(f"TOOL: {step.symbol} not found")
+                    print(f"CONTAINER: {step.symbol} not found")
 
                 clos_obj.focus_op(
                     step,

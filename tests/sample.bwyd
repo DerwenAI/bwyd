@@ -1,9 +1,9 @@
-// Make some yummy gnocchi from root veggies
+// make some yummy gnocchi from root veggies
 
-CLOSURE: "gnocchi dough"
+CLOSURE: "dough"
     NOTE: "best to work with cold ingredients and chilled utensils"
-    CONTAINER bowl: "chilled mixing bowl"
 
+    CONTAINER bowl: "chilled mixing bowl"
     FOCUS bowl
 
     TOOL fork: "small fork or whisk"
@@ -16,7 +16,7 @@ CLOSURE: "gnocchi dough"
     INGREDIENT parmesan: "grated parmesan"
     INGREDIENT nutmeg: "freshly grated nutmeg"
 
-    RATIO: "gnocchi dough" =
+    RATIO: "dough" =
     	   starch [ puree, flour ],
 	   egg
 
@@ -49,19 +49,19 @@ CLOSURE: "gnocchi dough"
 YIELDS (800 g)
 
 
-CLOSURE: "raw gnocchi dumplings"
+CLOSURE: "dumplings"
     NOTE: "divide dough into 8 pieces, rolling out one at a time"
-    CONTAINER mat: "floured rolling surface"
 
+    CONTAINER mat: "floured rolling surface"
     FOCUS mat
 
     TOOL hand: "clean hands"
     TOOL spoon: "large spoon"
     TOOL fork: "fork"
 
-    USE dough: "gnocchi dough"
-    INGREDIENT flour: "rice, semolina, etc."
+    USE dough: "dough"
 
+    INGREDIENT flour: "rice, semolina, etc."
     ADD flour (10 g)
 
     ACTION spoon: "spread"
@@ -81,10 +81,11 @@ CLOSURE: "raw gnocchi dumplings"
 YIELDS (20)
 
 
-CLOSURE: "frozen gnocchi dumplings"
+CLOSURE: "frozen product"
+    TITLE: "frozen gnocchi dumplings"
     NOTE: "add layers of dumplings to fill depth of baking dish"
-    CONTAINER dish: "baking dish"
 
+    CONTAINER dish: "baking dish"
     FOCUS dish
 
     TOOL hand: "clean hands"
@@ -96,7 +97,7 @@ CLOSURE: "frozen gnocchi dumplings"
         UNTIL: "fully lined"
 	TIME (30 sec)
 
-    USE raw: "raw gnocchi dumplings"
+    USE raw: "dumplings"
 
     ACTION board: "role dumplings (create edges) onto parchment paper; arrange without touching other dumplings"
         UNTIL: "layer is filled"

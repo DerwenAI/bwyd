@@ -55,6 +55,26 @@ Serializable representation for JSON.
 
 
 @dataclass(order=False, frozen=False)
+class Temperature:  # pylint: disable=R0902
+    """
+A data class representing one parsed Temperature object.
+    """
+    degrees: float
+    units: str
+
+    def to_json (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "degrees": self.degrees,
+            "units": self.units,
+        }
+
+
+@dataclass(order=False, frozen=False)
 class OpAdd:  # pylint: disable=R0902
     """
 A data class representing one Add object.
@@ -124,6 +144,33 @@ Serializable representation for JSON.
 
 
 @dataclass(order=False, frozen=False)
+class OpBake:  # pylint: disable=R0902
+    """
+A data class representing one Bake object.
+    """
+    container: str
+    modifier: str
+    until: str
+    duration: Duration
+    temperature: Temperature
+
+    def to_json (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "op": "bake",
+            "container": self.container,
+            "modifier": self.modifier,
+            "until": self.until,
+            "duration": self.duration.to_json(),
+            "temperature": self.temperature.to_json(),
+        }
+
+
+@dataclass(order=False, frozen=False)
 class OpChill:  # pylint: disable=R0902
     """
 A data class representing one Chill object.
@@ -148,7 +195,7 @@ Serializable representation for JSON.
         }
 
 
-OpsTypes = typing.Union[ OpAdd, OpUse, OpAction, OpChill ]
+OpsTypes = typing.Union[ OpAdd, OpUse, OpAction, OpBake, OpChill ]
 
 
 @dataclass(order=False, frozen=False)
@@ -179,6 +226,7 @@ A data class representing one parsed Closure object.
     name: str
     obj: typing.Any
     yields: Measure
+    title: typing.Optional[ str ] = None
     notes: typing.List[ str ] = field(default_factory = lambda: [])
     tools: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())  # pylint: disable=W0108
     containers: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())  # pylint: disable=W0108

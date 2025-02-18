@@ -1,0 +1,103 @@
+// our fam's fave muffin recipe
+// source: <https://www.beatbakeeat.com/best-applesauce-muffins-recipe-ever/>
+
+CLOSURE: "batter"
+    CONTAINER bowl: "chilled mixing bowl"
+    FOCUS bowl
+
+    TOOL whisk: "medium whisk or fork"
+    TOOL spatula: "silicone spatula"
+
+    // dry mix
+    INGREDIENT sugar: "granulated sugar"
+    INGREDIENT salt: "sea salt, fine grind"
+    INGREDIENT baking_soda: "baking soda"
+    INGREDIENT cinnamon: "ground cinnamon"
+    INGREDIENT nutmeg: "freshly grated nutmeg"
+
+    // wet mix
+    INGREDIENT applesauce: "unsweetened applesauce"
+    INGREDIENT oil: "avocado oil"
+    INGREDIENT molasses: "molasses"
+    INGREDIENT vanilla: "vanilla extract"
+    INGREDIENT egg: "large chicken egg"
+
+    // chunky mix
+    INGREDIENT oats: "rolled oats"
+    INGREDIENT coconut: "dry shredded coconut"
+    INGREDIENT chia: "chia seeds"
+    INGREDIENT walnut: "chopped walnut"
+    INGREDIENT blueberry: "fresh or frozen whole blueberries"
+    INGREDIENT flour: "all-purpose flour"
+
+    // Q: what is a known ratio here?
+
+    ADD sugar (133 g)
+    ADD salt (3 g)
+    ADD baking_soda (8.5 g)
+    ADD cinnamon (5.2 g)
+    ADD nutmeg (1.2 g)
+
+    ACTION whisk: "blend"
+        UNTIL: "well mixed"
+	TIME (30 sec)
+
+    ADD applesauce (375 g)
+    ADD oil (108 g)
+    ADD molasses (14 g)
+    ADD vanilla (6 g)
+    ADD egg (2)
+
+    ACTION spatula: "fold"
+        UNTIL: "lightly blended"
+	TIME (30 sec)
+
+    ADD oats (90 g)
+    ADD coconut (24 g)
+    ADD chia (40 g)
+    ADD walnut (29 g)
+    ADD blueberry (60 g)
+    
+    ACTION spatula: "fold"
+        UNTIL: "lightly blended"
+	TIME (1 min)
+
+    ADD flour (120 g) : "only until incorporated into the batter; do not overmix"
+
+    ACTION spatula: "mix"
+	UNTIL: "no more dry flour"
+	TIME (1.5 min)
+
+YIELDS (1117 g)
+
+
+CLOSURE: "muffins"
+    TITLE: "applesauce muffins"
+    NOTE: "for large, moist, breakfast muffins"
+
+    CONTAINER pan: "muffin pan, 8 large, buttered"
+    FOCUS pan
+
+    TOOL spoon: "large spoon"
+    TOOL fork: "small fork"
+
+    INGREDIENT butter: "vegan butter, butter, or oil"
+    ADD butter (14 g)
+
+    ACTION pan: "grease"
+        UNTIL: "cooking surfaces are all buttered"
+        TIME (1 min)
+
+    USE batter: "batter"
+    ADD batter (1117 g)
+
+    ACTION spoon: "fill"
+        UNTIL: "evenly distributed"
+	TIME (5 min)
+
+    BAKE pan: "place pan on a baking sheet, make level, convection bake"
+        AT: 177 C
+        UNTIL: "an inserted fork comes out with tiny crumbs"
+        TIME (20 min)
+
+YIELDS (8)

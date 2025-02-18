@@ -4,19 +4,20 @@ Program:
 
 Closure:
   "CLOSURE:" name=STRING
+    ("TITLE:" title=STRING)?
     steps+=Step
   "YIELDS" yields=Measure
 ;
 
 Step:
-  Ratio | Note | Container | Use | Ingredient | Focus | Tool | Add | Action | Chill
+  Ratio | Note | Container | Use | Ingredient | Focus | Tool | Add | Action | Bake | Chill
 ;
 
 Ratio:
-  "RATIO:" name=STRING "=" (elements+=RatioElement[','])
+  "RATIO:" name=STRING "=" (parts+=RatioPart[','])
 ;
 
-RatioElement:
+RatioPart:
     symbol=ID ('[' components+=ID[','] ']')?
 ;
 
@@ -57,7 +58,9 @@ MeasureUnits:
 ;
 
 Action:
-  "ACTION" symbol=ID (":" modifier=STRING)? "UNTIL:" until=STRING "TIME" duration=Duration
+  "ACTION" symbol=ID (":" modifier=STRING)?
+    "UNTIL:" until=STRING
+    "TIME" duration=Duration
 ;
 
 Duration:
@@ -68,8 +71,29 @@ DurationUnits:
   "sec" | "min" | "hrs"
 ;
 
+Bake:
+  OvenMode symbol=ID (":" modifier=STRING)?
+    "AT:" temperature=Temperature
+    "UNTIL:" until=STRING
+    "TIME" duration=Duration
+;
+
+OvenMode:
+  "BAKE" | "BROIL" | "ROAST" | "TOAST"
+;
+
+Temperature:
+  degrees=NUMBER units=TemperatureUnits
+;
+
+TemperatureUnits:
+  "C"
+;
+
 Chill:
-  "CHILL" symbol=ID (":" modifier=STRING)? "UNTIL:" until=STRING "TIME" duration=Duration
+  "CHILL" symbol=ID (":" modifier=STRING)?
+    "UNTIL:" until=STRING
+    "TIME" duration=Duration
 ;
 
 Comment:

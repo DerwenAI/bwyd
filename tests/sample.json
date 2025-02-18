@@ -1,6 +1,7 @@
 [
   {
-    "name": "gnocchi dough",
+    "title": null,
+    "name": "dough",
     "yields": {
       "amount": 800,
       "units": "g"
@@ -126,7 +127,8 @@
     ]
   },
   {
-    "name": "raw gnocchi dumplings",
+    "title": null,
+    "name": "dumplings",
     "yields": {
       "amount": 20,
       "units": null
@@ -143,7 +145,7 @@
       "mat": "floured rolling surface"
     },
     "ingredients": {
-      "dough": "gnocchi dough",
+      "dough": "dough",
       "flour": "rice, semolina, etc."
     },
     "foci": [
@@ -153,7 +155,7 @@
           {
             "op": "use",
             "symbol": "dough",
-            "name": "gnocchi dough"
+            "name": "dough"
           },
           {
             "op": "add",
@@ -208,7 +210,8 @@
     ]
   },
   {
-    "name": "frozen gnocchi dumplings",
+    "title": "frozen gnocchi dumplings",
+    "name": "frozen product",
     "yields": {
       "amount": 20,
       "units": null
@@ -225,7 +228,7 @@
     },
     "ingredients": {
       "parchment": "cut parchment paper",
-      "raw": "raw gnocchi dumplings"
+      "raw": "dumplings"
     },
     "foci": [
       {
@@ -244,7 +247,7 @@
           {
             "op": "use",
             "symbol": "raw",
-            "name": "raw gnocchi dumplings"
+            "name": "dumplings"
           },
           {
             "op": "action",
