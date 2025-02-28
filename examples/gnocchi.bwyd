@@ -16,10 +16,6 @@ CLOSURE: "dough"
     INGREDIENT parmesan: "grated parmesan"
     INGREDIENT nutmeg: "freshly grated nutmeg"
 
-    RATIO: "dough" =
-    	   starch [ puree, flour ],
-	   egg
-
     ADD egg (1)
 
     ACTION fork: "gently"
@@ -45,6 +41,10 @@ CLOSURE: "dough"
     ACTION spatula: "mix"
 	UNTIL: "dough just becomes smooth"
 	TIME (90 sec)
+
+    RATIO: "dough" =
+    	   starch [ puree, flour ],
+	   egg
 
 YIELDS (800 g)
 
