@@ -26,7 +26,8 @@ dependencies = [
     "textx (>=4.1.0,<5.0.0)",
     "icecream (>=2.1.4,<3.0.0)",
     "pydantic-graph (>=0.0.36,<0.0.37)",
-    "jupyterlab (>=4.3.5,<5.0.0)"
+    "jupyterlab (>=4.3.5,<5.0.0)",
+    "yattag (>=1.16.1,<2.0.0)"
 ]
 
 classifiers = [

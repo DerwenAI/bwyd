@@ -12,6 +12,7 @@ import typing
 
 from icecream import ic  # pylint: disable=E0401
 import textx  # pylint: disable=E0401
+import yattag
 
 from .objects import Duration, Measure, Temperature, \
     OpAction, OpAdd, OpBake, OpChill, OpUse, \
@@ -316,3 +317,57 @@ Process interpreter for once instance of a Bwyd program.
                 closure,
                 debug = debug,
             )
+
+
+    def html (
+        self,
+        *,
+        indent: bool = False,
+        ) -> str:
+        """
+Generate an HTML represenation
+        """
+        doc, tag, text = yattag.Doc().tagtext()
+
+        doc.asis("<!DOCTYPE html>")
+
+        with tag("html"):
+            with tag("body"):
+
+                if len(self.cites) > 0:
+                    with tag("h1"):
+                        text("Sources:")
+
+                    with tag("ul"):
+                        for cite in self.cites:
+                            with tag("li"):
+                                with tag("a", href = cite, target = "_blank",):
+                                    text(cite)
+
+                if len(self.posts) > 0:
+                    with tag("h1"):
+                        text("Gallery:")
+
+                    with tag("ul"):
+                        for post in self.posts:
+                            with tag("li"):
+                                with tag("a", href = post, target = "_blank",):
+                                    text(post)
+
+                with tag("h1"):
+                    text("Directions:")
+
+                    for title, closure in self.closures.items():
+                        with tag("h2"):
+                            text(title)
+
+                        with tag("p"):
+                            text(f"yields: {closure.yields.amount} ")
+
+                            if closure.yields.units is not None:
+                                text(closure.yields.units)
+
+        if indent:
+            return yattag.indent(doc.getvalue())
+
+        return doc.getvalue()
