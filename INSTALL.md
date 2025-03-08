@@ -31,7 +31,7 @@ To set up an environment locally:
 git clone https://github.com/DerwenAI/bwyd.git
 cd bwyd
 
-poetry install --no-root --extras=demo
+poetry install --extras=demo
 ```
 
 The source code is currently based on Python 3.11 or later.
@@ -41,6 +41,13 @@ The source code is currently based on Python 3.11 or later.
 
 ```bash
 poetry run python3 demo.py
+```
+
+## run the notebooks
+
+```bash
+poetry run python3 -m pip install -e .
+poetry run python3 -m bwyd.install
 ```
 
 ```bash
@@ -57,27 +64,13 @@ poetry install --extras=dev
 poetry install --extras=test
 ```
 
-This project uses [`pre-commit`](https://pre-commit.com/) hooks for
-code linting, etc., whenever `git` is used to commit or push.
-Be sure to install *after* the `poetry install` is performed.
-
-To run `pre-commit` explicitly:
-
 ```bash
-poetry run pre-commit
+poetry run pytest
 ```
 
 
 ######################################################################
 TBD:
-
-## install
-
-```bash
-python3 -m pip install -e .
-python3 -m bwyd.install
-```
-
 
 ## uninstall
 

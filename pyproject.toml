@@ -57,34 +57,18 @@ code = "https://github.com/DerwenAI/bwyd"
 [project.optional-dependencies]
 
 demo = [
+    "jupyterlab (>=4.3.5,<5.0.0)",
+    "jupyterlab-execute-time (>=3.2.0,<4.0.0)",
+    "ipympl (>=0.9.6,<0.10.0)",
+    "watermark (>=2.5.0,<3.0.0)",
 ]
 
 test = [
+    "pytest >= 7.4",
+    "deepdiff >= 8.3.0",
 ]
 
 dev = [
+    "mypy (>=1.15.0,<2.0.0)",
+    "pylint (>=3.3.4,<4.0.0)",
 ]
-
-
-[tool.poetry]
-
-name = "poetry-precommit"
-version = "0.1.0"
-description = ""
-authors = [ "Paco Nathan <paco@derwen.ai>" ]
-readme = "README.md"
-packages = [
-    { include = "poetry_precommit" }
-]
-
-
-[tool.poetry.dependencies]
-
-pre-commit = "4.1.0"
-
-
-[tool.poetry.group.dev.dependencies]
-
-pylint = "^3.3.4"
-deepdiff = "^8.3.0"
-pytest = "^8.3.5"
