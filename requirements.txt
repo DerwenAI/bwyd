@@ -1,4 +1,0 @@
-icecream >= 2.1
-jupyterlab >= 4.1
-pydantic-graph >= 0.0.21
-textX >= 4.0

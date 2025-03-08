@@ -1,44 +1,32 @@
 [build-system]
 
-build-backend = "setuptools.build_meta"
-
 requires = [
-    "setuptools >= 69.0",
-    "setuptools_scm[toml] >= 6.2",
-    "wheel >= 0.42",
+    "poetry-core >=2.0.0,<3.0.0",
 ]
 
-
-[tool.setuptools]
-
-packages = [ "bwyd" ]
-
-
-[tool.setuptools_scm]
-
-# required section; empty contents is fine
-
-
-[project.urls]
-
-code = "https://github.com/DerwenAI/bwyd"
+build-backend = "poetry.core.masonry.api"
 
 
 [project]
 
 name = "bwyd"
-readme = "README.md"
-license = { file = "LICENSE" }
-requires-python = ">=3.10"
-
-description = "The seed crazy idea behind the scenes here is to consider how human cooks behave somewhat like robots, following recipes as instructions."
-
-dynamic = [
-    "version"
-]
+version = "0.0.1"
+description = "The seed crazy idea here is to consider how human cooks behave like robots, following recipes as instructions."
 
 authors = [
-    { name = "derwen.ai", email = "info@derwen.ai" },
+    { name = "Paco Nathan", email = "paco@derwen.ai" }
+]
+
+readme = "README.md"
+license = { file = "LICENSE" }
+
+requires-python = ">=3.11"
+
+dependencies = [
+    "textx (>=4.1.0,<5.0.0)",
+    "icecream (>=2.1.4,<3.0.0)",
+    "pydantic-graph (>=0.0.36,<0.0.37)",
+    "jupyterlab (>=4.3.5,<5.0.0)"
 ]
 
 classifiers = [
@@ -58,30 +46,45 @@ classifiers = [
     "Topic :: Text Processing :: Linguistic",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.10",
 ]
 
-dependencies = [
-    "icecream >= 2.1",
-    "jupyterlab >= 4.1",
-    "textX >= 4.0",
-]
+
+[project.urls]
+
+code = "https://github.com/DerwenAI/bwyd"
 
 
 [project.optional-dependencies]
 
-dev = [
-    "build >= 1.0",
-    "Flask >= 3.0",
-    "mkdocs-git-revision-date-plugin >= 0.3",
-    "mkdocs-material >= 9.5",
-    "mknotebooks >= 0.8",
-    "pre-commit >= 3.6",
-    "selenium >= 4.16",
-    "twine >= 4.0",
+demo = [
 ]
 
 test = [
-    "deepdiff >= 6.7",
-    "pytest >= 8.0",
 ]
+
+dev = [
+]
+
+
+[tool.poetry]
+
+name = "poetry-precommit"
+version = "0.1.0"
+description = ""
+authors = [ "Paco Nathan <paco@derwen.ai>" ]
+readme = "README.md"
+packages = [
+    { include = "poetry_precommit" }
+]
+
+
+[tool.poetry.dependencies]
+
+pre-commit = "4.1.0"
+
+
+[tool.poetry.group.dev.dependencies]
+
+pylint = "^3.3.4"
+deepdiff = "^8.3.0"
+pytest = "^8.3.5"

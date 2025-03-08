@@ -1,6 +1,7 @@
 // our fam's fave muffin recipe
 
-SOURCE: "https://www.beatbakeeat.com/best-applesauce-muffins-recipe-ever/"
+CITE: "https://www.beatbakeeat.com/best-applesauce-muffins-recipe-ever/"
+POST: "https://www.instagram.com/p/DF1ibowRfbp/"
 
 CLOSURE: "batter"
     CONTAINER bowl: "chilled mixing bowl"

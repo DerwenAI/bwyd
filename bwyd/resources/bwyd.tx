@@ -1,10 +1,15 @@
 Program:
-  sources*=Source
+  cites*=Cite
+  posts*=Post
   closures+=Closure
 ;
 
-Source:
-  "SOURCE:" url=STRING
+Cite:
+  "CITE:" url=STRING
+;
+
+Post:
+  "POST:" url=STRING
 ;
 
 Closure:

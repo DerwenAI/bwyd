@@ -39,7 +39,8 @@ Bwyd DSL parser/interpreter.
         """
 Constructor.
         """
-        self.sources: typing.List[ str ] = []
+        self.cites: typing.List[ str ] = []
+        self.posts: typing.List[ str ] = []
         self.closures: typing.Dict[ str, Closure ] = {}
 
 
@@ -65,7 +66,8 @@ one for each parsed Closure.
         ]
 
         return {
-            "sources": self.sources,
+            "cites": self.cites,
+            "posts": self.posts,
             "closures": clos_list,
         }
 
@@ -272,6 +274,25 @@ Process interpreter for one Closure.
         return clos_obj
 
 
+    @classmethod
+    def validate_url (
+        cls,
+        url: str,
+        ) -> str:
+        """
+Parse one URL.
+        """
+        try:
+            result: ParseResult = urlparse(url)
+
+            if result.scheme not in [ "http", "https" ]:
+                raise Exception(f"badly formatted URL: {url}")
+
+            return url
+        except Exception as ex:
+            print(ex)
+
+
     def interpret (
         self,
         program: typing.Any,
@@ -281,16 +302,15 @@ Process interpreter for one Closure.
         """
 Process interpreter for once instance of a Bwyd program.
         """
-        for source in program.sources:
-            try:
-                result: ParseResult = urlparse(source.url)
+        # parse each `CITE`
+        for cite in program.cites:
+            self.cites.append(self.validate_url(cite.url))
 
-                if result.scheme not in [ "http", "https" ]:
-                    raise Exception(f"badly formatted URL: {source.url}")
-                    self.sources.append(source.url)
-            except Exception as ex:
-                print(ex)
+        # parse each `POST`
+        for post in program.posts:
+            self.posts.append(self.validate_url(post.url))
 
+        # parse each `CLOSURE`
         for closure in program.closures:
             self.closures[closure.name] = self.interpret_closure(
                 closure,
