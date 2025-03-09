@@ -302,7 +302,7 @@ Parse one URL.
         debug: bool = False,
         ) -> None:
         """
-Process interpreter for one Bwyd module.
+Interpret one Bwyd module.
         """
         # parse each `CITE`
         for cite in module.cites:
@@ -320,6 +320,22 @@ Process interpreter for one Bwyd module.
             )
 
 
+    def total_duration (
+        self,
+        ) -> str:
+        """
+Tally the total duration of one Bwyd module.
+        """
+        total_sec: int = sum([
+            op.get_duration().normalize()
+            for closure in self.closures.values()
+            for focus in closure.foci
+            for op in focus.ops
+        ])
+
+        return Duration(total_sec, "sec").humanize()
+
+
     def to_html (
         self,
         *,
@@ -330,7 +346,7 @@ Process interpreter for one Bwyd module.
         indent: bool = False,
         ) -> str:
         """
-Generate an HTML representation
+Generate an HTML representation.
         """
         title: str = ""
 
@@ -355,30 +371,38 @@ Generate an HTML representation
                 with tag("h1"):
                     text(title)
 
+                # metadata
+                with tag("p"):
+                    text("total time: ")
+
+                    with tag("strong"):
+                        with tag("time"):
+                            text(self.total_duration())
+
                 # cites
                 if len(self.cites) > 0:
-                    with tag("h2"):
-                        text("Sources:")
+                        with tag("p"):
+                            text("sources")
 
-                    with tag("ul"):
-                        for cite in self.cites:
-                            with tag("li"):
-                                with tag("a", href = cite, target = "_blank"):
-                                    text(cite)
+                            with tag("ul"):
+                                for cite in self.cites:
+                                    with tag("li"):
+                                        with tag("a", href = cite, target = "_blank"):
+                                            text(cite)
 
                 # posts
                 if len(self.posts) > 0:
-                    with tag("h2"):
-                        text("Gallery:")
+                    with tag("p"):
+                        text("gallery")
 
-                    with tag("ul"):
-                        for post in self.posts:
-                            with tag("li"):
-                                with tag("a", href = post, target = "_blank"):
-                                    text(post)
+                        with tag("ul"):
+                            for post in self.posts:
+                                with tag("li"):
+                                    with tag("a", href = post, target = "_blank"):
+                                        text(post)
 
                 with tag("h2"):
-                    text("Directions:")
+                    text("directions:")
 
                 for _, closure in self.closures.items():
                     closure.to_html(doc, tag, text)

@@ -58,8 +58,53 @@ A data class representing one parsed Duration object.
     amount: float
     units: str
 
+    def normalize (
+        self,
+        ) -> int:
+        """
+Return this duration normalized into seconds.
+        """
+        norm_ratio: typing.Dict[ str, int ] = {
+            "sec": 1,
+            "min": 60,
+            "hrs": 3600,
+        }
+
+        return self.amount * norm_ratio[self.units]
+
+
+    def humanize (
+        self,
+        ) -> str:
+        """
+Denormalize this duration into human-readable form.
+        """
+        amount: int = int(self.amount)
+        readable: str = f"{amount:d} {self.units}"
+
+        if self.units == "min":
+            if self.amount > 60:
+                hrs_amount: int = int(self.amount / 60)
+                min_remain: int = int(self.amount % 60)
+                readable = f"{hrs_amount:d} hrs, {min_remain} min"
+
+        elif self.units == "sec":
+            if self.amount > 3600:
+                hrs_amount: int = int(self.amount / 3600)
+                min_remain: int = self.amount % 3600
+                min_amount: int = int(min_remain / 60)
+                sec_remain: int = int(min_remain % 60)
+                readable = f"{hrs_amount:d} hrs, {min_amount:d} min, {sec_remain:d} sec"
+            elif self.amount > 60:
+                min_amount: int = int(self.amount / 60)
+                sec_remain: int = int(self.amount % 60)
+                readable = f"{min_amount:d} min, {sec_remain:d} sec"
+
+        return readable
+
+
     def to_html (
-        self
+        self,
         ) -> str:
         """
 HTML represenation.
@@ -118,8 +163,39 @@ Serializable representation for JSON.
         }
 
 
+######################################################################
+## operations
+
 @dataclass(order=False, frozen=False)
-class OpAdd:  # pylint: disable=R0902
+class OpGeneric:  # pylint: disable=R0902
+    """
+A data class representing a generic operation.
+    """
+
+    def get_duration (
+        self,
+        ) -> str:
+        """
+Stub: Total duration.
+        """
+        return Duration(0, "sec")
+
+
+    def to_html (
+        self,
+        doc: yattag.doc.Doc,
+        tag: typing.Any,
+        text: typing.Any,
+        ) -> str:
+        """
+Stub: HTML representation.
+        """
+        # not rendered as HTML -- so far
+        pass
+
+
+@dataclass(order=False, frozen=False)
+class OpAdd (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Add object.
     """
@@ -169,7 +245,7 @@ Serializable representation for JSON.
 
 
 @dataclass(order=False, frozen=False)
-class OpUse:  # pylint: disable=R0902
+class OpUse (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Use object.
     """
@@ -204,7 +280,7 @@ Serializable representation for JSON.
 
 
 @dataclass(order=False, frozen=False)
-class OpAction:  # pylint: disable=R0902
+class OpAction (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Action object.
     """
@@ -212,6 +288,15 @@ A data class representing one Action object.
     modifier: str
     until: str
     duration: Duration
+
+    def get_duration (
+        self,
+        ) -> str:
+        """
+Duration of this operation.
+        """
+        return self.duration
+
 
     def to_html (
         self,
@@ -264,7 +349,7 @@ Serializable representation for JSON.
 
 
 @dataclass(order=False, frozen=False)
-class OpBake:  # pylint: disable=R0902
+class OpBake (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Bake object.
     """
@@ -274,6 +359,15 @@ A data class representing one Bake object.
     until: str
     duration: Duration
     temperature: Temperature
+
+    def get_duration (
+        self,
+        ) -> str:
+        """
+Duration of this operation.
+        """
+        return self.duration
+
 
     def to_html (
         self,
@@ -326,7 +420,7 @@ Serializable representation for JSON.
 
 
 @dataclass(order=False, frozen=False)
-class OpChill:  # pylint: disable=R0902
+class OpChill (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Chill object.
     """
@@ -334,6 +428,15 @@ A data class representing one Chill object.
     modifier: str
     until: str
     duration: Duration
+
+    def get_duration (
+        self,
+        ) -> str:
+        """
+Duration of this operation.
+        """
+        return self.duration
+
 
     def to_html (
         self,
@@ -362,7 +465,6 @@ HTML representation
             text(self.until)
 
 
-
     def to_json (
         self
         ) -> dict:
@@ -380,6 +482,9 @@ Serializable representation for JSON.
 
 OpsTypes = typing.Union[ OpAdd, OpUse, OpAction, OpBake, OpChill ]
 
+
+######################################################################
+## structural classes
 
 @dataclass(order=False, frozen=False)
 class Focus:  # pylint: disable=R0902
