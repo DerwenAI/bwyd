@@ -1,0 +1,44 @@
+/* fonts, icons
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+
+/* structural
+ */
+
+html, h1, h2, h3, h4, h5, p, span, cite, figcaption, button, input, select, textarea {
+    font-family: "Atkinson Hyperlegible", sans-serif;
+}
+
+body {
+    color: hsl(0, 0%, 40%);
+/*
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 1em;
+ */
+}
+
+h2 {
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+p {
+    font-weight: normal;
+    font-size: 1em;
+    line-height: 1.3em;
+    margin: 1.2em 0 1.2em 0;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"],
+[type="image"],
+[type="checkbox"],
+[type="radio"],
+summary {
+    cursor: pointer;
+}

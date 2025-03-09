@@ -176,6 +176,20 @@ A data class representing one Use object.
     symbol: str
     name: str
 
+    def to_html (
+        self,
+        doc: yattag.doc.Doc,
+        tag: typing.Any,
+        text: typing.Any,
+        ) -> str:
+        """
+HTML representation
+        """
+        # {'op': 'use', 'symbol': 'batter', 'name': 'batter'}
+        # not rendered as HTML -- so far
+        pass
+
+
     def to_json (
         self
         ) -> dict:
@@ -223,7 +237,12 @@ HTML representation
             text(self.until)
 
         doc.stag("br")
-        text(f"({self.duration.to_html()})")
+        doc.asis("(")
+
+        with tag("time"):
+            text(self.duration.to_html())
+
+        doc.asis(")")
 
         doc.stag("br")
         doc.stag("br")
@@ -266,7 +285,6 @@ A data class representing one Bake object.
 HTML representation
         """
         # {'op': 'bake', 'container': 'pan', 'modifier': 'place pan on a baking sheet, make level, convection bake', 'until': 'an inserted fork comes out with tiny crumbs', 'duration': {'amount': 20, 'units': 'min'}, 'temperature': {'degrees': 177, 'units': 'C'}}
-
         text(self.modifier)
         doc.stag("br")
 
@@ -281,7 +299,8 @@ HTML representation
         text(" for ")
 
         with tag("strong"):
-            text(self.duration.to_html())
+            with tag("time"):
+                text(self.duration.to_html())
 
         text(" until ")
 
@@ -315,6 +334,34 @@ A data class representing one Chill object.
     modifier: str
     until: str
     duration: Duration
+
+    def to_html (
+        self,
+        doc: yattag.doc.Doc,
+        tag: typing.Any,
+        text: typing.Any,
+        ) -> str:
+        """
+HTML representation
+        """
+        # { "op": "chill", "container": "dish", "modifier": "freeze", "until": "dumplings are frozen solid", "duration": { "amount": 2, "units": "hrs" } }
+        text(self.modifier)
+
+        with tag("strong"):
+            text(self.container)
+
+        text(" for ")
+
+        with tag("strong"):
+            with tag("time"):
+                text(self.duration.to_html())
+
+        text(" until ")
+
+        with tag("em"):
+            text(self.until)
+
+
 
     def to_json (
         self
@@ -359,18 +406,7 @@ HTML representation
 
         with tag("dd"):
             for op in self.ops:
-                if isinstance(op, OpAdd):
-                    op.to_html(doc, tag, text)
-                elif isinstance(op, OpAction):
-                    op.to_html(doc, tag, text)
-                elif isinstance(op, OpBake):
-                    op.to_html(doc, tag, text)
-                elif isinstance(op, OpUse):
-                    # {'op': 'use', 'symbol': 'batter', 'name': 'batter'}
-                    pass
-                else:
-                    with tag("p"):
-                        text(str(op.to_json()))
+                op.to_html(doc, tag, text)
 
 
     def to_json (
@@ -424,7 +460,7 @@ Append one operation to the active Focus.
         """
 HTML representation
         """
-        with tag("h2"):
+        with tag("h3"):
             text(self.name)
 
         # notes
@@ -440,7 +476,7 @@ HTML representation
 
         # tools, containers
         if len(self.tools) > 0 or len(self.containers) > 0:
-            with tag("h3"):
+            with tag("h4"):
                 text("uses:")
 
             with tag("dl"):

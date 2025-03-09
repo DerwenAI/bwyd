@@ -98,7 +98,7 @@ CLOSURE: "muffins"
     TITLE: "applesauce muffins"
     NOTE: "for large, moist, breakfast muffins"
 
-    CONTAINER pan: "muffin pan, 8 large, buttered"
+    CONTAINER pan: "muffin pan, 8-hole large size"
     FOCUS pan
 
     TOOL spoon: "large spoon"

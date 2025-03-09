@@ -297,36 +297,40 @@ Parse one URL.
 
     def interpret (
         self,
-        program: typing.Any,
+        module: typing.Any,
         *,
         debug: bool = False,
         ) -> None:
         """
-Process interpreter for once instance of a Bwyd program.
+Process interpreter for one Bwyd module.
         """
         # parse each `CITE`
-        for cite in program.cites:
+        for cite in module.cites:
             self.cites.append(self.validate_url(cite.url))
 
         # parse each `POST`
-        for post in program.posts:
+        for post in module.posts:
             self.posts.append(self.validate_url(post.url))
 
         # parse each `CLOSURE`
-        for closure in program.closures:
+        for closure in module.closures:
             self.closures[closure.name] = self.interpret_closure(
                 closure,
                 debug = debug,
             )
 
 
-    def html (
+    def to_html (
         self,
         *,
+        lang: str = "en",
+        charset: str = "UTF-8",
+        viewport: str = "width=device-width, initial-scale=1.0",
+        stylesheet: str = "style.css",
         indent: bool = False,
         ) -> str:
         """
-Generate an HTML represenation
+Generate an HTML representation
         """
         title: str = ""
 
@@ -337,8 +341,13 @@ Generate an HTML represenation
         doc, tag, text = yattag.Doc().tagtext()
         doc.asis("<!DOCTYPE html>")
 
-        with tag("html"):
+        with tag("html", lang = lang):
             with tag("head"):
+                doc.stag("meta", charset = charset)
+                doc.stag("meta", name = "viewport", content = viewport)
+                doc.stag("link", rel = "stylesheet", href = stylesheet)
+                doc.stag("link", rel = "icon", href = "bwyd/resources/bwyd.svg")
+
                 with tag("title"):
                     text(title)
 
@@ -354,7 +363,7 @@ Generate an HTML represenation
                     with tag("ul"):
                         for cite in self.cites:
                             with tag("li"):
-                                with tag("a", href = cite, target = "_blank",):
+                                with tag("a", href = cite, target = "_blank"):
                                     text(cite)
 
                 # posts
@@ -365,14 +374,14 @@ Generate an HTML represenation
                     with tag("ul"):
                         for post in self.posts:
                             with tag("li"):
-                                with tag("a", href = post, target = "_blank",):
+                                with tag("a", href = post, target = "_blank"):
                                     text(post)
 
                 with tag("h2"):
                     text("Directions:")
 
-                    for _, closure in self.closures.items():
-                        closure.to_html(doc, tag, text)
+                for _, closure in self.closures.items():
+                    closure.to_html(doc, tag, text)
 
         if indent:
             return yattag.indent(doc.getvalue())

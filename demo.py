@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Example program in the Bwyd language.
+An example module in the Bwyd language.
 """
 
 import json
@@ -13,22 +13,22 @@ import bwyd
 
 
 if __name__ == "__main__":
-    ## parse an example Bwyd program
+    # parse an example Bwyd module
     bwyd_int: bwyd.Bwyd = bwyd.Bwyd()
     ic(bwyd_int)
 
-    prog = bwyd_int.parse(
+    module = bwyd_int.parse(
         pathlib.Path("examples/gnocchi.bwyd"),
         debug = False, # True
     )
 
-    ## interpret the parsed program
+    # interpret the parsed module
     bwyd_int.interpret(
-        prog,
+        module,
         debug = True, # False
     )
 
-    ## make a summary report
+    # make a summary report
     print(json.dumps(
         bwyd_int.to_json(),
         indent = 2,

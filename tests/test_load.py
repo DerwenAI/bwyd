@@ -27,13 +27,13 @@ Load a sample file to ensure the parser works correctly.
     """
     bwyd_int: bwyd.Bwyd = bwyd.Bwyd()
 
-    prog = bwyd_int.parse(
+    module = bwyd_int.parse(
         TEST_DIR / "sample.bwyd",
         debug = False, # True
     )
 
     bwyd_int.interpret(
-        prog,
+        module,
         debug = False, # True
     )
 

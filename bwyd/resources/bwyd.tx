@@ -1,4 +1,4 @@
-Program:
+Module:
   cites*=Cite
   posts*=Post
   closures+=Closure
