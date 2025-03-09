@@ -10,6 +10,8 @@ from collections import OrderedDict
 from dataclasses import dataclass, field
 import typing
 
+import yattag
+
 
 ######################################################################
 ## language object definitions
@@ -125,6 +127,33 @@ A data class representing one Add object.
     measure: Measure
     text: str
 
+    def to_html (
+        self,
+        doc: yattag.doc.Doc,
+        tag: typing.Any,
+        text: typing.Any,
+        ) -> str:
+        """
+HTML representation
+        """
+        # {'op': 'add', 'symbol': 'sugar', 'measure': {'amount': 133, 'units': 'g'}, 'text': ''}
+        text("add ")
+
+        with tag("strong"):
+            text(self.symbol)
+
+        text(", ")
+        text(self.measure.to_html())
+
+        if len(self.text) > 0:
+            text(" — ")
+
+        with tag("em"):
+            text(self.text)
+
+        doc.stag("br")
+
+
     def to_json (
         self
         ) -> dict:
@@ -170,6 +199,36 @@ A data class representing one Action object.
     until: str
     duration: Duration
 
+    def to_html (
+        self,
+        doc: yattag.doc.Doc,
+        tag: typing.Any,
+        text: typing.Any,
+        ) -> str:
+        """
+HTML representation
+        """
+        # {'op': 'action', 'tool': 'whisk', 'modifier': 'blend', 'until': 'well mixed, break any clumps', 'duration': {'amount': 30, 'units': 'sec'}}
+        doc.stag("br")
+        text("then ")
+        text(self.modifier)
+        text(" with ")
+
+        with tag("strong"):
+            text(self.tool)
+
+        text(" until ")
+                                                
+        with tag("em"):
+            text(self.until)
+
+        doc.stag("br")
+        text(f"({self.duration.to_html()})")
+
+        doc.stag("br")
+        doc.stag("br")
+
+
     def to_json (
         self
         ) -> dict:
@@ -196,6 +255,39 @@ A data class representing one Bake object.
     until: str
     duration: Duration
     temperature: Temperature
+
+    def to_html (
+        self,
+        doc: yattag.doc.Doc,
+        tag: typing.Any,
+        text: typing.Any,
+        ) -> str:
+        """
+HTML representation
+        """
+        # {'op': 'bake', 'container': 'pan', 'modifier': 'place pan on a baking sheet, make level, convection bake', 'until': 'an inserted fork comes out with tiny crumbs', 'duration': {'amount': 20, 'units': 'min'}, 'temperature': {'degrees': 177, 'units': 'C'}}
+
+        text(self.modifier)
+        doc.stag("br")
+
+        with tag("strong"):
+            text(self.mode.lower())
+
+        text(" at ")
+
+        with tag("strong"):
+            text(self.temperature.to_html())
+
+        text(" for ")
+
+        with tag("strong"):
+            text(self.duration.to_html())
+
+        text(" until ")
+
+        with tag("em"):
+            text(self.until)
+
 
     def to_json (
         self
@@ -250,6 +342,37 @@ A data class representing a parsed Focus object.
     container: str
     ops: typing.List[ OpsTypes ] = field(default_factory = lambda: [])
 
+    def to_html (
+        self,
+        doc: yattag.doc.Doc,
+        tag: typing.Any,
+        text: typing.Any,
+        ) -> str:
+        """
+HTML representation
+        """
+        with tag("dt"):
+            text("into ")
+
+            with tag("strong"):
+                text(self.container)
+
+        with tag("dd"):
+            for op in self.ops:
+                if isinstance(op, OpAdd):
+                    op.to_html(doc, tag, text)
+                elif isinstance(op, OpAction):
+                    op.to_html(doc, tag, text)
+                elif isinstance(op, OpBake):
+                    op.to_html(doc, tag, text)
+                elif isinstance(op, OpUse):
+                    # {'op': 'use', 'symbol': 'batter', 'name': 'batter'}
+                    pass
+                else:
+                    with tag("p"):
+                        text(str(op.to_json()))
+
+
     def to_json (
         self
         ) -> dict:
@@ -290,3 +413,56 @@ Append one operation to the active Focus.
             print(f"FOCUS: not defined yet for {cmd.symbol}")
         else:
             self.active_focus.ops.append(op_obj)
+
+
+    def to_html (
+        self,
+        doc: yattag.doc.Doc,
+        tag: typing.Any,
+        text: typing.Any,
+        ) -> str:
+        """
+HTML representation
+        """
+        with tag("h2"):
+            text(self.name)
+
+        # notes
+        for note in self.notes:
+            with tag("p"):
+                with tag("em"):
+                    text(note)
+
+        # yield
+        with tag("p"):
+            text("yields: ")
+            text(self.yields.to_html())
+
+        # tools, containers
+        if len(self.tools) > 0 or len(self.containers) > 0:
+            with tag("h3"):
+                text("uses:")
+
+            with tag("dl"):
+                for cont_symbol, cont_text in self.tools.items():
+                    with tag("dt"):
+                        with tag("strong"):
+                            text(cont_symbol)
+
+                    with tag("dd"):
+                        with tag("em"):
+                            text(cont_text)
+
+                for cont_symbol, cont_text in self.containers.items():
+                        with tag("dt"):
+                            with tag("strong"):
+                                text(cont_symbol)
+
+                        with tag("dd"):
+                            with tag("em"):
+                                text(cont_text)
+
+        # foci
+        with tag("dl"):
+            for focus in self.foci:
+                focus.to_html(doc, tag, text)
