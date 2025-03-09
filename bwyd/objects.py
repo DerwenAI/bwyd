@@ -22,6 +22,20 @@ A data class representing one parsed Measure object.
     amount: float
     units: str
 
+    def to_html (
+        self
+        ) -> str:
+        """
+HTML represenation.
+        """
+        html: str = f"{self.amount} "
+
+        if self.units is not None:
+            html += self.units
+
+        return html
+
+
     def to_json (
         self
         ) -> dict:
@@ -42,6 +56,20 @@ A data class representing one parsed Duration object.
     amount: float
     units: str
 
+    def to_html (
+        self
+        ) -> str:
+        """
+HTML represenation.
+        """
+        html: str = f"{self.amount} "
+
+        if self.units is not None:
+            html += self.units
+
+        return html
+
+
     def to_json (
         self
         ) -> dict:
@@ -61,6 +89,20 @@ A data class representing one parsed Temperature object.
     """
     degrees: float
     units: str
+
+    def to_html (
+        self
+        ) -> str:
+        """
+HTML represenation.
+        """
+        html: str = f"{self.degrees}° "
+
+        if self.units is not None:
+            html += self.units
+
+        return html
+
 
     def to_json (
         self
@@ -148,6 +190,7 @@ class OpBake:  # pylint: disable=R0902
     """
 A data class representing one Bake object.
     """
+    mode: str
     container: str
     modifier: str
     until: str
@@ -162,6 +205,7 @@ Serializable representation for JSON.
         """
         return {
             "op": "bake",
+            "mode": self.mode,
             "container": self.container,
             "modifier": self.modifier,
             "until": self.until,

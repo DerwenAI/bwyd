@@ -242,6 +242,7 @@ Process interpreter for one Closure.
                 clos_obj.focus_op(
                     step,
                     OpBake(
+                        mode = step_class_name,
                         container = step.symbol,
                         modifier = step.modifier,
                         until = step.until,
@@ -327,15 +328,27 @@ Process interpreter for once instance of a Bwyd program.
         """
 Generate an HTML represenation
         """
-        doc, tag, text = yattag.Doc().tagtext()
+        title: str = ""
 
+        for name, closure in self.closures.items():
+            if closure.title is not None:
+                title = closure.title
+
+        doc, tag, text = yattag.Doc().tagtext()
         doc.asis("<!DOCTYPE html>")
 
         with tag("html"):
-            with tag("body"):
+            with tag("head"):
+                with tag("title"):
+                    text(title)
 
+            with tag("body"):
+                with tag("h1"):
+                    text(title)
+
+                # cites
                 if len(self.cites) > 0:
-                    with tag("h1"):
+                    with tag("h2"):
                         text("Sources:")
 
                     with tag("ul"):
@@ -344,8 +357,9 @@ Generate an HTML represenation
                                 with tag("a", href = cite, target = "_blank",):
                                     text(cite)
 
+                # posts
                 if len(self.posts) > 0:
-                    with tag("h1"):
+                    with tag("h2"):
                         text("Gallery:")
 
                     with tag("ul"):
@@ -354,18 +368,137 @@ Generate an HTML represenation
                                 with tag("a", href = post, target = "_blank",):
                                     text(post)
 
-                with tag("h1"):
+                with tag("h2"):
                     text("Directions:")
 
-                    for title, closure in self.closures.items():
+                    for name, closure in self.closures.items():
                         with tag("h2"):
-                            text(title)
+                            text(name)
 
+                        # notes
+                        for note in closure.notes:
+                            with tag("p"):
+                                with tag("em"):
+                                    text(note)
+
+                        # yield
                         with tag("p"):
-                            text(f"yields: {closure.yields.amount} ")
+                            text("yields: ")
+                            text(closure.yields.to_html())
 
-                            if closure.yields.units is not None:
-                                text(closure.yields.units)
+                        # tools
+                        if len(closure.tools) > 0:
+                            with tag("h3"):
+                                text("tools:")
+
+                            with tag("dl"):
+                                for cont_symbol, cont_text in closure.tools.items():
+                                    with tag("dt"):
+                                        with tag("strong"):
+                                            text(cont_symbol)
+
+                                    with tag("dd"):
+                                        with tag("em"):
+                                            text(cont_text)
+
+                        # containers
+                        if len(closure.containers) > 0:
+                            with tag("h3"):
+                                text("containers:")
+
+                            with tag("dl"):
+                                for cont_symbol, cont_text in closure.containers.items():
+                                    with tag("dt"):
+                                        with tag("strong"):
+                                            text(cont_symbol)
+
+                                    with tag("dd"):
+                                        with tag("em"):
+                                            text(cont_text)
+
+                        # foci
+                        with tag("dl"):
+                            for focus in closure.foci:
+                                with tag("dt"):
+                                    text("into ")
+
+                                    with tag("strong"):
+                                        text(focus.container)
+
+                                with tag("dd"):
+                                    with tag("p"):
+                                        for op in focus.ops:
+                                            if isinstance(op, OpAdd):
+                                                # {'op': 'add', 'symbol': 'sugar', 'measure': {'amount': 133, 'units': 'g'}, 'text': ''}
+                                                text("add ")
+
+                                                with tag("strong"):
+                                                    text(op.symbol)
+
+                                                text(", ")
+                                                text(op.measure.to_html())
+
+                                                if len(op.text) > 0:
+                                                    text(" — ")
+
+                                                    with tag("em"):
+                                                        text(op.text)
+
+                                                doc.stag("br")
+
+                                            elif isinstance(op, OpAction):
+                                                # {'op': 'action', 'tool': 'whisk', 'modifier': 'blend', 'until': 'well mixed, break any clumps', 'duration': {'amount': 30, 'units': 'sec'}}
+                                                doc.stag("br")
+                                                text("then ")
+                                                text(op.modifier)
+                                                text(" with ")
+
+                                                with tag("strong"):
+                                                    text(op.tool)
+
+                                                text(" until ")
+                                                
+                                                with tag("em"):
+                                                    text(op.until)
+
+                                                doc.stag("br")
+                                                text(f"({op.duration.to_html()})")
+
+                                                doc.stag("br")
+                                                doc.stag("br")
+
+                                            elif isinstance(op, OpUse):
+                                                # {'op': 'use', 'symbol': 'batter', 'name': 'batter'}
+                                                pass
+
+                                            elif isinstance(op, OpBake):
+                                                # {'op': 'bake', 'container': 'pan', 'modifier': 'place pan on a baking sheet, make level, convection bake', 'until': 'an inserted fork comes out with tiny crumbs', 'duration': {'amount': 20, 'units': 'min'}, 'temperature': {'degrees': 177, 'units': 'C'}}
+
+                                                text(op.modifier)
+                                                doc.stag("br")
+
+                                                with tag("strong"):
+                                                    text(op.mode.lower())
+
+                                                text(" at ")
+
+                                                with tag("strong"):
+                                                    text(op.temperature.to_html())
+
+                                                text(" for ")
+
+                                                with tag("strong"):
+                                                    text(op.duration.to_html())
+
+                                                text(" until ")
+
+                                                with tag("em"):
+                                                    text(op.until)
+                                            else:
+                                                with tag("p"):
+                                                    text(str(op.to_json()))
+
+
 
         if indent:
             return yattag.indent(doc.getvalue())
