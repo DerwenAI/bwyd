@@ -1,12 +1,20 @@
+## TODOs
+
+  * leverage `pydantic-graph` to build a dependency graph of closures
+  * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
+  * analyze the `use` clauses, to throw exceptions for unresolved references
+  * scan a module to produce a total ingredients list
+  
+
 ## Taxonomy
 
 At the core, the configuration of the **Bwyd** language is based on a
 _knowledge graph_.
 
-  - ratio
-  - ingredient
-  - technique
-  - tool
+  - ratios
+  - ingredients
+  - techniques
+  - tools
 
 
 ## Research
