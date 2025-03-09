@@ -1,7 +1,7 @@
 include LICENSE
 include README.md
-include bwyd/bwyd.tx
-include bwyd/kernel.json
+include bwyd/resources/*.py
+include bwyd/resources/bwyd.*
 include bwyd/*.py
 include pyproject.toml
 include tests/*
