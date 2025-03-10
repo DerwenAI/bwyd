@@ -1,5 +1,6 @@
 ## TODOs
 
+  * show conversions in generated HTML
   * refactor tools, containers, etc., to allow for reference counts
   * refactor the `NOTE` objects to be Op
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules

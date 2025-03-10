@@ -17,9 +17,10 @@ import yattag
 ## required items
 
 @dataclass(order=False, frozen=False)
-class Equipment:  # pylint: disable=R0902
+class Dependency:  # pylint: disable=R0902
     """
-A data class representing one parsed Tool or Container object.
+A data class representing one parsed dependency:
+Ingredient, Tool, Container, etc.
     """
     symbol: str
     text: str
@@ -35,6 +36,21 @@ Serializable representation for JSON.
             "symbol": self.symbol,
             "text": self.text,
         }
+
+
+class DependencyDict (OrderedDict):
+    """
+A dictionary of a specific class of dependencies, which also provides
+a local namespace.
+    """
+
+    def to_json (
+        self
+        ) -> list:
+        """
+Serializable representation for JSON.
+        """
+        return [ dep.to_json() for dep in self.values() ]
 
 
 ######################################################################
@@ -308,7 +324,7 @@ class OpAction (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Action object.
     """
-    tool: Equipment
+    tool: Dependency
     modifier: str
     until: str
     duration: Duration
@@ -378,7 +394,7 @@ class OpBake (OpGeneric):  # pylint: disable=R0902
 A data class representing one Bake object.
     """
     mode: str
-    container: Equipment
+    container: Dependency
     modifier: str
     until: str
     duration: Duration
@@ -448,7 +464,7 @@ class OpChill (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Chill object.
     """
-    container: Equipment
+    container: Dependency
     modifier: str
     until: str
     duration: Duration
@@ -515,7 +531,7 @@ class Focus:  # pylint: disable=R0902
     """
 A data class representing a parsed Focus object.
     """
-    container: Equipment
+    container: Dependency
     ops: typing.List[ OpsTypes ] = field(default_factory = lambda: [])
 
     def to_html (
@@ -560,8 +576,8 @@ A data class representing one parsed Closure object.
     yields: Measure
     title: typing.Optional[ str ] = None
     notes: typing.List[ str ] = field(default_factory = lambda: [])
-    tools: typing.Dict[ str, Equipment ] = field(default_factory = lambda: OrderedDict())  # pylint: disable=W0108
-    containers: typing.Dict[ str, Equipment ] = field(default_factory = lambda: OrderedDict())  # pylint: disable=W0108
+    tools: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
+    containers: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     ingredients: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())  # pylint: disable=W0108
     foci: typing.List[ Focus ] = field(default_factory = lambda: [])
     active_focus: typing.Optional[ Focus ] = None

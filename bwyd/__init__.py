@@ -10,7 +10,7 @@ from .kernel import BwydKernel
 
 from .parser import Bwyd
 
-from .objects import Equipment, \
+from .objects import Dependency, DependencyDict, \
     Duration, Temperature, Measure, \
     OpAction, OpAdd, OpBake, OpChill, OpUse, OpsTypes, \
     Closure, Focus

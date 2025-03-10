@@ -14,7 +14,7 @@ from icecream import ic  # pylint: disable=E0401
 import textx  # pylint: disable=E0401
 import yattag
 
-from .objects import Equipment, \
+from .objects import Dependency, DependencyDict, \
     Duration, Measure, Temperature, \
     OpAction, OpAdd, OpBake, OpChill, OpUse, \
     Closure, Focus
@@ -59,8 +59,8 @@ one for each parsed Closure.
                 "name": name,
                 "yields": clos_obj.yields.to_json(),
                 "notes": clos_obj.notes,
-                "tools": [ tool.to_json() for tool in clos_obj.tools.values() ],
-                "containers": [ container.to_json() for container in clos_obj.containers.values() ],
+                "tools": clos_obj.tools.to_json(),
+                "containers": clos_obj.containers.to_json(),
                 "ingredients": clos_obj.ingredients,
                 "foci": [ focus.to_json() for focus in clos_obj.foci ],
             }
@@ -139,7 +139,7 @@ Process interpreter for one Closure.
                 if debug:
                     ic(step_class_name, step.symbol, step.text)
 
-                clos_obj.containers[step.symbol] = Equipment(
+                clos_obj.containers[step.symbol] = Dependency(
                     symbol = step.symbol,
                     text = step.text,
                 )
@@ -148,7 +148,7 @@ Process interpreter for one Closure.
                 if debug:
                     ic(step_class_name, step.symbol, step.text)
 
-                clos_obj.tools[step.symbol] = Equipment(
+                clos_obj.tools[step.symbol] = Dependency(
                     symbol = step.symbol,
                     text = step.text,
                 )
