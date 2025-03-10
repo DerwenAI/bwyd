@@ -10,7 +10,8 @@ from .kernel import BwydKernel
 
 from .parser import Bwyd
 
-from .objects import Duration, Temperature, Measure, \
+from .objects import Equipment, \
+    Duration, Temperature, Measure, \
     OpAction, OpAdd, OpBake, OpChill, OpUse, OpsTypes, \
     Closure, Focus
 
@@ -21,7 +22,7 @@ __release__ = __version__
 
 __title__ = "Bwyd DSL"
 
-__description__ = "Bwyd DSL for kitchen engineering"
+__description__ = "Bwyd DSL for cooking"
 
 __copyright__ = "2024-2025, Derwen, Inc."
 

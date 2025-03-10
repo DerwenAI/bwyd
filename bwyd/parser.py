@@ -14,7 +14,8 @@ from icecream import ic  # pylint: disable=E0401
 import textx  # pylint: disable=E0401
 import yattag
 
-from .objects import Duration, Measure, Temperature, \
+from .objects import Equipment, \
+    Duration, Measure, Temperature, \
     OpAction, OpAdd, OpBake, OpChill, OpUse, \
     Closure, Focus
 
@@ -58,8 +59,8 @@ one for each parsed Closure.
                 "name": name,
                 "yields": clos_obj.yields.to_json(),
                 "notes": clos_obj.notes,
-                "tools": clos_obj.tools,
-                "containers": clos_obj.containers,
+                "tools": [ tool.to_json() for tool in clos_obj.tools.values() ],
+                "containers": [ container.to_json() for container in clos_obj.containers.values() ],
                 "ingredients": clos_obj.ingredients,
                 "foci": [ focus.to_json() for focus in clos_obj.foci ],
             }
@@ -138,13 +139,19 @@ Process interpreter for one Closure.
                 if debug:
                     ic(step_class_name, step.symbol, step.text)
 
-                clos_obj.containers[step.symbol] = step.text
+                clos_obj.containers[step.symbol] = Equipment(
+                    symbol = step.symbol,
+                    text = step.text,
+                )
 
             elif step_class_name == "Tool":
                 if debug:
                     ic(step_class_name, step.symbol, step.text)
 
-                clos_obj.tools[step.symbol] = step.text
+                clos_obj.tools[step.symbol] = Equipment(
+                    symbol = step.symbol,
+                    text = step.text,
+                )
 
             elif step_class_name == "Use":
                 if debug:
@@ -174,7 +181,7 @@ Process interpreter for one Closure.
                     print(f"CHILL CONTAINER: {step.symbol} not found")
 
                 clos_obj.active_focus = Focus(
-                    container = step.symbol,
+                    container = clos_obj.containers[step.symbol],
                 )
 
                 clos_obj.foci.append(clos_obj.active_focus)
@@ -209,13 +216,19 @@ Process interpreter for one Closure.
                 if debug:
                     ic(step_class_name, step.symbol, step.modifier, step.until, duration)
 
-                if step.symbol not in clos_obj.tools and step.symbol not in clos_obj.containers:
+                equipment: typing.Optional[ typing.Any ] = None
+
+                if step.symbol in clos_obj.tools:
+                    equipment = clos_obj.tools[step.symbol]
+                elif step.symbol in clos_obj.containers:
+                    equipment = clos_obj.containers[step.symbol]
+                else:
                     print(f"ACTION OBJECT: {step.symbol} not found")
 
                 clos_obj.focus_op(
                     step,
                     OpAction(
-                        tool = step.symbol,
+                        tool = equipment,
                         modifier = step.modifier,
                         until = step.until,
                         duration = duration,
@@ -243,7 +256,7 @@ Process interpreter for one Closure.
                     step,
                     OpBake(
                         mode = step_class_name,
-                        container = step.symbol,
+                        container = clos_obj.containers[step.symbol],
                         modifier = step.modifier,
                         until = step.until,
                         duration = duration,
@@ -266,7 +279,7 @@ Process interpreter for one Closure.
                 clos_obj.focus_op(
                     step,
                     OpChill(
-                        container = step.symbol,
+                        container = clos_obj.containers[step.symbol],
                         modifier = step.modifier,
                         until = step.until,
                         duration = duration,

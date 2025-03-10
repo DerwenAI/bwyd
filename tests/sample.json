@@ -12,13 +12,22 @@
       "notes": [
         "best to work with cold ingredients and chilled utensils"
       ],
-      "tools": {
-        "fork": "small fork or whisk",
-        "spatula": "silicone spatula"
-      },
-      "containers": {
-        "bowl": "chilled mixing bowl"
-      },
+      "tools": [
+        {
+          "symbol": "fork",
+          "text": "small fork or whisk"
+        },
+        {
+          "symbol": "spatula",
+          "text": "silicone spatula"
+        }
+      ],
+      "containers": [
+        {
+          "symbol": "bowl",
+          "text": "chilled mixing bowl"
+        }
+      ],
       "ingredients": {
         "puree": "reduced veggie pur\u00e9e",
         "flour": "flour: rice, oat, etc.",
@@ -139,14 +148,26 @@
       "notes": [
         "divide dough into 8 pieces, rolling out one at a time"
       ],
-      "tools": {
-        "hand": "clean hands",
-        "spoon": "large spoon",
-        "fork": "fork"
-      },
-      "containers": {
-        "mat": "floured rolling surface"
-      },
+      "tools": [
+        {
+          "symbol": "hand",
+          "text": "clean hands"
+        },
+        {
+          "symbol": "spoon",
+          "text": "large spoon"
+        },
+        {
+          "symbol": "fork",
+          "text": "fork"
+        }
+      ],
+      "containers": [
+        {
+          "symbol": "mat",
+          "text": "floured rolling surface"
+        }
+      ],
       "ingredients": {
         "dough": "dough",
         "flour": "rice, semolina, etc."
@@ -222,13 +243,22 @@
       "notes": [
         "add layers of dumplings to fill depth of baking dish"
       ],
-      "tools": {
-        "hand": "clean hands",
-        "board": "gnocchi board or a fork"
-      },
-      "containers": {
-        "dish": "baking dish"
-      },
+      "tools": [
+        {
+          "symbol": "hand",
+          "text": "clean hands"
+        },
+        {
+          "symbol": "board",
+          "text": "gnocchi board or a fork"
+        }
+      ],
+      "containers": [
+        {
+          "symbol": "dish",
+          "text": "baking dish"
+        }
+      ],
       "ingredients": {
         "parchment": "cut parchment paper",
         "raw": "dumplings"

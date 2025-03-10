@@ -14,7 +14,31 @@ import yattag
 
 
 ######################################################################
-## language object definitions
+## required items
+
+@dataclass(order=False, frozen=False)
+class Equipment:  # pylint: disable=R0902
+    """
+A data class representing one parsed Tool or Container object.
+    """
+    symbol: str
+    text: str
+    use_count: int = 0
+
+    def to_json (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "symbol": self.symbol,
+            "text": self.text,
+        }
+
+
+######################################################################
+## measurables
 
 @dataclass(order=False, frozen=False)
 class Measure:  # pylint: disable=R0902
@@ -284,7 +308,7 @@ class OpAction (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Action object.
     """
-    tool: str
+    tool: Equipment
     modifier: str
     until: str
     duration: Duration
@@ -314,7 +338,7 @@ HTML representation
         text(" with ")
 
         with tag("strong"):
-            text(self.tool)
+            text(self.tool.symbol)
 
         text(" until ")
                                                 
@@ -341,7 +365,7 @@ Serializable representation for JSON.
         """
         return {
             "op": "action",
-            "tool": self.tool,
+            "tool": self.tool.symbol,
             "modifier": self.modifier,
             "until": self.until,
             "duration": self.duration.to_json(),
@@ -354,7 +378,7 @@ class OpBake (OpGeneric):  # pylint: disable=R0902
 A data class representing one Bake object.
     """
     mode: str
-    container: str
+    container: Equipment
     modifier: str
     until: str
     duration: Duration
@@ -411,7 +435,7 @@ Serializable representation for JSON.
         return {
             "op": "bake",
             "mode": self.mode,
-            "container": self.container,
+            "container": self.container.symbol,
             "modifier": self.modifier,
             "until": self.until,
             "duration": self.duration.to_json(),
@@ -424,7 +448,7 @@ class OpChill (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Chill object.
     """
-    container: str
+    container: Equipment
     modifier: str
     until: str
     duration: Duration
@@ -451,7 +475,7 @@ HTML representation
         text(self.modifier)
 
         with tag("strong"):
-            text(self.container)
+            text(self.container.symbol)
 
         text(" for ")
 
@@ -473,7 +497,7 @@ Serializable representation for JSON.
         """
         return {
             "op": "chill",
-            "container": self.container,
+            "container": self.container.symbol,
             "modifier": self.modifier,
             "until": self.until,
             "duration": self.duration.to_json(),
@@ -491,7 +515,7 @@ class Focus:  # pylint: disable=R0902
     """
 A data class representing a parsed Focus object.
     """
-    container: str
+    container: Equipment
     ops: typing.List[ OpsTypes ] = field(default_factory = lambda: [])
 
     def to_html (
@@ -507,7 +531,7 @@ HTML representation
             text("into ")
 
             with tag("strong"):
-                text(self.container)
+                text(self.container.symbol)
 
         with tag("dd"):
             for op in self.ops:
@@ -521,7 +545,7 @@ HTML representation
 Serializable representation for JSON.
         """
         return {
-            "container": self.container,
+            "container": self.container.symbol,
             "ops": [ op.to_json() for op in self.ops ],
         }
 
@@ -536,8 +560,8 @@ A data class representing one parsed Closure object.
     yields: Measure
     title: typing.Optional[ str ] = None
     notes: typing.List[ str ] = field(default_factory = lambda: [])
-    tools: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())  # pylint: disable=W0108
-    containers: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())  # pylint: disable=W0108
+    tools: typing.Dict[ str, Equipment ] = field(default_factory = lambda: OrderedDict())  # pylint: disable=W0108
+    containers: typing.Dict[ str, Equipment ] = field(default_factory = lambda: OrderedDict())  # pylint: disable=W0108
     ingredients: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())  # pylint: disable=W0108
     foci: typing.List[ Focus ] = field(default_factory = lambda: [])
     active_focus: typing.Optional[ Focus ] = None
@@ -585,23 +609,23 @@ HTML representation
                 text("uses:")
 
             with tag("dl"):
-                for cont_symbol, cont_text in self.tools.items():
+                for tool in self.tools.values():
                     with tag("dt"):
                         with tag("strong"):
-                            text(cont_symbol)
+                            text(tool.symbol)
 
                     with tag("dd"):
                         with tag("em"):
-                            text(cont_text)
+                            text(tool.text)
 
-                for cont_symbol, cont_text in self.containers.items():
+                for container in self.containers.values():
                         with tag("dt"):
                             with tag("strong"):
-                                text(cont_symbol)
+                                text(container.symbol)
 
                         with tag("dd"):
                             with tag("em"):
-                                text(cont_text)
+                                text(container.text)
 
         # foci
         with tag("dl"):
