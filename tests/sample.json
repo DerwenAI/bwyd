@@ -28,14 +28,32 @@
           "text": "chilled mixing bowl"
         }
       ],
-      "ingredients": {
-        "puree": "reduced veggie pur\u00e9e",
-        "flour": "flour: rice, oat, etc.",
-        "egg": "large chicken egg",
-        "ricotta": "whole milk ricotta",
-        "parmesan": "grated parmesan",
-        "nutmeg": "freshly grated nutmeg"
-      },
+      "ingredients": [
+        {
+          "symbol": "puree",
+          "text": "reduced veggie pur\u00e9e"
+        },
+        {
+          "symbol": "flour",
+          "text": "flour: rice, oat, etc."
+        },
+        {
+          "symbol": "egg",
+          "text": "large chicken egg"
+        },
+        {
+          "symbol": "ricotta",
+          "text": "whole milk ricotta"
+        },
+        {
+          "symbol": "parmesan",
+          "text": "grated parmesan"
+        },
+        {
+          "symbol": "nutmeg",
+          "text": "freshly grated nutmeg"
+        }
+      ],
       "foci": [
         {
           "container": "bowl",
@@ -168,10 +186,17 @@
           "text": "floured rolling surface"
         }
       ],
-      "ingredients": {
-        "dough": "dough",
-        "flour": "rice, semolina, etc."
-      },
+      "ingredients": [
+        {
+          "op": "use",
+          "symbol": "dough",
+          "text": "dough"
+        },
+        {
+          "symbol": "flour",
+          "text": "rice, semolina, etc."
+        }
+      ],
       "foci": [
         {
           "container": "mat",
@@ -179,7 +204,7 @@
             {
               "op": "use",
               "symbol": "dough",
-              "name": "dough"
+              "text": "dough"
             },
             {
               "op": "add",
@@ -259,10 +284,17 @@
           "text": "baking dish"
         }
       ],
-      "ingredients": {
-        "parchment": "cut parchment paper",
-        "raw": "dumplings"
-      },
+      "ingredients": [
+        {
+          "symbol": "parchment",
+          "text": "cut parchment paper"
+        },
+        {
+          "op": "use",
+          "symbol": "raw",
+          "text": "dumplings"
+        }
+      ],
       "foci": [
         {
           "container": "dish",
@@ -280,7 +312,7 @@
             {
               "op": "use",
               "symbol": "raw",
-              "name": "dumplings"
+              "text": "dumplings"
             },
             {
               "op": "action",

@@ -1,5 +1,6 @@
 ## TODOs
 
+  * check for duplicated symbols: Closures, Ingredients, Tools, Containers
   * show conversions in generated HTML
   * refactor tools, containers, etc., to allow for reference counts
   * refactor the `NOTE` objects to be Op

@@ -53,24 +53,24 @@ Constructor.
 Return a list of JSON-friendly dictionary representations,
 one for each parsed Closure.
         """
-        clos_list: typing.List[ dict ] = [
+        closure_list: typing.List[ dict ] = [
             {
-                "title": clos_obj.title,
+                "title": closure_obj.title,
                 "name": name,
-                "yields": clos_obj.yields.to_json(),
-                "notes": clos_obj.notes,
-                "tools": clos_obj.tools.to_json(),
-                "containers": clos_obj.containers.to_json(),
-                "ingredients": clos_obj.ingredients,
-                "foci": [ focus.to_json() for focus in clos_obj.foci ],
+                "yields": closure_obj.yields.to_json(),
+                "notes": closure_obj.notes,
+                "tools": closure_obj.tools.to_json(),
+                "containers": closure_obj.containers.to_json(),
+                "ingredients": closure_obj.ingredients.to_json(),
+                "foci": [ focus.to_json() for focus in closure_obj.foci ],
             }
-            for name, clos_obj in self.closures.items()
+            for name, closure_obj in self.closures.items()
         ]
 
         return {
             "cites": self.cites,
             "posts": self.posts,
-            "closures": clos_list,
+            "closures": closure_list,
         }
 
 
@@ -104,7 +104,7 @@ Process interpreter for one Closure.
         if title is not None and len(title) < 1:
             title = None
 
-        clos_obj: Closure = Closure(
+        closure_obj: Closure = Closure(
             name = closure.name,
             obj = closure,
             yields = Measure(
@@ -126,20 +126,20 @@ Process interpreter for one Closure.
                     ic(step_class_name, step.name, [ (part.symbol, part.components) for part in step.parts ])
 
                     for part in step.parts:
-                        if len(part.components) < 1 and part.symbol not in clos_obj.ingredients:
+                        if len(part.components) < 1 and part.symbol not in closure_obj.ingredients:
                             print(f"RATIO part: {part.symbol} not found")
 
             elif step_class_name == "Note":
                 if debug:
                     ic(step_class_name, step.text)
 
-                clos_obj.notes.append(step.text)
+                closure_obj.notes.append(step.text)
 
             elif step_class_name == "Container":
                 if debug:
                     ic(step_class_name, step.symbol, step.text)
 
-                clos_obj.containers[step.symbol] = Dependency(
+                closure_obj.containers[step.symbol] = Dependency(
                     symbol = step.symbol,
                     text = step.text,
                 )
@@ -148,43 +148,48 @@ Process interpreter for one Closure.
                 if debug:
                     ic(step_class_name, step.symbol, step.text)
 
-                clos_obj.tools[step.symbol] = Dependency(
+                closure_obj.tools[step.symbol] = Dependency(
                     symbol = step.symbol,
                     text = step.text,
                 )
 
             elif step_class_name == "Use":
                 if debug:
-                    ic(step_class_name, step.symbol, step.name)
+                    ic(step_class_name, step.symbol, step.text)
 
-                clos_obj.ingredients[step.symbol] = step.name
+                op: OpUse = OpUse(
+                    symbol = step.symbol,
+                    text = step.text,
+                )
 
-                clos_obj.focus_op(
+                closure_obj.ingredients[step.symbol] = op
+
+                closure_obj.focus_op(
                     step,
-                    OpUse(
-                        symbol = step.symbol,
-                        name = step.name,
-                    ),
+                    op,
                 )
 
             elif step_class_name == "Ingredient":
                 if debug:
                     ic(step_class_name, step.symbol, step.text)
 
-                clos_obj.ingredients[step.symbol] = step.text
+                closure_obj.ingredients[step.symbol] = Dependency(
+                    symbol = step.symbol,
+                    text = step.text,
+                )
 
             elif step_class_name == "Focus":
                 if debug:
                     ic(step_class_name, step.symbol)
 
-                if step.symbol not in clos_obj.containers:
+                if step.symbol not in closure_obj.containers:
                     print(f"CHILL CONTAINER: {step.symbol} not found")
 
-                clos_obj.active_focus = Focus(
-                    container = clos_obj.containers[step.symbol],
+                closure_obj.active_focus = Focus(
+                    container = closure_obj.containers[step.symbol],
                 )
 
-                clos_obj.foci.append(clos_obj.active_focus)
+                closure_obj.foci.append(closure_obj.active_focus)
 
             elif step_class_name == "Add":
                 measure: Measure = Measure(
@@ -195,10 +200,10 @@ Process interpreter for one Closure.
                 if debug:
                     ic(step_class_name, step.symbol, measure, step.text)
 
-                if step.symbol not in clos_obj.ingredients:
+                if step.symbol not in closure_obj.ingredients:
                     print(f"INGREDIENT: {step.symbol} not found")
 
-                clos_obj.focus_op(
+                closure_obj.focus_op(
                     step,
                     OpAdd(
                         symbol = step.symbol,
@@ -218,14 +223,14 @@ Process interpreter for one Closure.
 
                 equipment: typing.Optional[ typing.Any ] = None
 
-                if step.symbol in clos_obj.tools:
-                    equipment = clos_obj.tools[step.symbol]
-                elif step.symbol in clos_obj.containers:
-                    equipment = clos_obj.containers[step.symbol]
+                if step.symbol in closure_obj.tools:
+                    equipment = closure_obj.tools[step.symbol]
+                elif step.symbol in closure_obj.containers:
+                    equipment = closure_obj.containers[step.symbol]
                 else:
                     print(f"ACTION OBJECT: {step.symbol} not found")
 
-                clos_obj.focus_op(
+                closure_obj.focus_op(
                     step,
                     OpAction(
                         tool = equipment,
@@ -249,14 +254,14 @@ Process interpreter for one Closure.
                 if debug:
                     ic(step_class_name, step.symbol, step.modifier, step.until, temperature, duration)
 
-                if step.symbol not in clos_obj.containers:
+                if step.symbol not in closure_obj.containers:
                     print(f"BAKE CONTAINER: {step.symbol} not found")
 
-                clos_obj.focus_op(
+                closure_obj.focus_op(
                     step,
                     OpBake(
                         mode = step_class_name,
-                        container = clos_obj.containers[step.symbol],
+                        container = closure_obj.containers[step.symbol],
                         modifier = step.modifier,
                         until = step.until,
                         duration = duration,
@@ -273,20 +278,20 @@ Process interpreter for one Closure.
                 if debug:
                     ic(step_class_name, step.symbol, step.modifier, step.until, duration)
 
-                if step.symbol not in clos_obj.containers:
+                if step.symbol not in closure_obj.containers:
                     print(f"CONTAINER: {step.symbol} not found")
 
-                clos_obj.focus_op(
+                closure_obj.focus_op(
                     step,
                     OpChill(
-                        container = clos_obj.containers[step.symbol],
+                        container = closure_obj.containers[step.symbol],
                         modifier = step.modifier,
                         until = step.until,
                         duration = duration,
                     ),
                 )
 
-        return clos_obj
+        return closure_obj
 
 
     @classmethod

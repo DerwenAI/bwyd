@@ -1,10 +1,9 @@
 // make some yummy gnocchi from root veggies
 
 CLOSURE: "dough"
-    NOTE: "best to work with cold ingredients and chilled utensils"
-
     CONTAINER bowl: "chilled mixing bowl"
     FOCUS bowl
+    NOTE: "best to work with cold ingredients and chilled utensils"
 
     TOOL fork: "small fork or whisk"
     TOOL spatula: "silicone spatula"
@@ -50,10 +49,9 @@ YIELDS (800 g)
 
 
 CLOSURE: "dumplings"
-    NOTE: "divide dough into 8 pieces, rolling out one at a time"
-
     CONTAINER mat: "floured rolling surface"
     FOCUS mat
+    NOTE: "divide dough into 8 pieces, rolling out one at a time"
 
     TOOL hand: "clean hands"
     TOOL spoon: "large spoon"
@@ -83,10 +81,10 @@ YIELDS (20)
 
 CLOSURE: "frozen product"
     TITLE: "frozen gnocchi dumplings"
-    NOTE: "add layers of dumplings to fill depth of baking dish"
 
     CONTAINER dish: "baking dish"
     FOCUS dish
+    NOTE: "add layers of dumplings to fill depth of baking dish"
 
     TOOL hand: "clean hands"
     TOOL board: "gnocchi board or a fork"

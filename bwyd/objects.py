@@ -290,7 +290,7 @@ class OpUse (OpGeneric):  # pylint: disable=R0902
 A data class representing one Use object.
     """
     symbol: str
-    name: str
+    text: str
 
     def to_html (
         self,
@@ -301,7 +301,7 @@ A data class representing one Use object.
         """
 HTML representation
         """
-        # {'op': 'use', 'symbol': 'batter', 'name': 'batter'}
+        # {'op': 'use', 'symbol': 'batter', 'text': 'batter'}
         # not rendered as HTML -- so far
         pass
 
@@ -315,7 +315,7 @@ Serializable representation for JSON.
         return {
             "op": "use",
             "symbol": self.symbol,
-            "name": self.name,
+            "text": self.text,
         }
 
 
@@ -578,7 +578,7 @@ A data class representing one parsed Closure object.
     notes: typing.List[ str ] = field(default_factory = lambda: [])
     tools: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     containers: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
-    ingredients: typing.Dict[ str, str ] = field(default_factory = lambda: OrderedDict())  # pylint: disable=W0108
+    ingredients: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     foci: typing.List[ Focus ] = field(default_factory = lambda: [])
     active_focus: typing.Optional[ Focus ] = None
 

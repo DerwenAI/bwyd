@@ -40,7 +40,7 @@ Container:
 ;
 
 Use:
-  "USE" symbol=ID ":" name=STRING
+  "USE" symbol=ID ":" text=STRING
 ;
 
 Ingredient:

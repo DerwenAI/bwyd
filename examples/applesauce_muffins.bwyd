@@ -10,7 +10,7 @@ CLOSURE: "batter"
     TOOL whisk: "medium whisk or fork"
     TOOL spatula: "silicone spatula"
 
-    // dry mix
+    NOTE: "dry mix"
     INGREDIENT sugar: "granulated sugar"
     INGREDIENT salt: "sea salt, fine grind"
     INGREDIENT baking_soda: "baking soda"
@@ -29,10 +29,10 @@ CLOSURE: "batter"
     // 1/2 teaspoon ground nutmeg
 
     ACTION whisk: "blend"
-        UNTIL: "well mixed, break any clumps"
+        UNTIL: "well mixed, breaking any clumps"
 	TIME (30 sec)
 
-    // wet mix
+    NOTE: "wet mix"
     INGREDIENT applesauce: "unsweetened applesauce"
     INGREDIENT oil: "avocado oil"
     INGREDIENT vanilla: "vanilla extract"
@@ -96,10 +96,10 @@ YIELDS (1 l)
 
 CLOSURE: "muffins"
     TITLE: "applesauce muffins"
-    NOTE: "for large, moist, breakfast muffins"
 
-    CONTAINER pan: "muffin pan, 8-hole large size"
+    CONTAINER pan: "muffin pan, large size 8-hole"
     FOCUS pan
+    NOTE: "for large, moist, breakfast muffins"
 
     TOOL spoon: "large spoon"
     TOOL fork: "small fork"
