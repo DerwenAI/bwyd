@@ -93,7 +93,7 @@ OvenMode:
 ;
 
 Temperature:
-  degrees=NUMBER units=TemperatureUnits
+  amount=NUMBER units=TemperatureUnits
 ;
 
 TemperatureUnits:

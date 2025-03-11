@@ -14,7 +14,7 @@ import yattag
 
 
 ######################################################################
-## required items
+## dependencies
 
 @dataclass(order=False, frozen=False)
 class Dependency:  # pylint: disable=R0902
@@ -54,7 +54,7 @@ Serializable representation for JSON.
 
 
 ######################################################################
-## measurables
+## measures
 
 @dataclass(order=False, frozen=False)
 class Measure:  # pylint: disable=R0902
@@ -91,12 +91,10 @@ Serializable representation for JSON.
 
 
 @dataclass(order=False, frozen=False)
-class Duration:  # pylint: disable=R0902
+class Duration (Measure):  # pylint: disable=R0902
     """
 A data class representing one parsed Duration object.
     """
-    amount: float
-    units: str
 
     def normalize (
         self,
@@ -170,37 +168,27 @@ Serializable representation for JSON.
 
 
 @dataclass(order=False, frozen=False)
-class Temperature:  # pylint: disable=R0902
+class Temperature (Measure):  # pylint: disable=R0902
     """
 A data class representing one parsed Temperature object.
     """
-    degrees: float
-    units: str
 
-    def to_html (
+    def humanize (
         self
         ) -> str:
         """
 HTML represenation.
         """
-        html: str = f"{self.degrees}° "
+        html: str = f"{self.amount} °{self.units}"
 
-        if self.units is not None:
-            html += self.units
+        if self.units == "C":
+            f_deg: int = int(
+                round( ((self.amount / 5.0 * 9.0) + 32.0) / 5.0) * 5.0
+            )
+
+            html += f" ({f_deg} °F)"
 
         return html
-
-
-    def to_json (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "degrees": self.degrees,
-            "units": self.units,
-        }
 
 
 ######################################################################
@@ -418,8 +406,10 @@ Duration of this operation.
         """
 HTML representation
         """
-        # {'op': 'bake', 'container': 'pan', 'modifier': 'place pan on a baking sheet, make level, convection bake', 'until': 'an inserted fork comes out with tiny crumbs', 'duration': {'amount': 20, 'units': 'min'}, 'temperature': {'degrees': 177, 'units': 'C'}}
-        text(self.modifier)
+        # {'op': 'bake', 'container': 'pan', 'modifier': 'place pan on a baking sheet, make level, convection bake', 'until': 'an inserted fork comes out with tiny crumbs', 'duration': {'amount': 20, 'units': 'min'}, 'temperature': {'amount': 177, 'units': 'C'}}
+        with tag("em"):
+            text(self.modifier)
+
         doc.stag("br")
 
         with tag("strong"):
@@ -428,7 +418,7 @@ HTML representation
         text(" at ")
 
         with tag("strong"):
-            text(self.temperature.to_html())
+            text(self.temperature.humanize())
 
         text(" for ")
 
@@ -436,7 +426,8 @@ HTML representation
             with tag("time"):
                 text(self.duration.to_html())
 
-        text(" until ")
+        doc.stag("br")
+        text("until ")
 
         with tag("em"):
             text(self.until)

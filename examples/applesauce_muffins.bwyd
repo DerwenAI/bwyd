@@ -101,13 +101,14 @@ CLOSURE: "muffins"
     FOCUS pan
     NOTE: "for large, moist, breakfast muffins"
 
+    TOOL hand: "clean hands"
     TOOL spoon: "large spoon"
     TOOL fork: "small fork"
 
     INGREDIENT butter: "vegan butter, butter, or oil"
     ADD butter (14 g)
 
-    ACTION pan: "grease"
+    ACTION hand: "grease"
         UNTIL: "cooking surfaces are all buttered"
         TIME (3 min)
 
@@ -118,7 +119,7 @@ CLOSURE: "muffins"
         UNTIL: "evenly distributed"
 	TIME (3 min)
 
-    BAKE pan: "place pan on a baking sheet, make level, convection bake"
+    BAKE pan: "place pan on a baking sheet, make level, set to convection bake"
         AT: 177 C
         UNTIL: "an inserted fork comes out with tiny crumbs"
         TIME (20 min)

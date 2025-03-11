@@ -15,9 +15,9 @@ import textx  # pylint: disable=E0401
 import yattag
 
 from .objects import Dependency, DependencyDict, \
-    Duration, Measure, Temperature, \
-    OpAction, OpAdd, OpBake, OpChill, OpUse, \
-    Closure, Focus
+    Measure, Duration, Temperature, \
+    OpAdd, OpUse, OpAction, OpBake, OpChill, \
+    Focus, Closure
 
 
 ######################################################################
@@ -242,7 +242,7 @@ Process interpreter for one Closure.
 
             elif step_class_name == "Bake":
                 temperature = Temperature(
-                    degrees = step.temperature.degrees,
+                    amount = step.temperature.amount,
                     units = step.temperature.units,
                 )
 

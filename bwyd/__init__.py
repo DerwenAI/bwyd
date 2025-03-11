@@ -11,9 +11,9 @@ from .kernel import BwydKernel
 from .parser import Bwyd
 
 from .objects import Dependency, DependencyDict, \
-    Duration, Temperature, Measure, \
-    OpAction, OpAdd, OpBake, OpChill, OpUse, OpsTypes, \
-    Closure, Focus
+    Measure, Duration, Temperature, \
+    OpAdd, OpUse, OpAction, OpBake, OpChill, \
+    Focus, Closure
 
 
 __version__ = "0.2"
