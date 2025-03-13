@@ -10,6 +10,7 @@ from collections import OrderedDict
 from dataclasses import dataclass, field
 import typing
 
+from icecream import ic
 import yattag
 
 
@@ -214,6 +215,7 @@ Stub: Total duration.
         doc: yattag.doc.Doc,
         tag: typing.Any,
         text: typing.Any,
+        converter: dict,
         ) -> str:
         """
 Stub: HTML representation.
@@ -236,6 +238,7 @@ A data class representing one Add object.
         doc: yattag.doc.Doc,
         tag: typing.Any,
         text: typing.Any,
+        converter: dict,
         ) -> str:
         """
 HTML representation
@@ -248,6 +251,13 @@ HTML representation
 
         text(", ")
         text(self.measure.to_html())
+
+        # show conversion, if available
+        if self.symbol in converter:
+            imper_units, metric_units, ratio = converter[self.symbol]
+
+            if self.measure.units == metric_units:
+                text(f" ({round(self.measure.amount / ratio, 1)} {imper_units}) ")
 
         if len(self.text) > 0:
             text(" — ")
@@ -285,6 +295,7 @@ A data class representing one Use object.
         doc: yattag.doc.Doc,
         tag: typing.Any,
         text: typing.Any,
+        converter: dict,
         ) -> str:
         """
 HTML representation
@@ -331,18 +342,20 @@ Duration of this operation.
         doc: yattag.doc.Doc,
         tag: typing.Any,
         text: typing.Any,
+        converter: dict,
         ) -> str:
         """
 HTML representation
         """
         # {'op': 'action', 'tool': 'whisk', 'modifier': 'blend', 'until': 'well mixed, break any clumps', 'duration': {'amount': 30, 'units': 'sec'}}
         doc.stag("br")
-        text("then ")
-        text(self.modifier)
-        text(" with ")
+        text("with ")
 
         with tag("strong"):
             text(self.tool.symbol)
+
+        text(": ")
+        text(self.modifier)
 
         text(" until ")
                                                 
@@ -402,6 +415,7 @@ Duration of this operation.
         doc: yattag.doc.Doc,
         tag: typing.Any,
         text: typing.Any,
+        converter: dict,
         ) -> str:
         """
 HTML representation
@@ -474,6 +488,7 @@ Duration of this operation.
         doc: yattag.doc.Doc,
         tag: typing.Any,
         text: typing.Any,
+        converter: dict,
         ) -> str:
         """
 HTML representation
@@ -530,6 +545,7 @@ A data class representing a parsed Focus object.
         doc: yattag.doc.Doc,
         tag: typing.Any,
         text: typing.Any,
+        converter: dict,
         ) -> str:
         """
 HTML representation
@@ -542,7 +558,7 @@ HTML representation
 
         with tag("dd"):
             for op in self.ops:
-                op.to_html(doc, tag, text)
+                op.to_html(doc, tag, text, converter)
 
 
     def to_json (
@@ -592,6 +608,7 @@ Append one operation to the active Focus.
         doc: yattag.doc.Doc,
         tag: typing.Any,
         text: typing.Any,
+        converter: dict,
         ) -> str:
         """
 HTML representation
@@ -637,4 +654,4 @@ HTML representation
         # foci
         with tag("dl"):
             for focus in self.foci:
-                focus.to_html(doc, tag, text)
+                focus.to_html(doc, tag, text, converter)

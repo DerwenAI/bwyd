@@ -7,6 +7,7 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
 from urllib.parse import ParseResult, urlparse
+import json
 import pathlib
 import typing
 
@@ -19,6 +20,8 @@ from .objects import Dependency, DependencyDict, \
     OpAdd, OpUse, OpAction, OpBake, OpChill, \
     Focus, Closure
 
+from .resources import _CONVERT_PATH, _GRAMMAR_PATH
+
 
 ######################################################################
 ## parser/interpreter definitions
@@ -27,12 +30,12 @@ class Bwyd:
     """
 Bwyd DSL parser/interpreter.
     """
-    GRAMMAR: pathlib.Path = pathlib.Path(__file__).resolve().parent / "resources" / "bwyd.tx"
-
     META_MODEL: textx.metamodel.TextXMetaModel = textx.metamodel_from_file(
-        GRAMMAR,
+        _GRAMMAR_PATH,
         debug = False, # True
     )
+
+    UNIT_CONVERT: dict = json.load(open(_CONVERT_PATH, "r", encoding = "utf-8"))
 
 
     def __init__ (
@@ -423,7 +426,7 @@ Generate an HTML representation.
                     text("directions:")
 
                 for _, closure in self.closures.items():
-                    closure.to_html(doc, tag, text)
+                    closure.to_html(doc, tag, text, self.UNIT_CONVERT)
 
         if indent:
             return yattag.indent(doc.getvalue())

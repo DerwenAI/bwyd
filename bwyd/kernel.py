@@ -14,9 +14,9 @@ class BwydKernel (Kernel):  # pylint: disable=R0903
     """
 Jupyter wrapper kernel
     """
-    banner = "Bwyd kernel -- kitchen engineering"
+    banner = "Bwyd kernel -- DSL for cooking"
 
-    implementation_version = "0.1"
+    implementation_version = "0.2"
     implementation = "Bwyd"
 
     language_version = "0.1"
