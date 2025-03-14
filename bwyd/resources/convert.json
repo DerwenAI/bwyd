@@ -1,3 +1,18 @@
 {
-    "flour": [ "cup", "g", 125.0 ]
+    "applesauce": [ "cup", "g", 250.1 ],
+    "avocado_oil": [ "cup", "g", 215.3 ],
+    "baking_soda": [ "cup", "g", 520.5 ],
+    "butter": [ "cup", "g", 225.9 ],
+    "chia_seeds": [ "cup", "g", 160.9 ],
+    "chopped_walnuts": [ "cup", "g", 100.1 ],
+    "cinnamon": [ "cup", "g", 132.5 ],
+    "dried_cranberries": [ "cup", "g", 129.8 ],
+    "flour": [ "cup", "g", 124.9 ],
+    "molasses": [ "cup", "g", 279.8 ],
+    "nutmeg": [ "cup", "g", 149.1 ],
+    "rolled_oats": [ "cup", "g", 89.90 ],
+    "salt": [ "cup", "g", 302.8 ],
+    "shredded_coconut": [ "cup", "g", 70.98 ],
+    "sugar": [ "cup", "g", 201.1 ],
+    "vanilla_extract": [ "cup", "g", 208.0 ]
 }

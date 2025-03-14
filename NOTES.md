@@ -1,6 +1,6 @@
 ## TODOs
 
-  * show conversions in generated HTML
+  * express conversions as function of densities?
   * check for duplicated symbols: Closures, Ingredients, Tools, Containers
   * refactor tools, containers, etc., to allow for reference counts
   * refactor the `NOTE` objects to be Op -- or `HEADER` ?
