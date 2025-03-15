@@ -8,6 +8,7 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 
 from collections import OrderedDict
 from dataclasses import dataclass, field
+from fractions import Fraction
 import typing
 
 from icecream import ic
@@ -233,6 +234,70 @@ A data class representing one Add object.
     measure: Measure
     text: str
 
+    @classmethod
+    def humanize_cup (
+        cls,
+        amount: float,
+        ) -> str:
+        """
+Humanize imperial measurement ratios, for cups
+        """
+        units: str = "cups"
+        denom_limit: int = 4
+
+        if amount <= 0.24:
+            return cls.humanize_tsp(amount * 16.0)
+        elif amount >= 1.0:
+            human: str = cls.humanize_ratio(amount)
+            #human: str = f"{round(amount, 2):.2f}"
+        else:
+            human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
+
+        return f"{human} {units}"
+    
+
+    @classmethod
+    def humanize_tsp (
+        cls,
+        amount: float,
+        ) -> str:
+        """
+Humanize imperial measurement ratios, for cups
+        """
+        units: str = "tsp"
+        denom_limit: int = 8
+
+        if amount >= 0.95:
+            human: str = cls.humanize_ratio(amount)
+            #human: str = f"{round(amount, 2):.2f}"
+        elif amount >= 0.4:
+            human = str(Fraction(round(amount, 1)).limit_denominator(denom_limit))
+        else:
+            human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
+
+        return f"{human} {units}"
+
+
+    @classmethod
+    def humanize_ratio (
+        cls,
+        amount: float,
+        ) -> str:
+        """
+Humanize imperial measurement ratios >= 1.0
+        """
+        base: int = int(amount)
+        frac: float = amount - float(base)
+
+        if frac < 0.2:
+            return str(base)
+
+        denom_limit: int = 4
+        human = str(Fraction(round(frac, 2)).limit_denominator(denom_limit))
+
+        return f"{base:d} {human}"
+
+
     def to_html (
         self,
         doc: yattag.doc.Doc,
@@ -249,7 +314,7 @@ HTML representation
         with tag("strong"):
             text(self.symbol)
 
-        text(", ")
+        text(": ")
         text(self.measure.to_html())
 
         # show conversion, if available
@@ -257,7 +322,8 @@ HTML representation
             imper_units, metric_units, ratio = converter[self.symbol]
 
             if self.measure.units == metric_units:
-                text(f" ({round(self.measure.amount / ratio, 1)} {imper_units}) ")
+                imper_amount: float = self.measure.amount / ratio
+                text(" (", self.humanize_cup(imper_amount), ") ")
 
         if len(self.text) > 0:
             text(" — ")
