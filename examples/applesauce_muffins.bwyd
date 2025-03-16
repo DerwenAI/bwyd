@@ -10,7 +10,7 @@ CLOSURE: "batter"
     TOOL whisk: "medium whisk or fork"
     TOOL spatula: "silicone spatula"
 
-    NOTE: "dry mix"
+    HEADER: "dry mix"
     INGREDIENT sugar: "granulated sugar"
     INGREDIENT salt: "sea salt, fine grind"
     INGREDIENT baking_soda: "baking soda"
@@ -32,7 +32,7 @@ CLOSURE: "batter"
         UNTIL: "well mixed, breaking any clumps"
 	TIME (30 sec)
 
-    NOTE: "wet mix"
+    HEADER: "wet mix"
     INGREDIENT applesauce: "unsweetened applesauce"
     INGREDIENT avocado_oil: "avocado oil"
     INGREDIENT vanilla_extract: "vanilla extract"
@@ -53,7 +53,7 @@ CLOSURE: "batter"
         UNTIL: "lightly blended"
 	TIME (30 sec)
 
-    // chunky mix
+    HEADER: "chunky mix"
     INGREDIENT rolled_oats: "rolled oats"
     INGREDIENT shredded_coconut: "dry shredded coconut"
     INGREDIENT chia_seeds: "chia seeds"
@@ -96,10 +96,10 @@ YIELDS (1 l)
 
 CLOSURE: "muffins"
     TITLE: "applesauce muffins"
+    NOTE: "for large, moist, breakfast muffins"
 
     CONTAINER pan: "muffin pan, large size 8-hole"
     FOCUS pan
-    NOTE: "for large, moist, breakfast muffins"
 
     TOOL hand: "clean hands"
     TOOL spoon: "large spoon"

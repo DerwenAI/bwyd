@@ -4,14 +4,12 @@
   "closures": [
     {
       "title": null,
+      "note": "best to work with cold ingredients and chilled utensils",
       "name": "dough",
       "yields": {
         "amount": 800,
         "units": "g"
       },
-      "notes": [
-        "best to work with cold ingredients and chilled utensils"
-      ],
       "tools": [
         {
           "symbol": "fork",
@@ -158,14 +156,12 @@
     },
     {
       "title": null,
+      "note": "divide dough into 8 pieces, rolling out one at a time",
       "name": "dumplings",
       "yields": {
         "amount": 20,
         "units": null
       },
-      "notes": [
-        "divide dough into 8 pieces, rolling out one at a time"
-      ],
       "tools": [
         {
           "symbol": "hand",
@@ -260,14 +256,12 @@
     },
     {
       "title": "frozen gnocchi dumplings",
+      "note": "add layers of dumplings to fill depth of baking dish",
       "name": "frozen gnocchi",
       "yields": {
         "amount": 20,
         "units": null
       },
-      "notes": [
-        "add layers of dumplings to fill depth of baking dish"
-      ],
       "tools": [
         {
           "symbol": "hand",

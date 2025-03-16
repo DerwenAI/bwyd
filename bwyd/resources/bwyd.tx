@@ -15,12 +15,13 @@ Post:
 Closure:
   "CLOSURE:" name=STRING
     ("TITLE:" title=STRING)?
+    ("NOTE:" note=STRING)?
     steps+=Step
   "YIELDS" yields=Measure
 ;
 
 Step:
-  Ratio | Note | Container | Use | Ingredient | Focus | Tool | Add | Action | Bake | Chill
+  Ratio | Header | Container | Use | Ingredient | Focus | Tool | Add | Action | Bake | Chill
 ;
 
 Ratio:
@@ -31,8 +32,8 @@ RatioPart:
     symbol=ID ('[' components+=ID[','] ']')?
 ;
 
-Note:
-  "NOTE:" text=STRING
+Header:
+  "HEADER:" text=STRING
 ;
 
 Container:

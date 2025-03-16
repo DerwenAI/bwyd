@@ -230,6 +230,41 @@ Stub: HTML representation.
 
 
 @dataclass(order = False, frozen = False)
+class OpHeader (OpGeneric):  # pylint: disable=R0902
+    """
+A data class representing one Header object.
+    """
+    text: str
+
+    def to_html (
+        self,
+        doc: yattag.doc.Doc,
+        tag: typing.Any,
+        text: typing.Any,
+        converter: dict,
+        ) -> str:
+        """
+HTML representation
+        """
+        # {'op': 'header', 'text': 'foo bar baz'}
+        with tag("em"):
+            text(self.text)
+
+        doc.stag("br")
+
+
+    def to_json (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "text": self.text,
+        }
+
+
+@dataclass(order = False, frozen = False)
 class OpAdd (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Add object.
@@ -656,12 +691,13 @@ A data class representing one parsed Closure object.
     obj: typing.Any
     yields: Measure
     title: typing.Optional[ str ] = None
-    notes: typing.List[ str ] = field(default_factory = lambda: [])
+    note: str = ""
     tools: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     containers: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     ingredients: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     foci: typing.List[ Focus ] = field(default_factory = lambda: [])
     active_focus: typing.Optional[ Focus ] = None
+
 
     def focus_op (
         self,
@@ -690,11 +726,10 @@ HTML representation
         with tag("h3"):
             text(self.name)
 
-        # notes
-        for note in self.notes:
-            with tag("p"):
-                with tag("em"):
-                    text(note)
+        # note
+        with tag("p"):
+            with tag("em"):
+                text(self.note)
 
         # yield
         with tag("p"):

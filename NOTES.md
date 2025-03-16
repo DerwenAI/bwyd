@@ -1,13 +1,12 @@
 ## TODOs
 
-  * refactor the `NOTE` objects to be Op -- or `HEADER` ?
   * scan a module to produce a total ingredients list
+  * incorporate `Bootstrap` layouts
   * express conversions as function of densities
   * add a Corpus class to handle collections of parsed modules
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules
   * leverage `pydantic-graph` to build trees from directed cliques
   * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
-  * incorporate `Bootstrap` layouts
   
 
 ## Taxonomy
@@ -18,7 +17,10 @@ _knowledge graph_.
   - ratios
   - ingredients
   - techniques
-  - tools
+  - tools, containers
+  - prepped components
+  - conversions
+  - substitutions
 
 
 ## Research
@@ -27,41 +29,6 @@ _knowledge graph_.
 
 
 ---
-
-## Ideation
-
-Other language constructs to be added are `Substitutions` and `Pairings`,
-per Niki Segnit, [_The Flavor Thesaurus_](https://www.nikisegnit.com/the-flavour-thesaurus)
-and the concepts of _lateral cooking_ which she's explored.
-
-Each `Closure` of a recipe is by definition a 
-[_causal graph_](https://medium.com/@gxyang13/close-back-door-for-causal-models-a-guide-to-causal-graph-d4483cd5a276),
-where:
-
-  * `Yields` represent intermediate _outcomes_
-  * substitutions/pivots correspond to _interventions_
-
-
-Each `Step` within a `Closure` specifies its required ingredients in
-specific ratios and the tools which must be available, applying
-well-defined techniques, until some measurable state is reached.
-
-Consequently this formulation structures each `Step` as a
-[Petri net](https://en.wikipedia.org/wiki/Petri_net)
-composed of _places_, _transitions_, and _arcs_, where:
-
-  * ingredients getting transformed into `Yields` correspond to _tokens_
-  * measurable states correspond to _guard expressions_
-
-
-References to other elements within a `Closure` imply:
-
-  * "ADD TO FOCUS MENTIONED MOST RECENTLY"
-  * "USE TOOL MENTIONED MOST RECENTLY"
-
-As a consequence, a language model could render text from any
-parameterized recipe.
-
 
 ## Questions
 

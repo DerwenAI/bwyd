@@ -1,4 +1,4 @@
-## Language constructs
+# Language constructs
 
 > "Everything said is said by an observer." –
 Maturana and Varela, [_Autopoiesis_](https://www.researchgate.net/publication/232231194_Autopoiesis_40_years_Later_A_Review_and_a_Reformulation)
@@ -7,7 +7,7 @@ Maturana and Varela, [_Autopoiesis_](https://www.researchgate.net/publication/23
 [Michael Ruhlman](https://ruhlman.substack.com/p/on-cookbooks-and-writing?publication_id=218241&post_id=154625487)
 
 
-### `Ratio`
+## `Ratio`
 
 These dimensionless relations represent the ratios (by weight) of key
 components in cooking.
@@ -20,7 +20,7 @@ Meanwhile the structure in recipes defines the "craft" of cooking.
 **In practice**: `Ratio` objects allow for scaling recipes.
 
 
-### `Closure`
+## `Closure`
 
 These define process, based on `Ratios`, for how to use ingredients,
 equipment, and techniques to make specific products.
@@ -51,7 +51,7 @@ Process defines the "art" of cooking.
 planning within a professional kitchen work environment.
 
 
-### `Observable`
+## `Observable`
 
 These represent the experienced end-consumer of a graph of
 parameterized `Closure` objects, for a particular event.
@@ -65,3 +65,40 @@ Experience defines the shared  "communication" of cooking.
 
 **In practice**: `Observable` objects collect audience annotations
 (photos, comments, stories, successs/failures) for recipes.
+
+
+---
+
+## Ideation
+
+Other language constructs to be added are `Substitutions` and `Pairings`,
+per Niki Segnit, [_The Flavor Thesaurus_](https://www.nikisegnit.com/the-flavour-thesaurus)
+and the concepts of _lateral cooking_ which she's explored.
+
+Each `Closure` of a recipe is by definition a 
+[_causal graph_](https://medium.com/@gxyang13/close-back-door-for-causal-models-a-guide-to-causal-graph-d4483cd5a276),
+where:
+
+  * `Yields` represent intermediate _outcomes_
+  * substitutions/pivots correspond to _interventions_
+
+
+Each `Step` within a `Closure` specifies its required ingredients in
+specific ratios and the tools which must be available, applying
+well-defined techniques, until some measurable state is reached.
+
+Consequently this formulation structures each `Step` as a
+[Petri net](https://en.wikipedia.org/wiki/Petri_net)
+composed of _places_, _transitions_, and _arcs_, where:
+
+  * ingredients getting transformed into `Yields` correspond to _tokens_
+  * measurable states correspond to _guard expressions_
+
+
+References to other elements within a `Closure` imply:
+
+  * "ADD TO FOCUS MENTIONED MOST RECENTLY"
+  * "USE TOOL MENTIONED MOST RECENTLY"
+
+As a consequence, a language model could render text from any
+parameterized recipe.

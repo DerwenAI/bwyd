@@ -19,7 +19,7 @@ from .error import BwydParserError
 
 from .objects import Dependency, DependencyDict, \
     Measure, Duration, Temperature, \
-    OpAdd, OpUse, OpAction, OpBake, OpChill, \
+    OpHeader, OpAdd, OpUse, OpAction, OpBake, OpChill, \
     Focus, Closure
 
 from .resources import _CONVERT_PATH
@@ -57,9 +57,9 @@ one for each parsed Closure.
         closure_list: typing.List[ dict ] = [
             {
                 "title": closure_obj.title,
+                "note": closure_obj.note,
                 "name": name,
                 "yields": closure_obj.yields.to_json(),
-                "notes": closure_obj.notes,
                 "tools": closure_obj.tools.to_json(),
                 "containers": closure_obj.containers.to_json(),
                 "ingredients": closure_obj.ingredients.to_json(),
@@ -162,6 +162,7 @@ Helper method to interpret one Closure.
                 units = closure.yields.units,
             ),
             title = title,
+            note = closure.note,
         )
 
         for step in closure.steps:
@@ -171,13 +172,41 @@ Helper method to interpret one Closure.
 
             step_class_name: str = step.__class__.__name__
 
-            if step_class_name == "Note":
+            if step_class_name == "Focus":
+                if debug:
+                    ic(step_class_name, step.symbol)
+
+                # resolve local reference
+                if step.symbol in closure_obj.containers:
+                    entity: typing.Any = closure_obj.containers[step.symbol]
+                    entity.ref_count += 1
+                else:
+                    loc: dict = textx.get_location(step)
+
+                    raise BwydParserError(
+                        f"CONTAINER `{step.symbol}` used but not defined {loc}",
+                        symbol = step.symbol,
+                    )
+
+                closure_obj.active_focus = Focus(
+                    container = entity,
+                )
+
+                closure_obj.foci.append(closure_obj.active_focus)
+
+            elif step_class_name == "Header":
                 if debug:
                     ic(step_class_name, step.text)
 
-                closure_obj.notes.append(step.text)
+                closure_obj.focus_op(
+                    step,
+                    OpHeader(
+                        loc = textx.get_location(step),
+                        text = step.text,
+                    )
+                )
 
-            elif step_class_name == "Container":
+            if step_class_name == "Container":
                 if debug:
                     ic(step_class_name, step.symbol, step.text)
 
@@ -227,28 +256,6 @@ Helper method to interpret one Closure.
                     step,
                     op,
                 )
-
-            elif step_class_name == "Focus":
-                if debug:
-                    ic(step_class_name, step.symbol)
-
-                # resolve local reference
-                if step.symbol in closure_obj.containers:
-                    entity: typing.Any = closure_obj.containers[step.symbol]
-                    entity.ref_count += 1
-                else:
-                    loc: dict = textx.get_location(step)
-
-                    raise BwydParserError(
-                        f"CONTAINER `{step.symbol}` used but not defined {loc}",
-                        symbol = step.symbol,
-                    )
-
-                closure_obj.active_focus = Focus(
-                    container = entity,
-                )
-
-                closure_obj.foci.append(closure_obj.active_focus)
 
             elif step_class_name == "Add":
                 measure: Measure = Measure(
@@ -456,6 +463,17 @@ Tally the total duration of one Bwyd module.
         return Duration(total_sec, "sec").humanize()
 
 
+    def total_yield (
+        self,
+        ) -> str:
+        """
+Tally the end yield of one Bwyd module.
+        """
+        for name, closure in self.closures.items():
+            if closure.title is not None:
+                return closure.yields.to_html()
+
+
 ######################################################################
 ## HTML representation
 
@@ -496,11 +514,17 @@ Generate an HTML representation.
 
                 # metadata
                 with tag("p"):
-                    text("total time: ")
+                    text("time: ")
 
                     with tag("strong"):
                         with tag("time"):
                             text(self.total_duration())
+
+                    doc.stag("br")
+                    text("yields: ")
+
+                    with tag("strong"):
+                        text(self.total_yield())
 
                 # cites
                 if len(self.cites) > 0:
