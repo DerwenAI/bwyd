@@ -1,24 +1,24 @@
-## dependencies
-
-  - [`icecream`](https://github.com/gruns/icecream)
-  - [`jupyterlab`](https://jupyter.org/)
-  - [`pydantic-graph`](https://ai.pydantic.dev/graph/#graph-types)
-  - [`textX`](https://textx.github.io/textX/)
-
-
 ## files
 
-  - `bwyd/parser.py`: Bwyd language parser/simulator
-  - `bwyd/resources/bwyd.tx`: Bwyd language grammar in `textX`
+  - `bwyd/__init__.py`: Bwyd package definitions
+  - `bwyd/error.py`: Bwyd error handling
+  - `bwyd/module.py`: Bwyd module definition
+  - `bwyd/objects.py`: Bwyd language objects
+  - `bwyd/parser.py`: Bwyd language parser
 
-  - `bwyd/kernel.py`: Jupyter wrapper kernel
+  - `tests/*.py`: unit tests
+
+  - `bwyd/resources/bwyd.tx`: Bwyd language grammar in `textX`
+  - `bwyd/resources/bwyd.svg`: Bwyd icon
+  - `bwyd/resources/convert.json`: measure conversions
+
+  - `bwyd/__main__.py`: Jypter kernel CLI
   - `bwyd/install.py`: Jupyter kernel installer
+  - `bwyd/kernel.py`: Jupyter wrapper kernel
 
   - `demo.py`: Python demo app
   - `examples/gnocchi.bwyd`: example Gnocchi recipe in Bwyd, as a script
   - `examples/gnocchi.ipynb`: example Gnocchi recipe in Bwyd, as a Jupyter notebook
-
-  - `tests/*.py`: unit tests
 
 
 ## build a local environment
