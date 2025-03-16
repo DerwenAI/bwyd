@@ -1,9 +1,8 @@
 ## TODOs
 
-  * express conversions as function of densities
-  * check for duplicated symbols: Closures, Ingredients, Tools, Containers
-  * refactor tools, containers, etc., to allow for reference counts
   * refactor the `NOTE` objects to be Op -- or `HEADER` ?
+  * refactor Bwyd class to define Module and Corpus
+  * express conversions as function of densities
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules
   * analyze `use` clauses, ingredients, tools; throw exceptions for unresolved references
   * leverage `pydantic-graph` to build trees from directed cliques

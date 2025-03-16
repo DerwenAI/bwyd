@@ -16,17 +16,34 @@ import yattag
 
 
 ######################################################################
+## exception handling
+
+class BwydParserError (Exception):
+    def __init__ (
+        self,
+        *args,
+        **kwargs,
+        ) -> None:
+        """
+Custom exception which notes a Bwyd language discrepancy.
+        """
+        super().__init__(*args)
+        self.symbol = kwargs.get("symbol")
+
+
+######################################################################
 ## dependencies
 
-@dataclass(order=False, frozen=False)
+@dataclass(order = False, frozen = False, kw_only = True)
 class Dependency:  # pylint: disable=R0902
     """
 A data class representing one parsed dependency:
 Ingredient, Tool, Container, etc.
     """
+    loc: dict
     symbol: str
     text: str
-    use_count: int = 0
+    ref_count: int = 0
 
     def to_json (
         self
@@ -58,7 +75,7 @@ Serializable representation for JSON.
 ######################################################################
 ## measures
 
-@dataclass(order=False, frozen=False)
+@dataclass(order = False, frozen = False)
 class Measure:  # pylint: disable=R0902
     """
 A data class representing one parsed Measure object.
@@ -92,7 +109,7 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order=False, frozen=False)
+@dataclass(order = False, frozen = False)
 class Duration (Measure):  # pylint: disable=R0902
     """
 A data class representing one parsed Duration object.
@@ -169,7 +186,7 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order=False, frozen=False)
+@dataclass(order = False, frozen = False)
 class Temperature (Measure):  # pylint: disable=R0902
     """
 A data class representing one parsed Temperature object.
@@ -196,11 +213,14 @@ HTML represenation.
 ######################################################################
 ## operations
 
-@dataclass(order=False, frozen=False)
+@dataclass(order = False, frozen = False, kw_only = True)
 class OpGeneric:  # pylint: disable=R0902
     """
 A data class representing a generic operation.
     """
+    loc: dict
+    ref_count: int = 0
+
 
     def get_duration (
         self,
@@ -225,7 +245,7 @@ Stub: HTML representation.
         pass
 
 
-@dataclass(order=False, frozen=False)
+@dataclass(order = False, frozen = False)
 class OpAdd (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Add object.
@@ -348,7 +368,7 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order=False, frozen=False)
+@dataclass(order = False, frozen = False)
 class OpUse (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Use object.
@@ -384,7 +404,7 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order=False, frozen=False)
+@dataclass(order = False, frozen = False)
 class OpAction (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Action object.
@@ -455,7 +475,7 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order=False, frozen=False)
+@dataclass(order = False, frozen = False)
 class OpBake (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Bake object.
@@ -512,6 +532,8 @@ HTML representation
         with tag("em"):
             text(self.until)
 
+        doc.stag("br")
+
 
     def to_json (
         self
@@ -530,7 +552,7 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order=False, frozen=False)
+@dataclass(order = False, frozen = False)
 class OpChill (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Chill object.
@@ -576,6 +598,8 @@ HTML representation
         with tag("em"):
             text(self.until)
 
+        doc.stag("br")
+
 
     def to_json (
         self
@@ -598,7 +622,7 @@ OpsTypes = typing.Union[ OpAdd, OpUse, OpAction, OpBake, OpChill ]
 ######################################################################
 ## structural classes
 
-@dataclass(order=False, frozen=False)
+@dataclass(order = False, frozen = False)
 class Focus:  # pylint: disable=R0902
     """
 A data class representing a parsed Focus object.
@@ -639,7 +663,7 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order=False, frozen=False)
+@dataclass(order = False, frozen = False)
 class Closure:  # pylint: disable=R0902
     """
 A data class representing one parsed Closure object.

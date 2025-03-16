@@ -121,7 +121,11 @@ CLOSURE: "muffins"
 
     BAKE pan: "place pan on a baking sheet, make level, set to convection bake"
         AT: 177 C
-        UNTIL: "an inserted fork comes out with tiny crumbs"
+        UNTIL: "use fork to test doneness"
         TIME (20 min)
+
+    ACTION fork: "test doneness"
+        UNTIL: "comes out with tiny crumbs"
+        TIME (10 sec)
 
 YIELDS (8)
