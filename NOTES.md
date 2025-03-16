@@ -1,13 +1,12 @@
 ## TODOs
 
   * refactor the `NOTE` objects to be Op -- or `HEADER` ?
-  * refactor Bwyd class to define Module and Corpus
+  * scan a module to produce a total ingredients list
   * express conversions as function of densities
+  * add a Corpus class to handle collections of parsed modules
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules
-  * analyze `use` clauses, ingredients, tools; throw exceptions for unresolved references
   * leverage `pydantic-graph` to build trees from directed cliques
   * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
-  * scan a module to produce a total ingredients list
   * incorporate `Bootstrap` layouts
   
 

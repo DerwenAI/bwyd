@@ -260,7 +260,7 @@
     },
     {
       "title": "frozen gnocchi dumplings",
-      "name": "frozen product",
+      "name": "frozen gnocchi",
       "yields": {
         "amount": 20,
         "units": null
@@ -291,14 +291,23 @@
         },
         {
           "op": "use",
-          "symbol": "raw",
-          "text": "dumplings"
+          "symbol": "dumplings",
+          "text": "raw cut dumplings"
         }
       ],
       "foci": [
         {
           "container": "dish",
           "ops": [
+            {
+              "op": "add",
+              "symbol": "parchment",
+              "measure": {
+                "amount": 1,
+                "units": null
+              },
+              "text": ""
+            },
             {
               "op": "action",
               "tool": "hand",
@@ -311,13 +320,22 @@
             },
             {
               "op": "use",
-              "symbol": "raw",
-              "text": "dumplings"
+              "symbol": "dumplings",
+              "text": "raw cut dumplings"
+            },
+            {
+              "op": "add",
+              "symbol": "dumplings",
+              "measure": {
+                "amount": 20,
+                "units": null
+              },
+              "text": ""
             },
             {
               "op": "action",
               "tool": "board",
-              "modifier": "role dumplings (create edges) onto parchment paper; arrange without touching other dumplings",
+              "modifier": "roll the cut dumplings onto parchment paper; arrange without touching other dumplings",
               "until": "layer is filled",
               "duration": {
                 "amount": 10,

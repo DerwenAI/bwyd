@@ -6,15 +6,18 @@ Package definitions for the Bwyd DSL.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
+from .error import BwydParserError
+
 from .kernel import BwydKernel
 
-from .parser import Bwyd
+from .module import Module
 
-from .objects import BwydParserError, \
-    Dependency, DependencyDict, \
+from .objects import Dependency, DependencyDict, \
     Measure, Duration, Temperature, \
     OpAdd, OpUse, OpAction, OpBake, OpChill, \
     Focus, Closure
+
+from .parser import Bwyd
 
 
 __version__ = "0.2"

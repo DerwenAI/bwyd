@@ -25,19 +25,16 @@ def test_parser (
     """
 Load a sample file to ensure the parser works correctly.
     """
-    bwyd_int: bwyd.Bwyd = bwyd.Bwyd()
-
-    module = bwyd_int.parse(
+    module: bwyd.Module = bwyd.Bwyd.parse(
         TEST_DIR / "sample.bwyd",
         debug = False, # True
     )
 
-    bwyd_int.interpret(
-        module,
+    module.interpret(
         debug = False, # True
     )
 
-    obs_data: list = bwyd_int.to_json()
+    obs_data: list = module.to_json()
 
     if debug:
         print(json.dumps(obs_data, indent = 2, sort_keys = False,))

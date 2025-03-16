@@ -79,7 +79,7 @@ CLOSURE: "dumplings"
 YIELDS (20)
 
 
-CLOSURE: "frozen product"
+CLOSURE: "frozen gnocchi"
     TITLE: "frozen gnocchi dumplings"
 
     CONTAINER dish: "baking dish"
@@ -90,14 +90,16 @@ CLOSURE: "frozen product"
     TOOL board: "gnocchi board or a fork"
 
     INGREDIENT parchment: "cut parchment paper"
+    ADD parchment (1)
 
     ACTION hand: "line dish with parchment paper"
         UNTIL: "fully lined"
 	TIME (30 sec)
 
-    USE raw: "dumplings"
+    USE dumplings: "raw cut dumplings"
+    ADD dumplings (20)
 
-    ACTION board: "role dumplings (create edges) onto parchment paper; arrange without touching other dumplings"
+    ACTION board: "roll the cut dumplings onto parchment paper; arrange without touching other dumplings"
         UNTIL: "layer is filled"
 	TIME (10 sec)
 

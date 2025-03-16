@@ -16,22 +16,6 @@ import yattag
 
 
 ######################################################################
-## exception handling
-
-class BwydParserError (Exception):
-    def __init__ (
-        self,
-        *args,
-        **kwargs,
-        ) -> None:
-        """
-Custom exception which notes a Bwyd language discrepancy.
-        """
-        super().__init__(*args)
-        self.symbol = kwargs.get("symbol")
-
-
-######################################################################
 ## dependencies
 
 @dataclass(order = False, frozen = False, kw_only = True)
