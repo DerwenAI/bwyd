@@ -3331,4 +3331,4 @@ test = ["deepdiff", "pytest"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11"
-content-hash = "ea47f2e6bd05fcbdf0d6523ebf2db9e5d92a2e536682c8cf84033970f7a7f3e4"
+content-hash = "339f5acc547d484a7b652a34e875b839e4d7b01b0b8893f67530af90c910fe79"
