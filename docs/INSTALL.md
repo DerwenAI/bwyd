@@ -10,6 +10,7 @@
 
   - `bwyd/resources/bwyd.tx`: Bwyd language grammar in `textX`
   - `bwyd/resources/bwyd.svg`: Bwyd icon
+  - `bwyd/resources/bwyd.jinja`: Jinja2 HTML template
   - `bwyd/resources/convert.json`: measure conversions
 
   - `bwyd/__main__.py`: Jypter kernel CLI
