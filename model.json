@@ -1,16 +1,14 @@
 {
     "title": "applesauce muffins",
     "text": "This breakfast muffin recipe is simple to make and yields muffins which are soft, moist, high-protein, high-fiber, and packed with applesauce flavor.",
-    "image": "https://www.instagram.com/p/DF1ibowRfbp/",
-    "info": {
-        "duration": "29 min, 40 sec",
-        "serves": "8"
-    },
+    "duration": "29 min, 40 sec",
+    "serves": "8",
+    "image": "https://www.instagram.com/p/DHeymLVSUhG/embed",
     "sources": [
         "https://www.beatbakeeat.com/best-applesauce-muffins-recipe-ever/"
     ],
     "gallery": [
-        "https://www.instagram.com/p/DF1ibowRfbp/"
+        "https://www.instagram.com/p/DHeymLVSUhG/"
     ],
     "license": {
         "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",

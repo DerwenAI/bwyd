@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta viewport="width=device-width, initial-scale=1.0"/>
+    <link
+      rel="icon"
+      href="bwyd/resources/bwyd.svg"
+      />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+      />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      />
+    <style>
+/* fonts, icons */
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+/* structural */
+html, h1, h2, h3, h4, h5, p, span, cite, figcaption, button, input, select, textarea {
+    font-family: "Atkinson Hyperlegible", sans-serif;
+}
+
+body {
+    color: hsl(0, 0%, 40%);
+/*
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 1em;
+ */
+}
+
+h2 {
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+p {
+    font-weight: normal;
+    font-size: 1.1em;
+    line-height: 1.3em;
+    margin: 1.2em 0 1.2em 0;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"],
+[type="image"],
+[type="checkbox"],
+[type="radio"],
+summary {
+    cursor: pointer;
+}
+    </style>
+    <title>{{ module.title }}</title>
+  </head>
+  <body>
+    <div id="main" class="container-fluid">
+      <main>
+	<div class="container">
+	  <h1 style="margin:.5em 0 .5em 0;">{{ module.title }}</h1>
+	  <div class="row">
+	    <div class="col">
+	      <!-- module description -->
+	      <div class="card" style="width:93%;">
+		<div class="card-body">
+		  <p class="card-text" style="margin-top:0;">{{ module.text }}</p>
+		</div>
+	      </div>
+	    </div>
+	    <div class="col-6">
+	      <!-- module metadata -->
+	      <nav>
+		<div class="nav nav-tabs" id="nav-tab" role="tablist" style="width:93%;">
+		  <button class="nav-link active" id="nav-info-tab" data-bs-toggle="tab" data-bs-target="#nav-info" type="button" role="tab" aria-controls="nav-info" aria-selected="true"><strong>Info</strong></button>
+		  <button class="nav-link" id="nav-sources-tab" data-bs-toggle="tab" data-bs-target="#nav-sources" type="button" role="tab" aria-controls="nav-sources" aria-selected="false"><strong>Sources</strong></button>
+		  <button class="nav-link" id="nav-gallery-tab" data-bs-toggle="tab" data-bs-target="#nav-gallery" type="button" role="tab" aria-controls="nav-gallery" aria-selected="false"><strong>Gallery</strong></button>
+		</div>
+	      </nav>
+	      <div class="tab-content" id="nav-tabContent">
+		<!-- info -->
+		<div class="tab-pane fade show active" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab" tabindex="0">
+		  <table class="table" style="max-width:23rem;">
+		    <tbody>
+		      <tr>
+			<th scope="row">duration:</th>
+			<td><time>{{ module.duration }}</time></td>
+		      </tr>
+		      <tr>
+			<th scope="row">serves:</th>
+			<td>{{ module.serves }}</td>
+		      </tr>
+		    </tbody>
+		  </table>
+		</div>
+		<!-- sources -->
+		<div class="tab-pane fade" id="nav-sources" role="tabpanel" aria-labelledby="nav-sources-tab" tabindex="0">
+		  <ul class="list-group list-group-flush">
+		    {% for cite_url in module.sources %}
+		    <li class="list-group-item">
+		      <a
+			class="icon-link icon-link-hover"
+			href="{{ cite_url }}"
+			target="_blank"
+			style="text-decoration:none;"
+			>
+			<i class="bi bi-book"></i>
+			&nbsp;
+			{{ cite_url }}
+		      </a>
+		    </li>
+		    {% endfor %}
+		  </ul>
+		</div>
+		<!-- gallery -->
+		<div class="tab-pane fade" id="nav-gallery" role="tabpanel" aria-labelledby="nav-gallery-tab" tabindex="0">
+		  <ul class="list-group list-group-flush">
+		    {% for post_url in module.gallery %}
+		    <li class="list-group-item">
+		      <a
+			class="icon-link icon-link-hover"
+			href="{{ post_url }}"
+			target="_blank"
+			style="text-decoration:none;"
+			>
+			{{ post_url }}
+			&nbsp;
+			<i class="bi bi-arrow-up-right-square"></i>
+		      </a>
+		    </li>
+		    {% endfor %}
+		  </ul>
+		</div>
+	      </div>
+	    </div>
+	    <div class="col ratio ratio-1x1">
+	      <!-- thumbnail -->
+	      <iframe
+		src="{{ module.image }}"
+		scrolling="no"
+		allowtransparency="true"
+		></iframe>
+	    </div>
+	  </div>
+	  <!-- recipe directions -->
+	  <h4 class="bg-tertiary-subtle">directions:</h4>
+	  <div class="accordion" id="accordionExample">
+	    {% for closure in module.closures %}
+	    <div class="accordion-item">
+	      <h3 class="accordion-header">
+		<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		  <span style="font-weight:bold; font-size:1.4em;">{{ closure.title }}</span>
+		</button>
+	      </h3>
+	      <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+		<div class="accordion-body">
+		  <div class="row">
+		    <!-- closure metadata -->
+		    <div class="col">
+		      <div class="card" style="margin-bottom:1rem; max-width:93%;">
+			<div class="card-body">
+			  <h5 class="card-title">yields: {{ closure.yields }}</h5>
+			  <p class="card-text">{{ closure.text }}</p>
+			</div>
+		      </div>
+		    </div>
+		    <!-- closure requires -->
+		    <div class="col">
+		      <dl>
+			{% for req in closure.requires %}
+			<dt>
+			  <strong>{{ req.name }}</strong>
+			</dt>
+			<dd>
+			  <em>{{ req.text }}</em>
+			</dd>
+			{% endfor %}
+		      </dl>
+		    </div>
+		  </div>
+		  {% for focus in closure.foci %}
+		  <!-- focus -->
+		  <dl>
+		    <dt>
+		      <p>
+			into <span class="badge text-bg-primary" style="font-size:1.1em;">{{ focus.container }}:</span>
+		      </p>
+		    </dt>
+		  </dl>
+		  {% endfor %}
+		</div>
+	      </div>
+	    </div>
+	    {% endfor %}
+	  </div>
+	  <!-- license -->
+	  <footer>
+	    <div id="footer">
+	      <p>
+		<a
+		  href="{{ module.license.url }}"
+		  target="_blank"
+		  rel="license"
+		  ><img
+		     src="{{ module.license.image }}"
+		     alt="{{ module.license.text }}"
+		     style="width:4em;"
+		     />
+		  <br/>
+		  <small>{{ module.license.text }}</a></small>
+	      </p>
+	    </div>
+	  </footer>
+	</div>
+      </main>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+      ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+      ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+      ></script>
+  </body>
+</html>
