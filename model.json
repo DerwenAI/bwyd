@@ -216,6 +216,50 @@
                 {
                     "container": "pan",
                     "activities": [
+			{
+                            "title": "grease the pan",
+                            "steps": [
+                                {
+                                    "ingredients": [
+                                        {
+                                            "name": "butter",
+                                            "amount": "15 g (1 tsp)",
+                                            "text": ""
+                                        }
+                                    ]
+                                },
+                                {
+                                    "action": {
+                                        "tool": "hand",
+                                        "verb": "grease",
+                                        "text": "cooking surfaces are all buttered",
+                                        "time": "3 min"
+                                    }
+                                }
+			    ]
+			},
+			{
+                            "title": "fill with batter",
+                            "steps": [
+                                {
+                                    "ingredients": [
+                                        {
+                                            "name": "batter",
+                                            "amount": "1 l",
+                                            "text": ""
+                                        }
+                                    ]
+                                },
+                                {
+                                    "action": {
+                                        "tool": "spoon",
+                                        "verb": "fill",
+                                        "text": "evenly distributed",
+                                        "time": "3 min"
+                                    }
+                                }
+			    ]
+			},
                         {
                             "title": "place pan on a baking sheet, make level, set to convection bake",
                             "steps": [
@@ -231,7 +275,7 @@
                                 {
                                     "bake": {
                                         "modifier": "bake",
-                                        "temperature": "177 \u00b0C (350 \u00b0F)",
+                                        "temperature": "177 °C (350 °F)",
                                         "text": "use fork to test doneness",
                                         "time": "20 min"
                                     }

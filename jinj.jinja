@@ -192,6 +192,59 @@ summary {
 			into <span class="badge text-bg-primary" style="font-size:1.1em;">{{ focus.container }}:</span>
 		      </p>
 		    </dt>
+		    {% for act in focus.activities %}
+		    <!-- activity -->
+		    <dd>
+		      <div class="row">
+			<div class="col">
+			  <div class="card" style="width:93%;">
+			    <p class="card-text" style="margin:0;">
+			      <div class="alert alert-secondary" role="alert" style="margin-bottom:0;">
+				{{ act.title }}
+			      </div>
+			      {% for step_dict in act.steps %}
+			      {% for key, val in step_dict.items() %}
+			      {% if key == "ingredients" -%}
+			      <ul class="list-group list-group-flush">
+				{% for item in val %}
+				<li class="list-group-item">
+				  add <strong>{{ item.name }}</strong>: {{ item.amount }}
+				  {% if item.text|length %}
+				  <em>– {{ item.text }}</em>
+				  {% endif %}
+				</li>
+				{% endfor %}
+			      </ul>
+			      {% elif key == "action" -%}
+			      <div style="margin:.5em 0 0 1em;">
+				with <span class="badge text-bg-primary" style="font-size:1.1em;">{{ val.tool }}</span>:
+				<br/>
+				{{ val.verb }} until <em>{{ val.text }}</em>
+				<br/>
+				(<time>{{ val.time }}</time>)
+			      </div>
+			      {% elif key == "bake" -%}
+			      <div style="margin:.5em 0 0 1em;">
+				<strong>{{ val.modifier }}</strong> at <strong>{{ val.temperature }}</strong> 
+				<br/>
+				until <em>{{ val.text }}</em>
+				<br/>
+				(<time>{{ val.time }}</time>)
+			      </div>
+			      {% elif key == "chill" -%}
+			      TODO
+			      {% endif %}
+			      {% endfor %}
+			      {% endfor %}
+			    </p>
+			  </div>
+			</div>
+			<div class="col">
+			  &nbsp;
+			</div>
+		      </div>
+		    </dd>
+		    {% endfor %}
 		  </dl>
 		  {% endfor %}
 		</div>
