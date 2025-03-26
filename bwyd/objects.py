@@ -9,6 +9,7 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from fractions import Fraction
+import itertools
 import typing
 
 from icecream import ic
@@ -692,11 +693,11 @@ A data class representing one parsed Closure object.
     yields: Measure
     export: typing.Optional[ str ] = None
     note: str = ""
-    tools: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
-    containers: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
-    ingredients: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     foci: typing.List[ Focus ] = field(default_factory = lambda: [])
     active_focus: typing.Optional[ Focus ] = None
+    containers: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
+    tools: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
+    ingredients: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
 
 
     def focus_op (
@@ -711,6 +712,18 @@ Append one operation to the active Focus.
             print(f"FOCUS: not defined yet for {cmd.symbol}")
         else:
             self.active_focus.ops.append(op_obj)
+
+
+    def get_requires (
+        self
+        ) -> list:
+        """
+Serialized representation in JSON for the containers and tools.
+        """
+        return [
+            dep.to_json()
+            for dep in itertools.chain(self.containers.values(), self.tools.values())
+        ]
 
 
     def to_html (

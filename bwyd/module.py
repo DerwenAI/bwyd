@@ -59,16 +59,13 @@ one for each parsed Closure.
         """
         closure_list: typing.List[ dict ] = [
             {
-                "export": closure_obj.export,
-                "note": closure_obj.note,
-                "name": name,
-                "yields": closure_obj.yields.to_json(),
-                "tools": closure_obj.tools.to_json(),
-                "containers": closure_obj.containers.to_json(),
-                "ingredients": closure_obj.ingredients.to_json(),
-                "foci": [ focus.to_json() for focus in closure_obj.foci ],
+                "title": name,
+                "yields": closure.yields.to_json(),
+                "text": closure.note,
+                "requires": closure.get_requires(),
+                "foci": [ focus.to_json() for focus in closure.foci ],
             }
-            for name, closure_obj in self.closures.items()
+            for name, closure in self.closures.items()
         ]
 
         return {
@@ -79,6 +76,11 @@ one for each parsed Closure.
             "image": self.posts[0],
             "sources": self.cites,
             "gallery": self.posts,
+            "license": {
+                "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+                "image": "https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png",
+                "text": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License"
+            },
             "closures": closure_list,
         }
 
@@ -92,16 +94,16 @@ one for each parsed Closure.
         """
         closure_list: typing.List[ dict ] = [
             {
-                "export": closure_obj.export,
-                "note": closure_obj.note,
+                "export": closure.export,
+                "note": closure.note,
                 "name": name,
-                "yields": closure_obj.yields.to_json(),
-                "tools": closure_obj.tools.to_json(),
-                "containers": closure_obj.containers.to_json(),
-                "ingredients": closure_obj.ingredients.to_json(),
-                "foci": [ focus.to_json() for focus in closure_obj.foci ],
+                "yields": closure.yields.to_json(),
+                "tools": closure.tools.to_json(),
+                "containers": closure.containers.to_json(),
+                "ingredients": closure.ingredients.to_json(),
+                "foci": [ focus.to_json() for focus in closure.foci ],
             }
-            for name, closure_obj in self.closures.items()
+            for name, closure in self.closures.items()
         ]
 
         return {
@@ -177,7 +179,7 @@ Validate the forward references for one Bwyd module.
 
     def _interpret_closure (  # pylint: disable=R0912,R0915
         self,
-        closure: typing.Any,
+        closure_parse: typing.Any,
         *,
         debug: bool = False,
         ) -> Closure:
@@ -188,26 +190,26 @@ Helper method to interpret one Closure.
         export: typing.Optional[ str ] = None
         note: typing.Optional[ str ] = None
 
-        if closure.meta is not None:
-            if closure.meta.export is not None and len(closure.meta.export) < 1:
+        if closure_parse.meta is not None:
+            if closure_parse.meta.export is not None and len(closure_parse.meta.export) < 1:
                 export = None
-            if closure.meta.note is not None and len(closure.meta.note) < 1:
+            if closure_parse.meta.note is not None and len(closure_parse.meta.note) < 1:
                 note = None
 
-        closure_obj: Closure = Closure(
-            name = closure.name,
-            obj = closure,
+        closure: Closure = Closure(
+            name = closure_parse.name,
+            obj = closure_parse,
             yields = Measure(
-                amount = closure.yields.amount,
-                units = closure.yields.units,
+                amount = closure_parse.yields.amount,
+                units = closure_parse.yields.units,
             ),
             export = export,
             note = note,
         )
 
-        for step in closure.steps:
+        for step in closure_parse.steps:
             if debug:
-                #ic(dir(closure))
+                #ic(dir(closure_parse))
                 ic(step)
 
             step_class_name: str = step.__class__.__name__
@@ -217,8 +219,8 @@ Helper method to interpret one Closure.
                     ic(step_class_name, step.symbol)
 
                 # resolve local reference
-                if step.symbol in closure_obj.containers:
-                    entity: typing.Any = closure_obj.containers[step.symbol]
+                if step.symbol in closure.containers:
+                    entity: typing.Any = closure.containers[step.symbol]
                     entity.ref_count += 1
                 else:
                     loc: dict = textx.get_location(step)
@@ -228,17 +230,17 @@ Helper method to interpret one Closure.
                         symbol = step.symbol,
                     )
 
-                closure_obj.active_focus = Focus(
+                closure.active_focus = Focus(
                     container = entity,
                 )
 
-                closure_obj.foci.append(closure_obj.active_focus)
+                closure.foci.append(closure.active_focus)
 
             elif step_class_name == "Header":
                 if debug:
                     ic(step_class_name, step.text)
 
-                closure_obj.focus_op(
+                closure.focus_op(
                     step,
                     OpHeader(
                         loc = textx.get_location(step),
@@ -251,7 +253,7 @@ Helper method to interpret one Closure.
                     ic(step_class_name, step.symbol, step.text)
 
                 # forward reference, to be resolved during this parsing pass
-                closure_obj.containers[step.symbol] = Dependency(
+                closure.containers[step.symbol] = Dependency(
                     loc = textx.get_location(step),
                     symbol = step.symbol,
                     text = step.text,
@@ -262,7 +264,7 @@ Helper method to interpret one Closure.
                     ic(step_class_name, step.symbol, step.text)
 
                 # forward reference, to be resolved during this parsing pass
-                closure_obj.tools[step.symbol] = Dependency(
+                closure.tools[step.symbol] = Dependency(
                     loc = textx.get_location(step),
                     symbol = step.symbol,
                     text = step.text,
@@ -273,7 +275,7 @@ Helper method to interpret one Closure.
                     ic(step_class_name, step.symbol, step.text)
 
                 # forward reference, to be resolved during this parsing pass
-                closure_obj.ingredients[step.symbol] = Dependency(
+                closure.ingredients[step.symbol] = Dependency(
                     loc = textx.get_location(step),
                     symbol = step.symbol,
                     text = step.text,
@@ -290,9 +292,9 @@ Helper method to interpret one Closure.
                     text = step.text,
                 )
 
-                closure_obj.ingredients[step.symbol] = op
+                closure.ingredients[step.symbol] = op
 
-                closure_obj.focus_op(
+                closure.focus_op(
                     step,
                     op,
                 )
@@ -307,8 +309,8 @@ Helper method to interpret one Closure.
                     ic(step_class_name, step.symbol, measure, step.text)
 
                 # resolve local reference
-                if step.symbol in closure_obj.ingredients:
-                    entity: typing.Any = closure_obj.ingredients[step.symbol]
+                if step.symbol in closure.ingredients:
+                    entity: typing.Any = closure.ingredients[step.symbol]
                     entity.ref_count += 1
                 else:
                     loc: dict = textx.get_location(step)
@@ -318,7 +320,7 @@ Helper method to interpret one Closure.
                         symbol = step.symbol,
                     )
 
-                closure_obj.focus_op(
+                closure.focus_op(
                     step,
                     OpAdd(
                         loc = textx.get_location(step),
@@ -340,11 +342,11 @@ Helper method to interpret one Closure.
                 # resolve local reference
                 entity: typing.Optional[ typing.Any ] = None
 
-                if step.symbol in closure_obj.tools:
-                    entity = closure_obj.tools[step.symbol]
+                if step.symbol in closure.tools:
+                    entity = closure.tools[step.symbol]
                     entity.ref_count += 1
-                elif step.symbol in closure_obj.containers:
-                    entity = closure_obj.containers[step.symbol]
+                elif step.symbol in closure.containers:
+                    entity = closure.containers[step.symbol]
                     entity.ref_count += 1
                 else:
                     loc: dict = textx.get_location(step)
@@ -354,7 +356,7 @@ Helper method to interpret one Closure.
                         symbol = symbol,
                     )
 
-                closure_obj.focus_op(
+                closure.focus_op(
                     step,
                     OpAction(
                         loc = textx.get_location(step),
@@ -380,8 +382,8 @@ Helper method to interpret one Closure.
                     ic(step_class_name, step.symbol, step.modifier, step.until, temperature, duration)
 
                 # resolve local reference
-                if step.symbol in closure_obj.containers:
-                    entity: typing.Any = closure_obj.containers[step.symbol]
+                if step.symbol in closure.containers:
+                    entity: typing.Any = closure.containers[step.symbol]
                     entity.ref_count += 1
                 else:
                     loc: dict = textx.get_location(step)
@@ -391,7 +393,7 @@ Helper method to interpret one Closure.
                         symbol = step.symbol,
                     )
 
-                closure_obj.focus_op(
+                closure.focus_op(
                     step,
                     OpBake(
                         loc = textx.get_location(step),
@@ -414,8 +416,8 @@ Helper method to interpret one Closure.
                     ic(step_class_name, step.symbol, step.modifier, step.until, duration)
 
                 # resolve local reference
-                if step.symbol in closure_obj.containers:
-                    entity: typing.Any = closure_obj.containers[step.symbol]
+                if step.symbol in closure.containers:
+                    entity: typing.Any = closure.containers[step.symbol]
                     entity.ref_count += 1
                 else:
                     loc: dict = textx.get_location(step)
@@ -425,7 +427,7 @@ Helper method to interpret one Closure.
                         symbol = step.symbol,
                     )
 
-                closure_obj.focus_op(
+                closure.focus_op(
                     step,
                     OpChill(
                         loc = textx.get_location(step),
@@ -443,8 +445,8 @@ Helper method to interpret one Closure.
                     for part in step.parts:
                         if len(part.components) < 1:
                             # resolve local reference
-                            if part.symbol in closure_obj.ingredients:
-                                entity: typing.Any = closure_obj.ingredients[part.symbol]
+                            if part.symbol in closure.ingredients:
+                                entity: typing.Any = closure.ingredients[part.symbol]
                                 entity.ref_count += 1
                             else:
                                 loc: dict = textx.get_location(part)
@@ -454,7 +456,7 @@ Helper method to interpret one Closure.
                                     symbol = part.symbol,
                                 )
 
-        return closure_obj
+        return closure
 
 
     def interpret (
@@ -476,9 +478,9 @@ Interpret one Bwyd module.
             self.posts.append(self._validate_url(post))
 
         # parse each `CLOSURE`
-        for closure in self.parse_tree.closures:
-            self.closures[closure.name] = self._interpret_closure(
-                closure,
+        for closure_parse in self.parse_tree.closures:
+            self.closures[closure_parse.name] = self._interpret_closure(
+                closure_parse,
                 debug = debug,
             )
 
