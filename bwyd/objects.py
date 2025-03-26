@@ -281,7 +281,7 @@ A data class representing one Add object.
         """
 Humanize imperial measurement ratios, for cups
         """
-        units: str = "cups"
+        units: str = "cup"
         denom_limit: int = 4
 
         if amount <= 0.24:
@@ -690,7 +690,7 @@ A data class representing one parsed Closure object.
     name: str
     obj: typing.Any
     yields: Measure
-    title: typing.Optional[ str ] = None
+    export: typing.Optional[ str ] = None
     note: str = ""
     tools: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     containers: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108

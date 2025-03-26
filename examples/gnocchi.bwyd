@@ -82,7 +82,7 @@ YIELDS (20)
 
 
 CLOSURE: "frozen gnocchi"
-    TITLE: "frozen gnocchi dumplings"
+    EXPORT: "frozen gnocchi dumplings"
     NOTE: "add layers of dumplings to fill depth of baking dish"
 
     CONTAINER dish: "baking dish"

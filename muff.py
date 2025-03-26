@@ -5,6 +5,7 @@
 Parse an example module in the Bwyd language.
 """
 
+import json
 import pathlib
 import sys
 
@@ -24,7 +25,13 @@ if __name__ == "__main__":
         debug = True, # False
     )
 
-    #sys.exit(0)
+    print(json.dumps(
+        module.get_model(),
+        indent = 2,
+        sort_keys = False,
+    ))
+
+    sys.exit(0)
 
     # format as HTML
     print(module.to_html(indent = True))

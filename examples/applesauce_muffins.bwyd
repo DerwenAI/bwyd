@@ -1,7 +1,7 @@
-// our fam's fave muffin recipe
-
-CITE: "https://www.beatbakeeat.com/best-applesauce-muffins-recipe-ever/"
+TITLE: "Applesauce Breakfast Muffins"
+TEXT: "Our fam's fave muffin recipe is simple to make and yields muffins which are soft, moist, high-protein, high-fiber, and packed with flavor."
 POST: "https://www.instagram.com/p/DHeymLVSUhG/"
+CITE: "https://www.beatbakeeat.com/best-applesauce-muffins-recipe-ever/"
 
 CLOSURE: "batter"
     CONTAINER bowl: "chilled mixing bowl"
@@ -95,7 +95,7 @@ YIELDS (1 l)
 
 
 CLOSURE: "muffins"
-    TITLE: "applesauce muffins"
+    EXPORT: "applesauce muffins"
     NOTE: "for large, moist, breakfast muffins"
 
     CONTAINER pan: "muffin pan, large size 8-hole"

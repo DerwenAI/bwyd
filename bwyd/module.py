@@ -6,6 +6,7 @@ DSL implementing the Bwyd language.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
+from collections import OrderedDict
 from urllib.parse import ParseResult, urlparse
 import json
 import pathlib
@@ -42,9 +43,44 @@ One parsed module.
 Constructor.
         """
         self.parse_tree: typing.Any = parse_tree
+        self.title: str = ""
+        self.text: str = ""
         self.cites: typing.List[ str ] = []
         self.posts: typing.List[ str ] = []
-        self.closures: typing.Dict[ str, Closure ] = {}
+        self.closures: typing.Dict[ str, Closure ] = OrderedDict()
+
+
+    def get_model (
+        self,
+        ) -> typing.Dict[ str, list ]:
+        """
+Return a list of JSON-friendly dictionary representations,
+one for each parsed Closure.
+        """
+        closure_list: typing.List[ dict ] = [
+            {
+                "export": closure_obj.export,
+                "note": closure_obj.note,
+                "name": name,
+                "yields": closure_obj.yields.to_json(),
+                "tools": closure_obj.tools.to_json(),
+                "containers": closure_obj.containers.to_json(),
+                "ingredients": closure_obj.ingredients.to_json(),
+                "foci": [ focus.to_json() for focus in closure_obj.foci ],
+            }
+            for name, closure_obj in self.closures.items()
+        ]
+
+        return {
+            "title": self.title,
+            "text": self.text,
+            "duration": self.total_duration(),
+            "serves": closure_list[-1]["yields"]["amount"],
+            "image": self.posts[0],
+            "sources": self.cites,
+            "gallery": self.posts,
+            "closures": closure_list,
+        }
 
 
     def to_json (
@@ -56,7 +92,7 @@ one for each parsed Closure.
         """
         closure_list: typing.List[ dict ] = [
             {
-                "title": closure_obj.title,
+                "export": closure_obj.export,
                 "note": closure_obj.note,
                 "name": name,
                 "yields": closure_obj.yields.to_json(),
@@ -148,11 +184,15 @@ Validate the forward references for one Bwyd module.
         """
 Helper method to interpret one Closure.
         """
-        # ensure that "null" titles keep their anonymous semantics
-        title: typing.Optional[ str ] = closure.title
+        # ensure that "null" metadata values keep their semantics
+        export: typing.Optional[ str ] = None
+        note: typing.Optional[ str ] = None
 
-        if title is not None and len(title) < 1:
-            title = None
+        if closure.meta is not None:
+            if closure.meta.export is not None and len(closure.meta.export) < 1:
+                export = None
+            if closure.meta.note is not None and len(closure.meta.note) < 1:
+                note = None
 
         closure_obj: Closure = Closure(
             name = closure.name,
@@ -161,8 +201,8 @@ Helper method to interpret one Closure.
                 amount = closure.yields.amount,
                 units = closure.yields.units,
             ),
-            title = title,
-            note = closure.note,
+            export = export,
+            note = note,
         )
 
         for step in closure.steps:
@@ -425,12 +465,14 @@ Helper method to interpret one Closure.
         """
 Interpret one Bwyd module.
         """
-        # parse each `CITE`
-        for cite in self.parse_tree.cites:
+        # parse the metadata
+        self.title = self.parse_tree.meta.title
+        self.text = self.parse_tree.meta.text
+
+        for cite in self.parse_tree.meta.cites:
             self.cites.append(self._validate_url(cite))
 
-        # parse each `POST`
-        for post in self.parse_tree.posts:
+        for post in self.parse_tree.meta.posts:
             self.posts.append(self._validate_url(post))
 
         # parse each `CLOSURE`
@@ -470,7 +512,7 @@ Tally the total duration of one Bwyd module.
 Tally the end yield of one Bwyd module.
         """
         for name, closure in self.closures.items():
-            if closure.title is not None:
+            if closure.export is not None:
                 return closure.yields.to_html()
 
 
@@ -489,11 +531,11 @@ Tally the end yield of one Bwyd module.
         """
 Generate an HTML representation.
         """
-        title: str = ""
+        export: str = ""
 
         for name, closure in self.closures.items():
-            if closure.title is not None:
-                title = closure.title
+            if closure.export is not None:
+                export = closure.export
 
         doc, tag, text = yattag.Doc().tagtext()
         doc.asis("<!DOCTYPE html>")
@@ -505,12 +547,12 @@ Generate an HTML representation.
                 doc.stag("link", rel = "stylesheet", href = stylesheet)
                 doc.stag("link", rel = "icon", href = "bwyd/resources/bwyd.svg")
 
-                with tag("title"):
-                    text(title)
+                with tag("export"):
+                    text(export)
 
             with tag("body"):
                 with tag("h1"):
-                    text(title)
+                    text(export)
 
                 # metadata
                 with tag("p"):

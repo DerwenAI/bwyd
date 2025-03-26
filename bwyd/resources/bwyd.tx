@@ -1,7 +1,13 @@
 Module:
-  cites*=Cite
-  posts*=Post
+  meta=Module_Metadata
   closures+=Closure
+;
+
+Module_Metadata:
+  "TITLE:" title=STRING
+  "TEXT:" text=STRING
+  posts+=Post
+  cites*=Cite
 ;
 
 Cite:
@@ -14,10 +20,14 @@ Post:
 
 Closure:
   "CLOSURE:" name=STRING
-    ("TITLE:" title=STRING)?
-    ("NOTE:" note=STRING)?
+    meta=Closure_Metadata
     steps+=Step
   "YIELDS" yields=Measure
+;
+
+Closure_Metadata:
+  ("EXPORT:" export=STRING)?
+  ("NOTE:" note=STRING)?
 ;
 
 Step:
