@@ -692,7 +692,7 @@ A data class representing one parsed Closure object.
     obj: typing.Any
     yields: Measure
     export: typing.Optional[ str ] = None
-    note: str = ""
+    text: str = ""
     foci: typing.List[ Focus ] = field(default_factory = lambda: [])
     active_focus: typing.Optional[ Focus ] = None
     containers: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
@@ -739,10 +739,10 @@ HTML representation
         with tag("h3"):
             text(self.name)
 
-        # note
+        # text
         with tag("p"):
             with tag("em"):
-                text(self.note)
+                text(self.text)
 
         # yield
         with tag("p"):

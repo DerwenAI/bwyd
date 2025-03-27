@@ -61,7 +61,7 @@ one for each parsed Closure.
             {
                 "title": name,
                 "yields": closure.yields.to_json(),
-                "text": closure.note,
+                "text": closure.text,
                 "requires": closure.get_requires(),
                 "foci": [ focus.to_json() for focus in closure.foci ],
             }
@@ -95,7 +95,7 @@ one for each parsed Closure.
         closure_list: typing.List[ dict ] = [
             {
                 "export": closure.export,
-                "note": closure.note,
+                "text": closure.text,
                 "name": name,
                 "yields": closure.yields.to_json(),
                 "tools": closure.tools.to_json(),
@@ -188,13 +188,14 @@ Helper method to interpret one Closure.
         """
         # ensure that "null" metadata values keep their semantics
         export: typing.Optional[ str ] = None
-        note: typing.Optional[ str ] = None
+        text: str = ""
 
         if closure_parse.meta is not None:
-            if closure_parse.meta.export is not None and len(closure_parse.meta.export) < 1:
-                export = None
-            if closure_parse.meta.note is not None and len(closure_parse.meta.note) < 1:
-                note = None
+            if closure_parse.meta.export is not None and len(closure_parse.meta.export) > 0:
+                export = closure_parse.meta.export
+
+            if closure_parse.meta.text is not None and len(closure_parse.meta.text) > 0:
+                text = closure_parse.meta.text            
 
         closure: Closure = Closure(
             name = closure_parse.name,
@@ -204,7 +205,7 @@ Helper method to interpret one Closure.
                 units = closure_parse.yields.units,
             ),
             export = export,
-            note = note,
+            text = text,
         )
 
         for step in closure_parse.steps:

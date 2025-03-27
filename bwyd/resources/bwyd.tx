@@ -27,7 +27,7 @@ Closure:
 
 Closure_Metadata:
   ("EXPORT:" export=STRING)?
-  ("NOTE:" note=STRING)?
+  ("TEXT:" text=STRING)?
 ;
 
 Step:

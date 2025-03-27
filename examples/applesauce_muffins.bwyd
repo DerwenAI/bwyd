@@ -4,6 +4,8 @@ POST: "https://www.instagram.com/p/DHeymLVSUhG/"
 CITE: "https://www.beatbakeeat.com/best-applesauce-muffins-recipe-ever/"
 
 CLOSURE: "batter"
+    TEXT: "Muffins use pancake batter, then bake instead of pan fry."
+
     CONTAINER bowl: "chilled mixing bowl"
     FOCUS bowl
 
@@ -96,7 +98,7 @@ YIELDS (1 l)
 
 CLOSURE: "muffins"
     EXPORT: "applesauce muffins"
-    NOTE: "for large, moist, breakfast muffins"
+    TEXT: "for large, moist, breakfast muffins"
 
     CONTAINER pan: "muffin pan, large size 8-hole"
     FOCUS pan
