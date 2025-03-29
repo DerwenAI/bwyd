@@ -223,9 +223,12 @@ summary {
 			      </div>
 			      {% elif key == "bake" -%}
 			      <div style="margin:.5em 0 0 1em;">
-				<strong>{{ val.modifier }}</strong> at <strong>{{ val.temperature }}</strong> 
+				<strong>{{ val.mode }}</strong> at <strong>{{ val.temperature }}</strong> 
+				{% if val.text|length %}
+				<em>– {{ val.text }}</em>
+				{% endif %}
 				<br>
-				until <em>{{ val.text }}</em>
+				until <em>{{ val.until }}</em>
 				<br>
 				({{ val.time }})
 			      </div>

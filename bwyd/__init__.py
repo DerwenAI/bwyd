@@ -14,8 +14,8 @@ from .module import Module
 
 from .objects import Dependency, DependencyDict, \
     Measure, Duration, Temperature, \
-    OpHeader, OpAdd, OpUse, OpAction, OpBake, OpChill, \
-    Focus, Closure
+    OpsTypes, OpAdd, OpAction, OpBake, OpChill, \
+    Activity, Focus, Closure
 
 from .parser import Bwyd
 

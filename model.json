@@ -274,9 +274,10 @@
                                 },
                                 {
                                     "bake": {
-                                        "modifier": "bake",
+                                        "mode": "bake",
                                         "temperature": "177 °C (350 °F)",
-                                        "text": "use fork to test doneness",
+					"text": "set to convection bake",
+                                        "until": "use fork to test doneness",
                                         "time": "20 min"
                                     }
                                 },

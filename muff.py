@@ -7,10 +7,10 @@ Parse an example module in the Bwyd language.
 
 import json
 import pathlib
-import sys
 
 from icecream import ic
 import bwyd
+import jinja2
 
 
 if __name__ == "__main__":
@@ -25,13 +25,11 @@ if __name__ == "__main__":
         debug = True, # False
     )
 
-    print(json.dumps(
-        module.get_model(),
-        indent = 2,
-        sort_keys = False,
-    ))
+    # load Jinja2 template
+    env = jinja2.Environment(loader = jinja2.FileSystemLoader("bwyd/resources"))
+    template = env.get_template("bwyd.jinja")
 
-    sys.exit(0)
-
-    # format as HTML
-    print(module.to_html(indent = True))
+    # format a data model as HTML
+    data: dict = module.get_model()
+    output = template.render(module = data)
+    print(output)

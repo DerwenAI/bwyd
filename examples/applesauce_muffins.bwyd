@@ -3,21 +3,33 @@ TEXT: "Our fam's fave muffin recipe is simple to make and yields muffins which a
 POST: "https://www.instagram.com/p/DHeymLVSUhG/"
 CITE: "https://www.beatbakeeat.com/best-applesauce-muffins-recipe-ever/"
 
-CLOSURE: "batter"
+CLOSURE: batter
     TEXT: "Muffins use pancake batter, then bake instead of pan fry."
 
     CONTAINER bowl: "chilled mixing bowl"
-    FOCUS bowl
-
     TOOL whisk: "medium whisk or fork"
     TOOL spatula: "silicone spatula"
 
-    HEADER: "dry mix"
     INGREDIENT sugar: "granulated sugar"
     INGREDIENT salt: "sea salt, fine grind"
     INGREDIENT baking_soda: "baking soda"
     INGREDIENT cinnamon: "ground cinnamon"
     INGREDIENT nutmeg: "freshly grated nutmeg"
+    INGREDIENT applesauce: "unsweetened applesauce"
+    INGREDIENT avocado_oil: "avocado oil"
+    INGREDIENT vanilla_extract: "vanilla extract"
+    INGREDIENT molasses: "molasses"
+    INGREDIENT egg: "large chicken egg"
+    INGREDIENT rolled_oats: "rolled oats"
+    INGREDIENT shredded_coconut: "dry shredded coconut"
+    INGREDIENT chia_seeds: "chia seeds"
+    INGREDIENT chopped_walnuts: "chopped walnuts"
+    INGREDIENT dried_cranberries: "fresh or frozen whole blueberries, or dried cranberries"
+    INGREDIENT flour: "all-purpose flour"
+
+    FOCUS bowl
+
+    ACTIVITY: "prep dry mix"
 
     ADD sugar (133 g)
     // 2/3 cup granulated sugar
@@ -34,12 +46,7 @@ CLOSURE: "batter"
         UNTIL: "well mixed, breaking any clumps"
 	TIME (30 sec)
 
-    HEADER: "wet mix"
-    INGREDIENT applesauce: "unsweetened applesauce"
-    INGREDIENT avocado_oil: "avocado oil"
-    INGREDIENT vanilla_extract: "vanilla extract"
-    INGREDIENT molasses: "molasses"
-    INGREDIENT egg: "large chicken egg"
+    ACTIVITY: "prep wet mix"
 
     ADD applesauce (375 g)
     // 1 1/2 cups unsweetened applesauce
@@ -55,13 +62,7 @@ CLOSURE: "batter"
         UNTIL: "lightly blended"
 	TIME (30 sec)
 
-    HEADER: "chunky mix"
-    INGREDIENT rolled_oats: "rolled oats"
-    INGREDIENT shredded_coconut: "dry shredded coconut"
-    INGREDIENT chia_seeds: "chia seeds"
-    INGREDIENT chopped_walnuts: "chopped walnuts"
-    INGREDIENT dried_cranberries: "fresh or frozen whole blueberries, or dried cranberries"
-    INGREDIENT flour: "all-purpose flour"
+    ACTIVITY: "prep chunky mix"
 
     ADD rolled_oats (90 g)
     // 1 cup rolled oats
@@ -77,6 +78,8 @@ CLOSURE: "batter"
     ACTION spatula: "fold"
         UNTIL: "lightly blended"
 	TIME (1 min)
+
+    ACTIVITY: "complete the batter"
 
     ADD flour (120 g) : "only until incorporated into the batter; do not overmix"
     // 1 cup all-purpose flour
@@ -96,32 +99,40 @@ CLOSURE: "batter"
 YIELDS (1 l)
 
 
-CLOSURE: "muffins"
+CLOSURE: muffins
     EXPORT: "applesauce muffins"
     TEXT: "for large, moist, breakfast muffins"
 
     CONTAINER pan: "muffin pan, large size 8-hole"
-    FOCUS pan
 
     TOOL hand: "clean hands"
     TOOL spoon: "large spoon"
     TOOL fork: "small fork"
 
     INGREDIENT butter: "vegan butter, butter, or oil"
+    USE batter: "mixed batter"
+
+    FOCUS pan
+
+    ACTIVITY: "grease the pan"
+
     ADD butter (15 g)
 
     ACTION hand: "grease"
         UNTIL: "cooking surfaces are all buttered"
         TIME (3 min)
 
-    USE batter: "batter"
+    ACTIVITY: "fill with batter"
+
     ADD batter (1 l)
 
     ACTION spoon: "fill"
         UNTIL: "evenly distributed"
 	TIME (3 min)
 
-    BAKE pan: "place pan on a baking sheet, make level, set to convection bake"
+    ACTIVITY: "place pan on a baking sheet, make level"
+
+    BAKE pan: "set to convection bake"
         AT: 177 C
         UNTIL: "use fork to test doneness"
         TIME (20 min)

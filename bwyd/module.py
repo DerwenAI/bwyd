@@ -20,8 +20,8 @@ from .error import BwydParserError
 
 from .objects import Dependency, DependencyDict, \
     Measure, Duration, Temperature, \
-    OpHeader, OpAdd, OpUse, OpAction, OpBake, OpChill, \
-    Focus, Closure
+    OpsTypes, OpAdd, OpAction, OpBake, OpChill, \
+    Activity, Focus, Closure
 
 from .resources import _CONVERT_PATH
 
@@ -60,20 +60,25 @@ one for each parsed Closure.
         closure_list: typing.List[ dict ] = [
             {
                 "title": name,
-                "yields": closure.yields.to_json(),
+                "yields": closure.yields.to_html(),
                 "text": closure.text,
-                "requires": closure.get_requires(),
-                "foci": [ focus.to_json() for focus in closure.foci ],
+                "requires": closure.get_dependencies(),
+                "foci": [ focus.to_json(self.UNIT_CONVERT) for focus in closure.foci ],
             }
             for name, closure in self.closures.items()
         ]
+
+        ## TODO: make the image URL embeddable in an <iframe/>
+        img_embed_url: str = self.posts[0] + "embed"
+
+        ## TODO: structure the license spec in the language
 
         return {
             "title": self.title,
             "text": self.text,
             "duration": self.total_duration(),
-            "serves": closure_list[-1]["yields"]["amount"],
-            "image": self.posts[0],
+            "serves": closure_list[-1]["yields"],
+            "image": img_embed_url,
             "sources": self.cites,
             "gallery": self.posts,
             "license": {
@@ -166,16 +171,293 @@ Validate the forward references for one Bwyd module.
                     print(entity.loc)
 
             # check for references outside this module
-            for symbol, op in closure.ingredients.items():
-                if isinstance(op, OpUse) and symbol not in local_names:
+            for symbol, entity in closure.ingredients.items():
+                if entity.external and symbol not in local_names:
                     raise BwydParserError(
-                        f"CLOSURE `{symbol}` used but not defined {op.loc}",
+                        f"CLOSURE `{symbol}` used but not defined {entity.loc}",
                         symbol = symbol,
                     )
 
 
 ######################################################################
 ## parsing methods
+
+    def _interpret_dependency (
+        self,
+        closure: Closure,
+        depend_parse: typing.Any,
+        *,
+        debug: bool = False,
+        ) -> None:
+        """
+Interpret and resolve each dependency: container, tool, ingredient, use.
+        """
+        depend_class_name: str = depend_parse.__class__.__name__
+
+        if debug:
+            #ic(dir(depend_parse))
+            ic(depend_parse)
+            ic(depend_class_name, depend_parse.symbol, depend_parse.text)
+
+        if depend_class_name == "Container":
+            # forward reference, to be resolved during this parsing pass
+            closure.containers[depend_parse.symbol] = Dependency(
+                loc = textx.get_location(depend_parse),
+                symbol = depend_parse.symbol,
+                text = depend_parse.text,
+            )
+
+        elif depend_class_name == "Tool":
+            # forward reference, to be resolved during this parsing pass
+            closure.tools[depend_parse.symbol] = Dependency(
+                loc = textx.get_location(depend_parse),
+                symbol = depend_parse.symbol,
+                text = depend_parse.text,
+            )
+
+        elif depend_class_name == "Ingredient":
+            # forward reference, to be resolved during this parsing pass
+            closure.ingredients[depend_parse.symbol] = Dependency(
+                loc = textx.get_location(depend_parse),
+                symbol = depend_parse.symbol,
+                text = depend_parse.text,
+            )
+
+        elif depend_class_name == "Use":
+            # external forward reference, to be resolved on a subsequent pass
+            closure.ingredients[depend_parse.symbol] = Dependency(
+                loc = textx.get_location(depend_parse),
+                symbol = depend_parse.symbol,
+                text = depend_parse.text,
+                external = True,
+            )
+
+
+    def _interpret_op (
+        self,
+        closure: Closure,
+        op_parse: typing.Any,
+        *,
+        debug: bool = False,
+        ) -> typing.Optional[ OpsTypes ]:
+        """
+Interpret the steps within an activity.
+        """
+        op_class_name: str = op_parse.__class__.__name__
+
+        if debug:
+            ic(op_parse, op_parse.symbol)
+
+        if op_class_name == "Add":
+            measure: Measure = Measure(
+                amount = op_parse.measure.amount,
+                units = op_parse.measure.units,
+            )
+
+            if debug:
+                ic(op_class_name, op_parse.symbol, measure, op_parse.text)
+
+            # resolve local reference
+            if op_parse.symbol in closure.ingredients:
+                entity: typing.Any = closure.ingredients[op_parse.symbol]
+                entity.ref_count += 1
+            else:
+                loc: dict = textx.get_location(op_parse)
+
+                raise BwydParserError(
+                    f"INGREDIENT `{op_parse.symbol}` used but not defined {loc}",
+                    symbol = op_parse.symbol,
+                )
+
+            return OpAdd(
+                loc = textx.get_location(op_parse),
+                symbol = op_parse.symbol,
+                measure = measure,
+                text = op_parse.text,
+            )
+
+        elif op_class_name == "Action":
+            duration: Duration = Duration(
+                amount = op_parse.duration.amount,
+                units = op_parse.duration.units,
+            )
+
+            if debug:
+                ic(op_class_name, op_parse.symbol, op_parse.modifier, op_parse.until, duration)
+
+            # resolve local reference
+            entity: typing.Optional[ typing.Any ] = None
+
+            if op_parse.symbol in closure.tools:
+                entity = closure.tools[op_parse.symbol]
+                entity.ref_count += 1
+            elif op_parse.symbol in closure.containers:
+                entity = closure.containers[op_parse.symbol]
+                entity.ref_count += 1
+            else:
+                loc: dict = textx.get_location(op_parse)
+
+                raise BwydParserError(
+                    f"ACTION OBJECT `{op_parse.symbol}` used but not defined {loc}",
+                    symbol = symbol,
+                )
+
+            return OpAction(
+                loc = textx.get_location(op_parse),
+                tool = entity,
+                modifier = op_parse.modifier,
+                until = op_parse.until,
+                duration = duration,
+            )
+
+        elif op_class_name == "Bake":
+            temperature = Temperature(
+                amount = op_parse.temperature.amount,
+                units = op_parse.temperature.units,
+            )
+
+            duration = Duration(
+                amount = op_parse.duration.amount,
+                units = op_parse.duration.units,
+            )
+
+            if debug:
+                ic(op_class_name, op_parse.symbol, op_parse.modifier, op_parse.until, temperature, duration)
+
+            # resolve local reference
+            if op_parse.symbol in closure.containers:
+                entity: typing.Any = closure.containers[op_parse.symbol]
+                entity.ref_count += 1
+            else:
+                loc: dict = textx.get_location(op_parse)
+
+                raise BwydParserError(
+                    f"BAKE CONTAINER `{op_parse.symbol}` used but not defined {loc}",
+                    symbol = op_parse.symbol,
+                )
+
+            return OpBake(
+                loc = textx.get_location(op_parse),
+                mode = op_class_name,
+                container = entity,
+                modifier = op_parse.modifier,
+                until = op_parse.until,
+                duration = duration,
+                temperature = temperature,
+            )
+
+        elif op_class_name == "Chill":
+            duration = Duration(
+                amount = op_parse.duration.amount,
+                units = op_parse.duration.units,
+            )
+
+            if debug:
+                ic(op_class_name, op_parse.symbol, op_parse.modifier, op_parse.until, duration)
+
+            # resolve local reference
+            if op_parse.symbol in closure.containers:
+                entity: typing.Any = closure.containers[op_parse.symbol]
+                entity.ref_count += 1
+            else:
+                loc: dict = textx.get_location(op_parse)
+
+                raise BwydParserError(
+                    f"CHILL CONTAINER `{op_parse.symbol}` used but not defined {loc}",
+                    symbol = op_parse.symbol,
+                )
+
+            return OpChill(
+                loc = textx.get_location(op_parse),
+                container = entity,
+                modifier = op_parse.modifier,
+                until = op_parse.until,
+                duration = duration,
+            )
+
+        return None
+
+
+    def _interpret_focus (
+        self,
+        closure: Closure,
+        focus_parse: typing.Any,
+        *,
+        debug: bool = False,
+        ) -> None:
+        """
+Interpret the activities within a focus.
+        """
+        if debug:
+            ic(focus_parse, focus_parse.symbol)
+
+        # resolve local reference
+        if focus_parse.symbol in closure.containers:
+            entity: typing.Any = closure.containers[focus_parse.symbol]
+            entity.ref_count += 1
+        else:
+            loc: dict = textx.get_location(focus_parse)
+
+            raise BwydParserError(
+                f"CONTAINER `{focus_parse.symbol}` used but not defined {loc}",
+                symbol = focus_parse.symbol,
+            )
+
+        focus = Focus(
+            container = entity,
+        )
+
+        closure.foci.append(focus)
+
+        for activity in focus_parse.activities:
+            if debug:
+                ic(activity, activity.text)
+
+            act: Activity = Activity(
+                text = activity.text,
+            )
+
+            focus.activities.append(act)
+
+            for op_parse in activity.ops:
+                op_obj: OpsTypes = self._interpret_op(
+                    closure,
+                    op_parse,
+                    debug = debug,
+                )
+
+                act.ops.append(op_obj)
+ 
+
+    def _interpret_ratio (
+        self,
+        closure: Closure,
+        ratio_parse: typing.Any,
+        *,
+        debug: bool = False,
+        ) -> None:
+        """
+Interpret the components within a ratio.
+        """
+        if debug:
+            ic(ratio_parse.name, [ (part.symbol, part.components) for part in ratio_parse.parts ])
+
+        for part in ratio_parse.parts:
+            if len(part.components) < 1:
+                # resolve local reference
+                if part.symbol in closure.ingredients:
+                    entity: typing.Any = closure.ingredients[part.symbol]
+                    entity.ref_count += 1
+                else:
+                    loc: dict = textx.get_location(part)
+
+                    raise BwydParserError(
+                        f"RATIO part `{part.symbol}` used but not defined {loc}",
+                        symbol = part.symbol,
+                    )
+
+            ## TODO: store representation of this ratio
+
 
     def _interpret_closure (  # pylint: disable=R0912,R0915
         self,
@@ -198,7 +480,7 @@ Helper method to interpret one Closure.
                 text = closure_parse.meta.text            
 
         closure: Closure = Closure(
-            name = closure_parse.name,
+            name = closure_parse.symbol,
             obj = closure_parse,
             yields = Measure(
                 amount = closure_parse.yields.amount,
@@ -208,254 +490,29 @@ Helper method to interpret one Closure.
             text = text,
         )
 
-        for step in closure_parse.steps:
-            if debug:
-                #ic(dir(closure_parse))
-                ic(step)
+        # resolve each dependency
+        for depend_parse in closure_parse.depend:
+            self._interpret_dependency(
+                closure,
+                depend_parse,
+                debug = debug,
+            )
 
-            step_class_name: str = step.__class__.__name__
+        # interpret each focus
+        for focus_parse in closure_parse.foci:
+            self._interpret_focus(
+                closure,
+                focus_parse,
+                debug = debug,
+            )
 
-            if step_class_name == "Focus":
-                if debug:
-                    ic(step_class_name, step.symbol)
-
-                # resolve local reference
-                if step.symbol in closure.containers:
-                    entity: typing.Any = closure.containers[step.symbol]
-                    entity.ref_count += 1
-                else:
-                    loc: dict = textx.get_location(step)
-
-                    raise BwydParserError(
-                        f"CONTAINER `{step.symbol}` used but not defined {loc}",
-                        symbol = step.symbol,
-                    )
-
-                closure.active_focus = Focus(
-                    container = entity,
-                )
-
-                closure.foci.append(closure.active_focus)
-
-            elif step_class_name == "Header":
-                if debug:
-                    ic(step_class_name, step.text)
-
-                closure.focus_op(
-                    step,
-                    OpHeader(
-                        loc = textx.get_location(step),
-                        text = step.text,
-                    )
-                )
-
-            if step_class_name == "Container":
-                if debug:
-                    ic(step_class_name, step.symbol, step.text)
-
-                # forward reference, to be resolved during this parsing pass
-                closure.containers[step.symbol] = Dependency(
-                    loc = textx.get_location(step),
-                    symbol = step.symbol,
-                    text = step.text,
-                )
-
-            elif step_class_name == "Tool":
-                if debug:
-                    ic(step_class_name, step.symbol, step.text)
-
-                # forward reference, to be resolved during this parsing pass
-                closure.tools[step.symbol] = Dependency(
-                    loc = textx.get_location(step),
-                    symbol = step.symbol,
-                    text = step.text,
-                )
-
-            elif step_class_name == "Ingredient":
-                if debug:
-                    ic(step_class_name, step.symbol, step.text)
-
-                # forward reference, to be resolved during this parsing pass
-                closure.ingredients[step.symbol] = Dependency(
-                    loc = textx.get_location(step),
-                    symbol = step.symbol,
-                    text = step.text,
-                )
-
-            elif step_class_name == "Use":
-                if debug:
-                    ic(step_class_name, step.symbol, step.text)
-
-                # forward reference, to be resolved on a subsequent pass
-                op: OpUse = OpUse(
-                    loc = textx.get_location(step),
-                    symbol = step.symbol,
-                    text = step.text,
-                )
-
-                closure.ingredients[step.symbol] = op
-
-                closure.focus_op(
-                    step,
-                    op,
-                )
-
-            elif step_class_name == "Add":
-                measure: Measure = Measure(
-                    amount = step.measure.amount,
-                    units = step.measure.units,
-                )
-
-                if debug:
-                    ic(step_class_name, step.symbol, measure, step.text)
-
-                # resolve local reference
-                if step.symbol in closure.ingredients:
-                    entity: typing.Any = closure.ingredients[step.symbol]
-                    entity.ref_count += 1
-                else:
-                    loc: dict = textx.get_location(step)
-
-                    raise BwydParserError(
-                        f"INGREDIENT `{step.symbol}` used but not defined {loc}",
-                        symbol = step.symbol,
-                    )
-
-                closure.focus_op(
-                    step,
-                    OpAdd(
-                        loc = textx.get_location(step),
-                        symbol = step.symbol,
-                        measure = measure,
-                        text = step.text,
-                    ),
-                )
-
-            elif step_class_name == "Action":
-                duration: Duration = Duration(
-                    amount = step.duration.amount,
-                    units = step.duration.units,
-                )
-
-                if debug:
-                    ic(step_class_name, step.symbol, step.modifier, step.until, duration)
-
-                # resolve local reference
-                entity: typing.Optional[ typing.Any ] = None
-
-                if step.symbol in closure.tools:
-                    entity = closure.tools[step.symbol]
-                    entity.ref_count += 1
-                elif step.symbol in closure.containers:
-                    entity = closure.containers[step.symbol]
-                    entity.ref_count += 1
-                else:
-                    loc: dict = textx.get_location(step)
-
-                    raise BwydParserError(
-                        f"ACTION OBJECT `{step.symbol}` used but not defined {loc}",
-                        symbol = symbol,
-                    )
-
-                closure.focus_op(
-                    step,
-                    OpAction(
-                        loc = textx.get_location(step),
-                        tool = entity,
-                        modifier = step.modifier,
-                        until = step.until,
-                        duration = duration,
-                    ),
-                )
-
-            elif step_class_name == "Bake":
-                temperature = Temperature(
-                    amount = step.temperature.amount,
-                    units = step.temperature.units,
-                )
-
-                duration = Duration(
-                    amount = step.duration.amount,
-                    units = step.duration.units,
-                )
-
-                if debug:
-                    ic(step_class_name, step.symbol, step.modifier, step.until, temperature, duration)
-
-                # resolve local reference
-                if step.symbol in closure.containers:
-                    entity: typing.Any = closure.containers[step.symbol]
-                    entity.ref_count += 1
-                else:
-                    loc: dict = textx.get_location(step)
-
-                    raise BwydParserError(
-                        f"BAKE CONTAINER `{step.symbol}` used but not defined {loc}",
-                        symbol = step.symbol,
-                    )
-
-                closure.focus_op(
-                    step,
-                    OpBake(
-                        loc = textx.get_location(step),
-                        mode = step_class_name,
-                        container = entity,
-                        modifier = step.modifier,
-                        until = step.until,
-                        duration = duration,
-                        temperature = temperature,
-                    ),
-                )
-
-            elif step_class_name == "Chill":
-                duration = Duration(
-                    amount = step.duration.amount,
-                    units = step.duration.units,
-                )
-
-                if debug:
-                    ic(step_class_name, step.symbol, step.modifier, step.until, duration)
-
-                # resolve local reference
-                if step.symbol in closure.containers:
-                    entity: typing.Any = closure.containers[step.symbol]
-                    entity.ref_count += 1
-                else:
-                    loc: dict = textx.get_location(step)
-
-                    raise BwydParserError(
-                        f"CHILL CONTAINER `{step.symbol}` used but not defined {loc}",
-                        symbol = step.symbol,
-                    )
-
-                closure.focus_op(
-                    step,
-                    OpChill(
-                        loc = textx.get_location(step),
-                        container = entity,
-                        modifier = step.modifier,
-                        until = step.until,
-                        duration = duration,
-                    ),
-                )
-
-            elif step_class_name == "Ratio":
-                if debug:
-                    ic(step_class_name, step.name, [ (part.symbol, part.components) for part in step.parts ])
-
-                    for part in step.parts:
-                        if len(part.components) < 1:
-                            # resolve local reference
-                            if part.symbol in closure.ingredients:
-                                entity: typing.Any = closure.ingredients[part.symbol]
-                                entity.ref_count += 1
-                            else:
-                                loc: dict = textx.get_location(part)
-
-                                raise BwydParserError(
-                                    f"RATIO part `{part.symbol}` used but not defined {loc}",
-                                    symbol = part.symbol,
-                                )
+        # interpret the ratio specification, if any
+        if closure_parse.ratio is not None:
+            self._interpret_ratio(
+                closure,
+                closure_parse.ratio,
+                debug = debug,
+            )
 
         return closure
 
@@ -480,7 +537,7 @@ Interpret one Bwyd module.
 
         # parse each `CLOSURE`
         for closure_parse in self.parse_tree.closures:
-            self.closures[closure_parse.name] = self._interpret_closure(
+            self.closures[closure_parse.symbol] = self._interpret_closure(
                 closure_parse,
                 debug = debug,
             )
@@ -502,7 +559,8 @@ Tally the total duration of one Bwyd module.
             op.get_duration().normalize()
             for closure in self.closures.values()
             for focus in closure.foci
-            for op in focus.ops
+            for activity in focus.activities
+            for op in activity.ops
         ])
 
         return Duration(total_sec, "sec").humanize()

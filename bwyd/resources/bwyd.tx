@@ -19,9 +19,11 @@ Post:
 ;
 
 Closure:
-  "CLOSURE:" name=STRING
+  "CLOSURE:" symbol=ID
     meta=Closure_Metadata
-    steps+=Step
+    depend+=Dependency
+    foci+=Focus
+    ratio=Ratio?
   "YIELDS" yields=Measure
 ;
 
@@ -30,40 +32,38 @@ Closure_Metadata:
   ("TEXT:" text=STRING)?
 ;
 
-Step:
-  Ratio | Header | Container | Use | Ingredient | Focus | Tool | Add | Action | Bake | Chill
-;
-
-Ratio:
-  "RATIO:" name=STRING "=" (parts+=RatioPart[','])
-;
-
-RatioPart:
-    symbol=ID ('[' components+=ID[','] ']')?
-;
-
-Header:
-  "HEADER:" text=STRING
+Dependency:
+  Container | Tool | Ingredient | Use
 ;
 
 Container:
   "CONTAINER" symbol=ID ":" text=STRING
 ;
 
-Use:
-  "USE" symbol=ID ":" text=STRING
+Tool:
+  "TOOL" symbol=ID ":" text=STRING
 ;
 
 Ingredient:
   "INGREDIENT" symbol=ID ":" text=STRING
 ;
 
-Focus:
-  "FOCUS" symbol=ID
+Use:
+  "USE" symbol=ID ":" text=STRING
 ;
 
-Tool:
-  "TOOL" symbol=ID ":" text=STRING
+Focus:
+  "FOCUS" symbol=ID
+  activities+=Activity
+;
+
+Activity:
+  "ACTIVITY:" text=STRING
+   ops+=Op
+;
+
+Op:
+  Add | Action | Bake | Chill
 ;
 
 Add:
@@ -119,4 +119,12 @@ Chill:
 
 Comment:
   /\/\/.*$/
+;
+
+Ratio:
+  "RATIO:" name=STRING "=" (parts+=RatioPart[','])
+;
+
+RatioPart:
+    symbol=ID ('[' components+=ID[','] ']')?
 ;

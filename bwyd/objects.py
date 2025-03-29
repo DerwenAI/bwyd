@@ -29,6 +29,7 @@ Ingredient, Tool, Container, etc.
     symbol: str
     text: str
     ref_count: int = 0
+    external: bool = False
 
     def to_json (
         self
@@ -231,41 +232,6 @@ Stub: HTML representation.
 
 
 @dataclass(order = False, frozen = False)
-class OpHeader (OpGeneric):  # pylint: disable=R0902
-    """
-A data class representing one Header object.
-    """
-    text: str
-
-    def to_html (
-        self,
-        doc: yattag.doc.Doc,
-        tag: typing.Any,
-        text: typing.Any,
-        converter: dict,
-        ) -> str:
-        """
-HTML representation
-        """
-        # {'op': 'header', 'text': 'foo bar baz'}
-        with tag("em"):
-            text(self.text)
-
-        doc.stag("br")
-
-
-    def to_json (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "text": self.text,
-        }
-
-
-@dataclass(order = False, frozen = False)
 class OpAdd (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Add object.
@@ -375,51 +341,25 @@ HTML representation
 
 
     def to_json (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "op": "add",
-            "symbol": self.symbol,
-            "measure": self.measure.to_json(),
-            "text": self.text,
-        }
-
-
-@dataclass(order = False, frozen = False)
-class OpUse (OpGeneric):  # pylint: disable=R0902
-    """
-A data class representing one Use object.
-    """
-    symbol: str
-    text: str
-
-    def to_html (
         self,
-        doc: yattag.doc.Doc,
-        tag: typing.Any,
-        text: typing.Any,
         converter: dict,
-        ) -> str:
-        """
-HTML representation
-        """
-        # {'op': 'use', 'symbol': 'batter', 'text': 'batter'}
-        # not rendered as HTML -- so far
-        pass
-
-
-    def to_json (
-        self
         ) -> dict:
         """
 Serializable representation for JSON.
         """
+        amount: str = self.measure.to_html()
+
+        # show conversion, if available
+        if self.symbol in converter:
+            imper_units, metric_units, ratio = converter[self.symbol]
+
+            if self.measure.units == metric_units:
+                imper_amount: float = self.measure.amount / ratio
+                amount += f" ({self.humanize_cup(imper_amount)})"
+
         return {
-            "op": "use",
-            "symbol": self.symbol,
+            "name": self.symbol,
+            "amount": amount,
             "text": self.text,
         }
 
@@ -487,11 +427,12 @@ HTML representation
 Serializable representation for JSON.
         """
         return {
-            "op": "action",
-            "tool": self.tool.symbol,
-            "modifier": self.modifier,
-            "until": self.until,
-            "duration": self.duration.to_json(),
+            "action": {
+                "tool": self.tool.symbol,
+                "verb": self.modifier,
+                "text": self.until,
+                "time": self.duration.humanize(),
+            }
         }
 
 
@@ -562,13 +503,13 @@ HTML representation
 Serializable representation for JSON.
         """
         return {
-            "op": "bake",
-            "mode": self.mode,
-            "container": self.container.symbol,
-            "modifier": self.modifier,
-            "until": self.until,
-            "duration": self.duration.to_json(),
-            "temperature": self.temperature.to_json(),
+            "bake": {
+                "mode": self.mode.lower(),
+                "temperature": self.temperature.humanize(),
+                "text": self.modifier,
+                "until": self.until,
+                "time": self.duration.humanize(),
+            }
         }
 
 
@@ -636,11 +577,63 @@ Serializable representation for JSON.
         }
 
 
-OpsTypes = typing.Union[ OpAdd, OpUse, OpAction, OpBake, OpChill ]
+OpsTypes = typing.Union[ OpAdd, OpAction, OpBake, OpChill ]
 
 
 ######################################################################
 ## structural classes
+
+@dataclass(order = False, frozen = False)
+class Activity:  # pylint: disable=R0902
+    """
+A data class representing one Header object.
+    """
+    text: str
+    ops: typing.List[ OpsTypes ] = field(default_factory = lambda: [])
+
+    def to_html (
+        self,
+        doc: yattag.doc.Doc,
+        tag: typing.Any,
+        text: typing.Any,
+        converter: dict,
+        ) -> str:
+        """
+HTML representation
+        """
+        # {'op': 'header', 'text': 'foo bar baz'}
+        with tag("em"):
+            text(self.text)
+
+        doc.stag("br")
+
+
+    def to_json (
+        self,
+        converter: dict,
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        dat: dict = {
+            "title": self.text,
+            "steps": [
+                {
+                    "ingredients": [
+                        op.to_json(converter)
+                        for op in self.ops
+                        if isinstance(op, OpAdd)
+                    ]
+                }
+            ]
+        }
+
+        for op in self.ops:
+            if not isinstance(op, OpAdd):
+                dat["steps"].append(op.to_json())
+
+        return dat
+
 
 @dataclass(order = False, frozen = False)
 class Focus:  # pylint: disable=R0902
@@ -648,7 +641,7 @@ class Focus:  # pylint: disable=R0902
 A data class representing a parsed Focus object.
     """
     container: Dependency
-    ops: typing.List[ OpsTypes ] = field(default_factory = lambda: [])
+    activities: typing.List[ Activity ] = field(default_factory = lambda: [])
 
     def to_html (
         self,
@@ -672,14 +665,15 @@ HTML representation
 
 
     def to_json (
-        self
+        self,
+        converter: dict,
         ) -> dict:
         """
 Serializable representation for JSON.
         """
         return {
             "container": self.container.symbol,
-            "ops": [ op.to_json() for op in self.ops ],
+            "activities": [ act.to_json(converter) for act in self.activities ],
         }
 
 
@@ -693,28 +687,13 @@ A data class representing one parsed Closure object.
     yields: Measure
     export: typing.Optional[ str ] = None
     text: str = ""
-    foci: typing.List[ Focus ] = field(default_factory = lambda: [])
-    active_focus: typing.Optional[ Focus ] = None
     containers: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     tools: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     ingredients: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
+    foci: typing.List[ Focus ] = field(default_factory = lambda: [])
 
 
-    def focus_op (
-        self,
-        cmd: typing.Any,
-        op_obj: OpsTypes,
-        ) -> None:
-        """
-Append one operation to the active Focus.
-        """
-        if self.active_focus is None:
-            print(f"FOCUS: not defined yet for {cmd.symbol}")
-        else:
-            self.active_focus.ops.append(op_obj)
-
-
-    def get_requires (
+    def get_dependencies (
         self
         ) -> list:
         """
