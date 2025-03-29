@@ -10,14 +10,16 @@ from .error import BwydParserError
 
 from .kernel import BwydKernel
 
+from .measure import Measure, Duration, Temperature
+
 from .module import Module
 
-from .objects import Dependency, DependencyDict, \
-    Measure, Duration, Temperature, \
-    OpsTypes, OpAdd, OpAction, OpBake, OpChill, \
-    Activity, Focus, Closure
+from .ops import Dependency, DependencyDict, \
+    OpsTypes, OpAdd, OpAction, OpBake, OpChill
 
 from .parser import Bwyd
+
+from .structure import Activity, Focus, Closure
 
 
 __version__ = "0.2"

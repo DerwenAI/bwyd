@@ -18,12 +18,14 @@ import textx  # pylint: disable=E0401
 
 from .error import BwydParserError
 
-from .objects import Dependency, DependencyDict, \
-    Measure, Duration, Temperature, \
-    OpsTypes, OpAdd, OpAction, OpBake, OpChill, \
-    Activity, Focus, Closure
+from .measure import Measure, Duration, Temperature
+
+from .ops import Dependency, DependencyDict, \
+    OpsTypes, OpAdd, OpAction, OpBake, OpChill
 
 from .resources import _CONVERT_PATH, _JINJA_TEMPLATE
+
+from .structure import Activity, Focus, Closure
 
 
 ######################################################################
@@ -50,6 +52,20 @@ Constructor.
         self.closures: typing.Dict[ str, Closure ] = OrderedDict()
 
 
+    def get_image (
+        self,
+        ) -> str:
+        """
+Make the image URL embeddable in an <iframe/>
+        """
+        img_url: str = self.posts[0]
+
+        if "instagram.com" in img_url:
+            return img_url + "embed"
+
+        return img_url
+
+
     def get_model (
         self,
         ) -> typing.Dict[ str, list ]:
@@ -68,9 +84,6 @@ one for each parsed Closure.
             for name, closure in self.closures.items()
         ]
 
-        ## TODO: make the image URL embeddable in an <iframe/>
-        img_embed_url: str = self.posts[0] + "embed"
-
         ## TODO: structure the license spec in the language
 
         return {
@@ -78,7 +91,7 @@ one for each parsed Closure.
             "text": self.text,
             "duration": self.total_duration(),
             "serves": closure_list[-1]["yields"],
-            "image": img_embed_url,
+            "image": self.get_image(),
             "sources": self.cites,
             "gallery": self.posts,
             "license": {
