@@ -3292,17 +3292,6 @@ files = [
 ]
 
 [[package]]
-name = "yattag"
-version = "1.16.1"
-description = "Generate HTML or XML in a pythonic way. Pure python alternative to web template engines.Can fill HTML forms with default values and error messages."
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "yattag-1.16.1.tar.gz", hash = "sha256:baa8f254e7ea5d3e0618281ad2ff5610e0e5360b3608e695c29bfb3b29d051f4"},
-]
-
-[[package]]
 name = "zipp"
 version = "3.21.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -3331,4 +3320,4 @@ test = ["deepdiff", "pytest"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11"
-content-hash = "339f5acc547d484a7b652a34e875b839e4d7b01b0b8893f67530af90c910fe79"
+content-hash = "365bd4136553305889497ef879db16bdbc3c5a3e39a5261b303fc953feb66930"
