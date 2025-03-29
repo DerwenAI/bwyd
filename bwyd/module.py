@@ -13,8 +13,8 @@ import pathlib
 import typing
 
 from icecream import ic  # pylint: disable=E0401
+import jinja2
 import textx  # pylint: disable=E0401
-import yattag
 
 from .error import BwydParserError
 
@@ -23,7 +23,7 @@ from .objects import Dependency, DependencyDict, \
     OpsTypes, OpAdd, OpAction, OpBake, OpChill, \
     Activity, Focus, Closure
 
-from .resources import _CONVERT_PATH
+from .resources import _CONVERT_PATH, _JINJA_TEMPLATE
 
 
 ######################################################################
@@ -60,10 +60,10 @@ one for each parsed Closure.
         closure_list: typing.List[ dict ] = [
             {
                 "title": name,
-                "yields": closure.yields.to_html(),
+                "yields": closure.yields.humanize(),
                 "text": closure.text,
                 "requires": closure.get_dependencies(),
-                "foci": [ focus.to_json(self.UNIT_CONVERT) for focus in closure.foci ],
+                "foci": [ focus.get_model(self.UNIT_CONVERT) for focus in closure.foci ],
             }
             for name, closure in self.closures.items()
         ]
@@ -86,34 +86,6 @@ one for each parsed Closure.
                 "image": "https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png",
                 "text": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License"
             },
-            "closures": closure_list,
-        }
-
-
-    def to_json (
-        self,
-        ) -> typing.Dict[ str, list ]:
-        """
-Return a list of JSON-friendly dictionary representations,
-one for each parsed Closure.
-        """
-        closure_list: typing.List[ dict ] = [
-            {
-                "export": closure.export,
-                "text": closure.text,
-                "name": name,
-                "yields": closure.yields.to_json(),
-                "tools": closure.tools.to_json(),
-                "containers": closure.containers.to_json(),
-                "ingredients": closure.ingredients.to_json(),
-                "foci": [ focus.to_json() for focus in closure.foci ],
-            }
-            for name, closure in self.closures.items()
-        ]
-
-        return {
-            "cites": self.cites,
-            "posts": self.posts,
             "closures": closure_list,
         }
 
@@ -553,7 +525,7 @@ Interpret one Bwyd module.
         self,
         ) -> str:
         """
-Tally the total duration of one Bwyd module.
+Accessor for the total duration of one Bwyd module.
         """
         total_sec: int = sum([
             op.get_duration().normalize()
@@ -570,94 +542,22 @@ Tally the total duration of one Bwyd module.
         self,
         ) -> str:
         """
-Tally the end yield of one Bwyd module.
+Accessor for the total yield of one Bwyd module.
         """
-        for name, closure in self.closures.items():
-            if closure.export is not None:
-                return closure.yields.to_html()
+        return list(self.closures.values())[-1]["yields"]
 
 
 ######################################################################
-## HTML representation
+## Jinja2 template rendering
 
-    def to_html (
+    def render_template (
         self,
         *,
-        lang: str = "en",
-        charset: str = "UTF-8",
-        viewport: str = "width=device-width, initial-scale=1.0",
-        stylesheet: str = "style.css",
-        indent: bool = False,
+        template: jinja2.Template = _JINJA_TEMPLATE,
         ) -> str:
         """
-Generate an HTML representation.
+Load a Jinja2 template and render the data model as HTML.
         """
-        export: str = ""
-
-        for name, closure in self.closures.items():
-            if closure.export is not None:
-                export = closure.export
-
-        doc, tag, text = yattag.Doc().tagtext()
-        doc.asis("<!DOCTYPE html>")
-
-        with tag("html", lang = lang):
-            with tag("head"):
-                doc.stag("meta", charset = charset)
-                doc.stag("meta", name = "viewport", content = viewport)
-                doc.stag("link", rel = "stylesheet", href = stylesheet)
-                doc.stag("link", rel = "icon", href = "bwyd/resources/bwyd.svg")
-
-                with tag("export"):
-                    text(export)
-
-            with tag("body"):
-                with tag("h1"):
-                    text(export)
-
-                # metadata
-                with tag("p"):
-                    text("time: ")
-
-                    with tag("strong"):
-                        with tag("time"):
-                            text(self.total_duration())
-
-                    doc.stag("br")
-                    text("yields: ")
-
-                    with tag("strong"):
-                        text(self.total_yield())
-
-                # cites
-                if len(self.cites) > 0:
-                        with tag("p"):
-                            text("sources")
-
-                            with tag("ul"):
-                                for cite in self.cites:
-                                    with tag("li"):
-                                        with tag("a", href = cite, target = "_blank"):
-                                            text(cite)
-
-                # posts
-                if len(self.posts) > 0:
-                    with tag("p"):
-                        text("gallery")
-
-                        with tag("ul"):
-                            for post in self.posts:
-                                with tag("li"):
-                                    with tag("a", href = post, target = "_blank"):
-                                        text(post)
-
-                with tag("h2"):
-                    text("directions:")
-
-                for _, closure in self.closures.items():
-                    closure.to_html(doc, tag, text, self.UNIT_CONVERT)
-
-        if indent:
-            return yattag.indent(doc.getvalue())
-
-        return doc.getvalue()
+        return template.render(
+            module = self.get_model()
+        )

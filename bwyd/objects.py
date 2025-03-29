@@ -13,7 +13,6 @@ import itertools
 import typing
 
 from icecream import ic
-import yattag
 
 
 ######################################################################
@@ -31,7 +30,7 @@ Ingredient, Tool, Container, etc.
     ref_count: int = 0
     external: bool = False
 
-    def to_json (
+    def get_model (
         self
         ) -> dict:
         """
@@ -49,13 +48,13 @@ A dictionary of a specific class of dependencies, which also provides
 a local namespace.
     """
 
-    def to_json (
+    def get_model (
         self
         ) -> list:
         """
 Serializable representation for JSON.
         """
-        return [ dep.to_json() for dep in self.values() ]
+        return [ dep.get_model() for dep in self.values() ]
 
 
 ######################################################################
@@ -69,11 +68,11 @@ A data class representing one parsed Measure object.
     amount: float
     units: str
 
-    def to_html (
+    def humanize (
         self
         ) -> str:
         """
-HTML represenation.
+Denormalize this measure into human-readable form.
         """
         html: str = f"{self.amount} "
 
@@ -83,7 +82,7 @@ HTML represenation.
         return html
 
 
-    def to_json (
+    def get_model (
         self
         ) -> dict:
         """
@@ -146,21 +145,7 @@ Denormalize this duration into human-readable form.
         return readable
 
 
-    def to_html (
-        self,
-        ) -> str:
-        """
-HTML represenation.
-        """
-        html: str = f"{self.amount} "
-
-        if self.units is not None:
-            html += self.units
-
-        return html
-
-
-    def to_json (
+    def get_model (
         self
         ) -> dict:
         """
@@ -217,20 +202,6 @@ Stub: Total duration.
         return Duration(0, "sec")
 
 
-    def to_html (
-        self,
-        doc: yattag.doc.Doc,
-        tag: typing.Any,
-        text: typing.Any,
-        converter: dict,
-        ) -> str:
-        """
-Stub: HTML representation.
-        """
-        # not rendered as HTML -- so far
-        pass
-
-
 @dataclass(order = False, frozen = False)
 class OpAdd (OpGeneric):  # pylint: disable=R0902
     """
@@ -239,6 +210,7 @@ A data class representing one Add object.
     symbol: str
     measure: Measure
     text: str
+
 
     @classmethod
     def humanize_cup (
@@ -304,50 +276,14 @@ Humanize imperial measurement ratios >= 1.0
         return f"{base:d} {human}"
 
 
-    def to_html (
-        self,
-        doc: yattag.doc.Doc,
-        tag: typing.Any,
-        text: typing.Any,
-        converter: dict,
-        ) -> str:
-        """
-HTML representation
-        """
-        # {'op': 'add', 'symbol': 'sugar', 'measure': {'amount': 133, 'units': 'g'}, 'text': ''}
-        text("add ")
-
-        with tag("strong"):
-            text(self.symbol)
-
-        text(": ")
-        text(self.measure.to_html())
-
-        # show conversion, if available
-        if self.symbol in converter:
-            imper_units, metric_units, ratio = converter[self.symbol]
-
-            if self.measure.units == metric_units:
-                imper_amount: float = self.measure.amount / ratio
-                text(" (", self.humanize_cup(imper_amount), ") ")
-
-        if len(self.text) > 0:
-            text(" — ")
-
-        with tag("em"):
-            text(self.text)
-
-        doc.stag("br")
-
-
-    def to_json (
+    def get_model (
         self,
         converter: dict,
         ) -> dict:
         """
 Serializable representation for JSON.
         """
-        amount: str = self.measure.to_html()
+        amount: str = self.measure.humanize()
 
         # show conversion, if available
         if self.symbol in converter:
@@ -374,6 +310,7 @@ A data class representing one Action object.
     until: str
     duration: Duration
 
+
     def get_duration (
         self,
         ) -> str:
@@ -383,44 +320,7 @@ Duration of this operation.
         return self.duration
 
 
-    def to_html (
-        self,
-        doc: yattag.doc.Doc,
-        tag: typing.Any,
-        text: typing.Any,
-        converter: dict,
-        ) -> str:
-        """
-HTML representation
-        """
-        # {'op': 'action', 'tool': 'whisk', 'modifier': 'blend', 'until': 'well mixed, break any clumps', 'duration': {'amount': 30, 'units': 'sec'}}
-        doc.stag("br")
-        text("with ")
-
-        with tag("strong"):
-            text(self.tool.symbol)
-
-        text(": ")
-        text(self.modifier)
-
-        text(" until ")
-                                                
-        with tag("em"):
-            text(self.until)
-
-        doc.stag("br")
-        doc.asis("(")
-
-        with tag("time"):
-            text(self.duration.to_html())
-
-        doc.asis(")")
-
-        doc.stag("br")
-        doc.stag("br")
-
-
-    def to_json (
+    def get_model (
         self
         ) -> dict:
         """
@@ -448,6 +348,7 @@ A data class representing one Bake object.
     duration: Duration
     temperature: Temperature
 
+
     def get_duration (
         self,
         ) -> str:
@@ -457,46 +358,7 @@ Duration of this operation.
         return self.duration
 
 
-    def to_html (
-        self,
-        doc: yattag.doc.Doc,
-        tag: typing.Any,
-        text: typing.Any,
-        converter: dict,
-        ) -> str:
-        """
-HTML representation
-        """
-        # {'op': 'bake', 'container': 'pan', 'modifier': 'place pan on a baking sheet, make level, convection bake', 'until': 'an inserted fork comes out with tiny crumbs', 'duration': {'amount': 20, 'units': 'min'}, 'temperature': {'amount': 177, 'units': 'C'}}
-        with tag("em"):
-            text(self.modifier)
-
-        doc.stag("br")
-
-        with tag("strong"):
-            text(self.mode.lower())
-
-        text(" at ")
-
-        with tag("strong"):
-            text(self.temperature.humanize())
-
-        text(" for ")
-
-        with tag("strong"):
-            with tag("time"):
-                text(self.duration.to_html())
-
-        doc.stag("br")
-        text("until ")
-
-        with tag("em"):
-            text(self.until)
-
-        doc.stag("br")
-
-
-    def to_json (
+    def get_model (
         self
         ) -> dict:
         """
@@ -532,48 +394,18 @@ Duration of this operation.
         return self.duration
 
 
-    def to_html (
-        self,
-        doc: yattag.doc.Doc,
-        tag: typing.Any,
-        text: typing.Any,
-        converter: dict,
-        ) -> str:
-        """
-HTML representation
-        """
-        # { "op": "chill", "container": "dish", "modifier": "freeze", "until": "dumplings are frozen solid", "duration": { "amount": 2, "units": "hrs" } }
-        text(self.modifier)
-
-        with tag("strong"):
-            text(self.container.symbol)
-
-        text(" for ")
-
-        with tag("strong"):
-            with tag("time"):
-                text(self.duration.to_html())
-
-        text(" until ")
-
-        with tag("em"):
-            text(self.until)
-
-        doc.stag("br")
-
-
-    def to_json (
+    def get_model (
         self
         ) -> dict:
         """
 Serializable representation for JSON.
         """
         return {
-            "op": "chill",
-            "container": self.container.symbol,
-            "modifier": self.modifier,
-            "until": self.until,
-            "duration": self.duration.to_json(),
+            "chill": {
+                "text": self.modifier,
+                "until": self.until,
+                "time": self.duration.humanize(),
+            }
         }
 
 
@@ -591,24 +423,8 @@ A data class representing one Header object.
     text: str
     ops: typing.List[ OpsTypes ] = field(default_factory = lambda: [])
 
-    def to_html (
-        self,
-        doc: yattag.doc.Doc,
-        tag: typing.Any,
-        text: typing.Any,
-        converter: dict,
-        ) -> str:
-        """
-HTML representation
-        """
-        # {'op': 'header', 'text': 'foo bar baz'}
-        with tag("em"):
-            text(self.text)
 
-        doc.stag("br")
-
-
-    def to_json (
+    def get_model (
         self,
         converter: dict,
         ) -> dict:
@@ -620,7 +436,7 @@ Serializable representation for JSON.
             "steps": [
                 {
                     "ingredients": [
-                        op.to_json(converter)
+                        op.get_model(converter)
                         for op in self.ops
                         if isinstance(op, OpAdd)
                     ]
@@ -630,7 +446,7 @@ Serializable representation for JSON.
 
         for op in self.ops:
             if not isinstance(op, OpAdd):
-                dat["steps"].append(op.to_json())
+                dat["steps"].append(op.get_model())
 
         return dat
 
@@ -643,28 +459,8 @@ A data class representing a parsed Focus object.
     container: Dependency
     activities: typing.List[ Activity ] = field(default_factory = lambda: [])
 
-    def to_html (
-        self,
-        doc: yattag.doc.Doc,
-        tag: typing.Any,
-        text: typing.Any,
-        converter: dict,
-        ) -> str:
-        """
-HTML representation
-        """
-        with tag("dt"):
-            text("into ")
 
-            with tag("strong"):
-                text(self.container.symbol)
-
-        with tag("dd"):
-            for op in self.ops:
-                op.to_html(doc, tag, text, converter)
-
-
-    def to_json (
+    def get_model (
         self,
         converter: dict,
         ) -> dict:
@@ -673,7 +469,7 @@ Serializable representation for JSON.
         """
         return {
             "container": self.container.symbol,
-            "activities": [ act.to_json(converter) for act in self.activities ],
+            "activities": [ act.get_model(converter) for act in self.activities ],
         }
 
 
@@ -700,59 +496,6 @@ A data class representing one parsed Closure object.
 Serialized representation in JSON for the containers and tools.
         """
         return [
-            dep.to_json()
+            dep.get_model()
             for dep in itertools.chain(self.containers.values(), self.tools.values())
         ]
-
-
-    def to_html (
-        self,
-        doc: yattag.doc.Doc,
-        tag: typing.Any,
-        text: typing.Any,
-        converter: dict,
-        ) -> str:
-        """
-HTML representation
-        """
-        with tag("h3"):
-            text(self.name)
-
-        # text
-        with tag("p"):
-            with tag("em"):
-                text(self.text)
-
-        # yield
-        with tag("p"):
-            text("yields: ")
-            text(self.yields.to_html())
-
-        # tools, containers
-        if len(self.tools) > 0 or len(self.containers) > 0:
-            with tag("h4"):
-                text("uses:")
-
-            with tag("dl"):
-                for tool in self.tools.values():
-                    with tag("dt"):
-                        with tag("strong"):
-                            text(tool.symbol)
-
-                    with tag("dd"):
-                        with tag("em"):
-                            text(tool.text)
-
-                for container in self.containers.values():
-                        with tag("dt"):
-                            with tag("strong"):
-                                text(container.symbol)
-
-                        with tag("dd"):
-                            with tag("em"):
-                                text(container.text)
-
-        # foci
-        with tag("dl"):
-            for focus in self.foci:
-                focus.to_html(doc, tag, text, converter)

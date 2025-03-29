@@ -10,7 +10,6 @@ import pathlib
 
 from icecream import ic
 import bwyd
-import jinja2
 
 
 if __name__ == "__main__":
@@ -25,11 +24,7 @@ if __name__ == "__main__":
         debug = True, # False
     )
 
-    # load Jinja2 template
-    env = jinja2.Environment(loader = jinja2.FileSystemLoader("bwyd/resources"))
-    template = env.get_template("bwyd.jinja")
+    #data: dict = module.get_model()
 
-    # format a data model as HTML
-    data: dict = module.get_model()
-    output = template.render(module = data)
-    print(output)
+    # render the Jinja2 template
+    print(module.render_template())
