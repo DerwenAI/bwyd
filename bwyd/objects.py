@@ -37,7 +37,7 @@ Ingredient, Tool, Container, etc.
 Serializable representation for JSON.
         """
         return {
-            "symbol": self.symbol,
+            "name": self.symbol,
             "text": self.text,
         }
 
