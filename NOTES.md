@@ -1,7 +1,6 @@
 ## TODOs
 
   * scan a module to produce a total ingredients list
-  * incorporate `Bootstrap` layouts
   * express conversions as function of densities
   * add a Corpus class to handle collections of parsed modules
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules

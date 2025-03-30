@@ -1,0 +1,282 @@
+{
+  "title": "Frozen Gnocchi Dumplings",
+  "text": "Make some yummy gnocchi from root veggies.",
+  "duration": "2 hrs, 5 min, 40 sec",
+  "serves": "20 ",
+  "image": "https://www.instagram.com/p/Csu0b4yLOyZ/embed",
+  "sources": [],
+  "gallery": [
+    "https://www.instagram.com/p/Csu0b4yLOyZ/"
+  ],
+  "license": {
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "image": "https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png",
+    "text": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License"
+  },
+  "closures": [
+    {
+      "title": "dough",
+      "yields": "800 g",
+      "text": "best to work with cold ingredients and chilled utensils",
+      "requires": [
+        {
+          "name": "bowl",
+          "text": "chilled mixing bowl"
+        },
+        {
+          "name": "fork",
+          "text": "small fork or whisk"
+        },
+        {
+          "name": "spatula",
+          "text": "silicone spatula"
+        }
+      ],
+      "foci": [
+        {
+          "container": "bowl",
+          "activities": [
+            {
+              "title": "prep wet mix",
+              "steps": [
+                {
+                  "ingredients": [
+                    {
+                      "name": "egg",
+                      "amount": "1 ",
+                      "text": ""
+                    },
+                    {
+                      "name": "ricotta",
+                      "amount": "250 g",
+                      "text": ""
+                    },
+                    {
+                      "name": "parmesan",
+                      "amount": "50 g",
+                      "text": ""
+                    },
+                    {
+                      "name": "nutmeg",
+                      "amount": "1 g (1/8 tsp)",
+                      "text": ""
+                    },
+                    {
+                      "name": "puree",
+                      "amount": "250 g",
+                      "text": ""
+                    }
+                  ]
+                },
+                {
+                  "action": {
+                    "tool": "fork",
+                    "verb": "gently",
+                    "text": "lightly beaten",
+                    "time": "30 sec"
+                  }
+                },
+                {
+                  "action": {
+                    "tool": "spatula",
+                    "verb": "",
+                    "text": "well mixed",
+                    "time": "30 sec"
+                  }
+                },
+                {
+                  "action": {
+                    "tool": "spatula",
+                    "verb": "fold",
+                    "text": "lightly blended",
+                    "time": "30 sec"
+                  }
+                }
+              ]
+            },
+            {
+              "title": "complete the dough",
+              "steps": [
+                {
+                  "ingredients": [
+                    {
+                      "name": "flour",
+                      "amount": "240 g (1 1 cup)",
+                      "text": "only until the dough becomes no longer sticky"
+                    }
+                  ]
+                },
+                {
+                  "action": {
+                    "tool": "spatula",
+                    "verb": "mix",
+                    "text": "dough just becomes smooth",
+                    "time": "1 min, 30 sec"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "dumplings",
+      "yields": "20 ",
+      "text": "divide dough into 8 pieces, rolling out one at a time",
+      "requires": [
+        {
+          "name": "mat",
+          "text": "floured rolling surface"
+        },
+        {
+          "name": "hand",
+          "text": "clean hands"
+        },
+        {
+          "name": "spoon",
+          "text": "large spoon"
+        },
+        {
+          "name": "fork",
+          "text": "fork"
+        }
+      ],
+      "foci": [
+        {
+          "container": "mat",
+          "activities": [
+            {
+              "title": "make ropes",
+              "steps": [
+                {
+                  "ingredients": [
+                    {
+                      "name": "flour",
+                      "amount": "10 g (1 1/4 tsp)",
+                      "text": ""
+                    },
+                    {
+                      "name": "dough",
+                      "amount": "200 g",
+                      "text": ""
+                    }
+                  ]
+                },
+                {
+                  "action": {
+                    "tool": "spoon",
+                    "verb": "spread",
+                    "text": "evenly floured",
+                    "time": "30 sec"
+                  }
+                },
+                {
+                  "action": {
+                    "tool": "hand",
+                    "verb": "roll carefully into a rope",
+                    "text": "2 cm diameter",
+                    "time": "60 sec"
+                  }
+                }
+              ]
+            },
+            {
+              "title": "make pillows",
+              "steps": [
+                {
+                  "ingredients": []
+                },
+                {
+                  "action": {
+                    "tool": "fork",
+                    "verb": "cut into 1 cm dumplings pieces, resembling little pillows",
+                    "text": "entire rope is cut",
+                    "time": "30 sec"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "gnocchi",
+      "yields": "20 ",
+      "text": "add layers of dumplings to fill depth of baking dish",
+      "requires": [
+        {
+          "name": "dish",
+          "text": "baking dish"
+        },
+        {
+          "name": "hand",
+          "text": "clean hands"
+        },
+        {
+          "name": "board",
+          "text": "gnocchi board or a fork"
+        }
+      ],
+      "foci": [
+        {
+          "container": "dish",
+          "activities": [
+            {
+              "title": "prep container",
+              "steps": [
+                {
+                  "ingredients": [
+                    {
+                      "name": "parchment",
+                      "amount": "1 ",
+                      "text": ""
+                    }
+                  ]
+                },
+                {
+                  "action": {
+                    "tool": "hand",
+                    "verb": "line dish with parchment paper",
+                    "text": "fully lined",
+                    "time": "30 sec"
+                  }
+                }
+              ]
+            },
+            {
+              "title": "pack gnocchi",
+              "steps": [
+                {
+                  "ingredients": [
+                    {
+                      "name": "dumplings",
+                      "amount": "20 ",
+                      "text": ""
+                    }
+                  ]
+                },
+                {
+                  "action": {
+                    "tool": "board",
+                    "verb": "roll the cut dumplings onto parchment paper; arrange without touching other dumplings",
+                    "text": "layer is filled",
+                    "time": "10 sec"
+                  }
+                },
+                {
+                  "chill": {
+                    "text": "freeze",
+                    "until": "dumplings are frozen solid",
+                    "time": "2 hrs"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -23,6 +23,3 @@ _JINJA_TEMPLATE: jinja2.Template = jinja2.Environment(
 ).get_template("bwyd.jinja")
 
 _TEMPLATE_PATH: pathlib.Path = pathlib.Path(__file__).resolve().parent / "bwyd.jinja"
-
-
-

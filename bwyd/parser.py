@@ -8,7 +8,7 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 
 import pathlib
 
-import textx  # pylint: disable=E0401
+import textx  # type: ignore  # pylint: disable=E0401
 
 from .module import Module
 from .resources import _GRAMMAR_PATH
@@ -17,7 +17,7 @@ from .resources import _GRAMMAR_PATH
 ######################################################################
 ## parser/interpreter definitions
 
-class Bwyd:
+class Bwyd:  # pylint: disable=R0903
     """
 Bwyd DSL parser/interpreter.
     """

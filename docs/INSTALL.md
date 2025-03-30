@@ -2,9 +2,11 @@
 
   - `bwyd/__init__.py`: Bwyd package definitions
   - `bwyd/error.py`: Bwyd error handling
-  - `bwyd/module.py`: Bwyd module definition
-  - `bwyd/objects.py`: Bwyd language objects
+  - `bwyd/measure.py`: Bwyd language measurement objects
+  - `bwyd/module.py`: Bwyd module interpreter
+  - `bwyd/ops.py`: Bwyd language operations objects
   - `bwyd/parser.py`: Bwyd language parser
+  - `bwyd/structure.py`: Bwyd language structural objects
 
   - `tests/*.py`: unit tests
 
@@ -20,6 +22,7 @@
   - `demo.py`: Python demo app
   - `examples/gnocchi.bwyd`: example Gnocchi recipe in Bwyd, as a script
   - `examples/gnocchi.ipynb`: example Gnocchi recipe in Bwyd, as a Jupyter notebook
+  - `examples/gnocchi.json`: example Gnocchi recipe data model in JSON
 
 
 ## build a local environment

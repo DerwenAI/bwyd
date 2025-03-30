@@ -6,7 +6,7 @@ Measurement objects in the Bwyd language.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from fractions import Fraction
 import typing
 
@@ -47,14 +47,15 @@ Humanize imperial measurement ratios, for cups
 
         if amount <= 0.24:
             return cls.humanize_tsp(amount * 16.0)
-        elif amount >= 1.0:
+
+        if amount >= 1.0:
             human: str = cls.humanize_ratio(amount)
             #human: str = f"{round(amount, 2):.2f}"
         else:
             human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
 
         return f"{human} {units}"
-    
+
 
     @classmethod
     def humanize_tsp (
@@ -118,7 +119,7 @@ A data class representing one parsed Duration object.
 
     def normalize (
         self,
-        ) -> int:
+        ) -> float:
         """
 Return this duration normalized into seconds.
         """
@@ -148,14 +149,14 @@ Denormalize this duration into human-readable form.
 
         elif self.units == "sec":
             if self.amount > 3600:
-                hrs_amount: int = int(self.amount / 3600)
-                min_remain: int = self.amount % 3600
+                hrs_amount = int(self.amount / 3600)
+                min_remain = int(self.amount % 3600)
                 min_amount: int = int(min_remain / 60)
                 sec_remain: int = int(min_remain % 60)
                 readable = f"{hrs_amount:d} hrs, {min_amount:d} min, {sec_remain:d} sec"
             elif self.amount > 60:
-                min_amount: int = int(self.amount / 60)
-                sec_remain: int = int(self.amount % 60)
+                min_amount = int(self.amount / 60)
+                sec_remain = int(self.amount % 60)
                 readable = f"{min_amount:d} min, {sec_remain:d} sec"
 
         return readable

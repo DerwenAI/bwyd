@@ -24,9 +24,13 @@ if __name__ == "__main__":
         debug = True, # False
     )
 
-    # make a summary report
+    # output a JSON model, for use in unit tests
     print(json.dumps(
-        module.to_json(),
+        module.get_model(),
         indent = 2,
         sort_keys = False,
     ))
+
+    # render the Jinja2 HTML template
+    with open("gnoc.html", "w", encoding = "utf-8") as fp:
+        fp.write(module.render_template())

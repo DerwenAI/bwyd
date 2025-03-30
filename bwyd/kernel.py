@@ -29,13 +29,16 @@ Jupyter wrapper kernel
     }
 
 
-    def do_execute (  # pylint: disable=R0913
+    def do_execute (  # type: ignore  # pylint: disable=R0913,R0917
         self,
         code,
         silent,
         store_history = True,  # pylint: disable=W0613
         user_expressions = None,  # pylint: disable=W0613
         allow_stdin = False,  # pylint: disable=W0613
+        *,
+        cell_meta = None,
+        cell_id = None,
         ) -> dict:
         """
 Simply echo any given input to `stdout`
@@ -56,6 +59,17 @@ Simply echo any given input to `stdout`
             "payload": [],
             "user_expressions": {},
         }
+
+
+    def do_apply (
+        self,
+        content,
+        bufs,
+        msg_id,
+        reply_metadata,
+        ):
+        """DEPRECATED"""
+        raise NotImplementedError
 
 
 if __name__ == "__main__":

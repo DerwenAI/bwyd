@@ -11,6 +11,10 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 ## exception handling
 
 class BwydParserError (Exception):
+    """
+General parser exception for the Bwyd language.
+    """
+
     def __init__ (
         self,
         *args,

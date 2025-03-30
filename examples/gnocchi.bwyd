@@ -1,11 +1,11 @@
-// make some yummy gnocchi from root veggies
+TITLE: "Frozen Gnocchi Dumplings"
+TEXT: "Make some yummy gnocchi from root veggies."
+POST: "https://www.instagram.com/p/Csu0b4yLOyZ/"
 
-CLOSURE: "dough"
-    NOTE: "best to work with cold ingredients and chilled utensils"
+CLOSURE: dough
+    TEXT: "best to work with cold ingredients and chilled utensils"
 
     CONTAINER bowl: "chilled mixing bowl"
-    FOCUS bowl
-
     TOOL fork: "small fork or whisk"
     TOOL spatula: "silicone spatula"
 
@@ -15,6 +15,10 @@ CLOSURE: "dough"
     INGREDIENT ricotta: "whole milk ricotta"
     INGREDIENT parmesan: "grated parmesan"
     INGREDIENT nutmeg: "freshly grated nutmeg"
+
+    FOCUS bowl
+
+    ACTIVITY: "prep wet mix"
 
     ADD egg (1)
 
@@ -36,6 +40,8 @@ CLOSURE: "dough"
         UNTIL: "lightly blended"
 	TIME (30 sec)
 
+    ACTIVITY: "complete the dough"
+
     ADD flour (240 g) : "only until the dough becomes no longer sticky"
 
     ACTION spatula: "mix"
@@ -49,19 +55,21 @@ CLOSURE: "dough"
 YIELDS (800 g)
 
 
-CLOSURE: "dumplings"
-    NOTE: "divide dough into 8 pieces, rolling out one at a time"
+CLOSURE: dumplings
+    TEXT: "divide dough into 8 pieces, rolling out one at a time"
 
     CONTAINER mat: "floured rolling surface"
-    FOCUS mat
-
     TOOL hand: "clean hands"
     TOOL spoon: "large spoon"
     TOOL fork: "fork"
 
     USE dough: "dough"
-
     INGREDIENT flour: "rice, semolina, etc."
+
+    FOCUS mat
+
+    ACTIVITY: "make ropes"
+
     ADD flour (10 g)
 
     ACTION spoon: "spread"
@@ -74,6 +82,8 @@ CLOSURE: "dumplings"
         UNTIL: "2 cm diameter"
 	TIME (60 sec)
 
+    ACTIVITY: "make pillows"
+
     ACTION fork: "cut into 1 cm dumplings pieces, resembling little pillows"
         UNTIL: "entire rope is cut"
 	TIME (30 sec)
@@ -81,24 +91,29 @@ CLOSURE: "dumplings"
 YIELDS (20)
 
 
-CLOSURE: "frozen gnocchi"
+CLOSURE: gnocchi
     EXPORT: "frozen gnocchi dumplings"
-    NOTE: "add layers of dumplings to fill depth of baking dish"
+    TEXT: "add layers of dumplings to fill depth of baking dish"
 
     CONTAINER dish: "baking dish"
-    FOCUS dish
-
     TOOL hand: "clean hands"
     TOOL board: "gnocchi board or a fork"
 
     INGREDIENT parchment: "cut parchment paper"
+    USE dumplings: "raw cut dumplings"
+
+    FOCUS dish
+
+    ACTIVITY: "prep container"
+
     ADD parchment (1)
 
     ACTION hand: "line dish with parchment paper"
         UNTIL: "fully lined"
 	TIME (30 sec)
 
-    USE dumplings: "raw cut dumplings"
+    ACTIVITY: "pack gnocchi"
+
     ADD dumplings (20)
 
     ACTION board: "roll the cut dumplings onto parchment paper; arrange without touching other dumplings"

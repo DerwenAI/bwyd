@@ -10,12 +10,10 @@ from dataclasses import dataclass, field
 import itertools
 import typing
 
-from icecream import ic
-
-from .measure import Measure, Duration, Temperature
+from .measure import Measure
 
 from .ops import Dependency, DependencyDict, \
-    OpsTypes, OpAdd, OpAction, OpBake, OpChill
+    OpsTypes, OpAdd
 
 
 ######################################################################

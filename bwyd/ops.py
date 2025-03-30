@@ -7,7 +7,7 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
 from collections import OrderedDict
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import typing
 
 from .measure import Measure, Duration, Temperature
@@ -69,7 +69,7 @@ A data class representing a generic operation.
 
     def get_duration (
         self,
-        ) -> str:
+        ) -> Duration:
         """
 Stub: Total duration.
         """
@@ -97,7 +97,7 @@ Serializable representation for JSON.
 
         # show conversion, if available
         if self.symbol in converter:
-            imper_units, metric_units, ratio = converter[self.symbol]
+            _, metric_units, ratio = converter[self.symbol]
 
             if self.measure.units == metric_units:
                 imper_amount: float = self.measure.amount / ratio
@@ -123,7 +123,7 @@ A data class representing one Action object.
 
     def get_duration (
         self,
-        ) -> str:
+        ) -> Duration:
         """
 Duration of this operation.
         """
@@ -161,7 +161,7 @@ A data class representing one Bake object.
 
     def get_duration (
         self,
-        ) -> str:
+        ) -> Duration:
         """
 Duration of this operation.
         """
@@ -197,7 +197,7 @@ A data class representing one Chill object.
 
     def get_duration (
         self,
-        ) -> str:
+        ) -> Duration:
         """
 Duration of this operation.
         """

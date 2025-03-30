@@ -9,18 +9,17 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 from collections import OrderedDict
 from urllib.parse import ParseResult, urlparse
 import json
-import pathlib
 import typing
 
-from icecream import ic  # pylint: disable=E0401
+from icecream import ic  # type: ignore  # pylint: disable=E0401
 import jinja2
-import textx  # pylint: disable=E0401
+import textx  # type: ignore  # pylint: disable=E0401
 
 from .error import BwydParserError
 
 from .measure import Measure, Duration, Temperature
 
-from .ops import Dependency, DependencyDict, \
+from .ops import Dependency, \
     OpsTypes, OpAdd, OpAction, OpBake, OpChill
 
 from .resources import _CONVERT_PATH, _JINJA_TEMPLATE
@@ -35,7 +34,7 @@ class Module:
     """
 One parsed module.
     """
-    UNIT_CONVERT: dict = json.load(open(_CONVERT_PATH, "r", encoding = "utf-8"))
+    UNIT_CONVERT: dict = json.load(open(_CONVERT_PATH, "r", encoding = "utf-8"))  # pylint: disable=R1732
 
     def __init__ (
         self,
@@ -68,7 +67,7 @@ Make the image URL embeddable in an <iframe/>
 
     def get_model (
         self,
-        ) -> typing.Dict[ str, list ]:
+        ) -> dict:
         """
 Return a list of JSON-friendly dictionary representations,
 one for each parsed Closure.
@@ -84,7 +83,7 @@ one for each parsed Closure.
             for name, closure in self.closures.items()
         ]
 
-        ## TODO: structure the license spec in the language
+        ## FUCK: structure the license spec in the language
 
         return {
             "title": self.title,
@@ -96,8 +95,8 @@ one for each parsed Closure.
             "gallery": self.posts,
             "license": {
                 "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-                "image": "https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png",
-                "text": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License"
+                "image": "https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png",  # pylint: disable=C0301
+                "text": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License"  # pylint: disable=C0301
             },
             "closures": closure_list,
         }
@@ -107,7 +106,7 @@ one for each parsed Closure.
 ## validation
 
     @classmethod
-    def _validate_url (
+    def _validate_url (  # type: ignore  # pylint: disable=R1710
         cls,
         entity: typing.Any,
         ) -> str:
@@ -124,9 +123,9 @@ Helper method to parse one URL.
                     f"badly formatted URL `{url}` referenced at {loc}",
                     symbol = url,
                 )
-
             return url
-        except Exception as ex:
+
+        except Exception as ex:  # pylint: disable=W0718
             print(ex)
 
 
@@ -218,7 +217,7 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
             )
 
 
-    def _interpret_op (
+    def _interpret_op (  # pylint: disable=R0912
         self,
         closure: Closure,
         op_parse: typing.Any,
@@ -261,7 +260,7 @@ Interpret the steps within an activity.
                 text = op_parse.text,
             )
 
-        elif op_class_name == "Action":
+        if op_class_name == "Action":
             duration: Duration = Duration(
                 amount = op_parse.duration.amount,
                 units = op_parse.duration.units,
@@ -271,7 +270,7 @@ Interpret the steps within an activity.
                 ic(op_class_name, op_parse.symbol, op_parse.modifier, op_parse.until, duration)
 
             # resolve local reference
-            entity: typing.Optional[ typing.Any ] = None
+            entity = None
 
             if op_parse.symbol in closure.tools:
                 entity = closure.tools[op_parse.symbol]
@@ -280,11 +279,11 @@ Interpret the steps within an activity.
                 entity = closure.containers[op_parse.symbol]
                 entity.ref_count += 1
             else:
-                loc: dict = textx.get_location(op_parse)
+                loc = textx.get_location(op_parse)
 
                 raise BwydParserError(
                     f"ACTION OBJECT `{op_parse.symbol}` used but not defined {loc}",
-                    symbol = symbol,
+                    symbol = op_parse.symbol,
                 )
 
             return OpAction(
@@ -295,7 +294,7 @@ Interpret the steps within an activity.
                 duration = duration,
             )
 
-        elif op_class_name == "Bake":
+        if op_class_name == "Bake":
             temperature = Temperature(
                 amount = op_parse.temperature.amount,
                 units = op_parse.temperature.units,
@@ -307,14 +306,14 @@ Interpret the steps within an activity.
             )
 
             if debug:
-                ic(op_class_name, op_parse.symbol, op_parse.modifier, op_parse.until, temperature, duration)
+                ic(op_class_name, op_parse.symbol, op_parse.modifier, op_parse.until, temperature, duration)  # pylint: disable=C0301
 
             # resolve local reference
             if op_parse.symbol in closure.containers:
-                entity: typing.Any = closure.containers[op_parse.symbol]
+                entity = closure.containers[op_parse.symbol]
                 entity.ref_count += 1
             else:
-                loc: dict = textx.get_location(op_parse)
+                loc = textx.get_location(op_parse)
 
                 raise BwydParserError(
                     f"BAKE CONTAINER `{op_parse.symbol}` used but not defined {loc}",
@@ -331,7 +330,7 @@ Interpret the steps within an activity.
                 temperature = temperature,
             )
 
-        elif op_class_name == "Chill":
+        if op_class_name == "Chill":
             duration = Duration(
                 amount = op_parse.duration.amount,
                 units = op_parse.duration.units,
@@ -342,10 +341,10 @@ Interpret the steps within an activity.
 
             # resolve local reference
             if op_parse.symbol in closure.containers:
-                entity: typing.Any = closure.containers[op_parse.symbol]
+                entity = closure.containers[op_parse.symbol]
                 entity.ref_count += 1
             else:
-                loc: dict = textx.get_location(op_parse)
+                loc = textx.get_location(op_parse)
 
                 raise BwydParserError(
                     f"CHILL CONTAINER `{op_parse.symbol}` used but not defined {loc}",
@@ -405,14 +404,14 @@ Interpret the activities within a focus.
             focus.activities.append(act)
 
             for op_parse in activity.ops:
-                op_obj: OpsTypes = self._interpret_op(
+                op_obj: OpsTypes = self._interpret_op(  # type: ignore
                     closure,
                     op_parse,
                     debug = debug,
                 )
 
                 act.ops.append(op_obj)
- 
+
 
     def _interpret_ratio (
         self,
@@ -441,7 +440,7 @@ Interpret the components within a ratio.
                         symbol = part.symbol,
                     )
 
-            ## TODO: store representation of this ratio
+            ## FUCK: store representation of this ratio
 
 
     def _interpret_closure (  # pylint: disable=R0912,R0915
@@ -462,7 +461,7 @@ Helper method to interpret one Closure.
                 export = closure_parse.meta.export
 
             if closure_parse.meta.text is not None and len(closure_parse.meta.text) > 0:
-                text = closure_parse.meta.text            
+                text = closure_parse.meta.text
 
         closure: Closure = Closure(
             name = closure_parse.symbol,
@@ -540,13 +539,13 @@ Interpret one Bwyd module.
         """
 Accessor for the total duration of one Bwyd module.
         """
-        total_sec: int = sum([
+        total_sec: int = int(sum([  # type: ignore  # pylint: disable=R1728
             op.get_duration().normalize()
             for closure in self.closures.values()
             for focus in closure.foci
             for activity in focus.activities
             for op in activity.ops
-        ])
+        ]))
 
         return Duration(total_sec, "sec").humanize()
 
@@ -557,7 +556,7 @@ Accessor for the total duration of one Bwyd module.
         """
 Accessor for the total yield of one Bwyd module.
         """
-        return list(self.closures.values())[-1]["yields"]
+        return list(self.closures.values())[-1].yields.humanize()
 
 
 ######################################################################
