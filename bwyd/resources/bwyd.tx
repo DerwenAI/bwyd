@@ -19,17 +19,21 @@ Post:
 ;
 
 Closure:
-  "CLOSURE:" symbol=ID
+  "CLOSURE:" name=STRING
     meta=Closure_Metadata
     depend+=Dependency
     foci+=Focus
     ratio=Ratio?
-  "YIELDS" yields=Measure
+  prods+=Yield
 ;
 
 Closure_Metadata:
   ("EXPORT:" export=STRING)?
   ("TEXT:" text=STRING)?
+;
+
+Yield:
+"YIELDS" symbol=ID measure=Measure (intermediate="INTERMEDIATE")?
 ;
 
 Dependency:

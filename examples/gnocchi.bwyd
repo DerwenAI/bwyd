@@ -2,7 +2,7 @@ TITLE: "Frozen Gnocchi Dumplings"
 TEXT: "Make some yummy gnocchi from root veggies."
 POST: "https://www.instagram.com/p/Csu0b4yLOyZ/"
 
-CLOSURE: dough
+CLOSURE: "gnocchi dough"
     TEXT: "best to work with cold ingredients and chilled utensils"
 
     CONTAINER bowl: "chilled mixing bowl"
@@ -52,10 +52,10 @@ CLOSURE: dough
     	   starch [ puree, flour ],
 	   egg
 
-YIELDS (800 g)
+YIELDS dough (800 g) INTERMEDIATE
 
 
-CLOSURE: dumplings
+CLOSURE: "cut dumplings"
     TEXT: "divide dough into 8 pieces, rolling out one at a time"
 
     CONTAINER mat: "floured rolling surface"
@@ -88,11 +88,10 @@ CLOSURE: dumplings
         UNTIL: "entire rope is cut"
 	TIME (30 sec)
 
-YIELDS (20)
+YIELDS dumplings (20) INTERMEDIATE
 
 
-CLOSURE: gnocchi
-    EXPORT: "frozen gnocchi dumplings"
+CLOSURE: "frozen gnocchi for storage"
     TEXT: "add layers of dumplings to fill depth of baking dish"
 
     CONTAINER dish: "baking dish"
@@ -124,4 +123,4 @@ CLOSURE: gnocchi
         UNTIL: "dumplings are frozen solid"
         TIME (2 hrs)
 
-YIELDS (20)
+YIELDS frozen_gnocchi_dumplings (20)

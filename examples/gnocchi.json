@@ -2,7 +2,9 @@
   "title": "Frozen Gnocchi Dumplings",
   "text": "Make some yummy gnocchi from root veggies.",
   "duration": "2 hrs, 5 min, 40 sec",
-  "serves": "20 ",
+  "serves": [
+    "20 frozen gnocchi dumplings"
+  ],
   "image": "https://www.instagram.com/p/Csu0b4yLOyZ/embed",
   "sources": [],
   "gallery": [
@@ -15,8 +17,10 @@
   },
   "closures": [
     {
-      "title": "dough",
-      "yields": "800 g",
+      "title": "gnocchi dough",
+      "yields": [
+        "800 g dough"
+      ],
       "text": "best to work with cold ingredients and chilled utensils",
       "requires": [
         {
@@ -121,8 +125,10 @@
       ]
     },
     {
-      "title": "dumplings",
-      "yields": "20 ",
+      "title": "cut dumplings",
+      "yields": [
+        "20 dumplings"
+      ],
       "text": "divide dough into 8 pieces, rolling out one at a time",
       "requires": [
         {
@@ -202,8 +208,10 @@
       ]
     },
     {
-      "title": "gnocchi",
-      "yields": "20 ",
+      "title": "frozen gnocchi for storage",
+      "yields": [
+        "20 frozen gnocchi dumplings"
+      ],
       "text": "add layers of dumplings to fill depth of baking dish",
       "requires": [
         {

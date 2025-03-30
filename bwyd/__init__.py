@@ -19,7 +19,8 @@ from .ops import Dependency, DependencyDict, \
 
 from .parser import Bwyd
 
-from .structure import Activity, Focus, Closure
+from .structure import Product, \
+    Activity, Focus, Closure
 
 
 __version__ = "0.2"

@@ -24,7 +24,8 @@ from .ops import Dependency, \
 
 from .resources import _CONVERT_PATH, _JINJA_TEMPLATE
 
-from .structure import Activity, Focus, Closure
+from .structure import Product, \
+    Activity, Focus, Closure
 
 
 ######################################################################
@@ -57,7 +58,10 @@ Constructor.
         """
 Make the image URL embeddable in an <iframe/>
         """
-        img_url: str = self.posts[0]
+        img_url: str = ""
+
+        if len(self.posts) > 0:
+            img_url = self.posts[0]
 
         if "instagram.com" in img_url:
             return img_url + "embed"
@@ -75,7 +79,7 @@ one for each parsed Closure.
         closure_list: typing.List[ dict ] = [
             {
                 "title": name,
-                "yields": closure.yields.humanize(),
+                "yields": closure.total_yields(intermediaries = True),
                 "text": closure.text,
                 "requires": closure.get_dependencies(),
                 "foci": [ focus.get_model(self.UNIT_CONVERT) for focus in closure.foci ],
@@ -89,7 +93,7 @@ one for each parsed Closure.
             "title": self.title,
             "text": self.text,
             "duration": self.total_duration(),
-            "serves": closure_list[-1]["yields"],
+            "serves": self.total_yields(),
             "image": self.get_image(),
             "sources": self.cites,
             "gallery": self.posts,
@@ -135,7 +139,11 @@ Helper method to parse one URL.
         """
 Validate the forward references for one Bwyd module.
         """
-        local_names: typing.Set[ str ] = set(self.closures.keys())
+        local_names: typing.Set[ str ] = {
+            product.symbol
+            for closure in self.closures.values()
+            for product in closure.products
+        }
 
         for closure in self.closures.values():
             # check for zero reference counts
@@ -453,26 +461,34 @@ Interpret the components within a ratio.
 Helper method to interpret one Closure.
         """
         # ensure that "null" metadata values keep their semantics
-        export: typing.Optional[ str ] = None
         text: str = ""
 
         if closure_parse.meta is not None:
-            if closure_parse.meta.export is not None and len(closure_parse.meta.export) > 0:
-                export = closure_parse.meta.export
-
             if closure_parse.meta.text is not None and len(closure_parse.meta.text) > 0:
                 text = closure_parse.meta.text
 
         closure: Closure = Closure(
-            name = closure_parse.symbol,
+            name = closure_parse.name,
             obj = closure_parse,
-            yields = Measure(
-                amount = closure_parse.yields.amount,
-                units = closure_parse.yields.units,
-            ),
-            export = export,
             text = text,
         )
+
+        # interpret each product
+        for prod_parse in closure_parse.prods:
+            if debug:
+                ic(prod_parse.symbol, prod_parse.measure.amount, prod_parse.measure.units, prod_parse.intermediate)  # pylint: disable=C0301
+
+            closure.products.append(
+                Product(
+                    loc = textx.get_location(prod_parse),
+                    symbol = prod_parse.symbol,
+                    amount = Measure(
+                        amount = prod_parse.measure.amount,
+                        units = prod_parse.measure.units,
+                    ),
+                    intermediate = (prod_parse.intermediate == "INTERMEDIATE"),
+                )
+            )
 
         # resolve each dependency
         for depend_parse in closure_parse.depend:
@@ -521,7 +537,7 @@ Interpret one Bwyd module.
 
         # parse each `CLOSURE`
         for closure_parse in self.parse_tree.closures:
-            self.closures[closure_parse.symbol] = self._interpret_closure(
+            self.closures[closure_parse.name] = self._interpret_closure(
                 closure_parse,
                 debug = debug,
             )
@@ -550,13 +566,17 @@ Accessor for the total duration of one Bwyd module.
         return Duration(total_sec, "sec").humanize()
 
 
-    def total_yield (
+    def total_yields (
         self,
-        ) -> str:
+        ) -> typing.List[ str ]:
         """
-Accessor for the total yield of one Bwyd module.
+Accessor for the total, non-intermediate yields of one Bwyd module.
         """
-        return list(self.closures.values())[-1].yields.humanize()
+        return [
+            product
+            for closure in self.closures.values()
+            for product in closure.total_yields()
+        ]
 
 
 ######################################################################

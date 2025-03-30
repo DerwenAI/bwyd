@@ -94,7 +94,15 @@ summary {
 		      </tr>
 		      <tr>
 			<th scope="row">serves:</th>
-			<td>{{ module.serves }}</td>
+			<td>
+			  <ul class="list-group list-group-flush">
+			  {% for product in module.serves %}
+			  <li class="list-group-item" style="padding-top:0; padding-left:0;">
+			    {{ product }}
+			  </li>
+			  {% endfor %}
+			  </ul>
+			</td>
 		      </tr>
 		    </tbody>
 		  </table>
@@ -141,9 +149,15 @@ summary {
 	    </div>
 	    <div class="col ratio ratio-1x1">
 	      <!-- thumbnail -->
+	      {% if module.image|length %}
 	      <iframe
 		src="{{ module.image }}"
 		></iframe>
+	      {% else %}
+	      <img
+		src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdjOHv2zH8ACDcDZodV/EEAAAAASUVORK5CYII="
+		>
+	      {% endif %}
 	    </div>
 	  </div>
 	  <!-- recipe directions -->
@@ -163,7 +177,15 @@ summary {
 		    <div class="col">
 		      <div class="card" style="margin-bottom:1rem; max-width:93%;">
 			<div class="card-body">
-			  <h5 class="card-title">yields: {{ closure.yields }}</h5>
+			  <h5 class="card-title">yields:
+			    <ul class="list-group list-group-flush">
+			      {% for product in closure.yields %}
+			      <li class="list-group-item" style="padding-top:0; padding-left:2em;">
+				{{ product }}
+			      </li>
+			      {% endfor %}
+			    </ul>
+			  </h5>
 			  <p class="card-text">{{ closure.text }}</p>
 			</div>
 		      </div>
@@ -233,7 +255,13 @@ summary {
 				({{ val.time }})
 			      </div>
 			      {% elif key == "chill" -%}
-			      TODO
+			      <div style="margin:.5em 0 0 1em;">
+				<strong>{{ val.text }}</strong>
+				<br>
+				until <em>{{ val.until }}</em>
+				<br>
+				({{ val.time }})
+			      </div>
 			      {% endif %}
 			      {% endfor %}
 			      {% endfor %}

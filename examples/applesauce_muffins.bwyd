@@ -3,7 +3,7 @@ TEXT: "Our fam's fave muffin recipe is simple to make and yields muffins which a
 POST: "https://www.instagram.com/p/DHeymLVSUhG/"
 CITE: "https://www.beatbakeeat.com/best-applesauce-muffins-recipe-ever/"
 
-CLOSURE: batter
+CLOSURE: "prep batter"
     TEXT: "Muffins use pancake batter, then bake instead of pan fry."
 
     CONTAINER bowl: "chilled mixing bowl"
@@ -96,10 +96,10 @@ CLOSURE: batter
 	   egg,
 	   avocado_oil
 
-YIELDS (1 l)
+YIELDS batter (1 l) INTERMEDIATE
 
 
-CLOSURE: muffins
+CLOSURE: "bake muffins"
     EXPORT: "applesauce muffins"
     TEXT: "for large, moist, breakfast muffins"
 
@@ -141,4 +141,4 @@ CLOSURE: muffins
         UNTIL: "comes out with tiny crumbs"
         TIME (10 sec)
 
-YIELDS (8)
+YIELDS applesauce_muffins (8)

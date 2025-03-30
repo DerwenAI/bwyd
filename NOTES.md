@@ -1,24 +1,32 @@
 ## TODOs
 
   * scan a module to produce a total ingredients list
+  * define SLUG symbol
+  * licenses: https://spdx.org/licenses/CC-BY-NC-ND-4.0.html
+  * align BS style colors with Derwen palette
   * express conversions as function of densities
+  * PARALLEL/SERIAL for scaling durations
+  * override graph for densities, etc.
+  * schedule use of appliances: oven, fridge, range, instantpot, etc.
   * add a Corpus class to handle collections of parsed modules
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules
   * leverage `pydantic-graph` to build trees from directed cliques
   * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
-  
+  * embeddings based on ingredients, form
 
+  
 ## Taxonomy
 
 At the core, the configuration of the **Bwyd** language is based on a
 _knowledge graph_.
 
-  - ratios
   - ingredients
-  - techniques
   - tools, containers
-  - prepped components
+  - appliances
+  - techniques
   - conversions
+  - prepped itermediates
+  - ratios
   - substitutions
 
 

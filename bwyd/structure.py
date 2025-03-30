@@ -17,12 +17,27 @@ from .ops import Dependency, DependencyDict, \
 
 
 ######################################################################
+## yields classes
+
+@dataclass(order = False, frozen = False)
+class Product:  # pylint: disable=R0902
+    """
+A data class representing one Product object.
+    """
+    loc: dict
+    symbol: str
+    amount: Measure
+    intermediate: bool
+    ref_count: int = 0
+
+
+######################################################################
 ## structural classes
 
 @dataclass(order = False, frozen = False)
 class Activity:  # pylint: disable=R0902
     """
-A data class representing one Header object.
+A data class representing one Activity object.
     """
     text: str
     ops: typing.List[ OpsTypes ] = field(default_factory = lambda: [])
@@ -84,13 +99,12 @@ A data class representing one parsed Closure object.
     """
     name: str
     obj: typing.Any
-    yields: Measure
-    export: typing.Optional[ str ] = None
     text: str = ""
     containers: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     tools: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     ingredients: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     foci: typing.List[ Focus ] = field(default_factory = lambda: [])
+    products: typing.List[ Product ] = field(default_factory = lambda: [])
 
 
     def get_dependencies (
@@ -102,4 +116,18 @@ Serialized representation in JSON for the containers and tools.
         return [
             dep.get_model()
             for dep in itertools.chain(self.containers.values(), self.tools.values())
+        ]
+
+    def total_yields (
+        self,
+        *,
+        intermediaries: bool = False,
+        ) -> typing.List[ str ]:
+        """
+Accessor for the total, non-intermediate yields of one Closure object.
+        """
+        return [
+            f"{product.amount.humanize().strip()} {product.symbol}".replace("_", " ")
+            for product in self.products
+            if intermediaries or not product.intermediate
         ]
