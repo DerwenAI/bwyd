@@ -1,5 +1,11 @@
 # Bwyd cooking DSL
 
+Have you ever considered, "How does language generate food?"
+
+While not quite that, language does convey passion, desire, learnings
+-- all of which translate into preparing food to be shared lovingly.
+
+
 ## Abstract
 
 Goal: _Implement a DSL (domain specific language) to simplify means

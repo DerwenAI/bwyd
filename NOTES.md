@@ -5,6 +5,7 @@
   * licenses: https://spdx.org/licenses/CC-BY-NC-ND-4.0.html
   * align BS style colors with Derwen palette
   * express conversions as function of densities
+  * STORE, FERMENT, SAUTE
   * PARALLEL/SERIAL for scaling durations
   * override graph for densities, etc.
   * schedule use of appliances: oven, fridge, range, instantpot, etc.
