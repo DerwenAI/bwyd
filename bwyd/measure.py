@@ -34,6 +34,23 @@ Denormalize this measure into human-readable form.
         return html
 
 
+    def humanize_convert (
+        self,
+        symbol: str,
+        converter: dict,
+        ) -> str:
+        amount: str = self.humanize().strip()
+
+        if symbol in converter:
+            _, metric_units, ratio = converter[symbol]
+
+            if self.units == metric_units:
+                imper_amount: float = self.amount / ratio
+                amount += f" ({self.humanize_cup(imper_amount)})"
+
+        return amount
+
+
     @classmethod
     def humanize_cup (
         cls,

@@ -28,7 +28,6 @@ Closure:
 ;
 
 Closure_Metadata:
-  ("EXPORT:" export=STRING)?
   ("TEXT:" text=STRING)?
 ;
 

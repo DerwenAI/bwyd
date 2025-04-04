@@ -10,6 +10,36 @@
   "gallery": [
     "https://www.instagram.com/p/Csu0b4yLOyZ/"
   ],
+  "ingred": [
+    {
+      "amount": "1",
+      "text": "large chicken egg"
+    },
+    {
+      "amount": "250 g",
+      "text": "whole milk ricotta"
+    },
+    {
+      "amount": "50 g",
+      "text": "grated parmesan"
+    },
+    {
+      "amount": "1 g (1/8 tsp)",
+      "text": "freshly grated nutmeg"
+    },
+    {
+      "amount": "250 g",
+      "text": "reduced veggie pur\u00e9e"
+    },
+    {
+      "amount": "250 g (2 cup)",
+      "text": "flour: rice, oat, etc."
+    },
+    {
+      "amount": "1",
+      "text": "cut parchment paper"
+    }
+  ],
   "license": {
     "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
     "image": "https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png",
@@ -47,7 +77,7 @@
                   "ingredients": [
                     {
                       "name": "egg",
-                      "amount": "1 ",
+                      "amount": "1",
                       "text": ""
                     },
                     {
@@ -238,7 +268,7 @@
                   "ingredients": [
                     {
                       "name": "parchment",
-                      "amount": "1 ",
+                      "amount": "1",
                       "text": ""
                     }
                   ]
@@ -260,7 +290,7 @@
                   "ingredients": [
                     {
                       "name": "dumplings",
-                      "amount": "20 ",
+                      "amount": "20",
                       "text": ""
                     }
                   ]

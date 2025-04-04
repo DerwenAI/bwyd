@@ -100,7 +100,6 @@ YIELDS batter (1 l) INTERMEDIATE
 
 
 CLOSURE: "bake muffins"
-    EXPORT: "applesauce muffins"
     TEXT: "for large, moist, breakfast muffins"
 
     CONTAINER pan: "muffin pan, large size 8-hole"

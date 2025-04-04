@@ -84,6 +84,7 @@ A data class representing one Add object.
     symbol: str
     measure: Measure
     text: str
+    entity: Dependency
 
 
     def get_model (
@@ -93,15 +94,10 @@ A data class representing one Add object.
         """
 Serializable representation for JSON.
         """
-        amount: str = self.measure.humanize()
-
-        # show conversion, if available
-        if self.symbol in converter:
-            _, metric_units, ratio = converter[self.symbol]
-
-            if self.measure.units == metric_units:
-                imper_amount: float = self.measure.amount / ratio
-                amount += f" ({self.measure.humanize_cup(imper_amount)})"
+        amount: str = self.measure.humanize_convert(
+            self.symbol,
+            converter,
+        )
 
         return {
             "name": self.symbol,

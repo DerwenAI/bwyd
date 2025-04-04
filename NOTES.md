@@ -1,8 +1,7 @@
 ## TODOs
 
-  * scan a module to produce a total ingredients list
-  * define SLUG symbol
   * licenses: https://spdx.org/licenses/CC-BY-NC-ND-4.0.html
+  * define SLUG symbol
   * align BS style colors with Derwen palette
   * express conversions as function of densities
   * STORE, FERMENT, SAUTE

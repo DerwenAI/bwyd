@@ -79,6 +79,7 @@ summary {
 	      <nav>
 		<div class="nav nav-tabs" id="nav-tab" role="tablist" style="width:93%;">
 		  <button class="nav-link active" id="nav-info-tab" data-bs-toggle="tab" data-bs-target="#nav-info" type="button" role="tab" aria-controls="nav-info" aria-selected="true"><strong>Info</strong></button>
+		  <button class="nav-link" id="nav-ingred-tab" data-bs-toggle="tab" data-bs-target="#nav-ingred" type="button" role="tab" aria-controls="nav-ingred" aria-selected="false"><strong>Ingredients</strong></button>
 		  <button class="nav-link" id="nav-sources-tab" data-bs-toggle="tab" data-bs-target="#nav-sources" type="button" role="tab" aria-controls="nav-sources" aria-selected="false"><strong>Sources</strong></button>
 		  <button class="nav-link" id="nav-gallery-tab" data-bs-toggle="tab" data-bs-target="#nav-gallery" type="button" role="tab" aria-controls="nav-gallery" aria-selected="false"><strong>Gallery</strong></button>
 		</div>
@@ -104,6 +105,19 @@ summary {
 			  </ul>
 			</td>
 		      </tr>
+		    </tbody>
+		  </table>
+		</div>
+		<!-- ingred -->
+		<div class="tab-pane fade overflow-scroll" id="nav-ingred" role="tabpanel" aria-labelledby="nav-ingred-tab" tabindex="0" style="max-height:23rem;">
+		  <table class="table">
+		    <tbody>
+		      {% for ingr in module.ingred %}
+		      <tr>
+			<td>{{ ingr.amount }}</td>
+			<th>{{ ingr.text }}</th>
+		      </tr>
+		      {% endfor %}
 		    </tbody>
 		  </table>
 		</div>

@@ -97,6 +97,16 @@ one for each parsed Closure.
             "image": self.get_image(),
             "sources": self.cites,
             "gallery": self.posts,
+            "ingred": [
+                {
+                    "amount": measure.humanize_convert(
+                        entity.symbol,
+                        self.UNIT_CONVERT,
+                    ),
+                    "text": entity.text,
+                }
+                for entity, measure in self.iter_ingredients()
+            ],
             "license": {
                 "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
                 "image": "https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png",  # pylint: disable=C0301
@@ -250,8 +260,10 @@ Interpret the steps within an activity.
                 ic(op_class_name, op_parse.symbol, measure, op_parse.text)
 
             # resolve local reference
+            entity: typing.Optional[ typing.Any ] = None
+
             if op_parse.symbol in closure.ingredients:
-                entity: typing.Any = closure.ingredients[op_parse.symbol]
+                entity = closure.ingredients[op_parse.symbol]
                 entity.ref_count += 1
             else:
                 loc: dict = textx.get_location(op_parse)
@@ -266,6 +278,7 @@ Interpret the steps within an activity.
                 symbol = op_parse.symbol,
                 measure = measure,
                 text = op_parse.text,
+                entity = entity
             )
 
         if op_class_name == "Action":
@@ -578,6 +591,39 @@ Accessor for the total, non-intermediate yields of one Bwyd module.
             for product in closure.total_yields()
         ]
 
+
+    def iter_ingredients (
+        self,
+        ) -> typing.Iterator[typing.Tuple[ Dependency, Measure ]]:
+        """
+Iterator for the aggregate ingredients in one Bwyd module.
+        """
+        ing: OrderedDict = OrderedDict()
+
+        for closure in self.closures.values():
+            for focus in closure.foci:
+                for activity in focus.activities:
+                    for op in activity.ops:
+                        if isinstance(op, OpAdd) and not op.entity.external:
+                            measure: bwyd.Measure = op.measure
+                            name: str = op.entity.symbol
+
+                            if name not in ing:
+                                ing[name] = [
+                                    op.entity,
+                                    Measure(
+                                        amount = measure.amount,
+                                        units = measure.units,
+                                    ),
+                                ]
+                            elif measure.units == ing[name][1].units:
+                                ing[name][1].amount += measure.amount
+                            else:
+                                raise Exception(f"wrong units: {measure.units}")
+
+        for entity, measure in ing.values():
+            yield entity, measure
+            
 
 ######################################################################
 ## Jinja2 template rendering
