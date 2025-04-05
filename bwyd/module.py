@@ -40,11 +40,14 @@ One parsed module.
     def __init__ (
         self,
         parse_tree: typing.Any,
+        *,
+        slug: typing.Optional[ str ] = None,
         ) -> None:
         """
 Constructor.
         """
         self.parse_tree: typing.Any = parse_tree
+        self.slug: typing.Optional[ str ] = None,
         self.title: str = ""
         self.text: str = ""
         self.cites: typing.List[ str ] = []

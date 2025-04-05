@@ -1,19 +1,22 @@
 ## TODOs
 
-  * licenses: https://spdx.org/licenses/CC-BY-NC-ND-4.0.html
-  * define SLUG symbol
+  * LICENSE: https://spdx.org/licenses/CC-BY-NC-ND-4.0.html
+  * NOTES as collapsable <summary/>
+  * add metadata for UPDATED, AUTHOR
   * align BS style colors with Derwen palette
   * express conversions as function of densities
+  * download `.bwyd` source
   * STORE, FERMENT, SAUTE
-  * PARALLEL/SERIAL for scaling durations
   * override graph for densities, etc.
+  * PARALLEL/SERIAL for scaling durations
+  * generate `LanceDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
+  * use `BAML` to parse recipe elements for the DSL
+  * use `textX-LS` to generate a VS Code extension
   * schedule use of appliances: oven, fridge, range, instantpot, etc.
   * add a Corpus class to handle collections of parsed modules
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules
   * leverage `pydantic-graph` to build trees from directed cliques
   * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
-  * embeddings based on ingredients, form
-
   
 ## Taxonomy
 
@@ -81,6 +84,6 @@ content?
   - <https://skrub-data.org/stable/reference/generated/skrub.GapEncoder.html>
   - <https://huggingface.co/docs/setfit/index>
 
-Q: Can we use AI building blocks (e.g., language models, causal
-graphs, reinforcement learning, etc.) to restate sequences of `Step`
+Q: Can we use AI building blocks (e.g., language models, BAML functions,
+causal graphs, reinforcement learning, etc.) to restate sequences of `Step`
 procedures, i.e., to improve recipes?

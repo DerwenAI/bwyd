@@ -15,11 +15,16 @@ import bwyd
 
 
 if __name__ == "__main__":
+    slug: str = "applesauce_muffins"
+    muff_path: pathlib.Path = pathlib.Path("examples") / f"{slug}.bwyd"
+
     # parse an example Bwyd module
     module: bwyd.Module = bwyd.Bwyd.parse(
-        pathlib.Path("examples/applesauce_muffins.bwyd"),
+        muff_path,
+        slug = slug,
         debug = False, # True
     )
+
 
     # interpret the parsed module
     module.interpret(

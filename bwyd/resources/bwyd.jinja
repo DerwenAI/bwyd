@@ -78,21 +78,17 @@ summary {
 	      <!-- module metadata -->
 	      <nav>
 		<div class="nav nav-tabs" id="nav-tab" role="tablist" style="width:93%;">
-		  <button class="nav-link active" id="nav-info-tab" data-bs-toggle="tab" data-bs-target="#nav-info" type="button" role="tab" aria-controls="nav-info" aria-selected="true"><strong>Info</strong></button>
+		  <button class="nav-link active" id="nav-details-tab" data-bs-toggle="tab" data-bs-target="#nav-details" type="button" role="tab" aria-controls="nav-details" aria-selected="true"><strong>Details</strong></button>
 		  <button class="nav-link" id="nav-ingred-tab" data-bs-toggle="tab" data-bs-target="#nav-ingred" type="button" role="tab" aria-controls="nav-ingred" aria-selected="false"><strong>Ingredients</strong></button>
 		  <button class="nav-link" id="nav-sources-tab" data-bs-toggle="tab" data-bs-target="#nav-sources" type="button" role="tab" aria-controls="nav-sources" aria-selected="false"><strong>Sources</strong></button>
 		  <button class="nav-link" id="nav-gallery-tab" data-bs-toggle="tab" data-bs-target="#nav-gallery" type="button" role="tab" aria-controls="nav-gallery" aria-selected="false"><strong>Gallery</strong></button>
 		</div>
 	      </nav>
 	      <div class="tab-content" id="nav-tabContent">
-		<!-- info -->
-		<div class="tab-pane fade show active" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab" tabindex="0">
+		<!-- details -->
+		<div class="tab-pane fade show active" id="nav-details" role="tabpanel" aria-labelledby="nav-details-tab" tabindex="0">
 		  <table class="table" style="max-width:23rem;">
 		    <tbody>
-		      <tr>
-			<th scope="row">duration:</th>
-			<td>{{ module.duration }}</td>
-		      </tr>
 		      <tr>
 			<th scope="row">serves:</th>
 			<td>
@@ -104,6 +100,10 @@ summary {
 			  {% endfor %}
 			  </ul>
 			</td>
+		      </tr>
+		      <tr>
+			<th scope="row">duration:</th>
+			<td>{{ module.duration }}</td>
 		      </tr>
 		    </tbody>
 		  </table>
@@ -195,7 +195,7 @@ summary {
 			    <ul class="list-group list-group-flush">
 			      {% for product in closure.yields %}
 			      <li class="list-group-item" style="padding-top:0; padding-left:2em;">
-				{{ product }}
+				<strong>{{ product }}</strong>
 			      </li>
 			      {% endfor %}
 			    </ul>
@@ -235,7 +235,7 @@ summary {
 			    <div class="alert alert-secondary" role="alert" style="margin-bottom:0;">
 			      {{ act.title }}
 			    </div>
-			    <div class="card-text" style="margin:0;">
+			    <div class="card-text" style="margin:0; padding-bottom:1em;">
 			      {% for step_dict in act.steps %}
 			      {% for key, val in step_dict.items() %}
 			      {% if key == "ingredients" -%}
@@ -253,7 +253,8 @@ summary {
 			      <div style="margin:.5em 0 0 1em;">
 				with <span class="badge text-bg-primary" style="font-size:1.1em;">{{ val.tool }}</span>:
 				<br>
-				{{ val.verb }} until <em>{{ val.text }}</em>
+				<strong>{{ val.verb }}</strong>
+				until <em>{{ val.text }}</em>
 				<br>
 				({{ val.time }})
 			      </div>

@@ -7,6 +7,7 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
 import pathlib
+import typing
 
 import textx  # type: ignore  # pylint: disable=E0401
 
@@ -32,6 +33,7 @@ Bwyd DSL parser/interpreter.
         cls,
         script: pathlib.Path,
         *,
+        slug: typing.Optional[ str ] = None,
         debug: bool = False,
         ) -> Module:
         """
@@ -41,5 +43,6 @@ Parse one Bywd module (a file).
             cls.META_MODEL.model_from_file(
                 script,
                 debug = debug,
-            )
+            ),
+            slug = slug,
         )

@@ -137,7 +137,7 @@ CLOSURE: "bake muffins"
         TIME (20 min)
 
     ACTION fork: "test doneness"
-        UNTIL: "comes out with tiny crumbs"
+        UNTIL: "fork comes out with tiny crumbs"
         TIME (10 sec)
 
 YIELDS applesauce_muffins (8)

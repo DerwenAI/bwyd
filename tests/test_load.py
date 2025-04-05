@@ -13,8 +13,8 @@ import json
 import pathlib
 import sys
 
-TEST_DIR: pathlib.Path = pathlib.Path(__file__).resolve().parent.parent / "examples"
-sys.path.insert(0, str(TEST_DIR))
+EXAMPLES_DIR: pathlib.Path = pathlib.Path(__file__).resolve().parent.parent / "examples"
+sys.path.insert(0, str(EXAMPLES_DIR))
 import bwyd  # pylint: disable=C0413,E0401
 
 
@@ -25,8 +25,12 @@ def test_parser (
     """
 Load a sample file to ensure the parser works correctly.
     """
+    slug: str = "gnocchi"
+    gnoc_path: pathlib.Path = EXAMPLES_DIR / f"{slug}.bwyd"
+
     module: bwyd.Module = bwyd.Bwyd.parse(
-        TEST_DIR / "gnocchi.bwyd",
+        gnoc_path,
+        slug = slug,
         debug = False, # True
     )
 
@@ -39,7 +43,8 @@ Load a sample file to ensure the parser works correctly.
     if debug:
         print(json.dumps(obs_data, indent = 2, sort_keys = False,))
 
-    exp_data: dict = json.load(open(TEST_DIR / "gnocchi.json", "r", encoding = "utf-8"))  # pylint: disable=R1732
+    json_path: pathlib.Path = EXAMPLES_DIR / f"{slug}.json"
+    exp_data: dict = json.load(open(json_path, "r", encoding = "utf-8"))  # pylint: disable=R1732
 
     # compare
     assert sorted(obs_data.items()) == sorted(exp_data.items())

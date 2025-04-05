@@ -13,9 +13,13 @@ import bwyd
 
 
 if __name__ == "__main__":
+    slug: str = "gnocchi"
+    gnoc_path: pathlib.Path = pathlib.Path("examples") / f"{slug}.bwyd"
+
     # parse an example Bwyd module
     module: bwyd.Module = bwyd.Bwyd.parse(
-        pathlib.Path("examples/gnocchi.bwyd"),
+        gnoc_path,
+        slug = slug,
         debug = False, # True
     )
 
