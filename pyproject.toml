@@ -10,15 +10,24 @@ build-backend = "poetry.core.masonry.api"
 [project]
 
 name = "bwyd"
-version = "0.0.1"
-description = "The seed crazy idea here is to consider how human cooks behave like robots, following recipes as instructions."
 
-authors = [
-    { name = "Paco Nathan", email = "paco@derwen.ai" }
+dynamic = [
+    "classifiers",
+    "version",
 ]
 
+description = "The seed crazy idea here is to consider how human cooks behave like robots, following recipes as instructions."
+license = { text = "MIT" }
+
 readme = "README.md"
-license = { file = "LICENSE" }
+
+authors = [
+    { name = "derwen.ai", email = "info@derwen.ai" }
+]
+
+maintainers = [
+    { name = "Paco Nathan", email = "paco@derwen.ai" }
+]
 
 requires-python = ">=3.11"
 
@@ -30,8 +39,23 @@ dependencies = [
     "jinja2 (>=3.1.6,<4.0.0)"
 ]
 
+keywords = [
+    "cooking",
+    "dsl",
+    "knowledge-graph",
+    "nlp",
+    "publishing",
+    "recipes",
+    "validation",
+]
+
+
+[tool.poetry]
+
+version = "0.0.2"
+
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Intended Audience :: Developers",
@@ -42,6 +66,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Human Machine Interfaces",
     "Topic :: Scientific/Engineering :: Information Analysis",
     "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Software Development :: Build Tools",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Text Processing :: Indexing",
     "Topic :: Text Processing :: Linguistic",
@@ -52,7 +77,7 @@ classifiers = [
 
 [project.urls]
 
-code = "https://github.com/DerwenAI/bwyd"
+repository = "https://github.com/DerwenAI/bwyd"
 
 
 [project.optional-dependencies]

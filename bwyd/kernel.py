@@ -14,16 +14,16 @@ class BwydKernel (Kernel):  # pylint: disable=R0903
     """
 Jupyter wrapper kernel
     """
-    banner = "Bwyd kernel -- DSL for cooking"
-
-    implementation_version = "0.2"
     implementation = "Bwyd"
+    implementation_version = "1.0"
 
-    language_version = "0.1"
+    banner = "Bwyd kernel: a DSL for cooking"
+
     language = "no-op"
+    language_version = "1.0"
 
     language_info = {
-        "name": "Any text",
+        "name": "Bwyd",
         "mimetype": "text/plain",
         "file_extension": ".bwyd",
     }
@@ -41,7 +41,8 @@ Jupyter wrapper kernel
         cell_id = None,
         ) -> dict:
         """
-Simply echo any given input to `stdout`
+Simply echo any given input to `stdout`.
+See: <https://ipython-books.github.io/16-creating-a-simple-kernel-for-jupyter/>
         """
         if not silent:
             self.send_response(
