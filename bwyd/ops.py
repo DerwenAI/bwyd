@@ -107,6 +107,27 @@ Serializable representation for JSON.
 
 
 @dataclass(order = False, frozen = False)
+class OpNote (OpGeneric):  # pylint: disable=R0902
+    """
+A data class representing one Note object.
+    """
+    text: str
+
+
+    def get_model (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "note": {
+                "text": self.text,
+            }
+        }
+
+
+@dataclass(order = False, frozen = False)
 class OpAction (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Action object.
@@ -215,4 +236,4 @@ Serializable representation for JSON.
         }
 
 
-OpsTypes = typing.Union[ OpAdd, OpAction, OpBake, OpChill ]
+OpsTypes = typing.Union[ OpAdd, OpNote, OpAction, OpBake, OpChill ]

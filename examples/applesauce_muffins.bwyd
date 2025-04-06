@@ -1,5 +1,5 @@
 TITLE: "Applesauce Breakfast Muffins"
-TEXT: "Our fam's fave muffin recipe is simple to make and yields muffins which are soft, moist, high-protein, high-fiber, and packed with flavor."
+TEXT: "Our fam-fave muffin recipe is simple to make and yields muffins which are soft, moist, high-protein, high-fiber, and packed with flavor."
 LICENSE: "CC-BY-NC-SA-4.0"
 POST: "https://www.instagram.com/p/DHeymLVSUhG/"
 CITE: "https://www.beatbakeeat.com/best-applesauce-muffins-recipe-ever/"
@@ -76,6 +76,8 @@ CLOSURE: "prep batter"
     ADD dried_cranberries (40 g)
     // 1/3 cup fresh or dried berries
     
+    NOTE: "so many items can be substituted here: blueberries/cranberries, hazelnuts/walnutes, carrot/coconut ..."
+
     ACTION spatula: "fold"
         UNTIL: "lightly blended"
 	TIME (1 min)

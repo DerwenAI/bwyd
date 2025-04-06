@@ -15,7 +15,7 @@ from .measure import Measure, Duration, Temperature
 from .module import Module
 
 from .ops import Dependency, DependencyDict, \
-    OpsTypes, OpAdd, OpAction, OpBake, OpChill
+    OpsTypes, OpAdd, OpAction, OpBake, OpChill, OpNote
 
 from .parser import Bwyd
 

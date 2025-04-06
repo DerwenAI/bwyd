@@ -106,6 +106,13 @@ a {
     text-decoration: none !important;
 }
 
+details summary {
+    list-style-type:none;
+    font-size: 1.3em;
+    margin-left:.5em;
+    color:hsl(306, 45%, 57%);
+}
+
     </style>
     <title>{{ module.title }}</title>
   </head>
@@ -113,20 +120,28 @@ a {
     <div id="main" class="container-fluid">
       <main>
 	<div class="container">
-	  <h1 style="font-weight:bold; margin:.5em 0 .5em 0;">{{ module.title }}</h1>
+	  <h1
+	    style="font-weight:bold; margin:.5em 0 .5em 0;"
+	    >{{ module.title }}</h1>
 	  <div class="row">
 	    <div class="col">
 	      <!-- module description -->
-	      <div class="card" style="width:93%;">
+	      <div class="card"
+		   style="width:93%;"
+		   >
 		<div class="card-body">
-		  <p class="card-text" style="margin-top:0;">{{ module.text }}</p>
+		  <p class="card-text"
+		     style="margin-top:0;"
+		     >{{ module.text }}</p>
 		</div>
 	      </div>
 	    </div>
 	    <div class="col-6">
 	      <!-- module metadata -->
 	      <nav>
-		<div class="nav nav-tabs" id="nav-tab" role="tablist" style="width:93%;">
+		<div class="nav nav-tabs" id="nav-tab" role="tablist"
+		     style="width:93%;"
+		     >
 		  <button class="nav-link active" id="nav-details-tab" data-bs-toggle="tab" data-bs-target="#nav-details" type="button" role="tab" aria-controls="nav-details" aria-selected="true"><strong>Details</strong></button>
 		  <button class="nav-link" id="nav-ingred-tab" data-bs-toggle="tab" data-bs-target="#nav-ingred" type="button" role="tab" aria-controls="nav-ingred" aria-selected="false"><strong>Ingredients</strong></button>
 		  <button class="nav-link" id="nav-sources-tab" data-bs-toggle="tab" data-bs-target="#nav-sources" type="button" role="tab" aria-controls="nav-sources" aria-selected="false"><strong>Sources</strong></button>
@@ -136,14 +151,18 @@ a {
 	      <div class="tab-content" id="nav-tabContent">
 		<!-- details -->
 		<div class="tab-pane fade show active" id="nav-details" role="tabpanel" aria-labelledby="nav-details-tab" tabindex="0">
-		  <table class="table" style="max-width:23rem;">
+		  <table class="table"
+			 style="max-width:23rem;"
+			 >
 		    <tbody>
 		      <tr>
 			<th scope="row">serves:</th>
 			<td>
 			  <ul class="list-group list-group-flush">
 			  {% for product in module.details.serves %}
-			  <li class="list-group-item" style="padding-top:0; padding-left:0;">
+			  <li class="list-group-item"
+			      style="padding-top:0; padding-left:0;"
+			      >
 			    {{ product }}
 			  </li>
 			  {% endfor %}
@@ -158,7 +177,9 @@ a {
 		  </table>
 		</div>
 		<!-- ingred -->
-		<div class="tab-pane fade overflow-scroll" id="nav-ingred" role="tabpanel" aria-labelledby="nav-ingred-tab" tabindex="0" style="max-height:23rem;">
+		<div class="tab-pane fade overflow-scroll" id="nav-ingred" role="tabpanel" aria-labelledby="nav-ingred-tab" tabindex="0"
+		     style="max-height:23rem;"
+		     >
 		  <table class="table">
 		    <tbody>
 		      {% for ingr in module.ingredients %}
@@ -230,7 +251,9 @@ a {
 	    <div class="accordion-item">
 	      <h3 class="accordion-header">
 		<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="true" aria-controls="collapse{{ loop.index }}">
-		  <span style="font-weight:bold; font-size:1.4em;">{{ closure.title }}</span>
+		  <span
+		    style="font-weight:bold; font-size:1.4em;"
+		    >{{ closure.title }}</span>
 		</button>
 	      </h3>
 	      <div id="collapse{{ loop.index }}" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
@@ -238,18 +261,23 @@ a {
 		  <div class="row">
 		    <!-- closure metadata -->
 		    <div class="col">
-		      <div class="card" style="margin-bottom:1rem; max-width:93%;">
+		      <div class="card"
+			   style="margin-bottom:1rem; max-width:93%;"
+			   >
 			<div class="card-body">
 			  <h5 class="card-title">yields:
-			    <ul class="list-group list-group-flush">
-			      {% for product in closure.yields %}
-			      <li class="list-group-item" style="padding-top:0; padding-left:2em;">
-				<strong>{{ product }}</strong>
-			      </li>
-			      {% endfor %}
-			    </ul>
+			    {% for product in closure.yields %}
+			    <br>
+			    <span
+			      style="padding-top:0; padding-left:2em;"
+			      >
+			      <strong>{{ product }}</strong>
+			    </span>
+			    {% endfor %}
 			  </h5>
-			  <p class="card-text" style="margin-top:0;">{{ closure.text }}</p>
+			  <p class="card-text"
+			     style="margin-top:0;"
+			     >{{ closure.text }}</p>
 			</div>
 		      </div>
 		    </div>
@@ -271,8 +299,13 @@ a {
 		  <!-- focus -->
 		  <dl>
 		    <dt>
-		      <p style="margin-top:0;">
-			into <span class="badge text-bg-primary" style="font-size:1.1em;">{{ focus.container }}</span><strong>&nbsp;:</strong>
+		      <p
+			style="margin-top:0;"
+			>
+			into
+			<span class="badge text-bg-primary"
+			      style="font-size:1.1em;"
+			      >{{ focus.container }}</span><strong>&nbsp;:</strong>
 		      </p>
 		    </dt>
 		    {% for act in focus.activities %}
@@ -280,14 +313,34 @@ a {
 		    <dd>
 		      <div class="row">
 			<div class="col">
-			  <div class="card" style="width:93%;">
-			    <div class="alert alert-secondary" role="alert" style="margin-bottom:0;">
+			  <div class="card"
+			       style="width:93%;"
+			       >
+			    <div class="alert alert-secondary" role="alert"
+				 style="margin-bottom:0;"
+				 >
 			      {{ act.title }}
 			    </div>
-			    <div class="card-text" style="margin:0; padding-bottom:1em;">
+			    <div class="card-text"
+				 style="margin:0; padding-bottom:1em;"
+				 >
 			      {% for step_dict in act.steps %}
 			      {% for key, val in step_dict.items() %}
-			      {% if key == "ingredients" -%}
+			      {% if key == "note" -%}
+			      <details
+				>
+				<summary><i class="bi bi-journal-text"></i></summary>
+				<div class="alert alert-tertiary" role="alert"
+				     style="margin-bottom:0; padding:1em; background-color:hsl(308, 16%, 82%);"
+				     >
+				  <p
+				    style="margin:0;"
+				    >
+				    {{ val.text }}
+				  </p>
+				</div>
+			      </details>
+			      {% elif key == "ingredients" -%}
 			      <ul class="list-group list-group-flush">
 				{% for item in val %}
 				<li class="list-group-item">
@@ -299,17 +352,26 @@ a {
 				{% endfor %}
 			      </ul>
 			      <hr>
+
 			      {% elif key == "action" -%}
-			      <div style="margin:.5em 0 0 1em;">
-				with <span class="badge text-bg-primary" style="font-size:1.1em;">{{ val.tool }}</span><strong>&nbsp;:</strong>
+			      <div
+				style="margin:.5em 0 0 1em;"
+				>
+				with
+				<span class="badge text-bg-primary"
+				      style="font-size:1.1em;"
+				      >{{ val.tool }}</span><strong>&nbsp;:</strong>
 				<br>
 				<strong>{{ val.verb }}</strong>
 				until <em>{{ val.text }}</em>
 				<br>
 				({{ val.time }})
 			      </div>
+
 			      {% elif key == "bake" -%}
-			      <div style="margin:.5em 0 0 1em;">
+			      <div
+				style="margin:.5em 0 0 1em;"
+				>
 				<strong>{{ val.mode }}</strong> at <strong>{{ val.temperature }}</strong> 
 				{% if val.text|length %}
 				<em>– {{ val.text }}</em>
@@ -319,14 +381,18 @@ a {
 				<br>
 				({{ val.time }})
 			      </div>
+
 			      {% elif key == "chill" -%}
-			      <div style="margin:.5em 0 0 1em;">
+			      <div
+				style="margin:.5em 0 0 1em;"
+				>
 				<strong>{{ val.text }}</strong>
 				<br>
 				until <em>{{ val.until }}</em>
 				<br>
 				({{ val.time }})
 			      </div>
+
 			      {% endif %}
 			      {% endfor %}
 			      {% endfor %}
@@ -349,14 +415,24 @@ a {
 	  <!-- license -->
 	  {% set lic = module.license %}
 	  <footer>
-	    <div id="footer" style="margin: 2em 2em 0 0;">
-	      <div id="footer-thumb" style="float:left;">
+	    <div id="footer"
+		 style="margin: .5em 1em 0 0; font-size:smaller;"
+		 >
+	      <div id="footer-thumb"
+		   style="float:left;"
+		   >
 		<img
-		src="data:image/svg+xml,%3Csvg width='1200pt' height='1200pt' viewBox='0 0 1200 1200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath transform='matrix(20.339 0 0 20.339 172.88 20.339)' d='m5.8647 56.692v-31.278l-5.8647-4.8871v-20.526' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath transform='matrix(-20.339 0 0 20.339 727.69 20.339)' d='m16.572 56.692v-31.278l-5.8647-4.8871v-20.526' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath transform='matrix(20.339 0 0 20.339 172.88 20.339)' d='m5.3535 0.48864v17.621' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath transform='matrix(20.339 0 0 20.339 172.88 20.339)' d='m11.218 0.48864v17.621' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath transform='matrix(20.339 0 0 -20.339 172.88 1179.9)' d='m28.143 54.228v-30.963c-10.857-15.882-9.9048-23.632 2.8572-23.251 12.762 0.38085 13.667 8.1313 2.7142 23.251v30.963c0 1.5384-1.247 2.7856-2.7856 2.7856s-2.7858-1.2472-2.7858-2.7856z' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cpath transform='matrix(20.339 0 0 20.339 172.88 20.339)' d='m29 38c-1.9999 2.6667-3.6666 6.0001-5 10' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
-		style="height:3em; padding:.1em; float:left;">
+		  src="data:image/svg+xml,%3Csvg width='1200pt' height='1200pt' viewBox='0 0 1200 1200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath transform='matrix(20.339 0 0 20.339 172.88 20.339)' d='m5.8647 56.692v-31.278l-5.8647-4.8871v-20.526' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath transform='matrix(-20.339 0 0 20.339 727.69 20.339)' d='m16.572 56.692v-31.278l-5.8647-4.8871v-20.526' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath transform='matrix(20.339 0 0 20.339 172.88 20.339)' d='m5.3535 0.48864v17.621' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath transform='matrix(20.339 0 0 20.339 172.88 20.339)' d='m11.218 0.48864v17.621' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath transform='matrix(20.339 0 0 -20.339 172.88 1179.9)' d='m28.143 54.228v-30.963c-10.857-15.882-9.9048-23.632 2.8572-23.251 12.762 0.38085 13.667 8.1313 2.7142 23.251v30.963c0 1.5384-1.247 2.7856-2.7856 2.7856s-2.7858-1.2472-2.7858-2.7856z' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cpath transform='matrix(20.339 0 0 20.339 172.88 20.339)' d='m29 38c-1.9999 2.6667-3.6666 6.0001-5 10' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+		  alt="Bwyd logo"
+		  style="height:3em; padding:.1em; float:left;"
+		  >
 	      </div>
-	      <div id="footer-content" style="font-size:smaller; float:left;">
-		<p style="font-size:smaller; float:left;">
+	      <div id="footer-content"
+		   style="float:left;"
+		   >
+		<p
+		  style="float:left; margin:0;"
+		  >
 		  {% if lic is not none %}
   		  license:
 		  <strong>
@@ -368,7 +444,7 @@ a {
 		  </strong>
 		  <br>
 		  {% endif %}
-		  powered by:
+		  powered by
 		  <a
 		    href="https://github.com/DerwenAI/bwyd"
 		    target="_blank"

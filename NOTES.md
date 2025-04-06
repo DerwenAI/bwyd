@@ -1,17 +1,17 @@
 ## TODOs
 
-  * NOTES as collapsable <summary/>
-  * add metadata for UPDATED, AUTHOR
-  * express conversions as function of densities
-  * download `.bwyd` source
+  * add a Corpus class to handle collections of parsed modules
+  * Corpus: traverse and convert a directory
+  * Conversion: as a class, simplify extensions
   * STORE, FERMENT, SAUTE
-  * override graph for densities, etc.
+  * add metadata for UPDATED, AUTHOR
+  * download `.bwyd` source
+  * refactor style into CSS
   * PARALLEL/SERIAL for scaling durations
   * generate `LanceDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
   * use `BAML` to parse recipe elements for the DSL
   * use `textX-LS` to generate a VS Code extension
   * schedule use of appliances: oven, fridge, range, instantpot, etc.
-  * add a Corpus class to handle collections of parsed modules
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules
   * leverage `pydantic-graph` to build trees from directed cliques
   * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)

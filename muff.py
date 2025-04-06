@@ -34,4 +34,5 @@ if __name__ == "__main__":
     #data: dict = module.get_model()
 
     # render the Jinja2 template
-    print(module.render_template())
+    html: str = module.render_template()
+    print(html)

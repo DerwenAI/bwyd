@@ -14,6 +14,7 @@ import typing
 from icecream import ic  # type: ignore  # pylint: disable=E0401
 from spdx_tools.spdx.validation.spdx_id_validators import is_valid_internal_spdx_id
 import jinja2
+import minify_html
 import spdx_license_list
 import textx  # type: ignore  # pylint: disable=E0401
 
@@ -22,7 +23,7 @@ from .error import BwydParserError
 from .measure import Measure, Duration, Temperature
 
 from .ops import Dependency, \
-    OpsTypes, OpAdd, OpAction, OpBake, OpChill
+    OpsTypes, OpAdd, OpAction, OpBake, OpChill, OpNote
 
 from .resources import _CONVERT_PATH, _JINJA_TEMPLATE
 
@@ -270,7 +271,7 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
             )
 
 
-    def _interpret_op (  # pylint: disable=R0912
+    def _interpret_op (  # pylint: disable=R0912,R0915
         self,
         closure: Closure,
         op_parse: typing.Any,
@@ -283,7 +284,7 @@ Interpret the steps within an activity.
         op_class_name: str = op_parse.__class__.__name__
 
         if debug:
-            ic(op_parse, op_parse.symbol)
+            ic(op_parse)
 
         if op_class_name == "Add":
             measure: Measure = Measure(
@@ -313,7 +314,16 @@ Interpret the steps within an activity.
                 symbol = op_parse.symbol,
                 measure = measure,
                 text = op_parse.text,
-                entity = entity
+                entity = entity,
+            )
+
+        if op_class_name == "Note":
+            if debug:
+                ic(op_class_name, op_parse.text)
+
+            return OpNote(
+                loc = textx.get_location(op_parse),
+                text = op_parse.text,
             )
 
         if op_class_name == "Action":
@@ -672,10 +682,23 @@ Iterator for the aggregate ingredients in one Bwyd module.
         self,
         *,
         template: jinja2.Template = _JINJA_TEMPLATE,
+        minify: bool = True,
         ) -> str:
         """
-Load a Jinja2 template and render the data model as HTML.
+Load a Jinja2 template and render the data model as HTML,
+which is by default minified.
         """
-        return template.render(
+        html: str = template.render(
             module = self.get_model()
         )
+
+        if minify:
+            return minify_html.minify(  # pylint: disable=E1101
+                html,
+                keep_html_and_head_opening_tags = True,
+                minify_css = True,
+                minify_js = True,
+                remove_processing_instructions = True,
+            )
+
+        return html

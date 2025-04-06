@@ -69,11 +69,15 @@ Activity:
 ;
 
 Op:
-  Add | Action | Bake | Chill
+  Add | Note | Action | Bake | Chill
 ;
 
 Add:
   "ADD" symbol=ID measure=Measure (":" text=STRING)?
+;
+
+Note:
+  "NOTE:" text=STRING
 ;
 
 Measure:
