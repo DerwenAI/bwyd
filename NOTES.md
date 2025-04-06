@@ -1,6 +1,5 @@
 ## TODOs
 
-  * align BS style colors with Derwen palette
   * NOTES as collapsable <summary/>
   * add metadata for UPDATED, AUTHOR
   * express conversions as function of densities

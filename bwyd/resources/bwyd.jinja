@@ -57,6 +57,55 @@ button,
 summary {
     cursor: pointer;
 }
+
+button.nav-link:hover {
+    color: white !important;
+    background-color: hsl(289, 17%, 49%) !important;
+}
+
+.nav-link {
+    color: hsl(306, 45%, 57%);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: hsl(65, 46%, 58%);
+}
+
+.accordion-button.collapsed {
+    background-color: hsl(308, 16%, 82%);
+}
+
+.text-bg-primary {
+    color: hsl(289, 17%, 49%) !important;
+    background-color: hsl(65, 46%, 58%) !important;
+}
+
+.alert-secondary {
+    color: white;
+    background-color: hsl(55, 17%, 49%);
+    font-weight: bold;
+}
+
+a {
+    color: hsl(55, 17%, 49%);
+    background-color: white;
+    font-weight: bold;
+}
+
+a:visited {
+    color: hsl(55, 17%, 49%);
+    background-color: white;
+}
+
+a:hover {
+    color: white;
+    background-color: hsl(55, 17%, 49%);
+}
+
+a {
+    text-decoration: none !important;
+}
+
     </style>
     <title>{{ module.title }}</title>
   </head>
@@ -64,7 +113,7 @@ summary {
     <div id="main" class="container-fluid">
       <main>
 	<div class="container">
-	  <h1 style="margin:.5em 0 .5em 0;">{{ module.title }}</h1>
+	  <h1 style="font-weight:bold; margin:.5em 0 .5em 0;">{{ module.title }}</h1>
 	  <div class="row">
 	    <div class="col">
 	      <!-- module description -->
@@ -200,7 +249,7 @@ summary {
 			      {% endfor %}
 			    </ul>
 			  </h5>
-			  <p class="card-text">{{ closure.text }}</p>
+			  <p class="card-text" style="margin-top:0;">{{ closure.text }}</p>
 			</div>
 		      </div>
 		    </div>
@@ -222,8 +271,8 @@ summary {
 		  <!-- focus -->
 		  <dl>
 		    <dt>
-		      <p>
-			into <span class="badge text-bg-primary" style="font-size:1.1em;">{{ focus.container }}:</span>
+		      <p style="margin-top:0;">
+			into <span class="badge text-bg-primary" style="font-size:1.1em;">{{ focus.container }}</span><strong>&nbsp;:</strong>
 		      </p>
 		    </dt>
 		    {% for act in focus.activities %}
@@ -249,9 +298,10 @@ summary {
 				</li>
 				{% endfor %}
 			      </ul>
+			      <hr>
 			      {% elif key == "action" -%}
 			      <div style="margin:.5em 0 0 1em;">
-				with <span class="badge text-bg-primary" style="font-size:1.1em;">{{ val.tool }}</span>:
+				with <span class="badge text-bg-primary" style="font-size:1.1em;">{{ val.tool }}</span><strong>&nbsp;:</strong>
 				<br>
 				<strong>{{ val.verb }}</strong>
 				until <em>{{ val.text }}</em>
@@ -299,25 +349,32 @@ summary {
 	  <!-- license -->
 	  {% set lic = module.license %}
 	  <footer>
-	    <div id="footer">
-	      <p style="font-size:smaller;">
-		{% if lic is not none %}
-		license:
-		<stgrong>
-		<a
-		  href="https://spdx.org/licenses/{{ lic.id }}.html"
-		  target="_blank"
-		  rel="license"
-		  >{{ lic.name }}</a>
-		</strong>
-		<br>
-		{% endif %}
-		powered by:
-		<a
-		  href="https://github.com/DerwenAI/bwyd"
-		  target="_blank"
-		  >Bwyd</a>
-	      </p>
+	    <div id="footer" style="margin: 2em 2em 0 0;">
+	      <div id="footer-thumb" style="float:left;">
+		<img
+		src="data:image/svg+xml,%3Csvg width='1200pt' height='1200pt' viewBox='0 0 1200 1200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath transform='matrix(20.339 0 0 20.339 172.88 20.339)' d='m5.8647 56.692v-31.278l-5.8647-4.8871v-20.526' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath transform='matrix(-20.339 0 0 20.339 727.69 20.339)' d='m16.572 56.692v-31.278l-5.8647-4.8871v-20.526' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath transform='matrix(20.339 0 0 20.339 172.88 20.339)' d='m5.3535 0.48864v17.621' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath transform='matrix(20.339 0 0 20.339 172.88 20.339)' d='m11.218 0.48864v17.621' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3Cpath transform='matrix(20.339 0 0 -20.339 172.88 1179.9)' d='m28.143 54.228v-30.963c-10.857-15.882-9.9048-23.632 2.8572-23.251 12.762 0.38085 13.667 8.1313 2.7142 23.251v30.963c0 1.5384-1.247 2.7856-2.7856 2.7856s-2.7858-1.2472-2.7858-2.7856z' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cpath transform='matrix(20.339 0 0 20.339 172.88 20.339)' d='m29 38c-1.9999 2.6667-3.6666 6.0001-5 10' fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+		style="height:3em; padding:.1em; float:left;">
+	      </div>
+	      <div id="footer-content" style="font-size:smaller; float:left;">
+		<p style="font-size:smaller; float:left;">
+		  {% if lic is not none %}
+  		  license:
+		  <strong>
+		    <a
+		      href="https://spdx.org/licenses/{{ lic.id }}.html"
+		      target="_blank"
+		      rel="license"
+		      >{{ lic.name }}</a>
+		  </strong>
+		  <br>
+		  {% endif %}
+		  powered by:
+		  <a
+		    href="https://github.com/DerwenAI/bwyd"
+		    target="_blank"
+		    >Bwyd</a>
+		</p>
+	      </div>
             </div>
 	  </footer>
 	</div>
