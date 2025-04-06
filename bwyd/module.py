@@ -13,6 +13,7 @@ import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
 from spdx_tools.spdx.validation.spdx_id_validators import is_valid_internal_spdx_id
+from upath import UPath
 import jinja2
 import minify_html
 import spdx_license_list
@@ -71,8 +72,11 @@ Make the image URL embeddable in an <iframe/>
         if len(self.posts) > 0:
             img_url = self.posts[0]
 
-        if "instagram.com" in img_url:
-            return img_url + "embed"
+        host: typing.Optional[ str ] = urlparse(img_url).hostname
+
+        if host and host.endswith(".instagram.com"):
+            embed: UPath = UPath(img_url) / "embed"
+            return embed.as_posix()
 
         return img_url
 
