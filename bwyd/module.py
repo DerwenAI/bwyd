@@ -12,7 +12,9 @@ import json
 import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
+from spdx_tools.spdx.validation.spdx_id_validators import is_valid_internal_spdx_id
 import jinja2
+import spdx_license_list
 import textx  # type: ignore  # pylint: disable=E0401
 
 from .error import BwydParserError
@@ -31,7 +33,7 @@ from .structure import Product, \
 ######################################################################
 ## module definitions
 
-class Module:
+class Module:  # pylint: disable=R0902
     """
 One parsed module.
     """
@@ -47,12 +49,14 @@ One parsed module.
 Constructor.
         """
         self.parse_tree: typing.Any = parse_tree
-        self.slug: typing.Optional[ str ] = None,
+        self.slug: typing.Optional[ str ] = slug
         self.title: str = ""
         self.text: str = ""
         self.cites: typing.List[ str ] = []
         self.posts: typing.List[ str ] = []
         self.closures: typing.Dict[ str, Closure ] = OrderedDict()
+        self.spdx_id: typing.Optional[ str ] = None
+        self.spdx_name: typing.Optional[ str ] = None
 
 
     def get_image (
@@ -90,17 +94,23 @@ one for each parsed Closure.
             for name, closure in self.closures.items()
         ]
 
-        ## FUCK: structure the license spec in the language
+        spdx_license: typing.Optional[ dict ] = None
+
+        if self.spdx_id is not None:
+            spdx_license = {
+                "id": self.spdx_id,
+                "name": self.spdx_name,
+            }
 
         return {
             "title": self.title,
             "text": self.text,
-            "duration": self.total_duration(),
-            "serves": self.total_yields(),
-            "image": self.get_image(),
-            "sources": self.cites,
-            "gallery": self.posts,
-            "ingred": [
+            "license": spdx_license,
+            "details": {
+                "duration": self.total_duration(),
+                "serves": self.total_yields(),
+            },
+            "ingredients": [
                 {
                     "amount": measure.humanize_convert(
                         entity.symbol,
@@ -110,17 +120,39 @@ one for each parsed Closure.
                 }
                 for entity, measure in self.iter_ingredients()
             ],
-            "license": {
-                "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-                "image": "https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png",  # pylint: disable=C0301
-                "text": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License"  # pylint: disable=C0301
-            },
+            "sources": self.cites,
+            "gallery": self.posts,
+            "image": self.get_image(),
+
             "closures": closure_list,
         }
 
 
 ######################################################################
 ## validation
+
+    def _validate_license (
+        self,
+        lic_parse: typing.Any,
+        ) -> None:
+        """
+Helper method to validate an SPDX license identifier.
+See: <https://spdx.org/licenses/>
+        """
+        spdx_id: str = lic_parse.spdx_id
+        valid_ref: bool = is_valid_internal_spdx_id(f"SPDXRef-{spdx_id}")
+
+        if not valid_ref or spdx_id not in spdx_license_list.LICENSES:
+            loc: dict = textx.get_location(lic_parse)
+
+            raise BwydParserError(
+                f"unknown SPDX license ID `{spdx_id}` referenced at {loc}",
+                symbol = spdx_id,
+            )
+
+        self.spdx_id = spdx_id
+        self.spdx_name = spdx_license_list.LICENSES[spdx_id].name
+
 
     @classmethod
     def _validate_url (  # type: ignore  # pylint: disable=R1710
@@ -541,15 +573,19 @@ Helper method to interpret one Closure.
         """
 Interpret one Bwyd module.
         """
-        # parse the metadata
-        self.title = self.parse_tree.meta.title
-        self.text = self.parse_tree.meta.text
+        self.title = self.parse_tree.title
+        self.text = self.parse_tree.text
 
-        for cite in self.parse_tree.meta.cites:
-            self.cites.append(self._validate_url(cite))
+        # parse the optional metadata
+        for meta_parse in self.parse_tree.meta:
+            meta_class_name: str = meta_parse.__class__.__name__
 
-        for post in self.parse_tree.meta.posts:
-            self.posts.append(self._validate_url(post))
+            if meta_class_name == "License":
+                self._validate_license(meta_parse)
+            elif meta_class_name == "Cite":
+                self.cites.append(self._validate_url(meta_parse))
+            elif meta_class_name == "Post":
+                self.posts.append(self._validate_url(meta_parse))
 
         # parse each `CLOSURE`
         for closure_parse in self.parse_tree.closures:
@@ -603,12 +639,12 @@ Iterator for the aggregate ingredients in one Bwyd module.
         """
         ing: OrderedDict = OrderedDict()
 
-        for closure in self.closures.values():
+        for closure in self.closures.values():  # pylint: disable=R1702
             for focus in closure.foci:
                 for activity in focus.activities:
                     for op in activity.ops:
                         if isinstance(op, OpAdd) and not op.entity.external:
-                            measure: bwyd.Measure = op.measure
+                            measure: Measure = op.measure
                             name: str = op.entity.symbol
 
                             if name not in ing:
@@ -622,11 +658,12 @@ Iterator for the aggregate ingredients in one Bwyd module.
                             elif measure.units == ing[name][1].units:
                                 ing[name][1].amount += measure.amount
                             else:
-                                raise Exception(f"wrong units: {measure.units}")
+                                error_msg: str = f"wrong units for ingredient list: {measure.units}"
+                                raise RuntimeError(error_msg)
 
         for entity, measure in ing.values():
             yield entity, measure
-            
+
 
 ######################################################################
 ## Jinja2 template rendering

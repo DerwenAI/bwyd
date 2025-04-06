@@ -1,16 +1,17 @@
 {
   "title": "Frozen Gnocchi Dumplings",
   "text": "Make some yummy gnocchi from root veggies.",
-  "duration": "2 hrs, 5 min, 40 sec",
-  "serves": [
-    "20 frozen gnocchi dumplings"
-  ],
-  "image": "https://www.instagram.com/p/Csu0b4yLOyZ/embed",
-  "sources": [],
-  "gallery": [
-    "https://www.instagram.com/p/Csu0b4yLOyZ/"
-  ],
-  "ingred": [
+  "license": {
+    "id": "CC-BY-NC-SA-4.0",
+    "name": "Creative Commons Attribution Non Commercial Share Alike 4.0 International"
+  },
+  "details": {
+    "duration": "2 hrs, 5 min, 40 sec",
+    "serves": [
+      "20 frozen gnocchi dumplings"
+    ]
+  },
+  "ingredients": [
     {
       "amount": "1",
       "text": "large chicken egg"
@@ -40,11 +41,11 @@
       "text": "cut parchment paper"
     }
   ],
-  "license": {
-    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-    "image": "https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png",
-    "text": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License"
-  },
+  "sources": [],
+  "gallery": [
+    "https://www.instagram.com/p/Csu0b4yLOyZ/"
+  ],
+  "image": "https://www.instagram.com/p/Csu0b4yLOyZ/embed",
   "closures": [
     {
       "title": "gnocchi dough",

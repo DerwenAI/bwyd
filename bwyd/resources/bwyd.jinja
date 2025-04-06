@@ -93,7 +93,7 @@ summary {
 			<th scope="row">serves:</th>
 			<td>
 			  <ul class="list-group list-group-flush">
-			  {% for product in module.serves %}
+			  {% for product in module.details.serves %}
 			  <li class="list-group-item" style="padding-top:0; padding-left:0;">
 			    {{ product }}
 			  </li>
@@ -103,7 +103,7 @@ summary {
 		      </tr>
 		      <tr>
 			<th scope="row">duration:</th>
-			<td>{{ module.duration }}</td>
+			<td>{{ module.details.duration }}</td>
 		      </tr>
 		    </tbody>
 		  </table>
@@ -112,7 +112,7 @@ summary {
 		<div class="tab-pane fade overflow-scroll" id="nav-ingred" role="tabpanel" aria-labelledby="nav-ingred-tab" tabindex="0" style="max-height:23rem;">
 		  <table class="table">
 		    <tbody>
-		      {% for ingr in module.ingred %}
+		      {% for ingr in module.ingredients %}
 		      <tr>
 			<td>{{ ingr.amount }}</td>
 			<th>{{ ingr.text }}</th>
@@ -297,22 +297,28 @@ summary {
 	    {% endfor %}
 	  </div>
 	  <!-- license -->
+	  {% set lic = module.license %}
 	  <footer>
 	    <div id="footer">
-	      <p>
+	      <p style="font-size:smaller;">
+		{% if lic is not none %}
+		license:
+		<stgrong>
 		<a
-		  href="{{ module.license.url }}"
+		  href="https://spdx.org/licenses/{{ lic.id }}.html"
 		  target="_blank"
 		  rel="license"
-		  ><img
-		     src="{{ module.license.image }}"
-		     alt="{{ module.license.text }}"
-		     style="width:4em;"
-		     >
-		  <br>
-		  <small>{{ module.license.text }}</small></a>
+		  >{{ lic.name }}</a>
+		</strong>
+		<br>
+		{% endif %}
+		powered by:
+		<a
+		  href="https://github.com/DerwenAI/bwyd"
+		  target="_blank"
+		  >Bwyd</a>
 	      </p>
-	    </div>
+            </div>
 	  </footer>
 	</div>
       </main>

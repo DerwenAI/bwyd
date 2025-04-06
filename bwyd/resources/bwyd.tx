@@ -1,13 +1,16 @@
 Module:
-  meta=Module_Metadata
+  "TITLE:" title=STRING
+  "TEXT:" text=STRING
+  meta+=Module_Metadata
   closures+=Closure
 ;
 
 Module_Metadata:
-  "TITLE:" title=STRING
-  "TEXT:" text=STRING
-  posts+=Post
-  cites*=Cite
+  License | Post | Cite
+;
+
+License:
+  "LICENSE:" spdx_id=STRING
 ;
 
 Cite:

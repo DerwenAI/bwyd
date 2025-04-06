@@ -1,9 +1,8 @@
 ## TODOs
 
-  * LICENSE: https://spdx.org/licenses/CC-BY-NC-ND-4.0.html
+  * align BS style colors with Derwen palette
   * NOTES as collapsable <summary/>
   * add metadata for UPDATED, AUTHOR
-  * align BS style colors with Derwen palette
   * express conversions as function of densities
   * download `.bwyd` source
   * STORE, FERMENT, SAUTE

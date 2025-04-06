@@ -39,6 +39,10 @@ Denormalize this measure into human-readable form.
         symbol: str,
         converter: dict,
         ) -> str:
+        """
+Denormalize this measure into human-readable form, with an
+imperial conversion if available.
+        """
         amount: str = self.humanize().strip()
 
         if symbol in converter:
