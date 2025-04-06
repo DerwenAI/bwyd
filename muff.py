@@ -15,12 +15,12 @@ import bwyd
 
 
 if __name__ == "__main__":
+    examples_path: pathlib.Path = pathlib.Path("examples")
     slug: str = "applesauce_muffins"
-    muff_path: pathlib.Path = pathlib.Path("examples") / f"{slug}.bwyd"
 
     # parse an example Bwyd module
     module: bwyd.Module = bwyd.Bwyd.parse(
-        muff_path,
+        examples_path / f"{slug}.bwyd",
         slug = slug,
         debug = False, # True
     )
@@ -33,6 +33,6 @@ if __name__ == "__main__":
 
     #data: dict = module.get_model()
 
-    # render the Jinja2 template
-    html: str = module.render_template()
-    print(html)
+    # render the Jinja2 HTML template
+    with open(examples_path / f"{slug}.html", "w", encoding = "utf-8") as fp:
+        fp.write(module.render_template())

@@ -1,6 +1,5 @@
 # local
-gnoc.html
-muff.html
+examples/*.html
 *.dot
 *~
 

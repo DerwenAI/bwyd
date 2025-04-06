@@ -13,12 +13,12 @@ import bwyd
 
 
 if __name__ == "__main__":
+    examples_path: pathlib.Path = pathlib.Path("examples")
     slug: str = "gnocchi"
-    gnoc_path: pathlib.Path = pathlib.Path("examples") / f"{slug}.bwyd"
 
     # parse an example Bwyd module
     module: bwyd.Module = bwyd.Bwyd.parse(
-        gnoc_path,
+        examples_path / f"{slug}.bwyd",
         slug = slug,
         debug = False, # True
     )
@@ -29,12 +29,13 @@ if __name__ == "__main__":
     )
 
     # output a JSON model, for use in unit tests
-    print(json.dumps(
-        module.get_model(),
-        indent = 2,
-        sort_keys = False,
-    ))
+    with open(examples_path / f"{slug}.json", "w", encoding = "utf-8") as fp:
+        fp.write(json.dumps(
+            module.get_model(),
+            indent = 2,
+            sort_keys = False,
+        ))
 
     # render the Jinja2 HTML template
-    with open("gnoc.html", "w", encoding = "utf-8") as fp:
+    with open(examples_path / f"{slug}.html", "w", encoding = "utf-8") as fp:
         fp.write(module.render_template())
