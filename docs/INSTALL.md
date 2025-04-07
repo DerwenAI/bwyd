@@ -8,8 +8,6 @@
   - `bwyd/parser.py`: Bwyd language parser
   - `bwyd/structure.py`: Bwyd language structural objects
 
-  - `tests/*.py`: unit tests
-
   - `bwyd/resources/bwyd.tx`: Bwyd language grammar in `textX`
   - `bwyd/resources/bwyd.svg`: Bwyd icon
   - `bwyd/resources/bwyd.jinja`: Jinja2 HTML template
@@ -19,10 +17,12 @@
   - `bwyd/install.py`: Jupyter kernel installer
   - `bwyd/kernel.py`: Jupyter wrapper kernel
 
+  - `tests/*.py`: unit tests
+
   - `demo.py`: Python demo app
-  - `examples/gnocchi.bwyd`: example Gnocchi recipe in Bwyd, as a script
-  - `examples/gnocchi.ipynb`: example Gnocchi recipe in Bwyd, as a Jupyter notebook
-  - `examples/gnocchi.json`: example Gnocchi recipe data model in JSON
+  - `examples/*.bwyd`: example recipes as Bwyd scripts
+  - `examples/*.ipynb`: example recipes in Bwyd as Jupyter notebooks
+  - `examples/*.json`: example recipes data model in JSON files
 
 
 ## build a local environment
@@ -61,16 +61,21 @@ poetry run jupyter-lab
 
 ## development
 
-First, to set up the `dev` and `test` environment:
+To set up the `test` and `dev` environments:
 
 ```bash
-poetry install --extras=dev
 poetry install --extras=test
+poetry install --extras=dev
 ```
 
 ```bash
 poetry run pytest
+poetry run mypy bwyd
+poetry run pylint bwyd
 ```
+
+To validate the generated HTML:
+<https://validator.w3.org/nu/#file>
 
 
 ######################################################################
