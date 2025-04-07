@@ -1,7 +1,5 @@
 ## TODOs
 
-  * add a Corpus class to handle collections of parsed modules
-  * Corpus: traverse and convert a directory
   * Conversion: as a class, simplify extensions
   * STORE, FERMENT, SAUTE
   * add metadata for UPDATED, AUTHOR

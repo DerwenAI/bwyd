@@ -1,6 +1,7 @@
 ## files
 
   - `bwyd/__init__.py`: Bwyd package definitions
+  - `bwyd/corpus.py`: Bwyd corpus management
   - `bwyd/error.py`: Bwyd error handling
   - `bwyd/measure.py`: Bwyd language measurement objects
   - `bwyd/module.py`: Bwyd module interpreter
