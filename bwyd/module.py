@@ -601,11 +601,11 @@ Interpret one Bwyd module.
         # parse the optional metadata
         for meta_parse in self.parse_tree.meta:
             meta_class_name: str = meta_parse.__class__.__name__
+            loc: dict = textx.get_location(meta_parse)
 
             if meta_class_name == "License":
                 if self.spdx_id is not None:
                     # do not allow multiple licenses
-                    loc: dict = textx.get_location(meta_parse)
                     spdx_id: str = meta_parse.spdx_id
 
                     raise BwydParserError(
@@ -616,6 +616,15 @@ Interpret one Bwyd module.
                 self._validate_license(meta_parse)
 
             elif meta_class_name == "Updated":
+                if self.updated is not None:
+                    # do not allow multiple dates
+                    updated: str = meta_parse.date
+
+                    raise BwydParserError(
+                        f"redundant dates `{updated}` referenced at {loc}",
+                        symbol = updated,
+                    )
+
                 self.updated = dateutil.parser.parse(meta_parse.date).date()
 
             elif meta_class_name == "Cite":
