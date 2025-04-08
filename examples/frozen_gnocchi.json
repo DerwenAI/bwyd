@@ -6,10 +6,11 @@
     "name": "Creative Commons Attribution Non Commercial Share Alike 4.0 International"
   },
   "details": {
-    "duration": "2 hrs, 5 min, 40 sec",
     "serves": [
       "20 frozen gnocchi dumplings"
-    ]
+    ],
+    "duration": "2 hrs, 5 min, 40 sec",
+    "updated": "2023-04-10"
   },
   "ingredients": [
     {
@@ -41,9 +42,12 @@
       "text": "cut parchment paper"
     }
   ],
-  "sources": [],
+  "sources": [
+    "https://www.prouditaliancook.com/2020/11/butternut-squash-gnocchi-with-sage-and-brown-butter.html"
+  ],
   "gallery": [
-    "https://www.instagram.com/p/Csu0b4yLOyZ/"
+    "https://www.instagram.com/p/Csu0b4yLOyZ/",
+    "https://www.instagram.com/p/CqwO9KIPuCR/"
   ],
   "image": "https://www.instagram.com/p/Csu0b4yLOyZ/embed",
   "closures": [

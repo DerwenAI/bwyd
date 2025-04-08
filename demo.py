@@ -14,7 +14,7 @@ import bwyd
 
 if __name__ == "__main__":
     examples_path: pathlib.Path = pathlib.Path("examples")
-    slug: str = "gnocchi"
+    slug: str = "frozen_gnocchi"
 
     # parse an example Bwyd module
     module: bwyd.Module = bwyd.Bwyd.parse(

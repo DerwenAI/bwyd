@@ -2,7 +2,7 @@
 
   * Conversion: as a class, simplify extensions
   * STORE, FERMENT, SAUTE
-  * add metadata for UPDATED, AUTHOR
+  * add metadata for AUTHOR
   * download `.bwyd` source
   * refactor style into CSS
   * PARALLEL/SERIAL for scaling durations

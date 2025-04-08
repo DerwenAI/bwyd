@@ -8,12 +8,14 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 
 from collections import OrderedDict
 from urllib.parse import ParseResult, urlparse
+import datetime
 import json
 import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
 from spdx_tools.spdx.validation.spdx_id_validators import is_valid_internal_spdx_id
 from upath import UPath
+import dateutil
 import jinja2
 import minify_html
 import spdx_license_list
@@ -56,9 +58,10 @@ Constructor.
         self.text: str = ""
         self.cites: typing.List[ str ] = []
         self.posts: typing.List[ str ] = []
-        self.closures: typing.Dict[ str, Closure ] = OrderedDict()
         self.spdx_id: typing.Optional[ str ] = None
         self.spdx_name: typing.Optional[ str ] = None
+        self.updated: typing.Optional[ datetime.date ] = None
+        self.closures: typing.Dict[ str, Closure ] = OrderedDict()
 
 
     def get_image (
@@ -100,6 +103,7 @@ one for each parsed Closure.
         ]
 
         spdx_license: typing.Optional[ dict ] = None
+        updated: typing.Optional[ str ] = None
 
         if self.spdx_id is not None:
             spdx_license = {
@@ -107,13 +111,17 @@ one for each parsed Closure.
                 "name": self.spdx_name,
             }
 
+        if self.updated is not None:
+            updated = self.updated.isoformat()
+
         return {
             "title": self.title,
             "text": self.text,
             "license": spdx_license,
             "details": {
-                "duration": self.total_duration(),
                 "serves": self.total_yields(),
+                "duration": self.total_duration(),
+                "updated": updated,
             },
             "ingredients": [
                 {
@@ -595,9 +603,24 @@ Interpret one Bwyd module.
             meta_class_name: str = meta_parse.__class__.__name__
 
             if meta_class_name == "License":
+                if self.spdx_id is not None:
+                    # do not allow multiple licenses
+                    loc: dict = textx.get_location(meta_parse)
+                    spdx_id: str = meta_parse.spdx_id
+
+                    raise BwydParserError(
+                        f"redundant SPDX license ID `{spdx_id}` referenced at {loc}",
+                        symbol = spdx_id,
+                    )
+
                 self._validate_license(meta_parse)
+
+            elif meta_class_name == "Updated":
+                self.updated = dateutil.parser.parse(meta_parse.date).date()
+
             elif meta_class_name == "Cite":
                 self.cites.append(self._validate_url(meta_parse))
+
             elif meta_class_name == "Post":
                 self.posts.append(self._validate_url(meta_parse))
 

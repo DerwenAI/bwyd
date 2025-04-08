@@ -6,7 +6,11 @@ Module:
 ;
 
 Module_Metadata:
-  License | Post | Cite
+  Updated | License | Post | Cite
+;
+
+Updated:
+  "UPDATED:" date=STRING
 ;
 
 License:

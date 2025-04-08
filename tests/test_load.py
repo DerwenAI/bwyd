@@ -25,7 +25,7 @@ def test_parser (
     """
 Load a sample file to ensure the parser works correctly.
     """
-    slug: str = "gnocchi"
+    slug: str = "frozen_gnocchi"
     gnoc_path: pathlib.Path = EXAMPLES_DIR / f"{slug}.bwyd"
 
     module: bwyd.Module = bwyd.Bwyd.parse(
