@@ -1,7 +1,7 @@
 ## TODOs
 
+  * TRANSFER, HEAT, STORE, FERMENT
   * Conversion: as a class, simplify extensions
-  * STORE, FERMENT, SAUTE
   * add metadata for AUTHOR
   * download `.bwyd` source
   * refactor style into CSS
