@@ -288,14 +288,6 @@ A data class representing one Store object.
     modifier: str
     duration: Duration
 
-    def get_duration (
-        self,
-        ) -> Duration:
-        """
-Duration of this operation.
-        """
-        return self.duration
-
 
     def get_model (
         self

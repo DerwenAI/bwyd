@@ -14,7 +14,6 @@ import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
 from spdx_tools.spdx.validation.spdx_id_validators import is_valid_internal_spdx_id
-from upath import UPath
 import dateutil
 import jinja2
 import minify_html
@@ -30,7 +29,7 @@ from .ops import Dependency, \
 
 from .resources import _CONVERT_PATH, _JINJA_TEMPLATE
 
-from .structure import Product, \
+from .structure import Post, Product, \
     Activity, Focus, Closure
 
 
@@ -57,7 +56,7 @@ Constructor.
         self.title: str = ""
         self.text: str = ""
         self.cites: typing.List[ str ] = []
-        self.posts: typing.List[ str ] = []
+        self.posts: typing.List[ Post ] = []
         self.spdx_id: typing.Optional[ str ] = None
         self.spdx_name: typing.Optional[ str ] = None
         self.updated: typing.Optional[ datetime.date ] = None
@@ -73,13 +72,7 @@ Make the image URL embeddable in an <iframe/>
         img_url: str = ""
 
         if len(self.posts) > 0:
-            img_url = self.posts[0]
-
-        host: typing.Optional[ str ] = urlparse(img_url).hostname
-
-        if host and host.endswith(".instagram.com"):
-            embed: UPath = UPath(img_url) / "embed"
-            return embed.as_posix()
+            img_url = self.posts[0].get_image()
 
         return img_url
 
@@ -134,7 +127,7 @@ one for each parsed Closure.
                 for entity, measure in self.iter_ingredients()
             ],
             "sources": self.cites,
-            "gallery": self.posts,
+            "gallery": [ post.url for post in self.posts],
             "image": self.get_image(),
 
             "closures": closure_list,
@@ -712,7 +705,7 @@ Interpret one Bwyd module.
                 self.cites.append(self._validate_url(meta_parse))
 
             elif meta_class_name == "Post":
-                self.posts.append(self._validate_url(meta_parse))
+                self.posts.append(Post(url = self._validate_url(meta_parse)))
 
         # parse each `CLOSURE`
         for closure_parse in self.parse_tree.closures:

@@ -21,5 +21,5 @@ from .ops import Dependency, DependencyDict, \
 
 from .parser import Bwyd
 
-from .structure import Product, \
+from .structure import Post, Product, \
     Activity, Focus, Closure

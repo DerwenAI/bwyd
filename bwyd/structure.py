@@ -7,13 +7,57 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
 from dataclasses import dataclass, field
+from urllib.parse import urlparse
 import itertools
 import typing
+
+from upath import UPath
 
 from .measure import Measure
 
 from .ops import Dependency, DependencyDict, \
     OpsTypes, OpAdd
+
+
+######################################################################
+## gallery classes
+
+@dataclass(order = False, frozen = False)
+class Post:  # pylint: disable=R0902
+    """
+A data class representing one Post object.
+    """
+    url: str
+
+
+    def get_image (
+        self,
+        ) -> str:
+        """
+Accessor for an embeddable URL.
+        """
+        host: typing.Optional[ str ] = urlparse(self.url).hostname
+
+        if host and host.endswith(".instagram.com"):
+            embed: UPath = UPath(self.url) / "embed"
+            return embed.as_posix()
+
+        return self.url
+
+
+    def get_thumbnail (
+        self,
+        ) -> str:
+        """
+Accessor for a thumbnail URL.
+        """
+        host: typing.Optional[ str ] = urlparse(self.url).hostname
+
+        if host and host.endswith(".instagram.com"):
+            embed: UPath = UPath(self.url) / "media" / "?size=l"
+            return embed.as_posix()
+
+        return self.url
 
 
 ######################################################################

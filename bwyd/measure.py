@@ -137,6 +137,15 @@ class Duration (Measure):  # pylint: disable=R0902
     """
 A data class representing one parsed Duration object.
     """
+    NORM_RATIO: typing.Dict[ str, int ] = {
+        "sec": 1,
+        "min": 60,
+        "hrs": 60 * 60,
+        "day": 60 * 60 * 24,
+        "mon": 60 * 60 * 24 * 30,
+        "yrs": 60 * 60 * 24 * 365,
+    }
+
 
     def normalize (
         self,
@@ -144,16 +153,7 @@ A data class representing one parsed Duration object.
         """
 Return this duration normalized into seconds.
         """
-        norm_ratio: typing.Dict[ str, int ] = {
-            "sec": 1,
-            "min": 60,
-            "hrs": 60 * 60,
-            "day": 60 * 60 * 24,
-            "mon": 60 * 60 * 24 * 30,
-            "yrs": 60 * 60 * 24 * 365,
-        }
-
-        return self.amount * norm_ratio[self.units]
+        return self.amount * self.NORM_RATIO[self.units]
 
 
     def humanize (
