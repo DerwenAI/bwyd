@@ -6,9 +6,33 @@ Measurement objects in the Bwyd language.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
+from collections import OrderedDict
 from dataclasses import dataclass
 from fractions import Fraction
 import typing
+
+import inflect
+
+
+PLURAL = inflect.engine()
+
+NORM_RATIO: typing.Dict[ str, int ] = OrderedDict({
+    "year": 60 * 60 * 24 * 365,
+    "day": 60 * 60 * 24,
+    "hour": 60 * 60,
+    "minute": 60,
+    "second": 1,
+})
+
+NORM_RATIO_DEPR: typing.Dict[ str, int ] = {
+    "sec": 1,
+    "min": 60,
+    "hrs": 60 * 60,
+    "day": 60 * 60 * 24,
+    "mon": 60 * 60 * 24 * 30,
+    "yrs": 60 * 60 * 24 * 365,
+}
+
 
 
 @dataclass(order = False, frozen = False)
@@ -137,52 +161,42 @@ class Duration (Measure):  # pylint: disable=R0902
     """
 A data class representing one parsed Duration object.
     """
-    NORM_RATIO: typing.Dict[ str, int ] = {
-        "sec": 1,
-        "min": 60,
-        "hrs": 60 * 60,
-        "day": 60 * 60 * 24,
-        "mon": 60 * 60 * 24 * 30,
-        "yrs": 60 * 60 * 24 * 365,
-    }
-
-
     def normalize (
         self,
         ) -> float:
         """
 Return this duration normalized into seconds.
         """
-        return self.amount * self.NORM_RATIO[self.units]
+        return self.amount * NORM_RATIO_DEPR[self.units]
 
 
     def humanize (
         self,
         ) -> str:
         """
-Denormalize this duration into human-readable form.
+Adapted from:
+<https://stackoverflow.com/a/56499010/1698443>
         """
-        amount: int = int(self.amount)
-        readable: str = f"{amount:d} {self.units}"
+        (years, remainder) = divmod(self.normalize(), 31536000)
+        (days, remainder) = divmod(remainder, 86400)
+        (hours, remainder) = divmod(remainder, 3600)
+        (minutes, seconds) = divmod(remainder, 60)
 
-        if self.units == "min":
-            if self.amount > 60:
-                hrs_amount: int = int(self.amount / 60)
-                min_remain: int = int(self.amount % 60)
-                readable = f"{hrs_amount:d} hrs, {min_remain} min"
+        cascade: zip = zip(
+            NORM_RATIO.keys(),
+            ( years, days, hours, minutes, seconds, ),
+        )
 
-        elif self.units == "sec":
-            if self.amount > 3600:
-                hrs_amount = int(self.amount / 3600)
-                min_remain = int(self.amount % 3600)
-                min_amount: int = int(min_remain / 60)
-                sec_remain: int = int(min_remain % 60)
-                readable = f"{hrs_amount:d} hrs, {min_amount:d} min, {sec_remain:d} sec"
-            elif self.amount > 60:
-                min_amount = int(self.amount / 60)
-                sec_remain = int(self.amount % 60)
-                readable = f"{min_amount:d} min, {sec_remain:d} sec"
+        units: list = []
 
+        for label, amount in cascade:
+            if amount > 0:
+                if amount > 1:
+                    label = PLURAL.plural(label)
+
+                units.append(f"{int(amount)} {label}")
+
+        readable: str = ", ".join(units)
         return readable
 
 

@@ -9,7 +9,7 @@
     "serves": [
       "20 frozen gnocchi dumplings"
     ],
-    "duration": "2 hrs, 5 min, 40 sec",
+    "duration": "2 hours, 5 minutes, 40 seconds",
     "updated": "2023-04-10"
   },
   "ingredients": [
@@ -112,7 +112,7 @@
                     "tool": "fork",
                     "verb": "gently",
                     "text": "lightly beaten",
-                    "time": "30 sec"
+                    "time": "30 seconds"
                   }
                 },
                 {
@@ -120,7 +120,7 @@
                     "tool": "spatula",
                     "verb": "",
                     "text": "well mixed",
-                    "time": "30 sec"
+                    "time": "30 seconds"
                   }
                 },
                 {
@@ -128,7 +128,7 @@
                     "tool": "spatula",
                     "verb": "fold",
                     "text": "lightly blended",
-                    "time": "30 sec"
+                    "time": "30 seconds"
                   }
                 }
               ]
@@ -150,7 +150,7 @@
                     "tool": "spatula",
                     "verb": "mix",
                     "text": "dough just becomes smooth",
-                    "time": "1 min, 30 sec"
+                    "time": "1 minute, 30 seconds"
                   }
                 }
               ]
@@ -209,7 +209,7 @@
                     "tool": "spoon",
                     "verb": "spread",
                     "text": "evenly floured",
-                    "time": "30 sec"
+                    "time": "30 seconds"
                   }
                 },
                 {
@@ -217,7 +217,7 @@
                     "tool": "hand",
                     "verb": "roll carefully into a rope",
                     "text": "2 cm diameter",
-                    "time": "60 sec"
+                    "time": "1 minute"
                   }
                 }
               ]
@@ -233,7 +233,7 @@
                     "tool": "fork",
                     "verb": "cut into 1 cm dumplings pieces, resembling little pillows",
                     "text": "entire rope is cut",
-                    "time": "30 sec"
+                    "time": "30 seconds"
                   }
                 }
               ]
@@ -283,7 +283,7 @@
                     "tool": "hand",
                     "verb": "line dish with parchment paper",
                     "text": "fully lined",
-                    "time": "30 sec"
+                    "time": "30 seconds"
                   }
                 }
               ]
@@ -305,14 +305,14 @@
                     "tool": "board",
                     "verb": "roll the cut dumplings onto parchment paper; arrange without touching other dumplings",
                     "text": "layer is filled",
-                    "time": "10 sec"
+                    "time": "10 seconds"
                   }
                 },
                 {
                   "chill": {
                     "text": "freeze",
                     "until": "dumplings are frozen solid",
-                    "time": "2 hrs"
+                    "time": "2 hours"
                   }
                 }
               ]

@@ -276,7 +276,7 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
             )
 
 
-    def _interpret_op (  # pylint: disable=R0912,R0915
+    def _interpret_op (  # pylint: disable=R0911,R0912,R0915
         self,
         closure: Closure,
         op_parse: typing.Any,
@@ -334,13 +334,13 @@ Interpret the steps within an activity.
                 ic(op_class_name, op_parse.symbol, measure, op_parse.text)
 
             # resolve local reference
-            entity: typing.Optional[ typing.Any ] = None
+            entity = None
 
             if op_parse.symbol in closure.ingredients:
                 entity = closure.ingredients[op_parse.symbol]
                 entity.ref_count += 1
             else:
-                loc: dict = textx.get_location(op_parse)
+                loc = textx.get_location(op_parse)
 
                 raise BwydParserError(
                     f"INGREDIENT `{op_parse.symbol}` used but not defined {loc}",
