@@ -1,12 +1,10 @@
-TITLE: "Bread and ButteAr Pickles"
+TITLE: "Bread and Butter Pickles"
 TEXT: "Much better than store-bought pickles"
 LICENSE: "CC-BY-NC-SA-4.0"
 UPDATED: "2020-07-24"
 CITE: "https://www.browneyedbaker.com/bread-and-butter-pickles/"
-POST: "https://www.instagram.com/p/CDJy2u7JqSO/"
 POST: "https://www.instagram.com/p/C_EzMRLPEgn/"
-
-//  * yields: 4-5 cups
+POST: "https://www.instagram.com/p/CDJy2u7JqSO/"
 
 CLOSURE: "leached veggies"
     TEXT: "Start with ripe but crisp cukes, then brine them."
@@ -60,7 +58,7 @@ CLOSURE: "leached veggies"
 
     ACTION spatula: "toss slices with salt"
         UNTIL: "thoroughly coated"
-	TIME: (30 sec)
+	TIME (30 sec)
 
     ACTION hand: "cover with ice"
         UNTIL: "veggies are fully covered"
@@ -93,7 +91,7 @@ CLOSURE: "brine the pickles"
     INGREDIENT coriander_seeds: "whole coriander seeds"
     INGREDIENT sugar: "granulated sugar, or brown"
     INGREDIENT vinegar: "raw apple cider vinegar, or white wine"
-    USE leached_veggies
+    USE leached_veggies: "drained"
 
     FOCUS pan
 
@@ -120,6 +118,8 @@ CLOSURE: "brine the pickles"
         UNTIL: "bring to a light boil"
         TIME (5 min)
 
+    ACTIVITY: "cook brine"
+
     ADD leached_veggies (400 g)
 
     HEAT pan: "simmer over medium heat"
@@ -136,11 +136,13 @@ CLOSURE: "jar the pickles"
     TOOL spatula: "silicone spatula"
     TOOL hand: "clean hands"
 
+    USE brined_veggies: "veggies and brine both"
+
     FOCUS jar
 
     ACTIVITY: "pack jar"
 
-    USE brined_veggies (.9 l)
+    ADD brined_veggies (.9 l)
 
     ACTION spatula: "transfer brined veggies into jar"
         UNTIL: "jar is almost filled, with 1 cm air gap from top"
@@ -156,7 +158,7 @@ CLOSURE: "jar the pickles"
         UNTIL: "room temperature"
         TIME (1 hrs)
 
-    CHILL jar: "in refrigerator"
+    CHILL jar: "place in refrigerator"
         UNTIL: "allow mild fermentation"
         TIME (1 day)
 

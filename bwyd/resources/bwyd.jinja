@@ -331,6 +331,7 @@ details summary {
 				 >
 			      {% for step_dict in act.steps %}
 			      {% for key, val in step_dict.items() %}
+
 			      {% if key == "note" -%}
 			      <details
 				>
@@ -345,6 +346,7 @@ details summary {
 				  </p>
 				</div>
 			      </details>
+
 			      {% elif key == "ingredients" -%}
 			      <ul class="list-group list-group-flush">
 				{% for item in val %}
@@ -357,6 +359,13 @@ details summary {
 				{% endfor %}
 			      </ul>
 			      <hr>
+
+			      {% elif key == "transfer" -%}
+			      <div
+				style="margin:.5em 0 0 1em;"
+				>
+				transfer <strong>{{ val.name }}</strong>
+			      </div>
 
 			      {% elif key == "action" -%}
 			      <div
@@ -387,6 +396,17 @@ details summary {
 				({{ val.time }})
 			      </div>
 
+			      {% elif key == "heat" -%}
+			      <div
+				style="margin:.5em 0 0 1em;"
+				>
+				<strong>{{ val.text }}</strong>
+				<br>
+				until <em>{{ val.until }}</em>
+				<br>
+				({{ val.time }})
+			      </div>
+
 			      {% elif key == "chill" -%}
 			      <div
 				style="margin:.5em 0 0 1em;"
@@ -396,6 +416,15 @@ details summary {
 				until <em>{{ val.until }}</em>
 				<br>
 				({{ val.time }})
+			      </div>
+
+			      {% elif key == "store" -%}
+			      <div
+				style="margin:.5em 0 0 1em;"
+				>
+				store <strong>{{ val.text }}</strong>
+				<br>
+				upto <em>{{ val.upto }}</em>
 			      </div>
 
 			      {% endif %}

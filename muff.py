@@ -17,6 +17,7 @@ if __name__ == "__main__":
 
     count: int = corpus.render_html_files(
         examples_path,
+        #glob = "bread*.bwyd",
         debug = True, # False
     )
 

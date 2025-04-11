@@ -26,7 +26,7 @@ from .error import BwydParserError
 from .measure import Measure, Duration, Temperature
 
 from .ops import Dependency, \
-    OpsTypes, OpAdd, OpAction, OpBake, OpChill, OpNote
+    OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpBake, OpHeat, OpChill, OpStore
 
 from .resources import _CONVERT_PATH, _JINJA_TEMPLATE
 
@@ -298,6 +298,39 @@ Interpret the steps within an activity.
         if debug:
             ic(op_parse)
 
+        if op_class_name == "Note":
+            if debug:
+                ic(op_class_name, op_parse.text)
+
+            return OpNote(
+                loc = textx.get_location(op_parse),
+                text = op_parse.text,
+            )
+
+        if op_class_name == "Transfer":
+            if debug:
+                ic(op_class_name, op_parse.symbol)
+
+            # resolve local reference
+            entity: typing.Optional[ typing.Any ] = None
+
+            if op_parse.symbol in closure.ingredients:
+                entity = closure.ingredients[op_parse.symbol]
+                entity.ref_count += 1
+            else:
+                loc: dict = textx.get_location(op_parse)
+
+                raise BwydParserError(
+                    f"INGREDIENT `{op_parse.symbol}` used but not defined {loc}",
+                    symbol = op_parse.symbol,
+                )
+
+            return OpTransfer(
+                loc = textx.get_location(op_parse),
+                symbol = op_parse.symbol,
+                entity = entity,
+            )
+
         if op_class_name == "Add":
             measure: Measure = Measure(
                 amount = op_parse.measure.amount,
@@ -327,15 +360,6 @@ Interpret the steps within an activity.
                 measure = measure,
                 text = op_parse.text,
                 entity = entity,
-            )
-
-        if op_class_name == "Note":
-            if debug:
-                ic(op_class_name, op_parse.text)
-
-            return OpNote(
-                loc = textx.get_location(op_parse),
-                text = op_parse.text,
             )
 
         if op_class_name == "Action":
@@ -408,6 +432,35 @@ Interpret the steps within an activity.
                 temperature = temperature,
             )
 
+        if op_class_name == "Heat":
+            duration = Duration(
+                amount = op_parse.duration.amount,
+                units = op_parse.duration.units,
+            )
+
+            if debug:
+                ic(op_class_name, op_parse.symbol, op_parse.modifier, op_parse.until, duration)
+
+            # resolve local reference
+            if op_parse.symbol in closure.containers:
+                entity = closure.containers[op_parse.symbol]
+                entity.ref_count += 1
+            else:
+                loc = textx.get_location(op_parse)
+
+                raise BwydParserError(
+                    f"HEAT CONTAINER `{op_parse.symbol}` used but not defined {loc}",
+                    symbol = op_parse.symbol,
+                )
+
+            return OpHeat(
+                loc = textx.get_location(op_parse),
+                container = entity,
+                modifier = op_parse.modifier,
+                until = op_parse.until,
+                duration = duration,
+            )
+
         if op_class_name == "Chill":
             duration = Duration(
                 amount = op_parse.duration.amount,
@@ -434,6 +487,34 @@ Interpret the steps within an activity.
                 container = entity,
                 modifier = op_parse.modifier,
                 until = op_parse.until,
+                duration = duration,
+            )
+
+        if op_class_name == "Store":
+            duration = Duration(
+                amount = op_parse.duration.amount,
+                units = op_parse.duration.units,
+            )
+
+            if debug:
+                ic(op_class_name, op_parse.symbol, op_parse.modifier, duration)
+
+            # resolve local reference
+            if op_parse.symbol in closure.containers:
+                entity = closure.containers[op_parse.symbol]
+                entity.ref_count += 1
+            else:
+                loc = textx.get_location(op_parse)
+
+                raise BwydParserError(
+                    f"STORE CONTAINER `{op_parse.symbol}` used but not defined {loc}",
+                    symbol = op_parse.symbol,
+                )
+
+            return OpStore(
+                loc = textx.get_location(op_parse),
+                container = entity,
+                modifier = op_parse.modifier,
                 duration = duration,
             )
 

@@ -73,37 +73,25 @@ Activity:
 ;
 
 Op:
-  Add | Note | Action | Bake | Chill
-;
-
-Add:
-  "ADD" symbol=ID measure=Measure (":" text=STRING)?
+  Note | Transfer | Add | Action | Bake | Heat | Chill | Store
 ;
 
 Note:
   "NOTE:" text=STRING
 ;
 
-Measure:
-  "(" amount=NUMBER (units=MeasureUnits)? ")"
+Transfer:
+  "TRANSFER" symbol=ID
 ;
 
-MeasureUnits:
-  "g" | "kg" | "ml" | "l"
+Add:
+  "ADD" symbol=ID measure=Measure (":" text=STRING)?
 ;
 
 Action:
   "ACTION" symbol=ID (":" modifier=STRING)?
     "UNTIL:" until=STRING
     "TIME" duration=Duration
-;
-
-Duration:
-  "(" amount=NUMBER units=DurationUnits ")"
-;
-
-DurationUnits:
-  "sec" | "min" | "hrs"
 ;
 
 Bake:
@@ -117,12 +105,10 @@ OvenMode:
   "BAKE" | "BROIL" | "ROAST" | "TOAST"
 ;
 
-Temperature:
-  amount=NUMBER units=TemperatureUnits
-;
-
-TemperatureUnits:
-  "C"
+Heat:
+  "HEAT" symbol=ID (":" modifier=STRING)?
+    "UNTIL:" until=STRING
+    "TIME" duration=Duration
 ;
 
 Chill:
@@ -131,8 +117,33 @@ Chill:
     "TIME" duration=Duration
 ;
 
-Comment:
-  /\/\/.*$/
+Store:
+  "STORE" symbol=ID (":" modifier=STRING)?
+     "UPTO" duration=Duration
+;
+
+Measure:
+  "(" amount=NUMBER (units=MeasureUnits)? ")"
+;
+
+MeasureUnits:
+  "g" | "kg" | "ml" | "l"
+;
+
+Duration:
+  "(" amount=NUMBER units=DurationUnits ")"
+;
+
+DurationUnits:
+  "sec" | "min" | "hrs" | "day" | "mon" | "yrs"
+;
+
+Temperature:
+  amount=NUMBER units=TemperatureUnits
+;
+
+TemperatureUnits:
+  "C"
 ;
 
 Ratio:
@@ -141,4 +152,8 @@ Ratio:
 
 RatioPart:
     symbol=ID ('[' components+=ID[','] ']')?
+;
+
+Comment:
+  /\/\/.*$/
 ;

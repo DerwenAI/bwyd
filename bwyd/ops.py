@@ -77,6 +77,49 @@ Stub: Total duration.
 
 
 @dataclass(order = False, frozen = False)
+class OpNote (OpGeneric):  # pylint: disable=R0902
+    """
+A data class representing one Note object.
+    """
+    text: str
+
+
+    def get_model (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "note": {
+                "text": self.text,
+            }
+        }
+
+
+@dataclass(order = False, frozen = False)
+class OpTransfer (OpGeneric):  # pylint: disable=R0902
+    """
+A data class representing one Transfer object.
+    """
+    symbol: str
+    entity: Dependency
+
+
+    def get_model (
+        self,
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "transfer": {
+                "name": self.symbol,
+            },
+        }
+
+
+@dataclass(order = False, frozen = False)
 class OpAdd (OpGeneric):  # pylint: disable=R0902
     """
 A data class representing one Add object.
@@ -103,27 +146,6 @@ Serializable representation for JSON.
             "name": self.symbol,
             "amount": amount,
             "text": self.text,
-        }
-
-
-@dataclass(order = False, frozen = False)
-class OpNote (OpGeneric):  # pylint: disable=R0902
-    """
-A data class representing one Note object.
-    """
-    text: str
-
-
-    def get_model (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "note": {
-                "text": self.text,
-            }
         }
 
 
@@ -203,9 +225,9 @@ Serializable representation for JSON.
 
 
 @dataclass(order = False, frozen = False)
-class OpChill (OpGeneric):  # pylint: disable=R0902
+class OpHeat (OpGeneric):  # pylint: disable=R0902
     """
-A data class representing one Chill object.
+A data class representing one Heat object.
     """
     container: Dependency
     modifier: str
@@ -228,6 +250,27 @@ Duration of this operation.
 Serializable representation for JSON.
         """
         return {
+            "heat": {
+                "text": self.modifier,
+                "until": self.until,
+                "time": self.duration.humanize(),
+            }
+        }
+
+
+@dataclass(order = False, frozen = False)
+class OpChill (OpHeat):  # pylint: disable=R0902
+    """
+A data class representing one Chill object.
+    """
+
+    def get_model (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
             "chill": {
                 "text": self.modifier,
                 "until": self.until,
@@ -236,4 +279,45 @@ Serializable representation for JSON.
         }
 
 
-OpsTypes = typing.Union[ OpAdd, OpNote, OpAction, OpBake, OpChill ]
+@dataclass(order = False, frozen = False)
+class OpStore (OpGeneric):  # pylint: disable=R0902
+    """
+A data class representing one Store object.
+    """
+    container: Dependency
+    modifier: str
+    duration: Duration
+
+    def get_duration (
+        self,
+        ) -> Duration:
+        """
+Duration of this operation.
+        """
+        return self.duration
+
+
+    def get_model (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "store": {
+                "text": self.modifier,
+                "upto": self.duration.humanize(),
+            }
+        }
+
+
+OpsTypes = typing.Union[
+    OpNote,
+    OpTransfer,
+    OpAdd,
+    OpAction,
+    OpBake,
+    OpHeat,
+    OpChill,
+    OpStore,
+]

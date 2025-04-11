@@ -1,6 +1,7 @@
 ## TODOs
 
-  * TRANSFER, HEAT, STORE, FERMENT
+  * convert existing recipes
+  * FERMENT
   * Conversion: as a class, simplify extensions
   * add metadata for AUTHOR
   * download `.bwyd` source
