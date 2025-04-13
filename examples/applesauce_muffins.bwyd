@@ -46,7 +46,7 @@ CLOSURE: "prep batter"
 
     ACTION whisk: "blend"
         UNTIL: "well mixed, breaking any clumps"
-	TIME (30 sec)
+	TIME (30 second)
 
     ACTIVITY: "prep wet mix"
 
@@ -62,7 +62,7 @@ CLOSURE: "prep batter"
 
     ACTION spatula: "fold"
         UNTIL: "lightly blended"
-	TIME (30 sec)
+	TIME (30 second)
 
     ACTIVITY: "prep chunky mix"
 
@@ -81,7 +81,7 @@ CLOSURE: "prep batter"
 
     ACTION spatula: "fold"
         UNTIL: "lightly blended"
-	TIME (1 min)
+	TIME (1 minute)
 
     ACTIVITY: "complete the batter"
 
@@ -90,7 +90,7 @@ CLOSURE: "prep batter"
 
     ACTION spatula: "mix"
 	UNTIL: "no parts are dry any longer"
-	TIME (1.5 min)
+	TIME (1.5 minute)
 
     // known ratio, p. 69
     //  2 flours : 2 liquid : 1 egg : 1 butter
@@ -123,7 +123,7 @@ CLOSURE: "bake muffins"
 
     ACTION hand: "grease"
         UNTIL: "cooking surfaces are all buttered"
-        TIME (3 min)
+        TIME (3 minute)
 
     ACTIVITY: "fill with batter"
 
@@ -131,17 +131,17 @@ CLOSURE: "bake muffins"
 
     ACTION spoon: "fill"
         UNTIL: "evenly distributed"
-	TIME (3 min)
+	TIME (3 minute)
 
     ACTIVITY: "place pan on a baking sheet, make level"
 
     BAKE pan: "set to convection bake"
         AT: 177 C
         UNTIL: "use fork to test doneness"
-        TIME (20 min)
+        TIME (20 minute)
 
     ACTION fork: "test doneness"
         UNTIL: "fork comes out with tiny crumbs"
-        TIME (10 sec)
+        TIME (10 second)
 
 YIELDS applesauce_muffins (8)

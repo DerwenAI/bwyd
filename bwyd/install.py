@@ -17,7 +17,7 @@ import typing
 from jupyter_client.kernelspec import KernelSpecManager  # pylint: disable=E0401
 from IPython.utils.tempdir import TemporaryDirectory  # pylint: disable=E0401
 
-from .resources import _ICON_PATH
+from .resources import ICON_PATH
 
 
 KERNEL_JSON: dict = {
@@ -50,8 +50,8 @@ the Jupyter kernel installer.
             )
 
         shutil.copyfile(
-            _ICON_PATH,
-            pathlib.Path(tmp_dir) / _ICON_PATH.name,
+            ICON_PATH,
+            pathlib.Path(tmp_dir) / ICON_PATH.name,
         )
 
         print("Installing IPython kernel spec for Bwyd")

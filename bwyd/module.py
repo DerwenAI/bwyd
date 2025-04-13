@@ -27,7 +27,7 @@ from .measure import Measure, Duration, Temperature
 from .ops import Dependency, \
     OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpBake, OpHeat, OpChill, OpStore
 
-from .resources import _CONVERT_PATH, _JINJA_TEMPLATE
+from .resources import BWYD_SVG, CONVERT_PATH, JINJA_PAGE_TEMPLATE
 
 from .structure import Post, Product, \
     Activity, Focus, Closure
@@ -40,7 +40,7 @@ class Module:  # pylint: disable=R0902
     """
 One parsed module.
     """
-    UNIT_CONVERT: dict = json.load(open(_CONVERT_PATH, "r", encoding = "utf-8"))  # pylint: disable=R1732
+    UNIT_CONVERT: dict = json.load(open(CONVERT_PATH, "r", encoding = "utf-8"))  # pylint: disable=R1732
 
     def __init__ (
         self,
@@ -73,6 +73,20 @@ Make the image URL embeddable in an <iframe/>
 
         if len(self.posts) > 0:
             img_url = self.posts[0].get_image()
+
+        return img_url
+
+
+    def get_thumbnail (
+        self,
+        ) -> str:
+        """
+Accessor for a thumbnail URL.
+        """
+        img_url: str = BWYD_SVG
+
+        if len(self.posts) > 0:
+            img_url = self.posts[0].get_thumbnail()
 
         return img_url
 
@@ -735,7 +749,7 @@ Accessor for the total duration of one Bwyd module.
             for op in activity.ops
         ]))
 
-        return Duration(total_sec, "sec").humanize()
+        return Duration(total_sec, "second").humanize()
 
 
     def total_yields (
@@ -791,7 +805,7 @@ Iterator for the aggregate ingredients in one Bwyd module.
     def render_template (
         self,
         *,
-        template: jinja2.Template = _JINJA_TEMPLATE,
+        template: jinja2.Template = JINJA_PAGE_TEMPLATE,
         minify: bool = True,
         ) -> str:
         """

@@ -73,7 +73,7 @@ A data class representing a generic operation.
         """
 Stub: Total duration.
         """
-        return Duration(0, "sec")
+        return Duration(0, "second")
 
 
 @dataclass(order = False, frozen = False)

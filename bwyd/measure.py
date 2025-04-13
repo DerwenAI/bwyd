@@ -24,16 +24,6 @@ NORM_RATIO: typing.Dict[ str, int ] = OrderedDict({
     "second": 1,
 })
 
-NORM_RATIO_DEPR: typing.Dict[ str, int ] = {
-    "sec": 1,
-    "min": 60,
-    "hrs": 60 * 60,
-    "day": 60 * 60 * 24,
-    "mon": 60 * 60 * 24 * 30,
-    "yrs": 60 * 60 * 24 * 365,
-}
-
-
 
 @dataclass(order = False, frozen = False)
 class Measure:  # pylint: disable=R0902
@@ -75,8 +65,36 @@ imperial conversion if available.
             if self.units == metric_units:
                 imper_amount: float = self.amount / ratio
                 amount += f" ({self.humanize_cup(imper_amount)})"
+        else:
+            match self.units:
+                case "g":
+                    imper_amount = self.amount * 0.002204623
+                    amount += self.humanize_generic(imper_amount, "pounds")
+
+                case "l":
+                    imper_amount = round(self.amount * 4.226753, 2)
+                    amount += self.humanize_generic(imper_amount, "cups")
 
         return amount
+
+
+    @classmethod
+    def humanize_generic (
+        cls,
+        amount: float,
+        units: str,
+        ) -> str:
+        """
+Humanize imperial measurement ratios, for generic case
+        """
+        denom_limit: int = 4
+
+        if amount > .95:
+            human: str = cls.humanize_ratio(amount)
+        else:
+            human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
+
+        return f" ({human} {units})"
 
 
     @classmethod
@@ -167,7 +185,7 @@ A data class representing one parsed Duration object.
         """
 Return this duration normalized into seconds.
         """
-        return self.amount * NORM_RATIO_DEPR[self.units]
+        return self.amount * NORM_RATIO[self.units]
 
 
     def humanize (

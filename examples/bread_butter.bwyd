@@ -29,7 +29,7 @@ CLOSURE: "leached veggies"
 
     ACTION hand: "rinse in running cold water"
         UNTIL: "cukes are clean, and any extra gunk has been removed"
-        TIME (2 min)
+        TIME (2 minute)
 
     FOCUS board
 
@@ -40,13 +40,13 @@ CLOSURE: "leached veggies"
 
     ACTION hand: "peel onions"
         UNTIL: "cut off ends, peel off outer/paper skin"
-        TIME (30 sec)
+        TIME (30 second)
 
     TRANSFER cucumbers
 
     ACTION knife: "blend"
         UNTIL: "slice cukes and onion to .5 cm thick pieces"
-	TIME (4 min)
+	TIME (4 minute)
 
     FOCUS bowl
 
@@ -58,15 +58,15 @@ CLOSURE: "leached veggies"
 
     ACTION spatula: "toss slices with salt"
         UNTIL: "thoroughly coated"
-	TIME (30 sec)
+	TIME (30 second)
 
     ACTION hand: "cover with ice"
         UNTIL: "veggies are fully covered"
-        TIME (1 min)
+        TIME (1 minute)
 
     CHILL bowl: "chill"
         UNTIL: "liquid from cukes has leeched out"
-        TIME (1.5 hrs)
+        TIME (1.5 hour)
 
     FOCUS sink
 
@@ -74,7 +74,7 @@ CLOSURE: "leached veggies"
 
     ACTION hand: "rinse in running cold water"
         UNTIL: "remove the bitterness of the brine"
-        TIME (1 min)
+        TIME (1 minute)
 
 YIELDS leached_veggies (400 g) INTERMEDIATE
 
@@ -85,8 +85,8 @@ CLOSURE: "brine the pickles"
     CONTAINER pan: "medium saucepan"
     TOOL spatula: "silicone spatula"
 
-    INGREDIENT mustard: "mustard powder"
-    INGREDIENT tumeric: "tumeric powder"
+    INGREDIENT mustard_powder: "mustard powder"
+    INGREDIENT turmeric_powder: "turmeric powder"
     INGREDIENT celery_seeds: "whole celery seeds"
     INGREDIENT coriander_seeds: "whole coriander seeds"
     INGREDIENT sugar: "granulated sugar, or brown"
@@ -97,9 +97,9 @@ CLOSURE: "brine the pickles"
 
     ACTIVITY: "prep brine"
 
-    ADD mustard (2 g)
+    ADD mustard_powder (2 g)
     // 1 tsp
-    ADD tumeric (2 g)
+    ADD turmeric_powder (2 g)
     // 1/8 tsp
     ADD celery_seeds (1 g)
     // 1/2 tsp
@@ -112,11 +112,11 @@ CLOSURE: "brine the pickles"
 
     ACTION spatula: "gently mix"
         UNTIL: "sugar dissolves"
-	TIME (30 sec)
+	TIME (30 second)
 
     HEAT pan: "simmer over medium heat"
         UNTIL: "bring to a light boil"
-        TIME (5 min)
+        TIME (5 minute)
 
     ACTIVITY: "cook brine"
 
@@ -124,7 +124,7 @@ CLOSURE: "brine the pickles"
 
     HEAT pan: "simmer over medium heat"
         UNTIL: "bring to a light boil"
-        TIME (3 min)
+        TIME (3 minute)
 
 YIELDS brined_veggies (.9 l) INTERMEDIATE
 
@@ -146,24 +146,24 @@ CLOSURE: "jar the pickles"
 
     ACTION spatula: "transfer brined veggies into jar"
         UNTIL: "jar is almost filled, with 1 cm air gap from top"
-	TIME (30 sec)
+	TIME (30 second)
 
     ACTIVITY: "let cool"
 
     ACTION hand: "shake jar to loosen any bubbles, then seal"
         UNTIL: "jar is sealed"
-        TIME (30 sec)
+        TIME (30 second)
 
     CHILL jar: "let cool on countertop"
         UNTIL: "room temperature"
-        TIME (1 hrs)
+        TIME (1 hour)
 
     CHILL jar: "place in refrigerator"
         UNTIL: "allow mild fermentation"
         TIME (1 day)
 
     STORE jar: "in refrigerator"
-        UPTO (1 mon)
+        UPTO (30 day)
 
 YIELDS pickles (.9 l)
 

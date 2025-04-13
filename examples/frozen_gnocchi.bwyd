@@ -28,7 +28,7 @@ CLOSURE: "gnocchi dough"
 
     ACTION fork: "gently"
         UNTIL: "lightly beaten"
-	TIME (30 sec)
+	TIME (30 second)
 
     ADD ricotta (250 g)
     ADD parmesan (50 g)
@@ -36,13 +36,13 @@ CLOSURE: "gnocchi dough"
 
     ACTION spatula
         UNTIL: "well mixed"
-	TIME (30 sec)
+	TIME (30 second)
 
     ADD puree (250 g)
 
     ACTION spatula: "fold"
         UNTIL: "lightly blended"
-	TIME (30 sec)
+	TIME (30 second)
 
     ACTIVITY: "complete the dough"
 
@@ -50,7 +50,7 @@ CLOSURE: "gnocchi dough"
 
     ACTION spatula: "mix"
 	UNTIL: "dough just becomes smooth"
-	TIME (90 sec)
+	TIME (90 second)
 
     RATIO: "dough" =
     	   starch [ puree, flour ],
@@ -78,19 +78,19 @@ CLOSURE: "cut dumplings"
 
     ACTION spoon: "spread"
         UNTIL: "evenly floured"
-	TIME (30 sec)
+	TIME (30 second)
 
     ADD dough (200 g)
 
     ACTION hand: "roll carefully into a rope"
         UNTIL: "2 cm diameter"
-	TIME (60 sec)
+	TIME (60 second)
 
     ACTIVITY: "make pillows"
 
     ACTION fork: "cut into 1 cm dumplings pieces, resembling little pillows"
         UNTIL: "entire rope is cut"
-	TIME (30 sec)
+	TIME (30 second)
 
 YIELDS dumplings (20) INTERMEDIATE
 
@@ -113,7 +113,7 @@ CLOSURE: "frozen gnocchi for storage"
 
     ACTION hand: "line dish with parchment paper"
         UNTIL: "fully lined"
-	TIME (30 sec)
+	TIME (30 second)
 
     ACTIVITY: "pack gnocchi"
 
@@ -121,10 +121,10 @@ CLOSURE: "frozen gnocchi for storage"
 
     ACTION board: "roll the cut dumplings onto parchment paper; arrange without touching other dumplings"
         UNTIL: "layer is filled"
-	TIME (10 sec)
+	TIME (10 second)
 
     CHILL dish: "freeze"
         UNTIL: "dumplings are frozen solid"
-        TIME (2 hrs)
+        TIME (2 hour)
 
 YIELDS frozen_gnocchi_dumplings (20)

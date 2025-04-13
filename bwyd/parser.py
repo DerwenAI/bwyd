@@ -12,7 +12,7 @@ import typing
 import textx  # type: ignore  # pylint: disable=E0401
 
 from .module import Module
-from .resources import _GRAMMAR_PATH
+from .resources import GRAMMAR_PATH
 
 
 ######################################################################
@@ -23,7 +23,7 @@ class Bwyd:  # pylint: disable=R0903
 Bwyd DSL parser/interpreter.
     """
     META_MODEL: textx.metamodel.TextXMetaModel = textx.metamodel_from_file(
-        _GRAMMAR_PATH,
+        GRAMMAR_PATH,
         debug = False, # True
     )
 

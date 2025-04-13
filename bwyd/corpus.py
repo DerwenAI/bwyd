@@ -57,16 +57,15 @@ Iterator for listing the Bwyd modules in a given directory.
         glob: str = "*.bwyd",
         suffix: str = ".html",
         debug: bool = False,
-        ) -> int:
+        ) -> typing.List[ Module ]:
         """
 Traverse the given directory, rendering Bwyd scripts as HTML in place.
 Return a count of the modules processed.
         """
-        count: int = 0
+        modules: typing.List[ Module ] = []
 
         for bwyd_path in self.iter_files(dir_path, glob = glob):
             slug: str = bwyd_path.stem
-            count += 1
 
             if debug:
                 ic(bwyd_path.name)
@@ -82,10 +81,12 @@ Return a count of the modules processed.
                 debug = debug,
             )
 
+            modules.append(module)
+
             # render HTML using the Jinja2 template
             html_path: pathlib.Path = bwyd_path.with_suffix(suffix)
 
             with open(html_path, "w", encoding = "utf-8") as fp:
                 fp.write(module.render_template())
 
-        return count
+        return modules
