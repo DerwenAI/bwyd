@@ -28,7 +28,7 @@ if __name__ == "__main__":
     )
 
     mod_data: dict = {
-        "data": {
+        "corpus": {
             "icon": bwyd.BWYD_SVG,
             "modules": [
                 {
