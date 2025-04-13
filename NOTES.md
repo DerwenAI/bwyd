@@ -1,8 +1,17 @@
 ## TODOs
 
-  * index as: interactive table, searchable, autocomplete
-  * logging: show which ingredients lack conversions
-  * Conversion: as a class, simplify extending the defined ingredients
+  * bwyd.Bwyd singleton configurables:
+    + optional config file
+    + factory pattern for Parser, Corpus
+    + persisted URL request cache
+    https://requests-cache.readthedocs.io/en/stable/user_guide/backends.html#specifying-a-backend
+    + logging: show which ingredients lack conversions
+      https://docs.python.org/3/howto/logging.html
+    + Conversion: as a class, simplify extending the defined ingredients
+
+  * OpAppliance as superclass for OpHeat, OpBake, OpChill
+  * schedule use of appliances: oven, fridge, range, instantpot, etc.
+
   * add metadata for AUTHOR
   * convert existing recipes
   * FERMENT
@@ -17,7 +26,6 @@
   * generate `LanceDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
   * use `BAML` to parse recipe elements for the DSL
   * use `textX-LS` to generate a VS Code extension
-  * schedule use of appliances: oven, fridge, range, instantpot, etc.
   
 
 ## Taxonomy

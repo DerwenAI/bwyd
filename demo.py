@@ -17,7 +17,11 @@ if __name__ == "__main__":
     slug: str = "frozen_gnocchi"
 
     # parse an example Bwyd module
-    module: bwyd.Module = bwyd.Bwyd.parse(
+    dsl: bwyd.Bwyd = bwyd.Bwyd(
+        config_file = pathlib.Path("config.ini"),
+    )
+
+    module: bwyd.Module = dsl.parse(
         examples_path / f"{slug}.bwyd",
         slug = slug,
         debug = False, # True

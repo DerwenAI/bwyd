@@ -1,13 +1,12 @@
 ## files
 
-  - `bwyd/__init__.py`: Bwyd package definitions
-  - `bwyd/corpus.py`: Bwyd corpus management
-  - `bwyd/error.py`: Bwyd error handling
-  - `bwyd/measure.py`: Bwyd language measurement objects
-  - `bwyd/module.py`: Bwyd module interpreter
-  - `bwyd/ops.py`: Bwyd language operations objects
-  - `bwyd/parser.py`: Bwyd language parser
-  - `bwyd/structure.py`: Bwyd language structural objects
+  - `bwyd/__init__.py`: package definitions
+  - `bwyd/error.py`: error handling
+  - `bwyd/measure.py`: measurement objects
+  - `bwyd/module.py`: module interpreter
+  - `bwyd/ops.py`: operations objects
+  - `bwyd/parser.py`: parser, corpus operations
+  - `bwyd/structure.py`: structural objects
 
   - `bwyd/resources/bwyd.tx`: Bwyd language grammar in `textX`
   - `bwyd/resources/bwyd.svg`: Bwyd icon

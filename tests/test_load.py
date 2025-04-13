@@ -28,7 +28,9 @@ Load a sample file to ensure the parser works correctly.
     slug: str = "frozen_gnocchi"
     gnoc_path: pathlib.Path = EXAMPLES_DIR / f"{slug}.bwyd"
 
-    module: bwyd.Module = bwyd.Bwyd.parse(
+    dsl: bwyd.Bwyd = bwyd.Bwyd()
+
+    module: bwyd.Module = dsl.parse(
         gnoc_path,
         slug = slug,
         debug = False, # True
