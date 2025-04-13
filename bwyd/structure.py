@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from urllib.parse import urlparse
 import base64
 import io
+import logging
 import itertools
 import typing
 
@@ -77,9 +78,9 @@ Access an image by URL, resize to thumbnail, convert to a data URL.
             hex_data: str = base64.b64encode(buffered.getvalue()).decode("utf-8")
             data_url = f"data:image/jpeg;base64,{hex_data}"
 
-        except requests.exceptions.Timeout as ex:
+        except requests.exceptions.Timeout as ex:  # pylint: disable=W0612
             error_msg: str = f"URL read timeout: {img_url}"
-            raise RuntimeError(error_msg) from ex
+            logging.error(error_msg)
 
         return data_url
 

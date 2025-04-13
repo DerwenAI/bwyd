@@ -7,6 +7,7 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
 import configparser
+import logging
 import pathlib
 import typing
 
@@ -34,6 +35,8 @@ A corpus of Bwyd modules.
 Constructor.
         """
         self.converter: dict = converter
+
+        logging.basicConfig(format="%(asctime)s %(message)s")
 
 
     def iter_files (

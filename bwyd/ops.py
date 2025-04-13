@@ -144,6 +144,7 @@ Serializable representation for JSON.
         """
         amount: str = self.measure.humanize_convert(
             self.symbol,
+            self.entity.external,
             converter,
         )
 

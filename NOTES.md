@@ -1,12 +1,8 @@
 ## TODOs
 
-  * bwyd.Bwyd singleton configurables:
-    + optional config file
-    + factory pattern for Parser, Corpus
+  * make bwyd.Bwyd singleton configurable:
     + persisted URL request cache
     https://requests-cache.readthedocs.io/en/stable/user_guide/backends.html#specifying-a-backend
-    + logging: show which ingredients lack conversions
-      https://docs.python.org/3/howto/logging.html
     + Conversion: as a class, simplify extending the defined ingredients
 
   * OpAppliance as superclass for OpHeat, OpBake, OpChill

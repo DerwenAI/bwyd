@@ -9,6 +9,7 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 from collections import OrderedDict
 from dataclasses import dataclass
 from fractions import Fraction
+import logging
 import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=W0611
@@ -57,6 +58,7 @@ Denormalize this measure into human-readable form.
     def humanize_convert (
         self,
         symbol: str,
+        external: bool,
         converter: dict,
         ) -> str:
         """
@@ -71,7 +73,11 @@ imperial conversion if available.
             if self.units == metric_units:
                 imper_amount: float = self.amount / ratio
                 amount += f" ({self.humanize_cup(imper_amount)})"
-        else:
+
+        elif self.units is not None:
+            if not external:
+                logging.warning(f"no conversion ratio for {symbol}")  # pylint: disable=W1203
+
             match self.units:
                 case "g":
                     imper_amount = self.amount * POUNDS_PER_GRAM
@@ -80,6 +86,9 @@ imperial conversion if available.
                 case "l":
                     imper_amount = self.amount * CUPS_PER_LITER
                     amount += self.humanize_generic(imper_amount, "cups")
+
+                case _:
+                    logging.warning(f"no default conversion for unit `{self.units}`")  # pylint: disable=W1203
 
         return amount
 

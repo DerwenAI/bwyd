@@ -10,6 +10,7 @@ from collections import OrderedDict
 from urllib.parse import ParseResult, urlparse
 import datetime
 import json
+import logging
 import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
@@ -135,6 +136,7 @@ one for each parsed Closure.
                 {
                     "amount": measure.humanize_convert(
                         entity.symbol,
+                        entity.external,
                         self.UNIT_CONVERT,
                     ),
                     "text": entity.text,
@@ -794,7 +796,7 @@ Iterator for the aggregate ingredients in one Bwyd module.
                                 ing[name][1].amount += measure.amount
                             else:
                                 error_msg: str = f"wrong units for ingredient list: {measure.units}"
-                                raise RuntimeError(error_msg)
+                                logging.error(error_msg)
 
         for entity, measure in ing.values():
             yield entity, measure
