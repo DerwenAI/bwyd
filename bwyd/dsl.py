@@ -65,6 +65,7 @@ Traverse the given directory, rendering Bwyd scripts as HTML in place.
 Return a count of the modules processed.
         """
         modules: typing.List[ Module ] = []
+        dsl: Bwyd = Bwyd()
 
         for bwyd_path in self.iter_files(dir_path, glob = glob):
             slug: str = bwyd_path.stem
@@ -73,7 +74,7 @@ Return a count of the modules processed.
                 ic(bwyd_path.name)
 
             # parse the Bwyd module
-            module: Module = Bwyd.parse(
+            module: Module = dsl.parse(
                 bwyd_path,
                 slug = slug,
             )

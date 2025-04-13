@@ -6,6 +6,8 @@ Package definitions for the Bwyd DSL.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
+from .dsl import Bwyd, Corpus
+
 from .error import BwydParserError
 
 from .kernel import BwydKernel
@@ -16,8 +18,6 @@ from .module import Module
 
 from .ops import Dependency, DependencyDict, \
     OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpBake, OpHeat, OpChill, OpStore
-
-from .parser import Bwyd, Corpus
 
 from .resources import BWYD_SVG, \
     CONVERT_PATH, GRAMMAR_PATH, ICON_PATH, \

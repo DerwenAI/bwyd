@@ -77,9 +77,9 @@ Access an image by URL, resize to thumbnail, convert to a data URL.
             hex_data: str = base64.b64encode(buffered.getvalue()).decode("utf-8")
             data_url = f"data:image/jpeg;base64,{hex_data}"
 
-        except requests.exceptions.Timeout:
+        except requests.exceptions.Timeout as ex:
             error_msg: str = f"URL read timeout: {img_url}"
-            raise RuntimeError(error_msg)
+            raise RuntimeError(error_msg) from ex
 
         return data_url
 

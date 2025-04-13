@@ -18,7 +18,7 @@ if __name__ == "__main__":
         config_file = pathlib.Path("config.ini"),
     )
 
-    corpus: bwyd.Corpus = dsl.get_corpus()
+    corpus: bwyd.Corpus = dsl.build_corpus()
     examples_path: pathlib.Path = pathlib.Path("examples")
 
     modules: typing.List[ bwyd.Module ] = corpus.render_html_files(
