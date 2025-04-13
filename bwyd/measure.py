@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from fractions import Fraction
 import typing
 
+from icecream import ic  # type: ignore  # pylint: disable=W0611
 import inflect
 
 
@@ -18,11 +19,16 @@ PLURAL = inflect.engine()
 
 NORM_RATIO: typing.Dict[ str, int ] = OrderedDict({
     "year": 60 * 60 * 24 * 365,
+    "month": 60 * 60 * 24 * 30,
     "day": 60 * 60 * 24,
     "hour": 60 * 60,
     "minute": 60,
     "second": 1,
 })
+
+CUPS_PER_LITER: float = 4.226753
+POUNDS_PER_GRAM: float = 0.002204623
+
 
 
 @dataclass(order = False, frozen = False)
@@ -68,11 +74,11 @@ imperial conversion if available.
         else:
             match self.units:
                 case "g":
-                    imper_amount = self.amount * 0.002204623
+                    imper_amount = self.amount * POUNDS_PER_GRAM
                     amount += self.humanize_generic(imper_amount, "pounds")
 
                 case "l":
-                    imper_amount = round(self.amount * 4.226753, 2)
+                    imper_amount = self.amount * CUPS_PER_LITER
                     amount += self.humanize_generic(imper_amount, "cups")
 
         return amount
@@ -113,9 +119,11 @@ Humanize imperial measurement ratios, for cups
 
         if amount >= 1.0:
             human: str = cls.humanize_ratio(amount)
-            #human: str = f"{round(amount, 2):.2f}"
         else:
             human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
+
+        if amount > 1.0:
+            units = PLURAL.plural(units)
 
         return f"{human} {units}"
 
@@ -133,11 +141,13 @@ Humanize imperial measurement ratios, for cups
 
         if amount >= 0.95:
             human: str = cls.humanize_ratio(amount)
-            #human: str = f"{round(amount, 2):.2f}"
         elif amount >= 0.4:
             human = str(Fraction(round(amount, 1)).limit_denominator(denom_limit))
         else:
             human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
+
+        if amount > 1.0:
+            units = PLURAL.plural(units)
 
         return f"{human} {units}"
 
@@ -153,6 +163,8 @@ Humanize imperial measurement ratios >= 1.0
         base: int = int(amount)
         frac: float = amount - float(base)
 
+        if frac >= 0.9:
+            return str(round(amount))
         if frac < 0.2:
             return str(base)
 
@@ -196,13 +208,14 @@ Adapted from:
 <https://stackoverflow.com/a/56499010/1698443>
         """
         (years, remainder) = divmod(self.normalize(), 31536000)
+        (months, remainder) = divmod(remainder, 2592000)
         (days, remainder) = divmod(remainder, 86400)
         (hours, remainder) = divmod(remainder, 3600)
         (minutes, seconds) = divmod(remainder, 60)
 
         cascade: zip = zip(
             NORM_RATIO.keys(),
-            ( years, days, hours, minutes, seconds, ),
+            ( years, months, days, hours, minutes, seconds, ),
         )
 
         units: list = []

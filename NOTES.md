@@ -1,20 +1,25 @@
 ## TODOs
 
+  * index as: interactive table, searchable, autocomplete
+  * logging: show which ingredients lack conversions
+  * Conversion: as a class, simplify extending the defined ingredients
+  * add metadata for AUTHOR
   * convert existing recipes
   * FERMENT
-  * Conversion: as a class, simplify extensions
-  * add metadata for AUTHOR
   * download `.bwyd` source
   * refactor style into CSS
+
+  * use `NetworkX` to build a dependency graph of closures from a corpus of modules
+  * leverage `pydantic-graph` to build trees from directed cliques
+  * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
+
   * PARALLEL/SERIAL for scaling durations
   * generate `LanceDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
   * use `BAML` to parse recipe elements for the DSL
   * use `textX-LS` to generate a VS Code extension
   * schedule use of appliances: oven, fridge, range, instantpot, etc.
-  * use `NetworkX` to build a dependency graph of closures from a corpus of modules
-  * leverage `pydantic-graph` to build trees from directed cliques
-  * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
   
+
 ## Taxonomy
 
 At the core, the configuration of the **Bwyd** language is based on a
@@ -28,6 +33,9 @@ _knowledge graph_.
   - prepped itermediates
   - ratios
   - substitutions
+  - author notes to cooks
+  - citations
+  - posts describing results
 
 
 ## Research

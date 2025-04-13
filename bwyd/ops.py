@@ -28,6 +28,7 @@ Ingredient, Tool, Container, etc.
     ref_count: int = 0
     external: bool = False
 
+
     def get_model (
         self
         ) -> dict:
@@ -45,6 +46,7 @@ class DependencyDict (OrderedDict):
 A dictionary of a specific class of dependencies, which also provides
 a local namespace.
     """
+
 
     def get_model (
         self
@@ -79,7 +81,8 @@ Stub: Total duration.
 @dataclass(order = False, frozen = False)
 class OpNote (OpGeneric):  # pylint: disable=R0902
     """
-A data class representing one Note object.
+Represents a collapsable Note, inline *within* an Activity, from the
+Author/Cook for other Cooks.
     """
     text: str
 
@@ -100,7 +103,8 @@ Serializable representation for JSON.
 @dataclass(order = False, frozen = False)
 class OpTransfer (OpGeneric):  # pylint: disable=R0902
     """
-A data class representing one Transfer object.
+Represents the action of a Cook to Transfer an intermediate into
+a Container from another Focus, still *within* the same Closure.
     """
     symbol: str
     entity: Dependency
@@ -122,7 +126,8 @@ Serializable representation for JSON.
 @dataclass(order = False, frozen = False)
 class OpAdd (OpGeneric):  # pylint: disable=R0902
     """
-A data class representing one Add object.
+Represents the action of a Cook to Add a measured amount of an
+ingredient into a Container within an Activity.
     """
     symbol: str
     measure: Measure
@@ -152,7 +157,8 @@ Serializable representation for JSON.
 @dataclass(order = False, frozen = False)
 class OpAction (OpGeneric):  # pylint: disable=R0902
     """
-A data class representing one Action object.
+Represents the action of a Cook using a Tool to perform part of an
+Activity on the food within a specific Container.
     """
     tool: Dependency
     modifier: str
@@ -188,7 +194,8 @@ Serializable representation for JSON.
 @dataclass(order = False, frozen = False)
 class OpBake (OpGeneric):  # pylint: disable=R0902
     """
-A data class representing one Bake object.
+Represents the process of an appliance (oven) operating
+to bake the food within a Container.
     """
     mode: str
     container: Dependency
@@ -227,7 +234,8 @@ Serializable representation for JSON.
 @dataclass(order = False, frozen = False)
 class OpHeat (OpGeneric):  # pylint: disable=R0902
     """
-A data class representing one Heat object.
+Represents the process of an appliance (range, hotplate, camp fire)
+operating to heat the food within a Container.
     """
     container: Dependency
     modifier: str
@@ -261,7 +269,8 @@ Serializable representation for JSON.
 @dataclass(order = False, frozen = False)
 class OpChill (OpHeat):  # pylint: disable=R0902
     """
-A data class representing one Chill object.
+Represents the process of an appliance (refrigerator, freezer, icebox)
+operating to chill the food within a Container.
     """
 
     def get_model (
@@ -282,7 +291,8 @@ Serializable representation for JSON.
 @dataclass(order = False, frozen = False)
 class OpStore (OpGeneric):  # pylint: disable=R0902
     """
-A data class representing one Store object.
+Represents the process of a Cook on a Container to store the yield of
+a Closure for a specified time period.
     """
     container: Dependency
     modifier: str

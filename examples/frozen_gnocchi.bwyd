@@ -17,7 +17,7 @@ CLOSURE: "gnocchi dough"
     INGREDIENT flour: "flour: rice, oat, etc."
     INGREDIENT egg: "large chicken egg"
     INGREDIENT ricotta: "whole milk ricotta"
-    INGREDIENT parmesan: "grated parmesan"
+    INGREDIENT grated_parmesan: "grated parmesan"
     INGREDIENT nutmeg: "freshly grated nutmeg"
 
     FOCUS bowl
@@ -31,7 +31,7 @@ CLOSURE: "gnocchi dough"
 	TIME (30 second)
 
     ADD ricotta (250 g)
-    ADD parmesan (50 g)
+    ADD grated_parmesan (50 g)
     ADD nutmeg (1 g)
 
     ACTION spatula
@@ -60,7 +60,7 @@ YIELDS dough (800 g) INTERMEDIATE
 
 
 CLOSURE: "cut dumplings"
-    TEXT: "divide dough into 8 pieces, rolling out one at a time"
+    TEXT: "divide dough into 4 pieces, rolling out one at a time"
 
     CONTAINER mat: "floured rolling surface"
     TOOL hand: "clean hands"
@@ -88,11 +88,11 @@ CLOSURE: "cut dumplings"
 
     ACTIVITY: "make pillows"
 
-    ACTION fork: "cut into 1 cm dumplings pieces, resembling little pillows"
+    ACTION fork: "cut into 1.5 cm dumplings pieces, resembling little pillows"
         UNTIL: "entire rope is cut"
 	TIME (30 second)
 
-YIELDS dumplings (20) INTERMEDIATE
+YIELDS dumplings (80) INTERMEDIATE
 
 
 CLOSURE: "frozen gnocchi for storage"
@@ -102,7 +102,7 @@ CLOSURE: "frozen gnocchi for storage"
     TOOL hand: "clean hands"
     TOOL board: "gnocchi board or a fork"
 
-    INGREDIENT parchment: "cut parchment paper"
+    INGREDIENT parchment: "parchment paper, cut to line the baking dish"
     USE dumplings: "raw cut dumplings"
 
     FOCUS dish
@@ -112,19 +112,21 @@ CLOSURE: "frozen gnocchi for storage"
     ADD parchment (1)
 
     ACTION hand: "line dish with parchment paper"
-        UNTIL: "fully lined"
+        UNTIL: "each layer is fully lined"
 	TIME (30 second)
 
     ACTIVITY: "pack gnocchi"
 
-    ADD dumplings (20)
+    ADD dumplings (80)
 
     ACTION board: "roll the cut dumplings onto parchment paper; arrange without touching other dumplings"
         UNTIL: "layer is filled"
 	TIME (10 second)
 
+    NOTE: "depending on the size of the dish, you may need to add multiple layers of gnocchi dumplings"
+
     CHILL dish: "freeze"
         UNTIL: "dumplings are frozen solid"
         TIME (2 hour)
 
-YIELDS frozen_gnocchi_dumplings (20)
+YIELDS frozen_gnocchi_dumplings (80)

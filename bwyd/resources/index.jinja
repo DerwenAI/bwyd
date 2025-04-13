@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="{{ data.icon }}"
+      >
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css"
+      />
+    <style>
+/* fonts, icons */
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+/* structural */
+html, h1, h2, h3, h4, h5, p, span, cite, figcaption, button, input, select, textarea {
+    font-family: "Atkinson Hyperlegible", sans-serif;
+}
+
+body {
+    color: hsl(0, 0%, 40%);
+}
+
+p {
+    font-weight: normal;
+    font-size: 1.1em;
+    line-height: 1.3em;
+    margin: 1.2em 0 1.2em 0;
+}
+
+a {
+    color: hsl(55, 17%, 49%);
+    background-color: white;
+    font-weight: bold;
+}
+
+a:visited {
+    color: hsl(55, 17%, 49%);
+    background-color: white;
+}
+
+a:hover {
+    color: white;
+    background-color: hsl(55, 17%, 49%);
+}
+
+a {
+    text-decoration: none !important;
+}
+    </style>
+    <title>Bwyd Recipes</title>
+  </head>
+
+  <body>
+    <table id="recipe_table" class="display">
+      <thead>
+	<tr>
+	  <th>thumb</th>
+	  <th>name</th>
+	  <th>serves</th>
+	  <th>duration</th>
+	  <th>updated</th>
+	</tr>
+      </thead>
+      <tbody>
+	{% for module in data.modules %}
+	<tr>
+	  <td>
+	    <img
+	      src="{{ module.thumb }}"
+	      alt="{{ module.title }}"
+	      style="height: 3em;"
+	      >
+	  </td>
+	  <td>
+	    <a
+	      href="{{ module.slug }}.html"
+	      title="{{ module.text }}"
+              >{{ module.title }}</a>
+	  </td>
+	  <td>
+	    {% for yield in module.serves %}
+  	    {{ yield }}<br>
+	    {% endfor %}
+	  </td>
+	  <td>
+	    {{ module.duration }}
+	  </td>
+	  <td>
+	    {{ module.updated }}
+	  </td>
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>
+
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+      ></script>
+    <script
+      src="https://cdn.datatables.net/2.2.2/js/dataTables.js"
+      ></script>
+    <script>
+$(document).ready(function() {
+    $("#recipe_table").DataTable({ });
+});
+    </script>
+  </body>
+</html>

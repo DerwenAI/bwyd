@@ -41,7 +41,8 @@ dependencies = [
     "spdx-license-list (>=3.26.0,<4.0.0)",
     "minify-html (>=0.16.4,<0.17.0)",
     "universal-pathlib (>=0.2.6,<0.3.0)",
-    "inflect (>=7.5.0,<8.0.0)"
+    "inflect (>=7.5.0,<8.0.0)",
+    "types-requests (>=2.32.0.20250328,<3.0.0.0)"
 ]
 
 keywords = [

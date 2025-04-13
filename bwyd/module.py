@@ -122,6 +122,7 @@ one for each parsed Closure.
             updated = self.updated.isoformat()
 
         return {
+            "icon": BWYD_SVG,
             "title": self.title,
             "text": self.text,
             "license": spdx_license,

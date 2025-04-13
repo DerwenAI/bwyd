@@ -12,6 +12,7 @@
   - `bwyd/resources/bwyd.tx`: Bwyd language grammar in `textX`
   - `bwyd/resources/bwyd.svg`: Bwyd icon
   - `bwyd/resources/convert.json`: measure conversions
+  - `bwyd/resources/index.jinja`: Jinja2 HTML index template
   - `bwyd/resources/page.jinja`: Jinja2 HTML page template
 
   - `bwyd/__main__.py`: Jypter kernel CLI
@@ -69,10 +70,10 @@ poetry install --extras=test
 poetry install --extras=dev
 ```
 
+To run unit tests, type checking, and linting:
+
 ```bash
-poetry run pytest
-poetry run mypy bwyd
-poetry run pylint bwyd
+./hooks.sh
 ```
 
 To validate the generated HTML:

@@ -135,7 +135,7 @@ Duration:
 ;
 
 DurationUnits:
-  "second" | "minute" | "hour" | "day" | "year"
+  "second" | "minute" | "hour" | "day" | "month" | "year"
 ;
 
 Temperature:

@@ -8,10 +8,14 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 
 from dataclasses import dataclass, field
 from urllib.parse import urlparse
+import base64
+import io
 import itertools
 import typing
 
+from PIL import Image
 from upath import UPath
+import requests
 
 from .measure import Measure
 
@@ -45,6 +49,41 @@ Accessor for an embeddable URL.
         return self.url
 
 
+    @classmethod
+    def thumbify (
+        cls,
+        img_url: str,
+        ) -> str:
+        """
+Access an image by URL, resize to thumbnail, convert to a data URL.
+        """
+        data_url: str = img_url
+
+        try:
+            req = requests.get(
+                img_url,
+                timeout = 10,
+                stream = True,
+            )
+
+            image: Image = Image.open(req.raw)  # type: ignore
+
+            max_size: typing.Tuple[ int, int ] = (50, 50,)
+            image.thumbnail(max_size)  # type: ignore
+
+            buffered: io.BytesIO = io.BytesIO()
+            image.save(buffered, format = "JPEG")  # type: ignore
+
+            hex_data: str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+            data_url = f"data:image/jpeg;base64,{hex_data}"
+
+        except requests.exceptions.Timeout:
+            error_msg: str = f"URL read timeout: {img_url}"
+            raise RuntimeError(error_msg)
+
+        return data_url
+
+
     def get_thumbnail (
         self,
         ) -> str:
@@ -55,7 +94,7 @@ Accessor for a thumbnail URL.
 
         if host and host.endswith(".instagram.com"):
             embed: UPath = UPath(self.url) / "media" / "?size=l"
-            return embed.as_posix()
+            return self.thumbify(embed.as_posix())
 
         return self.url
 

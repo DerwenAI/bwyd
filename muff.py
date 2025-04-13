@@ -9,7 +9,7 @@ import pathlib
 import typing
 
 from icecream import ic
-from jinja2 import Environment, BaseLoader
+
 import bwyd
 
 
@@ -24,29 +24,26 @@ if __name__ == "__main__":
     )
 
     mod_data: dict = {
-        "data": [
-            {
-                "slug": module.slug,
-                "title": module.title,
-                "thumb": module.get_thumbnail(),
-            }
-            for module in modules
-        ]
+        "data": {
+            "icon": bwyd.BWYD_SVG,
+            "modules": [
+                {
+                    "slug": module.slug,
+                    "thumb": module.get_thumbnail(),
+                    "title": module.title,
+                    "text": module.text,
+                    "serves": module.total_yields(),
+                    "duration": module.total_duration(),
+                    "updated": module.updated,
+                }
+                for module in modules
+            ],
+        },
     }
 
-    JINJA_INDEX_TEMPLATE: str = """
-    <ul>
-    {% for module in data %}
-      <li>
-        <a href="{{ module.slug }}.html"
-         >{{ module.title }}</a>
-      </li>
-    {% endfor %}
-    </ul>
-    """
+    ic(mod_data)
 
-    rtemplate = Environment(loader = BaseLoader).from_string(JINJA_INDEX_TEMPLATE)
-    html: str= rtemplate.render(mod_data)
+    html: str = bwyd.JINJA_INDEX_TEMPLATE.render(mod_data)
 
     with open(examples_path / "index.html", "w", encoding = "utf-8") as fp:
         fp.write(html)

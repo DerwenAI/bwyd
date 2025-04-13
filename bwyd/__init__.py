@@ -21,5 +21,9 @@ from .ops import Dependency, DependencyDict, \
 
 from .parser import Bwyd
 
+from .resources import BWYD_SVG, \
+    CONVERT_PATH, GRAMMAR_PATH, ICON_PATH, \
+    JINJA_PAGE_TEMPLATE, JINJA_INDEX_TEMPLATE
+
 from .structure import Post, Product, \
     Activity, Focus, Closure
