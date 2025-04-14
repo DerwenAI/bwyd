@@ -22,7 +22,7 @@
   - `hooks.sh`: customized pre-commit hooks
 
   - `bwyd.cache`: serialized URL request cache
-  - `config.ini`: sample configuration settings
+  - `config.toml`: sample configuration settings
 
   - `demo.py`: Python demo app
   - `examples/*.bwyd`: example recipes as Bwyd scripts
