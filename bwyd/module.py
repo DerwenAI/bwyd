@@ -18,6 +18,7 @@ from spdx_tools.spdx.validation.spdx_id_validators import is_valid_internal_spdx
 import dateutil
 import jinja2
 import minify_html
+import requests_cache
 import spdx_license_list
 import textx  # type: ignore  # pylint: disable=E0401
 
@@ -80,6 +81,7 @@ Make the image URL embeddable in an <iframe/>
 
     def get_thumbnail (
         self,
+        session: requests_cache.CachedSession,
         ) -> str:
         """
 Accessor for a thumbnail URL.
@@ -87,7 +89,7 @@ Accessor for a thumbnail URL.
         img_url: str = BWYD_SVG
 
         if len(self.posts) > 0:
-            img_url = self.posts[0].get_thumbnail()
+            img_url = self.posts[0].get_thumbnail(session)
 
         return img_url
 

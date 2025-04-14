@@ -12,6 +12,7 @@ import pathlib
 import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
+import requests_cache
 import textx  # type: ignore  # pylint: disable=E0401
 
 from .module import Module
@@ -28,15 +29,41 @@ A corpus of Bwyd modules.
 
     def __init__ (
         self,
-        *,
-        converter: dict = Module.UNIT_CONVERT,
+        config: configparser.ConfigParser,
+        converter: dict,
         ) -> None:
         """
 Constructor.
         """
+        self.config: configparser.ConfigParser = config
         self.converter: dict = converter
 
         logging.basicConfig(format="%(asctime)s %(message)s")
+
+
+    def get_cache (
+        self,
+        *,
+        cache_path: typing.Optional[ pathlib.Path ] = None,
+        cache_expire: typing.Optional[ int ] = None,
+        ) -> requests_cache.CachedSession:
+        """
+Build a URL request cache session, optionally loading any
+previous serialized cache from disk.
+        """
+        if cache_path is None:
+            cache_path = pathlib.Path(self.config["BWYD"]["cache_path"])
+
+        if cache_expire is None:
+            cache_expire = int(self.config["BWYD"]["cache_expire"])
+
+        session: requests_cache.CachedSession = requests_cache.CachedSession(
+            backend = requests_cache.SQLiteCache(cache_path),
+        )
+
+        session.settings.expire_after = cache_expire
+
+        return session
 
 
     def iter_files (
@@ -115,14 +142,17 @@ Bwyd DSL parser/interpreter.
         self,
         *,
         config_file: typing.Optional[ pathlib.Path ] = None,
+        converter: dict = Module.UNIT_CONVERT,
         ) -> None:
         """
 Constructor.
         """
-        self.config = configparser.ConfigParser()
+        self.config: configparser.ConfigParser = configparser.ConfigParser()
 
         if config_file is not None:
             self.config.read(config_file)
+
+        self.converter: dict = converter
 
 
     def parse (
@@ -146,10 +176,11 @@ Initialize a parser to load one Bywd module from a file.
 
     def build_corpus (
         self,
-        *,
-        converter: dict = Module.UNIT_CONVERT,
         ) -> Corpus:
         """
 Factory for initializing a corpus of Bywd modules.
         """
-        return Corpus(converter = converter)
+        return Corpus(
+            config = self.config,
+            converter = self.converter,
+        )

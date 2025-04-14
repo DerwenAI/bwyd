@@ -9,6 +9,7 @@ import pathlib
 import typing
 
 from icecream import ic
+import requests_cache
 
 import bwyd
 
@@ -19,6 +20,8 @@ if __name__ == "__main__":
     )
 
     corpus: bwyd.Corpus = dsl.build_corpus()
+    session: requests_cache.CachedSession = corpus.get_cache()
+
     examples_path: pathlib.Path = pathlib.Path("examples")
 
     modules: typing.List[ bwyd.Module ] = corpus.render_html_files(
@@ -33,7 +36,7 @@ if __name__ == "__main__":
             "modules": [
                 {
                     "slug": module.slug,
-                    "thumb": module.get_thumbnail(),
+                    "thumb": module.get_thumbnail(session),
                     "title": module.title,
                     "text": module.text,
                     "serves": module.total_yields(),

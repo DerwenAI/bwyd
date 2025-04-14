@@ -1,4 +1,5 @@
 # local
+bwyd.cache
 examples/*.html
 recipes
 *.dot

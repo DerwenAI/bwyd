@@ -1,8 +1,6 @@
 ## TODOs
 
   * make bwyd.Bwyd singleton configurable:
-    + persisted URL request cache
-    https://requests-cache.readthedocs.io/en/stable/user_guide/backends.html#specifying-a-backend
     + Conversion: as a class, simplify extending the defined ingredients
 
   * OpAppliance as superclass for OpHeat, OpBake, OpChill

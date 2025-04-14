@@ -17,6 +17,7 @@ import typing
 from PIL import Image
 from upath import UPath
 import requests
+import requests_cache
 
 from .measure import Measure
 
@@ -50,10 +51,10 @@ Accessor for an embeddable URL.
         return self.url
 
 
-    @classmethod
     def thumbify (
-        cls,
+        self,
         img_url: str,
+        session: requests_cache.CachedSession,
         ) -> str:
         """
 Access an image by URL, resize to thumbnail, convert to a data URL.
@@ -61,7 +62,7 @@ Access an image by URL, resize to thumbnail, convert to a data URL.
         data_url: str = img_url
 
         try:
-            req = requests.get(
+            req: requests_cache.CachedResponse = session.get(  # type: ignore
                 img_url,
                 timeout = 10,
                 stream = True,
@@ -87,6 +88,7 @@ Access an image by URL, resize to thumbnail, convert to a data URL.
 
     def get_thumbnail (
         self,
+        session: requests_cache.CachedSession,
         ) -> str:
         """
 Accessor for a thumbnail URL.
@@ -95,7 +97,7 @@ Accessor for a thumbnail URL.
 
         if host and host.endswith(".instagram.com"):
             embed: UPath = UPath(self.url) / "media" / "?size=l"
-            return self.thumbify(embed.as_posix())
+            return self.thumbify(embed.as_posix(), session)
 
         return self.url
 
