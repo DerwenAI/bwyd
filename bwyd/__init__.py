@@ -17,7 +17,7 @@ from .measure import Measure, Duration, Temperature
 from .module import Module
 
 from .ops import Dependency, DependencyDict, \
-    OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpBake, OpHeat, OpChill, OpStore
+    OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpStore, OpHeat, OpChill, OpBake
 
 from .resources import BWYD_SVG, \
     CONVERT_PATH, GRAMMAR_PATH, ICON_PATH, \

@@ -7,8 +7,9 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
 from collections import OrderedDict
-from dataclasses import dataclass
 import typing
+
+from pydantic.dataclasses import dataclass
 
 from .measure import Measure, Duration, Temperature
 
@@ -78,7 +79,7 @@ Stub: Total duration.
         return Duration(0, "second")
 
 
-@dataclass(order = False, frozen = False)
+@dataclass(order = False, frozen = False, kw_only = True)
 class OpNote (OpGeneric):  # pylint: disable=R0902
     """
 Represents a collapsable Note, inline *within* an Activity, from the
@@ -100,7 +101,7 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False)
+@dataclass(order = False, frozen = False, kw_only = True)
 class OpTransfer (OpGeneric):  # pylint: disable=R0902
     """
 Represents the action of a Cook to Transfer an intermediate into
@@ -123,7 +124,7 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False)
+@dataclass(order = False, frozen = False, kw_only = True)
 class OpAdd (OpGeneric):  # pylint: disable=R0902
     """
 Represents the action of a Cook to Add a measured amount of an
@@ -155,7 +156,7 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False)
+@dataclass(order = False, frozen = False, kw_only = True)
 class OpAction (OpGeneric):  # pylint: disable=R0902
     """
 Represents the action of a Cook using a Tool to perform part of an
@@ -192,104 +193,7 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False)
-class OpBake (OpGeneric):  # pylint: disable=R0902
-    """
-Represents the process of an appliance (oven) operating
-to bake the food within a Container.
-    """
-    mode: str
-    container: Dependency
-    modifier: str
-    until: str
-    duration: Duration
-    temperature: Temperature
-
-
-    def get_duration (
-        self,
-        ) -> Duration:
-        """
-Duration of this operation.
-        """
-        return self.duration
-
-
-    def get_model (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "bake": {
-                "mode": self.mode.lower(),
-                "temperature": self.temperature.humanize(),
-                "text": self.modifier,
-                "until": self.until,
-                "time": self.duration.humanize(),
-            }
-        }
-
-
-@dataclass(order = False, frozen = False)
-class OpHeat (OpGeneric):  # pylint: disable=R0902
-    """
-Represents the process of an appliance (range, hotplate, camp fire)
-operating to heat the food within a Container.
-    """
-    container: Dependency
-    modifier: str
-    until: str
-    duration: Duration
-
-    def get_duration (
-        self,
-        ) -> Duration:
-        """
-Duration of this operation.
-        """
-        return self.duration
-
-
-    def get_model (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "heat": {
-                "text": self.modifier,
-                "until": self.until,
-                "time": self.duration.humanize(),
-            }
-        }
-
-
-@dataclass(order = False, frozen = False)
-class OpChill (OpHeat):  # pylint: disable=R0902
-    """
-Represents the process of an appliance (refrigerator, freezer, icebox)
-operating to chill the food within a Container.
-    """
-
-    def get_model (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "chill": {
-                "text": self.modifier,
-                "until": self.until,
-                "time": self.duration.humanize(),
-            }
-        }
-
-
-@dataclass(order = False, frozen = False)
+@dataclass(order = False, frozen = False, kw_only = True)
 class OpStore (OpGeneric):  # pylint: disable=R0902
     """
 Represents the process of a Cook on a Container to store the yield of
@@ -314,13 +218,96 @@ Serializable representation for JSON.
         }
 
 
+@dataclass(order = False, frozen = False, kw_only = True)
+class OpAppliance (OpGeneric):  # pylint: disable=R0902
+    """
+Represents the process of an Appliance operating on the food within
+a specific Container as part of an Activity.
+    """
+    container: Dependency
+    modifier: str
+    until: str
+    duration: Duration
+    appliance: str = "generic"
+
+
+    def get_duration (
+        self,
+        ) -> Duration:
+        """
+Duration of this operation.
+        """
+        return self.duration
+
+
+@dataclass(order = False, frozen = False, kw_only = True)
+class OpHeat (OpAppliance):  # pylint: disable=R0902
+    """
+Represents an Appliance: stove, range, hotplate, camp fire --
+used to *heat* in different modes.
+    """
+    appliance: str = "stove"
+
+
+    def get_model (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            self.appliance: {
+                "text": self.modifier,
+                "until": self.until,
+                "time": self.duration.humanize(),
+            }
+        }
+
+
+@dataclass(order = False, frozen = False, kw_only = True)
+class OpChill (OpHeat):  # pylint: disable=R0902
+    """
+Represents an Appliance: cooler --
+used to *chill* in different modes.
+    """
+    appliance: str = "cooler"
+
+
+@dataclass(order = False, frozen = False, kw_only = True)
+class OpBake (OpAppliance):  # pylint: disable=R0902
+    """
+Represents an Appliance: oven --
+used to *bake* in different modes.
+    """
+    mode: str
+    temperature: Temperature
+    appliance: str = "oven"
+
+
+    def get_model (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            self.appliance: {
+                "text": self.modifier,
+                "until": self.until,
+                "time": self.duration.humanize(),
+                "mode": self.mode.lower(),
+                "temperature": self.temperature.humanize(),
+            }
+        }
+
+
 OpsTypes = typing.Union[
     OpNote,
     OpTransfer,
     OpAdd,
     OpAction,
-    OpBake,
+    OpStore,
     OpHeat,
     OpChill,
-    OpStore,
+    OpBake,
 ]

@@ -197,13 +197,9 @@ details summary {
 		    {% for cite_url in module.sources %}
 		    <li class="list-group-item">
 		      <a
-			class="icon-link icon-link-hover"
 			href="{{ cite_url }}"
 			target="_blank"
-			style="text-decoration:none;"
 			>
-			<i class="bi bi-book"></i>
-			&nbsp;
 			{{ cite_url }}
 		      </a>
 		    </li>
@@ -216,14 +212,10 @@ details summary {
 		    {% for post_url in module.gallery %}
 		    <li class="list-group-item">
 		      <a
-			class="icon-link icon-link-hover"
 			href="{{ post_url }}"
 			target="_blank"
-			style="text-decoration:none;"
 			>
 			{{ post_url }}
-			&nbsp;
-			<i class="bi bi-arrow-up-right-square"></i>
 		      </a>
 		    </li>
 		    {% endfor %}
@@ -377,7 +369,38 @@ details summary {
 				({{ val.time }})
 			      </div>
 
-			      {% elif key == "bake" -%}
+			      {% elif key == "store" -%}
+			      <div
+				style="margin:.5em 0 0 1em;"
+				>
+				store <strong>{{ val.text }}</strong>
+				<br>
+				upto <em>{{ val.upto }}</em>
+			      </div>
+
+			      {% elif key == "stove" -%}
+			      <div
+				style="margin:.5em 0 0 1em;"
+				>
+				<strong>{{ val.text }}</strong>
+				<br>
+				until <em>{{ val.until }}</em>
+				<br>
+				({{ val.time }})
+			      </div>
+
+			      {% elif key == "cooler" -%}
+			      <div
+				style="margin:.5em 0 0 1em;"
+				>
+				<strong>{{ val.text }}</strong>
+				<br>
+				until <em>{{ val.until }}</em>
+				<br>
+				({{ val.time }})
+			      </div>
+
+			      {% elif key == "oven" -%}
 			      <div
 				style="margin:.5em 0 0 1em;"
 				>
@@ -389,37 +412,6 @@ details summary {
 				until <em>{{ val.until }}</em>
 				<br>
 				({{ val.time }})
-			      </div>
-
-			      {% elif key == "heat" -%}
-			      <div
-				style="margin:.5em 0 0 1em;"
-				>
-				<strong>{{ val.text }}</strong>
-				<br>
-				until <em>{{ val.until }}</em>
-				<br>
-				({{ val.time }})
-			      </div>
-
-			      {% elif key == "chill" -%}
-			      <div
-				style="margin:.5em 0 0 1em;"
-				>
-				<strong>{{ val.text }}</strong>
-				<br>
-				until <em>{{ val.until }}</em>
-				<br>
-				({{ val.time }})
-			      </div>
-
-			      {% elif key == "store" -%}
-			      <div
-				style="margin:.5em 0 0 1em;"
-				>
-				store <strong>{{ val.text }}</strong>
-				<br>
-				upto <em>{{ val.upto }}</em>
 			      </div>
 
 			      {% endif %}

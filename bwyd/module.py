@@ -27,7 +27,7 @@ from .error import BwydParserError
 from .measure import Measure, Duration, Temperature
 
 from .ops import Dependency, \
-    OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpBake, OpHeat, OpChill, OpStore
+    OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpStore, OpHeat, OpChill, OpBake
 
 from .resources import BWYD_SVG, CONVERT_PATH, JINJA_PAGE_TEMPLATE
 

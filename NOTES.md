@@ -3,7 +3,6 @@
   * make bwyd.Bwyd singleton configurable:
     + Conversion: as a class, simplify extending the defined ingredients
 
-  * OpAppliance as superclass for OpHeat, OpBake, OpChill
   * schedule use of appliances: oven, fridge, range, instantpot, etc.
 
   * add metadata for AUTHOR
