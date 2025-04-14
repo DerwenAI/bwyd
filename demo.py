@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     # parse an example Bwyd module
     dsl: bwyd.Bwyd = bwyd.Bwyd(
-        config_file = pathlib.Path("config.ini"),
+        config_path = pathlib.Path("config.toml"),
     )
 
     module: bwyd.Module = dsl.parse(

@@ -1,0 +1,3 @@
+[bwyd]
+cache_path = "bwyd.cache"
+cache_expire = 360

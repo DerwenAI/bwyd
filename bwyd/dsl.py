@@ -6,7 +6,7 @@ DSL implementing the Bwyd language.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
-import configparser
+import tomllib
 import logging
 import pathlib
 import typing
@@ -29,13 +29,13 @@ A corpus of Bwyd modules.
 
     def __init__ (
         self,
-        config: configparser.ConfigParser,
+        config: dict,
         converter: dict,
         ) -> None:
         """
 Constructor.
         """
-        self.config: configparser.ConfigParser = config
+        self.config: dict = config
         self.converter: dict = converter
 
         logging.basicConfig(format="%(asctime)s %(message)s")
@@ -52,10 +52,10 @@ Build a URL request cache session, optionally loading any
 previous serialized cache from disk.
         """
         if cache_path is None:
-            cache_path = pathlib.Path(self.config["BWYD"]["cache_path"])
+            cache_path = pathlib.Path(self.config["bwyd"]["cache_path"])
 
         if cache_expire is None:
-            cache_expire = int(self.config["BWYD"]["cache_expire"])
+            cache_expire = self.config["bwyd"]["cache_expire"]
 
         session: requests_cache.CachedSession = requests_cache.CachedSession(
             backend = requests_cache.SQLiteCache(cache_path),
@@ -141,16 +141,17 @@ Bwyd DSL parser/interpreter.
     def __init__ (
         self,
         *,
-        config_file: typing.Optional[ pathlib.Path ] = None,
+        config_path: typing.Optional[ pathlib.Path ] = None,
         converter: dict = Module.UNIT_CONVERT,
         ) -> None:
         """
 Constructor.
         """
-        self.config: configparser.ConfigParser = configparser.ConfigParser()
+        self.config: dict = {}
 
-        if config_file is not None:
-            self.config.read(config_file)
+        if config_path is not None:
+            with open(config_path, mode = "rb") as fp:
+                self.config = tomllib.load(fp)
 
         self.converter: dict = converter
 

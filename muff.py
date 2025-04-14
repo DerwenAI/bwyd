@@ -16,7 +16,7 @@ import bwyd
 
 if __name__ == "__main__":
     dsl: bwyd.Bwyd = bwyd.Bwyd(
-        config_file = pathlib.Path("config.ini"),
+        config_path = pathlib.Path("config.toml"),
     )
 
     corpus: bwyd.Corpus = dsl.build_corpus()
