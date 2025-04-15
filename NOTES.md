@@ -1,19 +1,21 @@
 ## TODOs
 
+  * impl "AS" for linking closures into a class taxonomy
+  * impl "KEYWORDS", which may link into the taxonomy
+
   * make bwyd.Bwyd singleton configurable:
     + Conversion: as a class, simplify extending the defined ingredients
 
-  * schedule use of appliances: oven, fridge, range, instantpot, etc.
-
-  * add metadata for AUTHOR
+  * add metadata for "AUTHOR"
   * convert existing recipes
-  * FERMENT
+  * impl "FERMENT" op
   * download `.bwyd` source
   * refactor style into CSS
 
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules
   * leverage `pydantic-graph` to build trees from directed cliques
   * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
+  * schedule use of appliances: oven, fridge, range, instantpot, etc.
 
   * PARALLEL/SERIAL for scaling durations
   * generate `LanceDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.

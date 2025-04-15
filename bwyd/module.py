@@ -626,15 +626,21 @@ Helper method to interpret one Closure.
         # ensure that "null" metadata values keep their semantics
         text: str = ""
 
-        if closure_parse.meta is not None:
-            if closure_parse.meta.text is not None and len(closure_parse.meta.text) > 0:
-                text = closure_parse.meta.text
+        if closure_parse.text is not None and len(closure_parse.text) > 0:
+            text = closure_parse.text
 
         closure: Closure = Closure(
             name = closure_parse.name,
             obj = closure_parse,
             text = text,
         )
+
+        # handle keywords, some of which may map into the taxonomy
+        if closure_parse.id_list is not None:
+            #ic([x for x in closure_parse.id_list])
+            ic(closure_parse.id_list.ids)
+
+        ic(closure_parse.keywords)
 
         # interpret each product
         for prod_parse in closure_parse.prods:

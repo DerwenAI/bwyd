@@ -26,17 +26,16 @@ Post:
 ;
 
 Closure:
-  "CLOSURE:" name=STRING
-    meta=Closure_Metadata
+  "CLOSURE:" name=STRING ("AS" id_list=IDList)?
+    ("TEXT:" text=STRING)?
+    ("KEYWORDS:" keywords=STRING)?
     depend+=Dependency
     foci+=Focus
     ratio=Ratio?
   prods+=Yield
 ;
 
-Closure_Metadata:
-  ("TEXT:" text=STRING)?
-;
+IDList: ids+=ID[","];
 
 Yield:
 "YIELDS" symbol=ID measure=Measure (intermediate="INTERMEDIATE")?

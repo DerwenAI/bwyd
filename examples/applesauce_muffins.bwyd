@@ -103,8 +103,9 @@ CLOSURE: "prep batter"
 YIELDS batter (1 l) INTERMEDIATE
 
 
-CLOSURE: "bake muffins"
+CLOSURE: "bake muffins" AS muffin
     TEXT: "for large, moist, breakfast muffins"
+    KEYWORDS: "breakfast, baked goods"
 
     CONTAINER pan: "muffin pan, large size 8-hole"
 

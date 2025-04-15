@@ -27,6 +27,7 @@ if __name__ == "__main__":
     modules: typing.List[ bwyd.Module ] = corpus.render_html_files(
         examples_path,
         #glob = "bread*.bwyd",
+        glob = "app*.bwyd",
         debug = True, # False
     )
 
@@ -48,7 +49,7 @@ if __name__ == "__main__":
         },
     }
 
-    ic(mod_data)
+    #ic(mod_data)
 
     html: str = bwyd.JINJA_INDEX_TEMPLATE.render(mod_data)
 
