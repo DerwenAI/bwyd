@@ -11,7 +11,13 @@
       "80 frozen gnocchi dumplings"
     ],
     "duration": "2 hours, 5 minutes, 40 seconds",
-    "updated": "2023-04-10"
+    "updated": "2023-04-10",
+    "keywords": [
+      "dumplings",
+      "pasta",
+      "quick",
+      "starch"
+    ]
   },
   "ingredients": [
     {
@@ -248,13 +254,19 @@
       ]
     },
     {
-      "title": "frozen gnocchi for storage",
+      "title": "frozen gnocchi",
       "yields": [
         "80 frozen gnocchi dumplings"
       ],
       "text": "add layers of dumplings to fill depth of baking dish",
-      "supers": [],
-      "keywords": [],
+      "supers": [
+        "dumplings",
+        "pasta"
+      ],
+      "keywords": [
+        "starch",
+        "quick"
+      ],
       "requires": [
         {
           "name": "dish",

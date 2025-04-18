@@ -95,8 +95,9 @@ CLOSURE: "cut dumplings"
 YIELDS dumplings (80) INTERMEDIATE
 
 
-CLOSURE: "frozen gnocchi for storage"
+CLOSURE: "frozen gnocchi" AS dumplings, pasta
     TEXT: "add layers of dumplings to fill depth of baking dish"
+    KEYWORDS: starch, quick
 
     CONTAINER dish: "baking dish"
     TOOL hand: "clean hands"

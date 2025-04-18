@@ -129,8 +129,9 @@ CLOSURE: "brine the pickles"
 YIELDS brined_veggies (.9 l) INTERMEDIATE
 
 
-CLOSURE: "jar the pickles"
+CLOSURE: "bread and butter pickles" AS pickels
     TEXT: "Refrigerate +1 days before eating"
+    KEYWORDS: fermented, condiment
 
     CONTAINER jar: "sanitized quart jar, still hot"
     TOOL spatula: "silicone spatula"

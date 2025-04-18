@@ -1191,18 +1191,6 @@ widgetsnbextension = ">=4.0.12,<4.1.0"
 test = ["ipykernel", "jsonschema", "pytest (>=3.6.0)", "pytest-cov", "pytz"]
 
 [[package]]
-name = "isodate"
-version = "0.7.2"
-description = "An ISO 8601 date/time/duration parser and formatter"
-optional = false
-python-versions = ">=3.7"
-groups = ["main"]
-files = [
-    {file = "isodate-0.7.2-py3-none-any.whl", hash = "sha256:28009937d8031054830160fce6d409ed342816b543597cece116d966c6d99e15"},
-    {file = "isodate-0.7.2.tar.gz", hash = "sha256:4cd1aa0f43ca76f4a6c6c0292a85f40b35ec2e43e315b59f06e6d32171a953e6"},
-]
-
-[[package]]
 name = "isoduration"
 version = "20.11.0"
 description = "Operations with ISO 8601 durations"
@@ -2986,28 +2974,25 @@ cffi = {version = "*", markers = "implementation_name == \"pypy\""}
 
 [[package]]
 name = "rdflib"
-version = "6.2.0"
+version = "7.1.4"
 description = "RDFLib is a Python library for working with RDF, a simple yet powerful language for representing information."
 optional = false
-python-versions = ">=3.7"
+python-versions = "<4.0.0,>=3.8.1"
 groups = ["main"]
 files = [
-    {file = "rdflib-6.2.0-py3-none-any.whl", hash = "sha256:85c34a86dfc517a41e5f2425a41a0aceacc23983462b32e68610b9fad1383bca"},
-    {file = "rdflib-6.2.0.tar.gz", hash = "sha256:62dc3c86d1712db0f55785baf8047f63731fa59b2682be03219cb89262065942"},
+    {file = "rdflib-7.1.4-py3-none-any.whl", hash = "sha256:72f4adb1990fa5241abd22ddaf36d7cafa5d91d9ff2ba13f3086d339b213d997"},
+    {file = "rdflib-7.1.4.tar.gz", hash = "sha256:fed46e24f26a788e2ab8e445f7077f00edcf95abb73bcef4b86cefa8b62dd174"},
 ]
 
 [package.dependencies]
-isodate = "*"
-pyparsing = "*"
-setuptools = "*"
+pyparsing = ">=2.1.0,<4"
 
 [package.extras]
-berkeleydb = ["berkeleydb"]
-dev = ["black (==22.6.0)", "flake8", "flakeheaven", "isort", "mypy", "pep8-naming", "types-setuptools"]
-docs = ["myst-parser", "sphinx (<6)", "sphinx-autodoc-typehints", "sphinxcontrib-apidoc", "sphinxcontrib-kroki"]
-html = ["html5lib"]
-networkx = ["networkx"]
-tests = ["html5lib", "pytest", "pytest-cov"]
+berkeleydb = ["berkeleydb (>=18.1.0,<19.0.0)"]
+html = ["html5rdf (>=1.2,<2)"]
+lxml = ["lxml (>=4.3,<6.0)"]
+networkx = ["networkx (>=2,<4)"]
+orjson = ["orjson (>=3.9.14,<4)"]
 
 [[package]]
 name = "referencing"
@@ -3763,5 +3748,5 @@ test = ["deepdiff", "pytest"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.11"
-content-hash = "03f4479e2749dccb82775f0f2fb6cbd40f980df9744e6fd14ae5efd2e54cde3e"
+python-versions = ">=3.11,<4.0.0"
+content-hash = "0f524da9747e31b1bf67e5d3f02dd27607a81267886665cdf5a77af50085bc03"

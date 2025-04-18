@@ -136,6 +136,7 @@ one for each parsed Closure.
                 "serves": self.total_yields(),
                 "duration": self.total_duration(),
                 "updated": updated,
+                "keywords": self.collect_keywords(),
             },
             "ingredients": [
                 {

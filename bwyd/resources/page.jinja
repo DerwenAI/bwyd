@@ -173,6 +173,20 @@ details summary {
 			<th scope="row">updated:</th>
 			<td>{{ module.details.updated }}</td>
 		      </tr>
+		      <tr>
+			<th scope="row">updated:</th>
+			<td>{{ module.details.updated }}</td>
+		      </tr>
+		      {% if module.details.keywords|length > 0 %}
+		      <tr>
+			<th scope="row">keywords:</th>
+			<td>
+			  {% for keyword in module.details.keywords %}
+  			  {{ keyword }}{{ ", " if not loop.last else "" }}
+			  {% endfor %}
+			</td>
+		      </tr>
+		      {% endif %}
 		    </tbody>
 		  </table>
 		</div>
@@ -270,6 +284,14 @@ details summary {
 			  <p class="card-text"
 			     style="margin-top:0;"
 			     >{{ closure.text }}</p>
+			  <p>
+			    {% if closure.keywords is defined and closure.keywords|length > 0 %}
+			    <em>keywords:</em>
+			    {% for keyword in closure.keywords %}
+  			    {{ keyword }}{{ ", " if not loop.last else "" }}
+			    {% endfor %}
+			    {% endif %}
+			  </p>
 			</div>
 		      </div>
 		    </div>
