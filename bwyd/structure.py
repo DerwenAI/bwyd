@@ -186,6 +186,8 @@ A data class representing one parsed Closure object.
     name: str
     obj: typing.Any
     text: str = ""
+    supers: typing.List[ str ] = field(default_factory = lambda: [])
+    keywords: typing.List[ str ] = field(default_factory = lambda: [])
     containers: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     tools: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
     ingredients: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108

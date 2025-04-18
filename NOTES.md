@@ -1,7 +1,8 @@
 ## TODOs
 
-  * impl "AS" for linking closures into a class taxonomy
-  * impl "KEYWORDS", which may link into the taxonomy
+  * optional load an RDF/SKOS taxonomy
+  * link "AS" supers into class taxonomy
+  * link "KEYWORDS" into taxonomy
 
   * make bwyd.Bwyd singleton configurable:
     + Conversion: as a class, simplify extending the defined ingredients

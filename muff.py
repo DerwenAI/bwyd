@@ -27,7 +27,7 @@ if __name__ == "__main__":
     modules: typing.List[ bwyd.Module ] = corpus.render_html_files(
         examples_path,
         #glob = "bread*.bwyd",
-        glob = "app*.bwyd",
+        #glob = "app*.bwyd",
         debug = True, # False
     )
 
@@ -43,6 +43,7 @@ if __name__ == "__main__":
                     "serves": module.total_yields(),
                     "duration": module.total_duration(),
                     "updated": module.updated,
+                    "keywords": module.collect_keywords(),
                 }
                 for module in modules
             ],

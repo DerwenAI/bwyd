@@ -9,6 +9,7 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 from collections import OrderedDict
 from urllib.parse import ParseResult, urlparse
 import datetime
+import itertools
 import json
 import logging
 import typing
@@ -106,6 +107,8 @@ one for each parsed Closure.
                 "title": name,
                 "yields": closure.total_yields(intermediaries = True),
                 "text": closure.text,
+                "supers": closure.supers,
+                "keywords": closure.keywords,
                 "requires": closure.get_dependencies(),
                 "foci": [ focus.get_model(self.UNIT_CONVERT) for focus in closure.foci ],
             }
@@ -635,12 +638,20 @@ Helper method to interpret one Closure.
             text = text,
         )
 
-        # handle keywords, some of which may map into the taxonomy
-        if closure_parse.id_list is not None:
-            #ic([x for x in closure_parse.id_list])
-            ic(closure_parse.id_list.ids)
+        # handle taxonomy and keywords
+        if closure_parse.supers is not None:
+            for symbol in closure_parse.supers.ids:
+                closure.supers.append(symbol)
 
-        ic(closure_parse.keywords)
+            if debug:
+                ic(closure.supers)
+
+        if closure_parse.keywords is not None:
+            for symbol in closure_parse.keywords.ids:
+                closure.keywords.append(symbol)
+
+            if debug:
+                ic(closure.keywords)
 
         # interpret each product
         for prod_parse in closure_parse.prods:
@@ -808,6 +819,22 @@ Iterator for the aggregate ingredients in one Bwyd module.
 
         for entity, measure in ing.values():
             yield entity, measure
+
+
+    def collect_keywords (
+        self,
+        ) -> typing.List[ str ]:
+        """
+Accessor for the collected keywords in one Bwyd module.
+        """
+        return sorted(
+            list(
+                itertools.chain.from_iterable([
+                    [ *closure.supers, *closure.keywords ]
+                    for closure in self.closures.values()
+                ])
+            )
+        )
 
 
 ######################################################################

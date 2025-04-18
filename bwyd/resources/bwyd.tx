@@ -26,9 +26,9 @@ Post:
 ;
 
 Closure:
-  "CLOSURE:" name=STRING ("AS" id_list=IDList)?
+  "CLOSURE:" name=STRING ("AS" supers=IDList)?
     ("TEXT:" text=STRING)?
-    ("KEYWORDS:" keywords=STRING)?
+    ("KEYWORDS:" keywords=IDList)?
     depend+=Dependency
     foci+=Focus
     ratio=Ratio?

@@ -58,6 +58,8 @@
         "800 g dough"
       ],
       "text": "best to work with cold ingredients and chilled utensils",
+      "supers": [],
+      "keywords": [],
       "requires": [
         {
           "name": "bowl",
@@ -166,6 +168,8 @@
         "80 dumplings"
       ],
       "text": "divide dough into 4 pieces, rolling out one at a time",
+      "supers": [],
+      "keywords": [],
       "requires": [
         {
           "name": "mat",
@@ -249,6 +253,8 @@
         "80 frozen gnocchi dumplings"
       ],
       "text": "add layers of dumplings to fill depth of baking dish",
+      "supers": [],
+      "keywords": [],
       "requires": [
         {
           "name": "dish",

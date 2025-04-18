@@ -64,6 +64,7 @@ a {
 	  <th>serves</th>
 	  <th>duration</th>
 	  <th>updated</th>
+	  <th>keywords</th>
 	</tr>
       </thead>
       <tbody>
@@ -92,6 +93,11 @@ a {
 	  </td>
 	  <td>
 	    {{ module.updated }}
+	  </td>
+	  <td>
+	    {% for keyword in module.keywords %}
+  	    {{ keyword }}{{ ", " if not loop.last else "" }}
+	    {% endfor %}
 	  </td>
 	</tr>
 	{% endfor %}
