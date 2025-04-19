@@ -12,11 +12,80 @@ import pathlib
 import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
+from rdflib.namespace import DCTERMS, RDF, SKOS, XSD  # pylint: disable=W0611
+import rdflib
 import requests_cache
 import textx  # type: ignore  # pylint: disable=E0401
 
 from .module import Module
-from .resources import GRAMMAR_PATH
+from .resources import BWYD_NAMESPACE, GRAMMAR_PATH
+
+
+######################################################################
+## knowledge graph management
+
+class Graph:
+    """
+A knowledge graph based on a corpus of Bwyd modules.
+    """
+    def __init__ (
+        self,
+        ) -> None:
+        """
+Constructor.
+        """
+        self.lang: str = "en"
+        self.prefix: str = "bwyd"
+        self.ns_bwyd: rdflib.Namespace = rdflib.Namespace(BWYD_NAMESPACE)
+        self.graph: rdflib.Graph = rdflib.Graph()
+
+        nm: rdflib.namespace.NamespaceManager = self.graph.namespace_manager
+        nm.bind(self.prefix, self.ns_bwyd)
+
+
+    def get_instance_iri (
+        self,
+        inst_symbol: str,
+        ) -> rdflib.URIRef:
+        """
+Return a constructed IRI for an instance of a Bwyd class within the corpus.
+        """
+        return self.ns_bwyd.module + "#" + inst_symbol
+
+
+    def get_literal_iri (
+        self,
+        literal: str,
+        ) -> rdflib.Literal:
+        """
+Return a constructed IRI for a literal of a Bwyd class within the corpus.
+        """
+        return rdflib.Literal(literal, lang = self.lang)
+
+
+    def add_tuple (
+        self,
+        s_obj: rdflib.URIRef,
+        p_obj: rdflib.URIRef,
+        o_obj: rdflib.term.Identifier,
+        ) -> None:
+        """
+Add one RDF tuple to the graph.
+        """
+        self.graph.add(( s_obj, p_obj, o_obj, ))
+
+
+    def serialize (
+        self,
+        *,
+        format: str = "ttl",  # pylint: disable=W0622
+        ) -> str:
+        """
+Return the serialized graph int the given format.
+        """
+        return self.graph.serialize(
+            format = format,
+        )
 
 
 ######################################################################
@@ -35,10 +104,11 @@ A corpus of Bwyd modules.
         """
 Constructor.
         """
+        logging.basicConfig(format="%(asctime)s %(message)s")
+
         self.config: dict = config
         self.converter: dict = converter
-
-        logging.basicConfig(format="%(asctime)s %(message)s")
+        self.graph: Graph = Graph()
 
 
     def get_cache (

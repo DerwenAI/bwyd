@@ -2,7 +2,6 @@
 
   * optional load an RDF/SKOS taxonomy
   * link "AS" supers into class taxonomy
-  * link "KEYWORDS" into taxonomy
 
   * make bwyd.Bwyd singleton configurable:
     + Conversion: as a class, simplify extending the defined ingredients
@@ -37,9 +36,12 @@ _knowledge graph_.
   - prepped itermediates
   - ratios
   - substitutions
+  - keywords
   - author notes to cooks
   - citations
   - posts describing results
+
+See: <https://foodon.org/>
 
 
 ## Research

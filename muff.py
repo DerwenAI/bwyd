@@ -9,6 +9,8 @@ import pathlib
 import typing
 
 from icecream import ic
+from rdflib.namespace import DCTERMS, SKOS
+import rdflib
 import requests_cache
 
 import bwyd
@@ -56,3 +58,31 @@ if __name__ == "__main__":
 
     with open(examples_path / "index.html", "w", encoding = "utf-8") as fp:
         fp.write(html)
+
+
+    ######################################################################
+    ## KG prototype support
+
+    for module in modules:
+        mod_iri: rdflib.URIRef = corpus.graph.get_instance_iri(module.slug)
+
+        corpus.graph.add_tuple(
+            mod_iri,
+            SKOS.prefLabel,
+            corpus.graph.get_literal_iri(module.title),
+        )
+
+        corpus.graph.add_tuple(
+            mod_iri,
+            DCTERMS.description,
+            corpus.graph.get_literal_iri(module.text),
+        )
+
+        for keyword in module.collect_keywords():
+            corpus.graph.add_tuple(
+                mod_iri,
+                SKOS.related,
+                corpus.graph.get_instance_iri(keyword),
+            )
+
+    print(corpus.graph.serialize())
