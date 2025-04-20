@@ -9,8 +9,6 @@ import pathlib
 import typing
 
 from icecream import ic
-from rdflib.namespace import DCTERMS, SKOS
-import rdflib
 import requests_cache
 
 import bwyd
@@ -60,29 +58,8 @@ if __name__ == "__main__":
         fp.write(html)
 
 
-    ######################################################################
     ## KG prototype support
+    graph: bwyd.Graph = corpus.build_graph(modules)
 
-    for module in modules:
-        mod_iri: rdflib.URIRef = corpus.graph.get_instance_iri(module.slug)
-
-        corpus.graph.add_tuple(
-            mod_iri,
-            SKOS.prefLabel,
-            corpus.graph.get_literal_iri(module.title),
-        )
-
-        corpus.graph.add_tuple(
-            mod_iri,
-            DCTERMS.description,
-            corpus.graph.get_literal_iri(module.text),
-        )
-
-        for keyword in module.collect_keywords():
-            corpus.graph.add_tuple(
-                mod_iri,
-                SKOS.related,
-                corpus.graph.get_instance_iri(keyword),
-            )
-
-    print(corpus.graph.serialize())
+    with open("kg.rdf", "w", encoding = "utf-8") as fp:
+        fp.write(graph.serialize())

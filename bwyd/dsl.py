@@ -10,6 +10,8 @@ import tomllib
 import logging
 import pathlib
 import typing
+import urllib.parse
+
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
 from rdflib.namespace import DCTERMS, RDF, SKOS, XSD  # pylint: disable=W0611
@@ -43,24 +45,45 @@ Constructor.
         nm.bind(self.prefix, self.ns_bwyd)
 
 
-    def get_instance_iri (
+    def compose_iri (
         self,
-        inst_symbol: str,
+        names: typing.List[ str ],
         ) -> rdflib.URIRef:
         """
-Return a constructed IRI for an instance of a Bwyd class within the corpus.
+Compose an IRI in the Bwyd namespace.
         """
-        return self.ns_bwyd.module + "#" + inst_symbol
+        urn: str = ":".join([ urllib.parse.quote_plus(name) for name in names ])
+        return rdflib.URIRef(self.ns_bwyd + urn)
 
 
-    def get_literal_iri (
+    def compose_iri_instance (
+        self,
+        inst_symbol: str,
+        *,
+        sub_symbol: typing.Optional[ str ] = None,
+        ) -> rdflib.URIRef:
+        """
+Compose an IRI in the Bwyd namespace for an instance of a class.
+        """
+        if sub_symbol is not None:
+            return rdflib.URIRef(self.ns_bwyd + inst_symbol + "#" + sub_symbol)
+
+        return rdflib.URIRef(self.ns_bwyd + inst_symbol)
+
+
+    def compose_iri_literal (
         self,
         literal: str,
+        *,
+        lang: str,
         ) -> rdflib.Literal:
         """
-Return a constructed IRI for a literal of a Bwyd class within the corpus.
+Compose an IRI in the Bwyd namespace for a literal.
         """
-        return rdflib.Literal(literal, lang = self.lang)
+        return rdflib.Literal(
+            literal,
+            lang = lang,
+        )
 
 
     def add_tuple (
@@ -78,13 +101,14 @@ Add one RDF tuple to the graph.
     def serialize (
         self,
         *,
-        format: str = "ttl",  # pylint: disable=W0622
+        format: str = "turtle",  # pylint: disable=W0622
         ) -> str:
         """
 Return the serialized graph int the given format.
         """
         return self.graph.serialize(
             format = format,
+            base = BWYD_NAMESPACE,
         )
 
 
@@ -100,6 +124,8 @@ A corpus of Bwyd modules.
         self,
         config: dict,
         converter: dict,
+        *,
+        lang: str = "en",
         ) -> None:
         """
 Constructor.
@@ -108,7 +134,7 @@ Constructor.
 
         self.config: dict = config
         self.converter: dict = converter
-        self.graph: Graph = Graph()
+        self.lang: str = lang
 
 
     def get_cache (
@@ -193,6 +219,133 @@ Return a count of the modules processed.
                 fp.write(module.render_template())
 
         return modules
+
+
+    def build_graph (  # pylint: disable=R0914
+        self,
+        modules: typing.List[ Module ],
+        *,
+        debug: bool = False,  # pylint: disable=W0613
+        ) -> Graph:
+        """
+Build a knowledge graph from the modules in this corpus.
+        """
+        graph: Graph = Graph()
+
+        class_closure: rdflib.URIRef = graph.compose_iri_instance("Closure")
+        class_ingredient: rdflib.URIRef = graph.compose_iri_instance("Ingredient")
+        class_product: rdflib.URIRef = graph.compose_iri_instance("Product")
+        class_recipe: rdflib.URIRef = graph.compose_iri_instance("Recipe")
+        pred_component_of: rdflib.URIRef = graph.compose_iri_instance("ComponentOf")
+        pred_produced_by: rdflib.URIRef = graph.compose_iri_instance("ProducedBy")
+        pred_uses_ingredient: rdflib.URIRef = graph.compose_iri_instance("UsesIngredient")
+
+        for module in modules:
+            module_iri: rdflib.URIRef = graph.compose_iri([ module.slug ])  # type: ignore
+
+            graph.add_tuple(
+                module_iri,
+                RDF.type,
+                class_recipe,
+            )
+
+            for closure_symbol, closure in module.closures.items():
+                closure_iri: rdflib.URIRef = graph.compose_iri([ module.slug, closure_symbol ])  # type: ignore  # pylint: disable=C0301
+
+                graph.add_tuple(
+                    closure_iri,
+                    RDF.type,
+                    class_closure,
+                )
+
+                graph.add_tuple(
+                    closure_iri,
+                    pred_component_of,
+                    module_iri,
+                )
+
+                graph.add_tuple(
+                    closure_iri,
+                    SKOS.prefLabel,
+                    graph.compose_iri_literal(closure.name, lang = self.lang),
+                )
+
+                graph.add_tuple(
+                    closure_iri,
+                    DCTERMS.description,
+                    graph.compose_iri_literal(closure.text, lang = self.lang),
+                )
+
+                for super_class in closure.supers:
+                    super_iri: rdflib.URIRef = graph.compose_iri([ super_class ])
+
+                    graph.add_tuple(
+                        closure_iri,
+                        RDF.type,
+                        super_iri,
+                    )
+
+                    graph.add_tuple(
+                        closure_iri,
+                        SKOS.broader,
+                        super_iri,
+                    )
+
+                for keyword in closure.keywords:
+                    keyword_iri: rdflib.URIRef = graph.compose_iri_instance("Keyword", sub_symbol = keyword)  # pylint: disable=C0301
+
+                    graph.add_tuple(
+                        closure_iri,
+                        SKOS.related,
+                        keyword_iri,
+                    )
+
+                for product in closure.products:
+                    product_iri: rdflib.URIRef = graph.compose_iri([ module.slug, product.symbol ])  # type: ignore  # pylint: disable=C0301
+
+                    graph.add_tuple(
+                        product_iri,
+                        RDF.type,
+                        class_product,
+                    )
+
+                    graph.add_tuple(
+                        product_iri,
+                        pred_produced_by,
+                        closure_iri,
+                    )
+
+                for dependency in closure.ingredients.values():
+                    if not dependency.external:
+                        ingredient_iri: rdflib.URIRef = graph.compose_iri_instance("Ingredient", sub_symbol = dependency.symbol)  # pylint: disable=C0301
+
+                        graph.add_tuple(
+                            ingredient_iri,
+                            RDF.type,
+                            class_ingredient,
+                        )
+
+                        graph.add_tuple(
+                            ingredient_iri,
+                            SKOS.prefLabel,
+                            graph.compose_iri_literal(dependency.symbol.replace("_", " "), lang = self.lang),  # pylint: disable=C0301
+                        )
+
+                        graph.add_tuple(
+                            ingredient_iri,
+                            DCTERMS.description,
+                            graph.compose_iri_literal(dependency.text, lang = self.lang),
+                        )
+                    else:
+                        ingredient_iri = graph.compose_iri([ module.slug, dependency.symbol ])  # type: ignore  # pylint: disable=C0301
+
+                    graph.add_tuple(
+                        closure_iri,
+                        pred_uses_ingredient,
+                        ingredient_iri,
+                    )
+
+        return graph
 
 
 ######################################################################

@@ -1,13 +1,14 @@
 ## TODOs
 
+  * convert existing recipes
+
   * optional load an RDF/SKOS taxonomy
-  * link "AS" supers into class taxonomy
+  * validate RDF
 
   * make bwyd.Bwyd singleton configurable:
     + Conversion: as a class, simplify extending the defined ingredients
 
   * add metadata for "AUTHOR"
-  * convert existing recipes
   * impl "FERMENT" op
   * download `.bwyd` source
   * refactor style into CSS
