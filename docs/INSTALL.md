@@ -66,11 +66,10 @@ poetry run jupyter-lab
 
 ## development
 
-To set up the `test` and `dev` environments:
+To set up the `test` environment:
 
 ```bash
 poetry install --extras=test
-poetry install --extras=dev
 ```
 
 To run unit tests, type checking, and linting:

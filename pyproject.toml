@@ -44,7 +44,9 @@ dependencies = [
     "inflect (>=7.5.0,<8.0.0)",
     "types-requests (>=2.32.0.20250328,<3.0.0.0)",
     "requests-cache (>=1.2.1,<2.0.0)",
-    "rdflib (>=7.1.4,<8.0.0)"
+    "rdflib (>=7.1.4,<8.0.0)",
+    "py3-pinterest (>=1.4.0,<2.0.0)",
+    "pillow (>=11.2.1,<12.0.0)",
 ]
 
 keywords = [
@@ -61,26 +63,6 @@ keywords = [
 [project.urls]
 
 repository = "https://github.com/DerwenAI/bwyd"
-
-
-[project.optional-dependencies]
-
-demo = [
-    "jupyterlab (>=4.3.5,<5.0.0)",
-    "jupyterlab-execute-time (>=3.2.0,<4.0.0)",
-    "ipympl (>=0.9.6,<0.10.0)",
-    "watermark (>=2.5.0,<3.0.0)",
-]
-
-test = [
-    "pytest >= 7.4",
-    "deepdiff >= 8.3.0",
-]
-
-dev = [
-    "mypy (>=1.15.0,<2.0.0)",
-    "pylint (>=3.3.4,<4.0.0)",
-]
 
 
 [tool.poetry]
@@ -116,3 +98,18 @@ filterwarnings = [
     'ignore:Jupyter is migrating:DeprecationWarning',
     'ignore:Parsing dates involving:DeprecationWarning',
 ]
+
+
+[tool.poetry.group.test.dependencies]
+
+deepdiff = "^8.4.2"
+mypy = "^1.15.0"
+pylint = "^3.3.6"
+pytest = "^8.3.5"
+
+[tool.poetry.group.demo.dependencies]
+jupyterlab = "^4.4.1"
+jupyterlab-execute-time = "^3.2.0"
+ipympl = "^0.9.7"
+watermark = "^2.5.0"
+

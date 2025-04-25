@@ -85,7 +85,7 @@ CLOSURE: "prep batter"
 
     ACTIVITY: "complete the batter"
 
-    ADD flour (120 g) : "only until incorporated into the batter; do not overmix"
+    ADD flour (160 g) : "only until incorporated into the batter; do not overmix"
     // 1 cup all-purpose flour
 
     ACTION spatula: "mix"

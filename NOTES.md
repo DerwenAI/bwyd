@@ -10,8 +10,12 @@
 
   * add metadata for "AUTHOR"
   * impl "FERMENT" op
+
   * download `.bwyd` source
   * refactor style into CSS
+
+  * generate `KùzuDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
+    + https://docs.kuzudb.com/extensions/vector/#create-the-vector-index
 
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules
   * leverage `pydantic-graph` to build trees from directed cliques
@@ -19,7 +23,6 @@
   * schedule use of appliances: oven, fridge, range, instantpot, etc.
 
   * PARALLEL/SERIAL for scaling durations
-  * generate `LanceDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
   * use `BAML` to parse recipe elements for the DSL
   * use `textX-LS` to generate a VS Code extension
   
