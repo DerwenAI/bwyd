@@ -1,0 +1,112 @@
+TITLE: "Creamed Eggs on Toast"
+TEXT: "An American variant of Oeufs durs à la Béchamel, using a roux instead. Based on childhood memories of spending days at a seaside diner."
+LICENSE: "CC-BY-NC-SA-4.0"
+UPDATED: "2021-06-26"
+POST: "https://www.instagram.com/p/CQmIExNL-yl/"
+CITE: "https://comfort.crisprecipes.com/gratin-doeufs-durs-a-la-bechamel/"
+CITE: "https://lacuisine.recipesown.com/2024/09/20/gratin-doeufs-durs-a-la-bechamel/"
+
+CLOSURE: "oeufs dur à la sauce roux"
+    TEXT: "Makes a thick golden savory sauce from a hard or soft boiled egg"
+
+    CONTAINER pan: "small sauté pan"
+    TOOL spatula: "silicone spatula"
+
+    INGREDIENT flour: "all-purpose flour"
+    INGREDIENT salt: "sea salt, flaked"
+    INGREDIENT garlic_powder: "dried garlic powder"
+    INGREDIENT ground_thyme: "ground dried thyme"
+    INGREDIENT dried_sumac: "ground dried sumac"
+    INGREDIENT avocado_oil: "avocado oil"
+    INGREDIENT egg: "hard boiled egg"
+    INGREDIENT milk: "whole milk, half-and-half, or cream"
+    INGREDIENT wine: "white wine, dry sherry, or sweet vermouth"
+
+    FOCUS pan
+
+    ACTIVITY: "make a roux"
+
+    ADD flour (30 g)
+    // 3 Tbs flour
+    NOTE: "substitute other kinds of flours, or a mix – such as buckwheat"
+
+    ADD garlic_powder (1 g)
+    // dash dried garlic
+    ADD ground_thyme (1 g)
+    // dash ground thyme
+    ADD dried_sumac (1.5 g)
+    // dash dried sumac
+
+    ACTION spatula: "stir"
+        UNTIL: "well mixed, breaking any clumps"
+	TIME (1 minute)
+
+    ADD avocado_oil (13.5 g)
+    // 1 Tbs oil
+    NOTE: "substitute other lipids in place of the olive oil to make the roux: butter, bacon fat, grapeseed oil, etc."
+
+    ACTION spatula: "blend"
+        UNTIL: "roux blends into a paste"
+	TIME (1 minute)
+
+    HEAT pan: "stir over medium heat"
+        UNTIL: "lightly browned"
+        TIME (3 minute)
+
+    ADD egg (1)
+    // 1 hard boiled egg
+    NOTE: "substitute a soft boiled egg for a creamier sauce"
+
+    ACTION spatula: "press"
+        UNTIL: "the yolk is out of the white and incorporated into the roux"
+        TIME (1 minute)
+
+    HEAT pan: "stir over low heat"
+        UNTIL: "the egg white pieces are covered with the roux"
+        TIME (30 second)
+
+    ADD milk (15 g)
+    // 2 Tbs milk
+    NOTE: "substitute oat milk, water, whey, etc., instead of milk"
+
+    ACTION spatula: "stir"
+        UNTIL: "mixture becomes a thick sauce"
+        TIME (2 minute)
+
+    ADD salt (1.4 g): "add salt to taste"
+    // dash sea salt
+
+    ADD wine (15 g)
+    // 1 Tbs wine
+
+    ACTION spatula: "stir"
+        UNTIL: "sauce glistens from the wine finish"
+        TIME (1 minute)
+
+YIELDS creamed_eggs (1) INTERMEDIATE
+
+
+CLOSURE: "creamed eggs on toast"
+    TEXT: "Serve immediately after plating"
+    KEYWORDS: breakfast
+
+    CONTAINER plate: "medium serving plate"
+    TOOL spatula: "silicone spatula"
+
+    INGREDIENT toast: "slice toasted bread"
+    USE creamed_eggs: "all for one serving"
+
+    FOCUS plate
+
+    ACTIVITY: "plating"
+    
+    ADD toast (1): "fit on plate"
+    ADD creamed_eggs (1)
+
+    ACTION spatula: "scrape"
+        UNTIL: "pour over toast until covered"
+        TIME (30 second)
+
+    NOTE: "garnish plate with dried sumac, minced green onion, fresh thyme, etc."
+
+YIELDS creamed_eggs_on_toast (1)
