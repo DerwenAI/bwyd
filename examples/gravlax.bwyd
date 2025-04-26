@@ -1,0 +1,129 @@
+TITLE: "Gravlax"
+TEXT: "Delish high-protein breakfast which pairs so well with savory breads and breakfast ferments."
+LICENSE: "CC-BY-NC-SA-4.0"
+UPDATED: "2025-04-26"
+POST: "https://www.instagram.com/p/DDv0NLQxdAu/"
+CITE: "https://www.thespruceeats.com/simple-homemade-gravlax-recipe-2216618"
+
+
+CLOSURE: "prep the fillet"
+    TEXT: "Start with fresh, wild-caught fish, using a thick section"
+
+    CONTAINER sink: "kitchen sink"
+    TOOL hand: "clean hands"
+    TOOL tweezers: "culinary tweezers, or pliers (or by hand)"
+
+    INGREDIENT salmon: "skin-on salmon fillets, thick part, fresh and wild-caught"
+
+    FOCUS sink
+
+    ACTIVITY: "clean the fish"
+
+    ADD salmon (227 g)
+    // .5 lb small fillet
+    NOTE: "substitute steelhead if local, which may be farmed"
+
+    ACTION hand: "rinse in running cold water"
+        UNTIL: "fillet is cleaned"
+        TIME (1 minute)
+
+    ACTION tweezers: "pull out pin bones"
+        UNTIL: "you cannot feel any more bones in the fillet"
+	TIME (5 minute)
+
+YIELDS fillet (227 g) INTERMEDIATE
+
+
+CLOSURE: "prep curing bag"
+    TEXT: "Prepare the fillet for curing in a fridge, in a small batch."
+
+    CONTAINER bag: "silicon storage bag"
+    CONTAINER pan: "rectangular glass storage container"
+    TOOL spoon: "large spoon"
+    TOOL hand: "clean hands"
+
+    USE fillet: "patted dry"
+    INGREDIENT vodka: "vodka, aquavit, gin, sherry, vermouth, etc."
+    INGREDIENT salt: "sea salt, fine grind"
+    INGREDIENT sugar: "granulated sugar"
+    INGREDIENT ground_pepper: "freshly ground black pepper"
+    INGREDIENT fresh_dill: "coarsely chopped dill fronds"
+
+    FOCUS bag
+
+    ACTIVITY: "place fillet into curing bag, skin side down"
+
+    ADD fillet (227 g)
+    ADD vodka (14 g)
+    // 1 Tbs
+
+    ACTION spoon: "drizzle the vodka over the fillet"
+        UNTIL: "fillet flesh is evenly covered"
+	TIME (30 second)
+
+    ADD salt (19 g)
+    // 1 Tbs
+    ADD sugar (13 g)
+    // 1 Tbs
+    ADD ground_pepper (2 g)
+    // 3/4 tsp
+
+    ACTION spoon: "spread spices over fillet flesh"
+        UNTIL: "fillet flesh is evenly covered"
+	TIME (30 second)
+
+    ADD fresh_dill (2 g)
+    // 2 Tbs
+
+    ACTION spoon: "spread dill over fillet flesh"
+        UNTIL: "fillet flesh is evenly covered"
+	TIME (30 second)
+
+    FOCUS pan
+
+    ACTIVITY: "cure gravlax in the fridge"
+
+    ACTION hand: "pack the curing into the pan"
+        UNTIL: "fillet in bag is level with the bottom of the pan"
+	TIME (30 second)
+
+    CHILL pan: "place in fridge, weighted with food cans"
+        UNTIL: "fillet flesh becomes firm"
+        TIME (2 day)
+
+YIELDS cured_fillet (1) INTERMEDIATE
+
+
+CLOSURE: "gravlax ready to eat"
+    TEXT: "Slice the finished gravlax and store in fridge"
+    KEYWORDS: fermented, seafood, charcuterie
+
+    CONTAINER board: "cutting board"
+    CONTAINER jar: "glass storage jar"
+    TOOL knife: "French chef knife"
+
+    USE cured_fillet: "drained"
+
+    FOCUS board
+
+    ACTIVITY: "slice cured fillet"
+
+    ADD cured_fillet (1)
+
+    ACTION knife: "slice thinly against the grain"
+        UNTIL: "all cured fillet flesh is removed from the skin"
+	TIME (5 minute)
+
+    NOTE: "Sauté the skin with oil for a crispy snack"
+
+    FOCUS jar
+
+    ACTIVITY: "prepare for storage"
+
+    TRANSFER cured_fillet
+
+    STORE jar: "in refrigerator"
+        UPTO (4 day)
+
+YIELDS gravlax (200 g)
+
