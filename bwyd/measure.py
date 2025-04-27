@@ -7,12 +7,12 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
 from collections import OrderedDict
-from dataclasses import dataclass
 from fractions import Fraction
 import logging
 import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=W0611
+from pydantic import BaseModel, NonNegativeFloat, PositiveFloat
 import inflect
 
 
@@ -31,13 +31,24 @@ CUPS_PER_LITER: float = 4.226753
 POUNDS_PER_GRAM: float = 0.002204623
 
 
+class Conversion (BaseModel):  # pylint: disable=R0902
+    """
+A data class representing one Conversion object.
+    """
+    symbol: str
+    density: PositiveFloat
+    imperial: str = "cup"
+    metric: str = "g"
 
-@dataclass(order = False, frozen = False)
-class Measure:  # pylint: disable=R0902
+
+Converter = typing.Dict[ str, Conversion ]
+
+
+class Measure (BaseModel):  # pylint: disable=R0902
     """
 A data class representing one parsed Measure object.
     """
-    amount: float
+    amount: NonNegativeFloat
     units: str
 
 
@@ -59,7 +70,7 @@ Denormalize this measure into human-readable form.
         self,
         symbol: str,
         external: bool,
-        converter: dict,
+        converter: Converter,
         ) -> str:
         """
 Denormalize this measure into human-readable form, with an
@@ -68,10 +79,10 @@ imperial conversion if available.
         amount: str = self.humanize().strip()
 
         if symbol in converter:
-            _, metric_units, ratio = converter[symbol]
+            conv: Conversion = converter[symbol]
 
-            if self.units == metric_units:
-                imper_amount: float = self.amount / ratio
+            if self.units == conv.metric:
+                imper_amount: float = self.amount / conv.density
                 amount += f" ({self.humanize_cup(imper_amount)})"
 
         elif self.units is not None:
@@ -195,7 +206,6 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False)
 class Duration (Measure):  # pylint: disable=R0902
     """
 A data class representing one parsed Duration object.
@@ -252,17 +262,15 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False)
 class Temperature (Measure):  # pylint: disable=R0902
     """
 A data class representing one parsed Temperature object.
     """
-
     def humanize (
         self
         ) -> str:
         """
-HTML represenation.
+HTML representation.
         """
         html: str = f"{self.amount} °{self.units}"
 

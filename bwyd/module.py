@@ -10,7 +10,6 @@ from collections import OrderedDict
 from urllib.parse import ParseResult, urlparse
 import datetime
 import itertools
-import json
 import logging
 import typing
 
@@ -25,12 +24,12 @@ import textx  # type: ignore  # pylint: disable=E0401
 
 from .error import BwydParserError
 
-from .measure import Measure, Duration, Temperature
+from .measure import Measure, Duration, Temperature, Converter
 
 from .ops import Dependency, \
     OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpStore, OpHeat, OpChill, OpBake
 
-from .resources import BWYD_SVG, CONVERT_PATH, JINJA_PAGE_TEMPLATE
+from .resources import BWYD_SVG, JINJA_PAGE_TEMPLATE
 
 from .structure import Post, Product, \
     Activity, Focus, Closure
@@ -43,11 +42,10 @@ class Module:  # pylint: disable=R0902
     """
 One parsed module.
     """
-    UNIT_CONVERT: dict = json.load(open(CONVERT_PATH, "r", encoding = "utf-8"))  # pylint: disable=R1732
-
     def __init__ (
         self,
         parse_tree: typing.Any,
+        converter: Converter,
         *,
         slug: typing.Optional[ str ] = None,
         ) -> None:
@@ -55,6 +53,7 @@ One parsed module.
 Constructor.
         """
         self.parse_tree: typing.Any = parse_tree
+        self.converter: Converter = converter
         self.slug: typing.Optional[ str ] = slug
         self.title: str = ""
         self.text: str = ""
@@ -110,7 +109,7 @@ one for each parsed Closure.
                 "supers": closure.supers,
                 "keywords": closure.keywords,
                 "requires": closure.get_dependencies(),
-                "foci": [ focus.get_model(self.UNIT_CONVERT) for focus in closure.foci ],
+                "foci": [ focus.get_model(self.converter) for focus in closure.foci ],
             }
             for name, closure in self.closures.items()
         ]
@@ -143,7 +142,7 @@ one for each parsed Closure.
                     "amount": measure.humanize_convert(
                         entity.symbol,
                         entity.external,
-                        self.UNIT_CONVERT,
+                        self.converter,
                     ),
                     "text": entity.text,
                 }
@@ -349,8 +348,8 @@ Interpret the steps within an activity.
 
         if op_class_name == "Add":
             measure: Measure = Measure(
-                amount = op_parse.measure.amount,
-                units = op_parse.measure.units,
+                amount = float(op_parse.measure.amount),
+                units = str(op_parse.measure.units),
             )
 
             if debug:
@@ -664,8 +663,8 @@ Helper method to interpret one Closure.
                     loc = textx.get_location(prod_parse),
                     symbol = prod_parse.symbol,
                     amount = Measure(
-                        amount = prod_parse.measure.amount,
-                        units = prod_parse.measure.units,
+                        amount = float(prod_parse.measure.amount),
+                        units = str(prod_parse.measure.units),
                     ),
                     intermediate = (prod_parse.intermediate == "INTERMEDIATE"),
                 )
@@ -772,7 +771,10 @@ Accessor for the total duration of one Bwyd module.
             for op in activity.ops
         ]))
 
-        return Duration(total_sec, "second").humanize()
+        return Duration(
+            amount = total_sec,
+            units = "second",
+        ).humanize()
 
 
     def total_yields (

@@ -8,7 +8,7 @@
   },
   "details": {
     "serves": [
-      "80 frozen gnocchi dumplings"
+      "80.0 None frozen gnocchi dumplings"
     ],
     "duration": "2 hours, 5 minutes, 40 seconds",
     "updated": "2023-04-10",
@@ -21,31 +21,31 @@
   },
   "ingredients": [
     {
-      "amount": "1",
+      "amount": "1.0 None",
       "text": "large chicken egg"
     },
     {
-      "amount": "250 g (1/2 pounds)",
+      "amount": "250.0 g (1/2 pounds)",
       "text": "whole milk ricotta"
     },
     {
-      "amount": "50 g (1/2 cup)",
+      "amount": "50.0 g (1/2 cup)",
       "text": "grated parmesan"
     },
     {
-      "amount": "1 g (1/8 tsp)",
+      "amount": "1.0 g (1/8 tsp)",
       "text": "freshly grated nutmeg"
     },
     {
-      "amount": "250 g (1/2 pounds)",
+      "amount": "250.0 g (1/2 pounds)",
       "text": "reduced veggie pur\u00e9e"
     },
     {
-      "amount": "250 g (1 1/2 cups)",
+      "amount": "250.0 g (1 1/2 cups)",
       "text": "flour: rice, oat, etc."
     },
     {
-      "amount": "1",
+      "amount": "1.0 None",
       "text": "parchment paper, cut to line the baking dish"
     }
   ],
@@ -61,7 +61,7 @@
     {
       "title": "gnocchi dough",
       "yields": [
-        "800 g dough"
+        "800.0 g dough"
       ],
       "text": "best to work with cold ingredients and chilled utensils",
       "supers": [],
@@ -91,27 +91,27 @@
                   "ingredients": [
                     {
                       "name": "egg",
-                      "amount": "1",
+                      "amount": "1.0 None",
                       "text": ""
                     },
                     {
                       "name": "ricotta",
-                      "amount": "250 g (1/2 pounds)",
+                      "amount": "250.0 g (1/2 pounds)",
                       "text": ""
                     },
                     {
                       "name": "grated_parmesan",
-                      "amount": "50 g (1/2 cup)",
+                      "amount": "50.0 g (1/2 cup)",
                       "text": ""
                     },
                     {
                       "name": "nutmeg",
-                      "amount": "1 g (1/8 tsp)",
+                      "amount": "1.0 g (1/8 tsp)",
                       "text": ""
                     },
                     {
                       "name": "puree",
-                      "amount": "250 g (1/2 pounds)",
+                      "amount": "250.0 g (1/2 pounds)",
                       "text": ""
                     }
                   ]
@@ -149,7 +149,7 @@
                   "ingredients": [
                     {
                       "name": "flour",
-                      "amount": "240 g (1 1/2 cups)",
+                      "amount": "240.0 g (1 1/2 cups)",
                       "text": "only until the dough becomes no longer sticky"
                     }
                   ]
@@ -171,7 +171,7 @@
     {
       "title": "cut dumplings",
       "yields": [
-        "80 dumplings"
+        "80.0 None dumplings"
       ],
       "text": "divide dough into 4 pieces, rolling out one at a time",
       "supers": [],
@@ -205,12 +205,12 @@
                   "ingredients": [
                     {
                       "name": "flour",
-                      "amount": "10 g (1 tsp)",
+                      "amount": "10.0 g (1 tsp)",
                       "text": ""
                     },
                     {
                       "name": "dough",
-                      "amount": "200 g (1/2 pounds)",
+                      "amount": "200.0 g (1/2 pounds)",
                       "text": ""
                     }
                   ]
@@ -256,7 +256,7 @@
     {
       "title": "frozen gnocchi",
       "yields": [
-        "80 frozen gnocchi dumplings"
+        "80.0 None frozen gnocchi dumplings"
       ],
       "text": "add layers of dumplings to fill depth of baking dish",
       "supers": [
@@ -292,7 +292,7 @@
                   "ingredients": [
                     {
                       "name": "parchment",
-                      "amount": "1",
+                      "amount": "1.0 None",
                       "text": ""
                     }
                   ]
@@ -314,7 +314,7 @@
                   "ingredients": [
                     {
                       "name": "dumplings",
-                      "amount": "80",
+                      "amount": "80.0 None",
                       "text": ""
                     }
                   ]

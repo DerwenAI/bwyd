@@ -6,7 +6,6 @@ Objects in the Bwyd language.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
-from dataclasses import dataclass, field
 from urllib.parse import urlparse
 import base64
 import io
@@ -15,11 +14,12 @@ import itertools
 import typing
 
 from PIL import Image
+from pydantic import BaseModel, NonNegativeInt
 from upath import UPath
 import requests
 import requests_cache
 
-from .measure import Measure
+from .measure import Measure, Converter
 
 from .ops import Dependency, DependencyDict, \
     OpsTypes, OpAdd
@@ -28,8 +28,7 @@ from .ops import Dependency, DependencyDict, \
 ######################################################################
 ## gallery classes
 
-@dataclass(order = False, frozen = False)
-class Post:  # pylint: disable=R0902
+class Post (BaseModel):  # pylint: disable=R0902
     """
 A data class representing one Post object.
     """
@@ -105,8 +104,7 @@ Accessor for a thumbnail URL.
 ######################################################################
 ## yields classes
 
-@dataclass(order = False, frozen = False)
-class Product:  # pylint: disable=R0902
+class Product (BaseModel):  # pylint: disable=R0902
     """
 A data class representing one Product object.
     """
@@ -114,24 +112,23 @@ A data class representing one Product object.
     symbol: str
     amount: Measure
     intermediate: bool
-    ref_count: int = 0
+    ref_count: NonNegativeInt = 0
 
 
 ######################################################################
 ## structural classes
 
-@dataclass(order = False, frozen = False)
-class Activity:  # pylint: disable=R0902
+class Activity (BaseModel):  # pylint: disable=R0902
     """
 A data class representing one Activity object.
     """
     text: str
-    ops: typing.List[ OpsTypes ] = field(default_factory = lambda: [])
+    ops: typing.List[ OpsTypes ] = []
 
 
     def get_model (
         self,
-        converter: dict,
+        converter: Converter,
         ) -> dict:
         """
 Serializable representation for JSON.
@@ -156,18 +153,17 @@ Serializable representation for JSON.
         return dat
 
 
-@dataclass(order = False, frozen = False)
-class Focus:  # pylint: disable=R0902
+class Focus (BaseModel):  # pylint: disable=R0902
     """
 A data class representing a parsed Focus object.
     """
     container: Dependency
-    activities: typing.List[ Activity ] = field(default_factory = lambda: [])
+    activities: typing.List[ Activity ] = []
 
 
     def get_model (
         self,
-        converter: dict,
+        converter: Converter,
         ) -> dict:
         """
 Serializable representation for JSON.
@@ -178,21 +174,20 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False)
-class Closure:  # pylint: disable=R0902
+class Closure (BaseModel, arbitrary_types_allowed = True):  # pylint: disable=R0902
     """
 A data class representing one parsed Closure object.
     """
     name: str
     obj: typing.Any
     text: str = ""
-    supers: typing.List[ str ] = field(default_factory = lambda: [])
-    keywords: typing.List[ str ] = field(default_factory = lambda: [])
-    containers: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
-    tools: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
-    ingredients: DependencyDict = field(default_factory = lambda: DependencyDict())  # pylint: disable=W0108
-    foci: typing.List[ Focus ] = field(default_factory = lambda: [])
-    products: typing.List[ Product ] = field(default_factory = lambda: [])
+    supers: typing.List[ str ] = []
+    keywords: typing.List[ str ] = []
+    containers: DependencyDict = DependencyDict()
+    tools: DependencyDict = DependencyDict()
+    ingredients: DependencyDict = DependencyDict()
+    foci: typing.List[ Focus ] = []
+    products: typing.List[ Product ] = []
 
 
     def get_dependencies (

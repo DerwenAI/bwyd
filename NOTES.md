@@ -1,12 +1,13 @@
 ## TODOs
 
+  * fix conversions
+  * conversions should never show "0" values
+  * use StrEnum instead of raw string values
+
   * convert existing recipes
 
   * optional load an RDF/SKOS taxonomy
   * validate RDF
-
-  * make bwyd.Bwyd singleton configurable:
-    + Conversion: as a class, simplify extending the defined ingredients
 
   * add metadata for "AUTHOR"
   * impl "FERMENT" op

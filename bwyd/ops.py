@@ -9,16 +9,15 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 from collections import OrderedDict
 import typing
 
-from pydantic.dataclasses import dataclass
+from pydantic import BaseModel, NonNegativeInt
 
-from .measure import Measure, Duration, Temperature
+from .measure import Measure, Duration, Temperature, Converter
 
 
 ######################################################################
 ## dependencies
 
-@dataclass(order = False, frozen = False, kw_only = True)
-class Dependency:  # pylint: disable=R0902
+class Dependency (BaseModel):  # pylint: disable=R0902
     """
 A data class representing one parsed dependency:
 Ingredient, Tool, Container, etc.
@@ -26,7 +25,7 @@ Ingredient, Tool, Container, etc.
     loc: dict
     symbol: str
     text: str
-    ref_count: int = 0
+    ref_count: NonNegativeInt = 0
     external: bool = False
 
 
@@ -47,8 +46,6 @@ class DependencyDict (OrderedDict):
 A dictionary of a specific class of dependencies, which also provides
 a local namespace.
     """
-
-
     def get_model (
         self
         ) -> list:
@@ -61,13 +58,12 @@ Serializable representation for JSON.
 ######################################################################
 ## operations
 
-@dataclass(order = False, frozen = False, kw_only = True)
-class OpGeneric:  # pylint: disable=R0902
+class OpGeneric (BaseModel):  # pylint: disable=R0902
     """
 A data class representing a generic operation.
     """
     loc: dict
-    ref_count: int = 0
+    ref_count: NonNegativeInt = 0
 
 
     def get_duration (
@@ -76,10 +72,12 @@ A data class representing a generic operation.
         """
 Stub: Total duration.
         """
-        return Duration(0, "second")
+        return Duration(
+            amount = 0.0,
+            units = "second",
+        )
 
 
-@dataclass(order = False, frozen = False, kw_only = True)
 class OpNote (OpGeneric):  # pylint: disable=R0902
     """
 Represents a collapsable Note, inline *within* an Activity, from the
@@ -101,7 +99,6 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False, kw_only = True)
 class OpTransfer (OpGeneric):  # pylint: disable=R0902
     """
 Represents the action of a Cook to Transfer an intermediate into
@@ -124,7 +121,6 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False, kw_only = True)
 class OpAdd (OpGeneric):  # pylint: disable=R0902
     """
 Represents the action of a Cook to Add a measured amount of an
@@ -138,7 +134,7 @@ ingredient into a Container within an Activity.
 
     def get_model (
         self,
-        converter: dict,
+        converter: Converter,
         ) -> dict:
         """
 Serializable representation for JSON.
@@ -156,7 +152,6 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False, kw_only = True)
 class OpAction (OpGeneric):  # pylint: disable=R0902
     """
 Represents the action of a Cook using a Tool to perform part of an
@@ -193,7 +188,6 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False, kw_only = True)
 class OpStore (OpGeneric):  # pylint: disable=R0902
     """
 Represents the process of a Cook on a Container to store the yield of
@@ -218,7 +212,6 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False, kw_only = True)
 class OpAppliance (OpGeneric):  # pylint: disable=R0902
     """
 Represents the process of an Appliance operating on the food within
@@ -240,7 +233,6 @@ Duration of this operation.
         return self.duration
 
 
-@dataclass(order = False, frozen = False, kw_only = True)
 class OpHeat (OpAppliance):  # pylint: disable=R0902
     """
 Represents an Appliance: stove, range, hotplate, camp fire --
@@ -264,7 +256,6 @@ Serializable representation for JSON.
         }
 
 
-@dataclass(order = False, frozen = False, kw_only = True)
 class OpChill (OpHeat):  # pylint: disable=R0902
     """
 Represents an Appliance: cooler --
@@ -273,7 +264,6 @@ used to *chill* in different modes.
     appliance: str = "cooler"
 
 
-@dataclass(order = False, frozen = False, kw_only = True)
 class OpBake (OpAppliance):  # pylint: disable=R0902
     """
 Represents an Appliance: oven --

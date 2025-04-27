@@ -19,6 +19,10 @@ if __name__ == "__main__":
         config_path = pathlib.Path("config.toml"),
     )
 
+    dsl.extend_converter([
+        #bwyd.Conversion.model_validate({ "symbol": "vodka", "density": 222.4, })
+    ])
+
     corpus: bwyd.Corpus = dsl.build_corpus()
     session: requests_cache.CachedSession = corpus.get_cache()
 

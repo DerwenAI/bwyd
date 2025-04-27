@@ -6,12 +6,12 @@ DSL implementing the Bwyd language.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
-import tomllib
+import json
 import logging
 import pathlib
+import tomllib
 import typing
 import urllib.parse
-
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
 from rdflib.namespace import DCTERMS, RDF, SKOS, XSD  # pylint: disable=W0611
@@ -19,8 +19,9 @@ import rdflib
 import requests_cache
 import textx  # type: ignore  # pylint: disable=E0401
 
+from .measure import Conversion, Converter
 from .module import Module
-from .resources import BWYD_NAMESPACE, GRAMMAR_PATH
+from .resources import BWYD_NAMESPACE, CONVERT_PATH, GRAMMAR_PATH
 
 
 ######################################################################
@@ -123,7 +124,7 @@ A corpus of Bwyd modules.
     def __init__ (
         self,
         config: dict,
-        converter: dict,
+        converter: Converter,
         *,
         lang: str = "en",
         ) -> None:
@@ -133,7 +134,7 @@ Constructor.
         logging.basicConfig(format="%(asctime)s %(message)s")
 
         self.config: dict = config
-        self.converter: dict = converter
+        self.converter: Converter = converter
         self.lang: str = lang
 
 
@@ -360,12 +361,19 @@ Bwyd DSL parser/interpreter.
         debug = False, # True
     )
 
+    with open(CONVERT_PATH, "r", encoding = "utf-8") as fp:
+        UNIT_CONVERTER: Converter = {
+            conv.symbol: conv
+            for row in json.load(fp)
+            for conv in [ Conversion.model_validate(row) ]
+        }
+
 
     def __init__ (
         self,
         *,
         config_path: typing.Optional[ pathlib.Path ] = None,
-        converter: dict = Module.UNIT_CONVERT,
+        converter: Converter = UNIT_CONVERTER,
         ) -> None:
         """
 Constructor.
@@ -376,7 +384,18 @@ Constructor.
             with open(config_path, mode = "rb") as fp:
                 self.config = tomllib.load(fp)
 
-        self.converter: dict = converter
+        self.converter: Converter = converter
+
+
+    def extend_converter (
+        self,
+        conversions: typing.List[ Conversion ],
+        ) -> None:
+        """
+Extend the measurements unit converter by merging with provided conversions.
+        """
+        for conv in conversions:
+            self.converter[ conv.symbol ] = conv
 
 
     def parse (
@@ -394,6 +413,7 @@ Initialize a parser to load one Bywd module from a file.
                 script,
                 debug = debug,
             ),
+            self.converter,
             slug = slug,
         )
 
