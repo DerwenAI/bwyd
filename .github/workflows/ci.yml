@@ -5,6 +5,10 @@ on: [pull_request, workflow_dispatch]
 jobs:
   test:
     name: Tests for Python ${{ matrix.python-version }}
+    permissions:
+      contents: read
+      pull-requests: write
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
