@@ -12,7 +12,8 @@ from .error import BwydParserError
 
 from .kernel import BwydKernel
 
-from .measure import Conversion, Converter, Measure, Duration, Temperature
+from .measure import Conversion, Converter, Humanized, \
+    MeasureUnits, Measure, Duration, Temperature
 
 from .module import Module
 

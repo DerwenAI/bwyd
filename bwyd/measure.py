@@ -8,6 +8,7 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 
 from collections import OrderedDict
 from fractions import Fraction
+import enum
 import logging
 import typing
 
@@ -16,7 +17,20 @@ from pydantic import BaseModel, NonNegativeFloat, PositiveFloat
 import inflect
 
 
-PLURAL = inflect.engine()
+class MeasureUnits (enum.StrEnum):
+    """
+An enumeration class representing string literals for Measure units.
+    """
+    TEASPOON = "tsp"
+    CUP = enum.auto()
+    POUND = enum.auto()
+    LITER = "l"
+    MILLILITER = "ml"
+    GRAM = "g"
+    KILOGRAM = "kg"
+
+CUP_PER_LITER: float = 4.226753
+POUND_PER_GRAM: float = 0.002204623
 
 NORM_RATIO: typing.Dict[ str, int ] = OrderedDict({
     "year": 60 * 60 * 24 * 365,
@@ -27,8 +41,8 @@ NORM_RATIO: typing.Dict[ str, int ] = OrderedDict({
     "second": 1,
 })
 
-CUP_PER_LITER: float = 4.226753
-POUND_PER_GRAM: float = 0.002204623
+PLURAL = inflect.engine()
+
 
 
 class Conversion (BaseModel):  # pylint: disable=R0902
@@ -37,8 +51,8 @@ A data class representing one Conversion object.
     """
     symbol: str
     density: PositiveFloat
-    imperial: str = "cup"
-    metric: str = "g"
+    imperial: str = MeasureUnits.CUP.value
+    metric: str = MeasureUnits.GRAM.value
 
 
 Converter = typing.Dict[ str, Conversion ]
@@ -48,8 +62,26 @@ class Humanized (BaseModel):  # pylint: disable=R0902
     """
 A data class representing one humanized Measure object.
     """
-    amount: str
-    units: typing.Optional[ str ]
+    amount: NonNegativeFloat
+    human: str
+    units: typing.Optional[ MeasureUnits ]
+
+
+    def denormalize (
+        self
+        ) -> str:
+        """
+Denormalize a meaure which is already in human-readable form.
+        """
+        if self.units is None:
+            return f" ({self.human})"
+
+        units: str = self.units.value
+
+        if self.amount > 1.0 and self.human != "1" and self.units != MeasureUnits.TEASPOON:
+            units = PLURAL.plural(units)
+
+        return f" ({self.human} {units})"
 
 
 class Measure (BaseModel):  # pylint: disable=R0902
@@ -96,22 +128,21 @@ imperial conversion if available.
                 if self.units == conv.metric:
                     imper_amount: float = self.amount / conv.density
                     human: Humanized = self._humanize_cup(imper_amount)
-                    amount += f" ({human.amount} {human.units})"
+                    amount += human.denormalize()
 
             elif self.units is not None:
                 if not external:
                     logging.warning(f"no conversion ratio for {symbol}")  # pylint: disable=W1203
 
                 match self.units:
-                    case "g":
+                    case MeasureUnits.GRAM.value:
                         imper_amount = self.amount * POUND_PER_GRAM
-                        human = self._humanize_generic(imper_amount, "pound")
-                        amount += f" ({human.amount} {human.units})"
-
-                    case "l":
+                        human = self._humanize_generic(imper_amount, MeasureUnits.POUND)
+                        amount += human.denormalize()
+                    case MeasureUnits.LITER.value:
                         imper_amount = self.amount * CUP_PER_LITER
-                        human = self._humanize_generic(imper_amount, "cup")
-                        amount += f" ({human.amount} {human.units})"
+                        human = self._humanize_generic(imper_amount, MeasureUnits.CUP)
+                        amount += human.denormalize()
 
                     case _:
                         logging.warning(f"no default conversion for unit `{self.units}`")  # pylint: disable=W1203
@@ -123,7 +154,7 @@ imperial conversion if available.
     def _humanize_generic (
         cls,
         amount: float,
-        units: str,
+        units: MeasureUnits,
         ) -> Humanized:
         """
 Private method to humanize imperial measurement ratios, for generic case.
@@ -136,7 +167,8 @@ Private method to humanize imperial measurement ratios, for generic case.
             human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
 
         return Humanized(
-            amount = human,
+            amount = amount,
+            human = human,
             units = units,
         )
 
@@ -149,7 +181,7 @@ Private method to humanize imperial measurement ratios, for generic case.
         """
 Private method to humanize imperial measurement ratios, for cup.
         """
-        units: str = "cup"
+        units: MeasureUnits = MeasureUnits.CUP
         denom_limit: int = 4
 
         if amount <= 0.24:
@@ -160,11 +192,9 @@ Private method to humanize imperial measurement ratios, for cup.
         else:
             human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
 
-        if amount > 1.0:
-            units = PLURAL.plural(units)
-
         return Humanized(
-            amount = human,
+            amount = amount,
+            human = human,
             units = units,
         )
 
@@ -177,7 +207,7 @@ Private method to humanize imperial measurement ratios, for cup.
         """
 Private method to humanize imperial measurement ratios, for teaspoon.
         """
-        units: str = "tsp"
+        units: MeasureUnits = MeasureUnits.TEASPOON
         denom_limit: int = 8
 
         if amount >= 0.95:
@@ -190,7 +220,8 @@ Private method to humanize imperial measurement ratios, for teaspoon.
         # plural for teaspoons is too easily confused with tablespoon
 
         return Humanized(
-            amount = human,
+            amount = amount,
+            human = human,
             units = units,
         )
 
