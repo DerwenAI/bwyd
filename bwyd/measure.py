@@ -27,8 +27,8 @@ NORM_RATIO: typing.Dict[ str, int ] = OrderedDict({
     "second": 1,
 })
 
-CUPS_PER_LITER: float = 4.226753
-POUNDS_PER_GRAM: float = 0.002204623
+CUP_PER_LITER: float = 4.226753
+POUND_PER_GRAM: float = 0.002204623
 
 
 class Conversion (BaseModel):  # pylint: disable=R0902
@@ -44,12 +44,20 @@ A data class representing one Conversion object.
 Converter = typing.Dict[ str, Conversion ]
 
 
+class Humanized (BaseModel):  # pylint: disable=R0902
+    """
+A data class representing one humanized Measure object.
+    """
+    amount: str
+    units: typing.Optional[ str ]
+
+
 class Measure (BaseModel):  # pylint: disable=R0902
     """
 A data class representing one parsed Measure object.
     """
     amount: NonNegativeFloat
-    units: str
+    units: typing.Optional[ str ]
 
 
     def humanize (
@@ -58,10 +66,13 @@ A data class representing one parsed Measure object.
         """
 Denormalize this measure into human-readable form.
         """
-        html: str = f"{self.amount} "
+        html: str = f"{self.amount}"
+
+        if html.endswith(".0"):
+            html = html[:-2]
 
         if self.units is not None:
-            html += self.units
+            html = f"{html} {self.units}"
 
         return html
 
@@ -70,7 +81,7 @@ Denormalize this measure into human-readable form.
         self,
         symbol: str,
         external: bool,
-        converter: Converter,
+        converter: typing.Optional[ Converter ],
         ) -> str:
         """
 Denormalize this measure into human-readable form, with an
@@ -78,107 +89,119 @@ imperial conversion if available.
         """
         amount: str = self.humanize().strip()
 
-        if symbol in converter:
-            conv: Conversion = converter[symbol]
+        if converter is not None:
+            if symbol in converter:
+                conv: Conversion = converter[symbol]
 
-            if self.units == conv.metric:
-                imper_amount: float = self.amount / conv.density
-                amount += f" ({self.humanize_cup(imper_amount)})"
+                if self.units == conv.metric:
+                    imper_amount: float = self.amount / conv.density
+                    human: Humanized = self._humanize_cup(imper_amount)
+                    amount += f" ({human.amount} {human.units})"
 
-        elif self.units is not None:
-            if not external:
-                logging.warning(f"no conversion ratio for {symbol}")  # pylint: disable=W1203
+            elif self.units is not None:
+                if not external:
+                    logging.warning(f"no conversion ratio for {symbol}")  # pylint: disable=W1203
 
-            match self.units:
-                case "g":
-                    imper_amount = self.amount * POUNDS_PER_GRAM
-                    amount += self.humanize_generic(imper_amount, "pounds")
+                match self.units:
+                    case "g":
+                        imper_amount = self.amount * POUND_PER_GRAM
+                        human = self._humanize_generic(imper_amount, "pound")
+                        amount += f" ({human.amount} {human.units})"
 
-                case "l":
-                    imper_amount = self.amount * CUPS_PER_LITER
-                    amount += self.humanize_generic(imper_amount, "cups")
+                    case "l":
+                        imper_amount = self.amount * CUP_PER_LITER
+                        human = self._humanize_generic(imper_amount, "cup")
+                        amount += f" ({human.amount} {human.units})"
 
-                case _:
-                    logging.warning(f"no default conversion for unit `{self.units}`")  # pylint: disable=W1203
+                    case _:
+                        logging.warning(f"no default conversion for unit `{self.units}`")  # pylint: disable=W1203
 
         return amount
 
 
     @classmethod
-    def humanize_generic (
+    def _humanize_generic (
         cls,
         amount: float,
         units: str,
-        ) -> str:
+        ) -> Humanized:
         """
-Humanize imperial measurement ratios, for generic case
+Private method to humanize imperial measurement ratios, for generic case.
         """
         denom_limit: int = 4
 
         if amount > .95:
-            human: str = cls.humanize_ratio(amount)
+            human: str = cls.fix_fraction(amount)
         else:
             human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
 
-        return f" ({human} {units})"
+        return Humanized(
+            amount = human,
+            units = units,
+        )
 
 
     @classmethod
-    def humanize_cup (
+    def _humanize_cup (
         cls,
         amount: float,
-        ) -> str:
+        ) -> Humanized:
         """
-Humanize imperial measurement ratios, for cups
+Private method to humanize imperial measurement ratios, for cup.
         """
         units: str = "cup"
         denom_limit: int = 4
 
         if amount <= 0.24:
-            return cls.humanize_tsp(amount * 16.0)
+            return cls._humanize_tsp(amount * 16.0)
 
         if amount >= 1.0:
-            human: str = cls.humanize_ratio(amount)
+            human: str = cls.fix_fraction(amount)
         else:
             human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
 
         if amount > 1.0:
             units = PLURAL.plural(units)
 
-        return f"{human} {units}"
+        return Humanized(
+            amount = human,
+            units = units,
+        )
 
 
     @classmethod
-    def humanize_tsp (
+    def _humanize_tsp (
         cls,
         amount: float,
-        ) -> str:
+        ) -> Humanized:
         """
-Humanize imperial measurement ratios, for cups
+Private method to humanize imperial measurement ratios, for teaspoon.
         """
         units: str = "tsp"
         denom_limit: int = 8
 
         if amount >= 0.95:
-            human: str = cls.humanize_ratio(amount)
+            human: str = cls.fix_fraction(amount)
         elif amount >= 0.4:
             human = str(Fraction(round(amount, 1)).limit_denominator(denom_limit))
         else:
             human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
 
-        if amount > 1.0:
-            units = PLURAL.plural(units)
+        # plural for teaspoons is too easily confused with tablespoon
 
-        return f"{human} {units}"
+        return Humanized(
+            amount = human,
+            units = units,
+        )
 
 
     @classmethod
-    def humanize_ratio (
+    def fix_fraction (
         cls,
         amount: float,
         ) -> str:
         """
-Humanize imperial measurement ratios >= 1.0
+Humanize fractions representing imperial measurement ratios >= 1.0
         """
         base: int = int(amount)
         frac: float = amount - float(base)
@@ -216,7 +239,7 @@ A data class representing one parsed Duration object.
         """
 Return this duration normalized into seconds.
         """
-        return self.amount * NORM_RATIO[self.units]
+        return self.amount * float(NORM_RATIO[self.units])  # type: ignore
 
 
     def humanize (

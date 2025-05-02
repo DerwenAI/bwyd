@@ -201,6 +201,7 @@ Serialized representation in JSON for the containers and tools.
             for dep in itertools.chain(self.containers.values(), self.tools.values())
         ]
 
+
     def total_yields (
         self,
         *,
@@ -209,8 +210,17 @@ Serialized representation in JSON for the containers and tools.
         """
 Accessor for the total, non-intermediate yields of one Closure object.
         """
-        return [
-            f"{product.amount.humanize().strip()} {product.symbol}".replace("_", " ")
-            for product in self.products
-            if intermediaries or not product.intermediate
-        ]
+        yields_list: typing.List[ str ] = []
+
+        for product in self.products:
+            if intermediaries or not product.intermediate:
+                amount: str = product.amount.humanize_convert(
+                    product.symbol,
+                    False,
+                    None,
+                )
+
+                html: str = f"{amount} {product.symbol}".replace("_", " ").strip()
+                yields_list.append(html)
+
+        return yields_list

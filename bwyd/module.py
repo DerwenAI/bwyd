@@ -349,7 +349,7 @@ Interpret the steps within an activity.
         if op_class_name == "Add":
             measure: Measure = Measure(
                 amount = float(op_parse.measure.amount),
-                units = str(op_parse.measure.units),
+                units = op_parse.measure.units,
             )
 
             if debug:
@@ -664,7 +664,7 @@ Helper method to interpret one Closure.
                     symbol = prod_parse.symbol,
                     amount = Measure(
                         amount = float(prod_parse.measure.amount),
-                        units = str(prod_parse.measure.units),
+                        units = prod_parse.measure.units,
                     ),
                     intermediate = (prod_parse.intermediate == "INTERMEDIATE"),
                 )

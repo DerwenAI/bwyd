@@ -1,7 +1,5 @@
 ## TODOs
 
-  * fix conversions
-  * conversions should never show "0" values
   * use StrEnum instead of raw string values
 
   * convert existing recipes
