@@ -105,7 +105,7 @@ YIELDS batter (1 l) INTERMEDIATE
 
 CLOSURE: "bake muffins" AS muffin
     TEXT: "for large, moist, breakfast muffins"
-    KEYWORDS: breakfast, baked_goods
+    KEYWORDS: breakfast, baked_goods, California
 
     CONTAINER pan: "muffin pan, large size 8-hole"
 

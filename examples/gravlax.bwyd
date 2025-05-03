@@ -97,7 +97,7 @@ YIELDS cured_fillet (1) INTERMEDIATE
 
 CLOSURE: "gravlax ready to eat"
     TEXT: "Slice the finished gravlax and store in fridge"
-    KEYWORDS: fermented, seafood, charcuterie
+    KEYWORDS: fermented, seafood, charcuterie, Nordic
 
     CONTAINER board: "cutting board"
     CONTAINER jar: "glass storage jar"

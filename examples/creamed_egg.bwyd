@@ -88,7 +88,7 @@ YIELDS creamed_eggs (1) INTERMEDIATE
 
 CLOSURE: "creamed eggs on toast"
     TEXT: "Serve immediately after plating"
-    KEYWORDS: breakfast
+    KEYWORDS: breakfast, savory, French
 
     CONTAINER plate: "medium serving plate"
     TOOL spatula: "silicone spatula"
