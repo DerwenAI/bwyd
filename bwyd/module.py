@@ -24,7 +24,7 @@ import textx  # type: ignore  # pylint: disable=E0401
 
 from .error import BwydParserError
 
-from .measure import Measure, Duration, Temperature, Converter
+from .measure import Converter, Measure, DurationUnits, Duration, Temperature
 
 from .ops import Dependency, \
     OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpStore, OpHeat, OpChill, OpBake
@@ -773,7 +773,7 @@ Accessor for the total duration of one Bwyd module.
 
         return Duration(
             amount = total_sec,
-            units = "second",
+            units = DurationUnits.SECOND.value,
         ).humanize()
 
 

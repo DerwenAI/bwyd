@@ -2,11 +2,8 @@
 
   * use StrEnum instead of raw string values
      - parsed results
-     - duration
-     - tempurature
 
   * allow measure abbrevs: "g" vs "gram", etc.
-
 
   * convert existing recipes
 

@@ -11,7 +11,7 @@ import typing
 
 from pydantic import BaseModel, NonNegativeInt
 
-from .measure import Measure, Duration, Temperature, Converter
+from .measure import Converter, Measure, DurationUnits, Duration, Temperature
 
 
 ######################################################################
@@ -74,7 +74,7 @@ Stub: Total duration.
         """
         return Duration(
             amount = 0.0,
-            units = "second",
+            units = DurationUnits.SECOND.value,
         )
 
 

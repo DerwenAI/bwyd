@@ -17,6 +17,7 @@ from pydantic import BaseModel, NonNegativeFloat, PositiveFloat
 import inflect
 
 
+
 class MeasureUnits (enum.StrEnum):
     """
 An enumeration class representing string literals for Measure units.
@@ -32,14 +33,36 @@ An enumeration class representing string literals for Measure units.
 CUP_PER_LITER: float = 4.226753
 POUND_PER_GRAM: float = 0.002204623
 
+
+class DurationUnits (enum.StrEnum):
+    """
+An enumeration class representing string literals for Duration units.
+    """
+    SECOND = enum.auto()
+    MINUTE = enum.auto()
+    HOUR = enum.auto()
+    DAY = enum.auto()
+    MONTH = enum.auto()
+    YEAR = enum.auto()
+
+
 NORM_RATIO: typing.Dict[ str, int ] = OrderedDict({
-    "year": 60 * 60 * 24 * 365,
-    "month": 60 * 60 * 24 * 30,
-    "day": 60 * 60 * 24,
-    "hour": 60 * 60,
-    "minute": 60,
-    "second": 1,
+    DurationUnits.YEAR.value: 60 * 60 * 24 * 365,
+    DurationUnits.MONTH.value: 60 * 60 * 24 * 30,
+    DurationUnits.DAY.value: 60 * 60 * 24,
+    DurationUnits.HOUR.value: 60 * 60,
+    DurationUnits.MINUTE.value: 60,
+    DurationUnits.SECOND.value: 1,
 })
+
+
+class TemperatureUnits (enum.StrEnum):
+    """
+An enumeration class representing string literals for Temperature units.
+    """
+    CELSIUS = "C"
+    FAHRENHEIT = "F"
+
 
 PLURAL = inflect.engine()
 
@@ -280,11 +303,11 @@ Return this duration normalized into seconds.
 Adapted from:
 <https://stackoverflow.com/a/56499010/1698443>
         """
-        (years, remainder) = divmod(self.normalize(), 31536000)
-        (months, remainder) = divmod(remainder, 2592000)
-        (days, remainder) = divmod(remainder, 86400)
-        (hours, remainder) = divmod(remainder, 3600)
-        (minutes, seconds) = divmod(remainder, 60)
+        (years, remainder) = divmod(self.normalize(), NORM_RATIO[DurationUnits.YEAR.value])
+        (months, remainder) = divmod(remainder, NORM_RATIO[DurationUnits.MONTH.value])
+        (days, remainder) = divmod(remainder, NORM_RATIO[DurationUnits.DAY.value])
+        (hours, remainder) = divmod(remainder, NORM_RATIO[DurationUnits.HOUR.value])
+        (minutes, seconds) = divmod(remainder, NORM_RATIO[DurationUnits.MINUTE.value])
 
         cascade: zip = zip(
             NORM_RATIO.keys(),
@@ -328,11 +351,11 @@ HTML representation.
         """
         html: str = f"{self.amount} °{self.units}"
 
-        if self.units == "C":
-            f_deg: int = int(
-                round( ((self.amount / 5.0 * 9.0) + 32.0) / 5.0) * 5.0
-            )
+        if self.units == TemperatureUnits.CELSIUS.value:
+            fahr: float = (self.amount / 5.0 * 9.0) + 32.0
+            # round the converted temperature to the nearest 5 °F
+            f_deg: int = int(round(fahr / 5.0) * 5.0)
 
-            html += f" ({f_deg} °F)"
+            html += f" ({f_deg} °{TemperatureUnits.FAHRENHEIT.value})"
 
         return html
