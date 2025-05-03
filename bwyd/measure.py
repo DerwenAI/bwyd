@@ -115,6 +115,25 @@ A data class representing one parsed Measure object.
     units: typing.Optional[ str ]
 
 
+    @classmethod
+    def build (
+        cls,
+        parse: typing.Any,
+        ) -> "Measure":
+        """
+Constructor from a `textx` parse object.
+        """
+        measure_units: typing.Optional[ str ] = None
+
+        if parse.units is not None:
+            measure_units = MeasureUnits(parse.units).value
+
+        return Measure(
+            amount = float(parse.amount),
+            units = measure_units,
+        )
+
+
     def humanize (
         self
         ) -> str:
@@ -287,6 +306,27 @@ class Duration (Measure):  # pylint: disable=R0902
     """
 A data class representing one parsed Duration object.
     """
+
+
+    @classmethod
+    def build (
+        cls,
+        parse: typing.Any,
+        ) -> "Duration":
+        """
+Constructor from a `textx` parse object.
+        """
+        duration_units: typing.Optional[ str ] = None
+
+        if parse.units is not None:
+            duration_units = DurationUnits(parse.units).value
+
+        return Duration(
+            amount = float(parse.amount),
+            units = duration_units,
+        )
+
+
     def normalize (
         self,
         ) -> float:
@@ -343,6 +383,48 @@ class Temperature (Measure):  # pylint: disable=R0902
     """
 A data class representing one parsed Temperature object.
     """
+
+    @classmethod
+    def build (
+        cls,
+        parse: typing.Any,
+        ) -> "Temperature":
+        """
+Constructor from a `textx` parse object.
+        """
+        temperature_units: typing.Optional[ str ] = None
+
+        if parse.units is not None:
+            temperature_units = TemperatureUnits(parse.units).value
+
+        return Temperature(
+            amount = float(parse.amount),
+            units = temperature_units,
+        )
+
+
+    @classmethod
+    def celsius_to_fahrenheit (
+        cls,
+        amount: float,
+        ) -> float:
+        """
+Convert from Celsius to Fahrenheit scale.
+        """
+        return (amount / 5.0 * 9.0) + 32.0
+
+
+    @classmethod
+    def fahrenheit_to_celsius (
+        cls,
+        amount: float,
+        ) -> float:
+        """
+Convert from Fahrenheit to Celsius scale.
+        """
+        return (amount / 5.0 * 9.0) + 32.0
+
+
     def humanize (
         self
         ) -> str:
@@ -352,7 +434,8 @@ HTML representation.
         html: str = f"{self.amount} °{self.units}"
 
         if self.units == TemperatureUnits.CELSIUS.value:
-            fahr: float = (self.amount / 5.0 * 9.0) + 32.0
+            fahr: float = self.celsius_to_fahrenheit(self.amount)
+
             # round the converted temperature to the nearest 5 °F
             f_deg: int = int(round(fahr / 5.0) * 5.0)
 

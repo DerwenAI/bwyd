@@ -24,7 +24,8 @@ import textx  # type: ignore  # pylint: disable=E0401
 
 from .error import BwydParserError
 
-from .measure import Converter, Measure, DurationUnits, Duration, Temperature
+from .measure import Converter, \
+    Measure, DurationUnits, Duration, Temperature
 
 from .ops import Dependency, \
     OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpStore, OpHeat, OpChill, OpBake
@@ -262,7 +263,11 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
         if debug:
             #ic(dir(depend_parse))
             ic(depend_parse)
-            ic(depend_class_name, depend_parse.symbol, depend_parse.text)
+            ic(
+                depend_class_name,
+                depend_parse.symbol,
+                depend_parse.text,
+            )
 
         if depend_class_name == "Container":
             # forward reference, to be resolved during this parsing pass
@@ -315,7 +320,10 @@ Interpret the steps within an activity.
 
         if op_class_name == "Note":
             if debug:
-                ic(op_class_name, op_parse.text)
+                ic(
+                    op_class_name,
+                    op_parse.text,
+                )
 
             return OpNote(
                 loc = textx.get_location(op_parse),
@@ -324,7 +332,10 @@ Interpret the steps within an activity.
 
         if op_class_name == "Transfer":
             if debug:
-                ic(op_class_name, op_parse.symbol)
+                ic(
+                    op_class_name,
+                    op_parse.symbol,
+                )
 
             # resolve local reference
             entity: typing.Optional[ typing.Any ] = None
@@ -347,14 +358,6 @@ Interpret the steps within an activity.
             )
 
         if op_class_name == "Add":
-            measure: Measure = Measure(
-                amount = float(op_parse.measure.amount),
-                units = op_parse.measure.units,
-            )
-
-            if debug:
-                ic(op_class_name, op_parse.symbol, measure, op_parse.text)
-
             # resolve local reference
             entity = None
 
@@ -369,6 +372,17 @@ Interpret the steps within an activity.
                     symbol = op_parse.symbol,
                 )
 
+            measure: Measure = Measure.build(op_parse.measure)
+
+            if debug:
+                ic(
+                    op_class_name,
+                    op_parse.symbol,
+                    op_parse.text,
+                    measure,
+                    entity,
+                )
+
             return OpAdd(
                 loc = textx.get_location(op_parse),
                 symbol = op_parse.symbol,
@@ -378,14 +392,6 @@ Interpret the steps within an activity.
             )
 
         if op_class_name == "Action":
-            duration: Duration = Duration(
-                amount = op_parse.duration.amount,
-                units = op_parse.duration.units,
-            )
-
-            if debug:
-                ic(op_class_name, op_parse.symbol, op_parse.modifier, op_parse.until, duration)
-
             # resolve local reference
             entity = None
 
@@ -403,6 +409,18 @@ Interpret the steps within an activity.
                     symbol = op_parse.symbol,
                 )
 
+            duration: Duration = Duration.build(op_parse.duration)
+
+            if debug:
+                ic(
+                    op_class_name,
+                    op_parse.symbol,
+                    op_parse.modifier,
+                    op_parse.until,
+                    duration,
+                    entity,
+                )
+
             return OpAction(
                 loc = textx.get_location(op_parse),
                 tool = entity,
@@ -412,19 +430,6 @@ Interpret the steps within an activity.
             )
 
         if op_class_name == "Bake":
-            temperature = Temperature(
-                amount = op_parse.temperature.amount,
-                units = op_parse.temperature.units,
-            )
-
-            duration = Duration(
-                amount = op_parse.duration.amount,
-                units = op_parse.duration.units,
-            )
-
-            if debug:
-                ic(op_class_name, op_parse.symbol, op_parse.modifier, op_parse.until, temperature, duration)  # pylint: disable=C0301
-
             # resolve local reference
             if op_parse.symbol in closure.containers:
                 entity = closure.containers[op_parse.symbol]
@@ -435,6 +440,19 @@ Interpret the steps within an activity.
                 raise BwydParserError(
                     f"BAKE CONTAINER `{op_parse.symbol}` used but not defined {loc}",
                     symbol = op_parse.symbol,
+                )
+
+            duration = Duration.build(op_parse.duration)
+            temperature = Temperature.build(op_parse.temperature)
+
+            if debug:
+                ic(
+                    op_class_name,
+                    op_parse.symbol,
+                    op_parse.modifier,
+                    op_parse.until,
+                    duration,
+                    temperature,
                 )
 
             return OpBake(
@@ -448,14 +466,6 @@ Interpret the steps within an activity.
             )
 
         if op_class_name == "Heat":
-            duration = Duration(
-                amount = op_parse.duration.amount,
-                units = op_parse.duration.units,
-            )
-
-            if debug:
-                ic(op_class_name, op_parse.symbol, op_parse.modifier, op_parse.until, duration)
-
             # resolve local reference
             if op_parse.symbol in closure.containers:
                 entity = closure.containers[op_parse.symbol]
@@ -468,6 +478,17 @@ Interpret the steps within an activity.
                     symbol = op_parse.symbol,
                 )
 
+            duration = Duration.build(op_parse.duration)
+
+            if debug:
+                ic(
+                    op_class_name,
+                    op_parse.symbol,
+                    op_parse.modifier,
+                    op_parse.until,
+                    duration,
+                )
+
             return OpHeat(
                 loc = textx.get_location(op_parse),
                 container = entity,
@@ -477,14 +498,6 @@ Interpret the steps within an activity.
             )
 
         if op_class_name == "Chill":
-            duration = Duration(
-                amount = op_parse.duration.amount,
-                units = op_parse.duration.units,
-            )
-
-            if debug:
-                ic(op_class_name, op_parse.symbol, op_parse.modifier, op_parse.until, duration)
-
             # resolve local reference
             if op_parse.symbol in closure.containers:
                 entity = closure.containers[op_parse.symbol]
@@ -497,6 +510,17 @@ Interpret the steps within an activity.
                     symbol = op_parse.symbol,
                 )
 
+            duration = Duration.build(op_parse.duration)
+
+            if debug:
+                ic(
+                    op_class_name,
+                    op_parse.symbol,
+                    op_parse.modifier,
+                    op_parse.until,
+                    duration,
+                )
+
             return OpChill(
                 loc = textx.get_location(op_parse),
                 container = entity,
@@ -506,14 +530,6 @@ Interpret the steps within an activity.
             )
 
         if op_class_name == "Store":
-            duration = Duration(
-                amount = op_parse.duration.amount,
-                units = op_parse.duration.units,
-            )
-
-            if debug:
-                ic(op_class_name, op_parse.symbol, op_parse.modifier, duration)
-
             # resolve local reference
             if op_parse.symbol in closure.containers:
                 entity = closure.containers[op_parse.symbol]
@@ -526,6 +542,16 @@ Interpret the steps within an activity.
                     symbol = op_parse.symbol,
                 )
 
+            duration = Duration.build(op_parse.duration)
+
+            if debug:
+                ic(
+                    op_class_name,
+                    op_parse.symbol,
+                    op_parse.modifier,
+                    duration,
+                )
+
             return OpStore(
                 loc = textx.get_location(op_parse),
                 container = entity,
@@ -533,6 +559,7 @@ Interpret the steps within an activity.
                 duration = duration,
             )
 
+        ## OTHERWISE, parse fails ...
         return None
 
 
@@ -547,7 +574,10 @@ Interpret the steps within an activity.
 Interpret the activities within a focus.
         """
         if debug:
-            ic(focus_parse, focus_parse.symbol)
+            ic(
+                focus_parse,
+                focus_parse.symbol,
+            )
 
         # resolve local reference
         if focus_parse.symbol in closure.containers:
@@ -569,7 +599,10 @@ Interpret the activities within a focus.
 
         for activity in focus_parse.activities:
             if debug:
-                ic(activity, activity.text)
+                ic(
+                    activity,
+                    activity.text,
+                )
 
             act: Activity = Activity(
                 text = activity.text,
@@ -598,7 +631,10 @@ Interpret the activities within a focus.
 Interpret the components within a ratio.
         """
         if debug:
-            ic(ratio_parse.name, [ (part.symbol, part.components) for part in ratio_parse.parts ])
+            ic(
+                ratio_parse.name,
+                [ (part.symbol, part.components) for part in ratio_parse.parts ],
+            )
 
         for part in ratio_parse.parts:
             if len(part.components) < 1:
@@ -614,7 +650,7 @@ Interpret the components within a ratio.
                         symbol = part.symbol,
                     )
 
-            ## FUCK: store representation of this ratio
+            ## OHFUCK: store representation of this ratio
 
 
     def _interpret_closure (  # pylint: disable=R0912,R0915
@@ -656,16 +692,18 @@ Helper method to interpret one Closure.
         # interpret each product
         for prod_parse in closure_parse.prods:
             if debug:
-                ic(prod_parse.symbol, prod_parse.measure.amount, prod_parse.measure.units, prod_parse.intermediate)  # pylint: disable=C0301
+                ic(
+                    prod_parse.symbol,
+                    prod_parse.measure.amount,
+                    prod_parse.measure.units,
+                    prod_parse.intermediate,
+                )
 
             closure.products.append(
                 Product(
                     loc = textx.get_location(prod_parse),
                     symbol = prod_parse.symbol,
-                    amount = Measure(
-                        amount = float(prod_parse.measure.amount),
-                        units = prod_parse.measure.units,
-                    ),
+                    amount = Measure.build(prod_parse.measure),
                     intermediate = (prod_parse.intermediate == "INTERMEDIATE"),
                 )
             )

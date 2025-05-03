@@ -358,7 +358,7 @@ details summary {
 				<li class="list-group-item">
 				  add <strong>{{ item.name }}</strong>: {{ item.amount }}
 				  {% if item.text|length %}
-				  <em> ... {{ item.text }}</em>
+				  <em>&nbsp;&hellip; {{ item.text }}</em>
 				  {% endif %}
 				</li>
 				{% endfor %}
@@ -424,7 +424,7 @@ details summary {
 				>
 				<strong>{{ val.mode }}</strong> at <strong>{{ val.temperature }}</strong> 
 				{% if val.text|length %}
-				<em>&nbsp;– {{ val.text }}</em>
+				<em>&nbsp;&hellip; {{ val.text }}</em>
 				{% endif %}
 				<br>
 				until <em>{{ val.until }}</em>
