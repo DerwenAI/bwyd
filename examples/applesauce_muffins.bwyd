@@ -21,27 +21,28 @@ CLOSURE: "prep batter"
     INGREDIENT avocado_oil: "avocado oil"
     INGREDIENT vanilla_extract: "vanilla extract"
     INGREDIENT molasses: "molasses"
+    INGREDIENT honey: "wildflower honey"
     INGREDIENT egg: "large chicken egg"
     INGREDIENT rolled_oats: "rolled oats"
     INGREDIENT shredded_coconut: "dry shredded coconut"
     INGREDIENT chia_seeds: "chia seeds"
+    INGREDIENT raisins: "fresh or frozen whole blueberries, or dried cranberries"
     INGREDIENT chopped_walnuts: "chopped walnuts"
-    INGREDIENT dried_cranberries: "fresh or frozen whole blueberries, or dried cranberries"
     INGREDIENT flour: "all-purpose flour"
 
     FOCUS bowl
 
     ACTIVITY: "prep dry mix"
 
-    ADD sugar (133 g)
-    // 2/3 cup granulated sugar
-    ADD salt (9 g)
-    // 1/2 teaspoon sea salt, fine grind
-    ADD baking_soda (50 g)
+    ADD sugar (61 g)
+    // 1/3 cup granulated sugar
+    ADD salt (3 g)
+    // 1/2 teaspoon sea salt, fine grain
+    ADD baking_soda (8 g)
     // 1.5 teaspoon baking soda
-    ADD cinnamon (17 g)
+    ADD cinnamon (5 g)
     // 2 teaspoons ground cinnamon
-    ADD nutmeg (5 g)
+    ADD nutmeg (2 g)
     // 1/2 teaspoon ground nutmeg
 
     ACTION whisk: "blend"
@@ -50,13 +51,15 @@ CLOSURE: "prep batter"
 
     ACTIVITY: "prep wet mix"
 
-    ADD applesauce (375 g)
+    ADD applesauce (381 g)
     // 1.5 cups unsweetened applesauce
-    ADD avocado_oil (108 g)
+    ADD avocado_oil (96 g)
     // 1/2 cup avocado oil
-    ADD vanilla_extract (13 g)
+    ADD vanilla_extract (4 g)
     // 1 teaspoon vanilla extract
-    ADD molasses (26 g)
+    ADD honey (106 g)
+    // 1/3 cup honey
+    ADD molasses (9 g)
     // 1.5 teaspoons molasses
     ADD egg (2)
 
@@ -66,26 +69,26 @@ CLOSURE: "prep batter"
 
     ACTIVITY: "prep chunky mix"
 
-    ADD rolled_oats (90 g)
+    ADD rolled_oats (102 g)
     // 1 cup rolled oats
-    ADD shredded_coconut (24 g)
+    ADD shredded_coconut (12 g)
     // 1/3 cup dry shredded coconut
-    ADD chia_seeds (40 g)
+    ADD chia_seeds (41 g)
     // 1/4 cup chia seeds
-    ADD chopped_walnuts (50 g)
+    ADD chopped_walnuts (58 g)
     // 1/2 cup walnuts
-    ADD dried_cranberries (40 g)
+    ADD raisins (50 g)
     // 1/3 cup fresh or dried berries
     
     NOTE: "so many items can be substituted here: blueberries/cranberries, hazelnuts/walnutes, carrot/coconut ..."
 
     ACTION spatula: "fold"
-        UNTIL: "lightly blended"
+        UNTIL: "thoroughly mixed"
 	TIME (1 minute)
 
     ACTIVITY: "complete the batter"
 
-    ADD flour (160 g) : "only until incorporated into the batter; do not overmix"
+    ADD flour (170 g) : "only until incorporated into the batter; do not overmix"
     // 1 cup all-purpose flour
 
     ACTION spatula: "mix"
@@ -96,7 +99,7 @@ CLOSURE: "prep batter"
     //  2 flours : 2 liquid : 1 egg : 1 butter
     RATIO: "batter" =
     	   flours [ flour, rolled_oats, shredded_coconut, chia_seeds, chopped_walnuts ],
-    	   liquid [ applesauce, molasses, vanilla_extract, dried_cranberries ],
+    	   liquid [ applesauce, molasses, honey, vanilla_extract ],
 	   egg,
 	   avocado_oil
 
@@ -107,24 +110,15 @@ CLOSURE: "bake muffins" AS muffin
     TEXT: "for large, moist, breakfast muffins"
     KEYWORDS: breakfast, baked_goods, California
 
-    CONTAINER pan: "muffin pan, large size 8-hole"
+    CONTAINER pan: "muffin pan, large size 12-hole"
 
     TOOL hand: "clean hands"
     TOOL spoon: "large spoon"
     TOOL fork: "small fork"
 
-    INGREDIENT butter: "vegan butter, butter, or oil"
     USE batter: "mixed batter"
 
     FOCUS pan
-
-    ACTIVITY: "grease the pan"
-
-    ADD butter (15 g)
-
-    ACTION hand: "grease"
-        UNTIL: "cooking surfaces are all buttered"
-        TIME (3 minute)
 
     ACTIVITY: "fill with batter"
 
@@ -145,4 +139,4 @@ CLOSURE: "bake muffins" AS muffin
         UNTIL: "fork comes out with tiny crumbs"
         TIME (10 second)
 
-YIELDS applesauce_muffins (8)
+YIELDS applesauce_muffins (11)

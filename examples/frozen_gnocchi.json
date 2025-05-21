@@ -42,7 +42,7 @@
       "text": "reduced veggie pur\u00e9e"
     },
     {
-      "amount": "250 g (1 1/2 cups)",
+      "amount": "350 g (2 cups)",
       "text": "flour: rice, oat, etc."
     },
     {
@@ -62,7 +62,7 @@
     {
       "title": "gnocchi dough",
       "yields": [
-        "800 g dough"
+        "900 g dough"
       ],
       "text": "best to work with cold ingredients and chilled utensils",
       "supers": [],
@@ -150,7 +150,7 @@
                   "ingredients": [
                     {
                       "name": "flour",
-                      "amount": "240 g (1 1/2 cups)",
+                      "amount": "340 g (2 cups)",
                       "text": "only until the dough becomes no longer sticky"
                     }
                   ]
@@ -206,12 +206,12 @@
                   "ingredients": [
                     {
                       "name": "flour",
-                      "amount": "10 g (1 tsp)",
+                      "amount": "10 g (7/8 tsp)",
                       "text": ""
                     },
                     {
                       "name": "dough",
-                      "amount": "200 g (1/2 pound)",
+                      "amount": "225 g (1/2 pound)",
                       "text": ""
                     }
                   ]

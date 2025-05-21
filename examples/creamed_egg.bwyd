@@ -26,7 +26,7 @@ CLOSURE: "oeufs dur à la sauce roux"
 
     ACTIVITY: "make a roux"
 
-    ADD flour (30 g)
+    ADD flour (32 g)
     // 3 Tbs flour
     NOTE: "substitute other kinds of flours, or a mix – such as buckwheat"
 
@@ -41,7 +41,7 @@ CLOSURE: "oeufs dur à la sauce roux"
         UNTIL: "well mixed, breaking any clumps"
 	TIME (1 minute)
 
-    ADD avocado_oil (13.5 g)
+    ADD avocado_oil (12 g)
     // 1 Tbs oil
     NOTE: "substitute other lipids in place of the olive oil to make the roux: butter, bacon fat, grapeseed oil, etc."
 

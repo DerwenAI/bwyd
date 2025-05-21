@@ -46,7 +46,7 @@ CLOSURE: "gnocchi dough"
 
     ACTIVITY: "complete the dough"
 
-    ADD flour (240 g) : "only until the dough becomes no longer sticky"
+    ADD flour (340 g) : "only until the dough becomes no longer sticky"
 
     ACTION spatula: "mix"
 	UNTIL: "dough just becomes smooth"
@@ -56,7 +56,7 @@ CLOSURE: "gnocchi dough"
     	   starch [ puree, flour ],
 	   egg
 
-YIELDS dough (800 g) INTERMEDIATE
+YIELDS dough (900 g) INTERMEDIATE
 
 
 CLOSURE: "cut dumplings"
@@ -80,7 +80,7 @@ CLOSURE: "cut dumplings"
         UNTIL: "evenly floured"
 	TIME (30 second)
 
-    ADD dough (200 g)
+    ADD dough (225 g)
 
     ACTION hand: "roll carefully into a rope"
         UNTIL: "2 cm diameter"
