@@ -7,6 +7,7 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
 from collections import OrderedDict
+import enum
 import typing
 
 from pydantic import BaseModel, NonNegativeInt
@@ -57,6 +58,16 @@ Serializable representation for JSON.
 
 ######################################################################
 ## operations
+
+class Appliance (enum.StrEnum):
+    """
+An enumeration class representing string literals for kinds of appliances.
+    """
+    GENERIC = enum.auto()
+    STOVE = enum.auto()
+    COOLER = enum.auto()
+    OVEN = enum.auto()
+
 
 class OpGeneric (BaseModel):  # pylint: disable=R0902
     """
@@ -221,7 +232,7 @@ a specific Container as part of an Activity.
     modifier: str
     until: str
     duration: Duration
-    appliance: str = "generic"
+    appliance: str = Appliance.GENERIC
 
 
     def get_duration (
@@ -238,7 +249,7 @@ class OpHeat (OpAppliance):  # pylint: disable=R0902
 Represents an Appliance: stove, range, hotplate, camp fire --
 used to *heat* in different modes.
     """
-    appliance: str = "stove"
+    appliance: str = Appliance.STOVE
 
 
     def get_model (
@@ -261,7 +272,7 @@ class OpChill (OpHeat):  # pylint: disable=R0902
 Represents an Appliance: cooler --
 used to *chill* in different modes.
     """
-    appliance: str = "cooler"
+    appliance: str = Appliance.COOLER
 
 
 class OpBake (OpAppliance):  # pylint: disable=R0902
@@ -271,7 +282,7 @@ used to *bake* in different modes.
     """
     mode: str
     temperature: Temperature
-    appliance: str = "oven"
+    appliance: str = Appliance.OVEN
 
 
     def get_model (

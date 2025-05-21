@@ -17,7 +17,6 @@ from pydantic import BaseModel, NonNegativeFloat, PositiveFloat
 import inflect
 
 
-
 class MeasureUnits (enum.StrEnum):
     """
 An enumeration class representing string literals for Measure units.
@@ -65,7 +64,6 @@ An enumeration class representing string literals for Temperature units.
 
 
 PLURAL = inflect.engine()
-
 
 
 class Conversion (BaseModel):  # pylint: disable=R0902
@@ -422,7 +420,7 @@ Convert from Celsius to Fahrenheit scale.
         """
 Convert from Fahrenheit to Celsius scale.
         """
-        return (amount / 5.0 * 9.0) + 32.0
+        return (amount - 32.0) / 9.0 * 5.0
 
 
     def humanize (

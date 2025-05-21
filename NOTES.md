@@ -1,20 +1,19 @@
 ## TODOs
 
-  * use StrEnum instead of raw string values
-     - parsed results
-
-  * allow measure abbrevs: "g" vs "gram", etc.
-
   * convert existing recipes
+
+  * add metadata for "AUTHOR"
+  * refactor style into CSS
+  * download `.bwyd` source
 
   * optional load an RDF/SKOS taxonomy
   * validate RDF
 
-  * add metadata for "AUTHOR"
   * impl "FERMENT" op
 
-  * download `.bwyd` source
-  * refactor style into CSS
+  * use `BAML` to parse recipe elements for the DSL
+
+  * allow measure abbrevs: "g" vs "gram", etc.
 
   * generate `KùzuDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
     + https://docs.kuzudb.com/extensions/vector/#create-the-vector-index
@@ -23,9 +22,8 @@
   * leverage `pydantic-graph` to build trees from directed cliques
   * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
   * schedule use of appliances: oven, fridge, range, instantpot, etc.
-
   * PARALLEL/SERIAL for scaling durations
-  * use `BAML` to parse recipe elements for the DSL
+
   * use `textX-LS` to generate a VS Code extension
   
 
