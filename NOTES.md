@@ -1,15 +1,18 @@
 ## TODOs
 
+  * generate HTML for corpus index
+  * refactor style into CSS
+  * download `.bwyd` source
+
   * convert existing recipes
 
   * add metadata for "AUTHOR"
-  * refactor style into CSS
-  * download `.bwyd` source
 
   * optional load an RDF/SKOS taxonomy
   * validate RDF
 
   * impl "FERMENT" op
+  * support substitutions
 
   * use `BAML` to parse recipe elements for the DSL
 
