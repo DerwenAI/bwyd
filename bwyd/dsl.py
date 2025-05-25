@@ -21,7 +21,8 @@ import textx  # type: ignore  # pylint: disable=E0401
 
 from .measure import Conversion, Converter
 from .module import Module
-from .resources import BWYD_NAMESPACE, CONVERT_PATH, GRAMMAR_PATH
+from .resources import BWYD_NAMESPACE, BWYD_SVG, \
+    CONVERT_PATH, GRAMMAR_PATH, JINJA_INDEX_TEMPLATE
 
 
 ######################################################################
@@ -220,6 +221,39 @@ Return a count of the modules processed.
                 fp.write(module.render_template())
 
         return modules
+
+
+    def render_discovery (
+        self,
+        modules: typing.List[ Module ],
+        index_path: pathlib.Path,
+        ) -> None:
+        """
+Render an HTML index for search/discovery across a directory of recipes.
+        """
+        mod_data: dict = {
+            "corpus": {
+                "icon": BWYD_SVG,
+                "modules": [
+                    {
+                        "slug": module.slug,
+                        "thumb": module.get_thumbnail(self.get_cache()),
+                        "title": module.title,
+                        "text": module.text,
+                        "serves": module.total_yields(),
+                        "duration": module.total_duration(),
+                        "updated": module.updated,
+                        "keywords": module.collect_keywords(),
+                    }
+                    for module in modules
+                ],
+            },
+        }
+
+        html: str = JINJA_INDEX_TEMPLATE.render(mod_data)
+
+        with open(index_path, "w", encoding = "utf-8") as fp:
+            fp.write(html)
 
 
     def build_graph (  # pylint: disable=R0914

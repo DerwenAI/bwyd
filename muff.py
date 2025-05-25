@@ -23,9 +23,9 @@ if __name__ == "__main__":
         #bwyd.Conversion.model_validate({ "symbol": "vodka", "density": 222.4, })
     ])
 
-    corpus: bwyd.Corpus = dsl.build_corpus()
-    session: requests_cache.CachedSession = corpus.get_cache()
 
+    ## render each module as HTML
+    corpus: bwyd.Corpus = dsl.build_corpus()
     examples_path: pathlib.Path = pathlib.Path("examples")
 
     modules: typing.List[ bwyd.Module ] = corpus.render_html_files(
@@ -35,31 +35,12 @@ if __name__ == "__main__":
         debug = True, # False
     )
 
-    mod_data: dict = {
-        "corpus": {
-            "icon": bwyd.BWYD_SVG,
-            "modules": [
-                {
-                    "slug": module.slug,
-                    "thumb": module.get_thumbnail(session),
-                    "title": module.title,
-                    "text": module.text,
-                    "serves": module.total_yields(),
-                    "duration": module.total_duration(),
-                    "updated": module.updated,
-                    "keywords": module.collect_keywords(),
-                }
-                for module in modules
-            ],
-        },
-    }
 
-    #ic(mod_data)
-
-    html: str = bwyd.JINJA_INDEX_TEMPLATE.render(mod_data)
-
-    with open(examples_path / "index.html", "w", encoding = "utf-8") as fp:
-        fp.write(html)
+    ## search/discovery support
+    corpus.render_discovery(
+        modules,
+        examples_path / "index.html",
+    )
 
 
     ## KG prototype support

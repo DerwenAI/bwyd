@@ -1,12 +1,12 @@
 ## TODOs
 
-  * generate HTML for corpus index
   * refactor style into CSS
   * download `.bwyd` source
 
   * convert existing recipes
 
   * add metadata for "AUTHOR"
+  * better support for search/discovery across a directory of recipes
 
   * optional load an RDF/SKOS taxonomy
   * validate RDF
@@ -59,6 +59,11 @@ See: <https://foodon.org/>
 ---
 
 ## Questions
+
+Q: Are there integration paths for working with [Cooklang](https://cooklang.org/)?
+
+This markdown language shares some features with Bwyd.
+
 
 Q: Can we make use of
 [`pydantic-graph`](https://ai.pydantic.dev/graph/)
