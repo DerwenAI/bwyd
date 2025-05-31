@@ -434,7 +434,7 @@ Extend the measurements unit converter by merging with provided conversions.
 
     def parse (
         self,
-        script: pathlib.Path,
+        path: pathlib.Path,
         *,
         slug: typing.Optional[ str ] = None,
         debug: bool = False,
@@ -443,8 +443,9 @@ Extend the measurements unit converter by merging with provided conversions.
 Initialize a parser to load one Bywd module from a file.
         """
         return Module(
+            path,
             self.META_MODEL.model_from_file(
-                script,
+                path,
                 debug = debug,
             ),
             self.converter,

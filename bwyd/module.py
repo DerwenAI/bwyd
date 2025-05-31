@@ -11,6 +11,7 @@ from urllib.parse import ParseResult, urlparse
 import datetime
 import itertools
 import logging
+import pathlib
 import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
@@ -45,6 +46,7 @@ One parsed module.
     """
     def __init__ (
         self,
+        path: pathlib.Path,
         parse_tree: typing.Any,
         converter: Converter,
         *,
@@ -53,6 +55,7 @@ One parsed module.
         """
 Constructor.
         """
+        self.path: pathlib.Path = path
         self.parse_tree: typing.Any = parse_tree
         self.converter: Converter = converter
         self.slug: typing.Optional[ str ] = slug
@@ -128,6 +131,7 @@ one for each parsed Closure.
             updated = self.updated.isoformat()
 
         return {
+            "path": self.path.name,
             "icon": BWYD_SVG,
             "title": self.title,
             "text": self.text,
