@@ -109,6 +109,75 @@ details summary {
     color:hsl(306, 45%, 57%);
 }
 
+.bywd_title {
+    font-weight: bold;
+    margin:.5em 0 .5em 0;
+}
+
+div.card {
+    width: 93%;
+}
+
+p.card-text {
+    margin-top: 0;
+}
+
+div.nav_tabs {
+    width: 93%;
+}
+
+table.details {
+    max-width: 23rem;
+}
+
+li.details {
+    padding-top: 0;
+    padding-left: 0;
+}
+
+div.ingred {
+    max-height: 23rem;
+}
+
+span.closure_title {
+    font-weight: bold;
+    font-size: 1.4em;
+}
+
+div.closure_meta {
+    margin-bottom: 1rem;
+    max-width: 93%;
+}
+
+span.closure_meta {
+    padding-top: 0;
+    padding-left: 2em;
+}
+
+p.closure_meta {
+    margin-top: 0;
+}
+
+p.focus {
+    margin-top: 0;
+}
+
+p.focus span {
+    font-size: 1.1em;
+}
+
+div.activity {
+    width: 93%;
+}
+
+div.activity_title {
+    margin-bottom: 0;
+}
+
+div.activity_text {
+    margin: 0;
+    padding-bottom: 1em;
+}
     </style>
     <title>{{ module.title }}</title>
   </head>
@@ -116,19 +185,14 @@ details summary {
     <div id="main" class="container-fluid">
       <main>
 	<div class="container">
-	  <h1
-	    style="font-weight:bold; margin:.5em 0 .5em 0;"
-	    >{{ module.title }}</h1>
+	  <h1 class="bwyd_title">{{ module.title }}</h1>
 	  <div class="row">
 	    <div class="col">
 	      <!-- module description -->
 	      <div class="card"
-		   style="width:93%;"
 		   >
 		<div class="card-body">
-		  <p class="card-text"
-		     style="margin-top:0;"
-		     >{{ module.text }}</p>
+		  <p class="card-text">{{ module.text }}</p>
 		  &nbsp;
 		  <a
 		    href="{{ module.path }}"
@@ -142,7 +206,6 @@ details summary {
 	      <!-- module metadata -->
 	      <nav>
 		<div class="nav nav-tabs" id="nav-tab" role="tablist"
-		     style="width:93%;"
 		     >
 		  <button class="nav-link active" id="nav-details-tab" data-bs-toggle="tab" data-bs-target="#nav-details" type="button" role="tab" aria-controls="nav-details" aria-selected="true"><strong>Details</strong></button>
 		  <button class="nav-link" id="nav-ingred-tab" data-bs-toggle="tab" data-bs-target="#nav-ingred" type="button" role="tab" aria-controls="nav-ingred" aria-selected="false"><strong>Ingredients</strong></button>
@@ -153,18 +216,14 @@ details summary {
 	      <div class="tab-content" id="nav-tabContent">
 		<!-- details -->
 		<div class="tab-pane fade show active" id="nav-details" role="tabpanel" aria-labelledby="nav-details-tab" tabindex="0">
-		  <table class="table"
-			 style="max-width:23rem;"
-			 >
+		  <table class="table details">
 		    <tbody>
 		      <tr>
 			<th scope="row">serves:</th>
 			<td>
 			  <ul class="list-group list-group-flush">
 			  {% for product in module.details.serves %}
-			  <li class="list-group-item"
-			      style="padding-top:0; padding-left:0;"
-			      >
+			  <li class="list-group-item details">
 			    {{ product }}
 			  </li>
 			  {% endfor %}
@@ -193,9 +252,7 @@ details summary {
 		  </table>
 		</div>
 		<!-- ingred -->
-		<div class="tab-pane fade overflow-scroll" id="nav-ingred" role="tabpanel" aria-labelledby="nav-ingred-tab" tabindex="0"
-		     style="max-height:23rem;"
-		     >
+		<div class="tab-pane fade overflow-scroll ingred" id="nav-ingred" role="tabpanel" aria-labelledby="nav-ingred-tab" tabindex="0">
 		  <table class="table">
 		    <tbody>
 		      {% for ingr in module.ingredients %}
@@ -259,9 +316,7 @@ details summary {
 	    <div class="accordion-item">
 	      <h3 class="accordion-header">
 		<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="true" aria-controls="collapse{{ loop.index }}">
-		  <span
-		    style="font-weight:bold; font-size:1.4em;"
-		    >{{ closure.title }}</span>
+		  <span class="closure_title">{{ closure.title }}</span>
 		</button>
 	      </h3>
 	      <div id="collapse{{ loop.index }}" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
@@ -269,23 +324,17 @@ details summary {
 		  <div class="row">
 		    <!-- closure metadata -->
 		    <div class="col">
-		      <div class="card"
-			   style="margin-bottom:1rem; max-width:93%;"
-			   >
+		      <div class="card closure_meta">
 			<div class="card-body">
 			  <h5 class="card-title">yields:
 			    {% for product in closure.yields %}
 			    <br>
-			    <span
-			      style="padding-top:0; padding-left:2em;"
-			      >
+			    <span class="closure_meta">
 			      <strong>{{ product }}</strong>
 			    </span>
 			    {% endfor %}
 			  </h5>
-			  <p class="card-text"
-			     style="margin-top:0;"
-			     >{{ closure.text }}</p>
+			  <p class="card-text closure_meta">{{ closure.text }}</p>
 			  <p>
 			    {% if closure.keywords is defined and closure.keywords|length > 0 %}
 			    <em>keywords:</em>
@@ -315,13 +364,9 @@ details summary {
 		  <!-- focus -->
 		  <dl>
 		    <dt>
-		      <p
-			style="margin-top:0;"
-			>
+		      <p class="focus">
 			into
-			<span class="badge text-bg-primary"
-			      style="font-size:1.1em;"
-			      >{{ focus.container }}</span><strong>&nbsp;:</strong>
+			<span class="badge text-bg-primary">{{ focus.container }}</span><strong>&nbsp;:</strong>
 		      </p>
 		    </dt>
 		    {% for act in focus.activities %}
@@ -329,17 +374,11 @@ details summary {
 		    <dd>
 		      <div class="row">
 			<div class="col">
-			  <div class="card"
-			       style="width:93%;"
-			       >
-			    <div class="alert alert-secondary" role="alert"
-				 style="margin-bottom:0;"
-				 >
+			  <div class="card activity">
+			    <div class="alert alert-secondary activity_title" role="alert">
 			      {{ act.title }}
 			    </div>
-			    <div class="card-text"
-				 style="margin:0; padding-bottom:1em;"
-				 >
+			    <div class="card-text activity_text">
 			      {% for step_dict in act.steps %}
 			      {% for key, val in step_dict.items() %}
 
