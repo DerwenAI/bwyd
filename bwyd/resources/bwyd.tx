@@ -6,7 +6,11 @@ Module:
 ;
 
 Module_Metadata:
-  Updated | License | Post | Cite
+  Author | Updated | License | Post | Cite
+;
+
+Author:
+  "AUTHOR:" name=STRING
 ;
 
 Updated:

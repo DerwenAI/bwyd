@@ -1,7 +1,5 @@
 ## TODOs
 
-  * add metadata for "AUTHOR"
-
   * convert existing recipes
 
   * better support for search/discovery across a directory of recipes

@@ -277,10 +277,6 @@ div#footer-content p {
 			<th scope="row">duration:</th>
 			<td>{{ module.details.duration }}</td>
 		      </tr>
-		      <tr>
-			<th scope="row">updated:</th>
-			<td>{{ module.details.updated }}</td>
-		      </tr>
 		      {% if module.details.keywords|length > 0 %}
 		      <tr>
 			<th scope="row">keywords:</th>
@@ -291,6 +287,14 @@ div#footer-content p {
 			</td>
 		      </tr>
 		      {% endif %}
+		      <tr>
+			<th scope="row">author:</th>
+			<td>{{ module.details.author }}</td>
+		      </tr>
+		      <tr>
+			<th scope="row">updated:</th>
+			<td>{{ module.details.updated }}</td>
+		      </tr>
 		    </tbody>
 		  </table>
 		</div>

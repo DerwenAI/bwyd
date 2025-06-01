@@ -7,6 +7,7 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
 import pathlib
+import re
 
 import jinja2
 
@@ -31,3 +32,8 @@ _jinja2_env: jinja2.Environment = jinja2.Environment(
 
 JINJA_PAGE_TEMPLATE: jinja2.Template = _jinja2_env.get_template("page.jinja")
 JINJA_INDEX_TEMPLATE: jinja2.Template = _jinja2_env.get_template("index.jinja")
+
+
+URL_PATTERN: re.Pattern = re.compile(
+    r"""(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))"""  # pylint: disable=C0301
+)

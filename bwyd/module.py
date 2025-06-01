@@ -31,7 +31,7 @@ from .measure import Converter, \
 from .ops import Dependency, \
     OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpStore, OpHeat, OpChill, OpBake
 
-from .resources import BWYD_SVG, JINJA_PAGE_TEMPLATE
+from .resources import BWYD_SVG, JINJA_PAGE_TEMPLATE, URL_PATTERN
 
 from .structure import Post, Product, \
     Activity, Focus, Closure
@@ -63,10 +63,23 @@ Constructor.
         self.text: str = ""
         self.cites: typing.List[ str ] = []
         self.posts: typing.List[ Post ] = []
+        self.author: typing.Optional[ str ] = None
         self.spdx_id: typing.Optional[ str ] = None
         self.spdx_name: typing.Optional[ str ] = None
         self.updated: typing.Optional[ datetime.date ] = None
         self.closures: typing.Dict[ str, Closure ] = OrderedDict()
+
+
+    @classmethod
+    def _urlify (
+        cls,
+        text: str,
+        ) -> str:
+        """
+Detect a URL within and format as HTML.
+        """
+        pat: str = r'<a target="_blank" href="\1">\1</a>'
+        return URL_PATTERN.sub(pat, text)
 
 
     def get_image (
@@ -139,8 +152,9 @@ one for each parsed Closure.
             "details": {
                 "serves": self.total_yields(),
                 "duration": self.total_duration(),
-                "updated": updated,
                 "keywords": self.collect_keywords(),
+                "author": self.author,
+                "updated": updated,
             },
             "ingredients": [
                 {
@@ -755,7 +769,10 @@ Interpret one Bwyd module.
             meta_class_name: str = meta_parse.__class__.__name__
             loc: dict = textx.get_location(meta_parse)
 
-            if meta_class_name == "License":
+            if meta_class_name == "Author":
+                self.author = self._urlify(meta_parse.name)
+
+            elif meta_class_name == "License":
                 if self.spdx_id is not None:
                     # do not allow multiple licenses
                     spdx_id: str = meta_parse.spdx_id

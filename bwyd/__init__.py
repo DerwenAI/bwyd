@@ -24,7 +24,8 @@ from .ops import Dependency, DependencyDict, Appliance, \
 
 from .resources import BWYD_NAMESPACE, BWYD_SVG, \
     CONVERT_PATH, GRAMMAR_PATH, ICON_PATH, \
-    JINJA_PAGE_TEMPLATE, JINJA_INDEX_TEMPLATE
+    JINJA_PAGE_TEMPLATE, JINJA_INDEX_TEMPLATE, \
+    URL_PATTERN
 
 from .structure import Post, Product, \
     Activity, Focus, Closure
