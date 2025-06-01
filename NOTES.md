@@ -1,12 +1,10 @@
 ## TODOs
 
-  * refactor style into CSS
   * add metadata for "AUTHOR"
 
   * convert existing recipes
 
   * better support for search/discovery across a directory of recipes
-
   * optional load an RDF/SKOS taxonomy
   * validate RDF
 

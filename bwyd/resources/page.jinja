@@ -178,6 +178,49 @@ div.activity_text {
     margin: 0;
     padding-bottom: 1em;
 }
+
+div.activity_note {
+    margin-bottom: 0;
+    padding: 1em;
+    background-color: hsl(308, 16%, 82%);
+}
+
+div.activity_note p {
+    margin: 0;
+}
+
+div.activity_step {
+    margin: .5em 0 0 1em;
+}
+
+span.action_span {
+    font-size: 1.1em;
+}
+
+div#footer {
+    margin: .5em 1em 0 0;
+    font-size: smaller;
+}
+
+div#footer-thumb {
+    float: left;
+}
+
+div#footer-thumb img {
+    height: 3em;
+    padding: .1em;
+    float: left;
+}
+
+div#footer-content {
+    float: left;
+}
+
+div#footer-content p {
+    float: left;
+    margin: 0;
+    padding: 0 0 1em .5em;
+}
     </style>
     <title>{{ module.title }}</title>
   </head>
@@ -386,14 +429,8 @@ div.activity_text {
 			      <details
 				>
 				<summary><i class="bi bi-journal-text"></i></summary>
-				<div class="alert alert-tertiary" role="alert"
-				     style="margin-bottom:0; padding:1em; background-color:hsl(308, 16%, 82%);"
-				     >
-				  <p
-				    style="margin:0;"
-				    >
-				    {{ val.text }}
-				  </p>
+				<div class="alert alert-tertiary activity_note" role="alert">
+				  <p>{{ val.text }}</p>
 				</div>
 			      </details>
 
@@ -411,20 +448,16 @@ div.activity_text {
 			      <hr>
 
 			      {% elif key == "transfer" -%}
-			      <div
-				style="margin:.5em 0 0 1em;"
-				>
+			      <div class="activity_step">
 				transfer <strong>{{ val.name }}</strong>
 			      </div>
 
 			      {% elif key == "action" -%}
-			      <div
-				style="margin:.5em 0 0 1em;"
-				>
+			      <div class="activity_step">
 				with
-				<span class="badge text-bg-primary"
-				      style="font-size:1.1em;"
-				      >{{ val.tool }}</span><strong>&nbsp;:</strong>
+				<span class="badge text-bg-primary action_span">
+				  {{ val.tool }}
+				</span><strong>&nbsp;:</strong>
 				<br>
 				<strong>{{ val.verb }}</strong>
 				until <em>{{ val.text }}</em>
@@ -433,18 +466,14 @@ div.activity_text {
 			      </div>
 
 			      {% elif key == "store" -%}
-			      <div
-				style="margin:.5em 0 0 1em;"
-				>
+			      <div class="activity_step">
 				store <strong>{{ val.text }}</strong>
 				<br>
 				upto <em>{{ val.upto }}</em>
 			      </div>
 
 			      {% elif key == "stove" -%}
-			      <div
-				style="margin:.5em 0 0 1em;"
-				>
+			      <div class="activity_step">
 				<strong>{{ val.text }}</strong>
 				<br>
 				until <em>{{ val.until }}</em>
@@ -453,9 +482,7 @@ div.activity_text {
 			      </div>
 
 			      {% elif key == "cooler" -%}
-			      <div
-				style="margin:.5em 0 0 1em;"
-				>
+			      <div class="activity_step">
 				<strong>{{ val.text }}</strong>
 				<br>
 				until <em>{{ val.until }}</em>
@@ -464,9 +491,7 @@ div.activity_text {
 			      </div>
 
 			      {% elif key == "oven" -%}
-			      <div
-				style="margin:.5em 0 0 1em;"
-				>
+			      <div class="activity_step">
 				<strong>{{ val.mode }}</strong> at <strong>{{ val.temperature }}</strong> 
 				{% if val.text|length %}
 				<em>&nbsp;&hellip; {{ val.text }}</em>
@@ -499,24 +524,15 @@ div.activity_text {
 	  <!-- license -->
 	  {% set lic = module.license %}
 	  <footer>
-	    <div id="footer"
-		 style="margin: .5em 1em 0 0; font-size:smaller;"
-		 >
-	      <div id="footer-thumb"
-		   style="float:left;"
-		   >
+	    <div id="footer">
+	      <div id="footer-thumb">
 		<img
 		  src="{{ module.icon }}"
 		  alt="Bwyd logo"
-		  style="height:3em; padding:.1em; float:left;"
 		  >
 	      </div>
-	      <div id="footer-content"
-		   style="float:left;"
-		   >
-		<p
-		  style="float:left; margin:0; padding:0 0 1em .5em;"
-		  >
+	      <div id="footer-content">
+		<p>
 		  {% if lic is not none %}
   		  license:
 		  <strong>
