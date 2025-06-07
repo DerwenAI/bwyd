@@ -47,6 +47,11 @@ dependencies = [
     "rdflib (>=7.1.4,<8.0.0)",
     "py3-pinterest (>=1.4.0,<2.0.0)",
     "pillow (>=11.2.1,<12.0.0)",
+    "kuzu (>=0.10.0,<0.11.0)",
+    "sentence-transformers (>=4.1.0,<5.0.0)",
+    "pyinstrument (>=5.0.2,<6.0.0)",
+    "polars (>=1.30.0,<2.0.0)",
+    "pyarrow (>=20.0.0,<21.0.0)",
 ]
 
 keywords = [

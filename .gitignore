@@ -3,6 +3,7 @@ kg.rdf
 bwyd.cache
 examples/*.html
 recipes
+db/
 *.dot
 *~
 

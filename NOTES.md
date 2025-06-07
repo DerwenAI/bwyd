@@ -2,6 +2,16 @@
 
   * convert existing recipes
 
+  * Schema.org markup in HTML, and perhaps support MLWeb too?
+    + Schema.app
+    + https://schema.org/Recipe
+    + https://github.com/microsoft/NLWeb
+
+  * load graph into `KùzuDB`
+  * use `NetworkX` to build a dependency graph of closures from a corpus of modules
+  * generate `KùzuDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
+    + https://docs.kuzudb.com/extensions/vector/#create-the-vector-index
+
   * better support for search/discovery across a directory of recipes
   * optional load an RDF/SKOS taxonomy
   * validate RDF
@@ -13,10 +23,6 @@
 
   * allow measure abbrevs: "g" vs "gram", etc.
 
-  * generate `KùzuDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
-    + https://docs.kuzudb.com/extensions/vector/#create-the-vector-index
-
-  * use `NetworkX` to build a dependency graph of closures from a corpus of modules
   * leverage `pydantic-graph` to build trees from directed cliques
   * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
   * schedule use of appliances: oven, fridge, range, instantpot, etc.
