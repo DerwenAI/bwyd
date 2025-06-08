@@ -8,11 +8,13 @@ Prototype the use of KùzuDB
 import contextlib
 import pathlib
 import shutil
+import sys
 
 from icecream import ic
 from pyinstrument import Profiler
 from sentence_transformers import SentenceTransformer
 import kuzu
+import polars as pl
 
 
 # sample data
@@ -70,7 +72,6 @@ def main (
 Main entry point
     """
     profiler: Profiler = Profiler()
-
     model: SentenceTransformer = load_model()
     conn: kuzu.Connection = db_connect()
 
@@ -78,9 +79,8 @@ Main entry point
     ## set up schema
 
     # install and load vector extension
-    conn.execute("INSTALL vector; LOAD vector;")
-
     # create tables
+    conn.execute("INSTALL vector; LOAD vector;")
     conn.execute("CREATE NODE TABLE Book(id SERIAL PRIMARY KEY, title STRING, title_embedding FLOAT[384], published_year INT64);")
     conn.execute("CREATE NODE TABLE Publisher(name STRING PRIMARY KEY);")
     conn.execute("CREATE REL TABLE PublishedBy(FROM Book TO Publisher);")
@@ -88,28 +88,31 @@ Main entry point
     ## start code profiling
     profiler.start()
 
-    # insert sample data - Books with embeddings
-    for title, published_year in zip(TITLES, PUBLISHED_YEARS):
-        embeddings = model.encode(title).tolist()
+    # load dataframe
+    df = pl.DataFrame([
+        {
+            "title": title,
+            "publisher": publisher,
+            "published_year": published_year,
+        }
+        for title, publisher, published_year in zip(TITLES, PUBLISHERS, PUBLISHED_YEARS)
+    ])
+
+    # insert sample data - Books with embeddings, Publishers
+    # and create relationships between Books and Publishers
+    for title, publisher, published_year in df.rows():
+        title_embedding: list = model.encode(title).tolist()
 
         conn.execute(
-            """CREATE (b:Book {title: $title, title_embedding: $embeddings, published_year: $year});""",
-            { "title": title, "embeddings": embeddings, "year": published_year, },
+            """CREATE (b:Book {title: $title, title_embedding: $title_embedding, published_year: $published_year});""",
+            { "title": title, "title_embedding": title_embedding, "published_year": published_year, },
         )
 
-        print(f"inserted book: {title}")
-
-    # insert sample data - Publishers
-    for publisher in PUBLISHERS:
         conn.execute(
             """CREATE (p:Publisher {name: $publisher});""",
             { "publisher": publisher, },
         )
 
-        print(f"inserted publisher: {publisher}")
-
-    # create relationships between Books and Publishers
-    for title, publisher in zip(TITLES, PUBLISHERS):
         conn.execute(
             """
     MATCH (b:Book {title: $title})
@@ -118,9 +121,6 @@ Main entry point
             """,
             { "title": title, "publisher": publisher, },
         )
-
-        print(f"relationship between {title} and {publisher}")
-
 
     ######################################################################
     ## vector search
@@ -135,8 +135,6 @@ Main entry point
     );
         """
     )
-
-    print("vector index created")
 
     # vector search query
     query: str = "quantum machine learning"
@@ -155,7 +153,7 @@ Main entry point
         { "query_vector": query_vector, },
     )
 
-    print(result.get_as_pl())
+    ic(result.get_as_pl())
 
     result = conn.execute(
         """
@@ -168,7 +166,7 @@ Main entry point
         { "query_vector": query_vector,},
     )
 
-    print(result.get_as_pl())
+    ic(result.get_as_pl())
 
     ## end code profiling
     profiler.stop()
