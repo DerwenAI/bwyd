@@ -1,20 +1,18 @@
 ## TODOs
 
-  * convert existing recipes
-
-  * Schema.org markup in HTML, and perhaps support MLWeb too?
-    + Schema.app
-    + https://schema.org/Recipe
-    + https://github.com/microsoft/NLWeb
-
   * load graph into `KùzuDB`
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules
   * generate `KùzuDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
     + https://docs.kuzudb.com/extensions/vector/#create-the-vector-index
 
+  * convert existing recipes
+
   * better support for search/discovery across a directory of recipes
   * optional load an RDF/SKOS taxonomy
   * validate RDF
+
+  * support MLWeb too?
+    + https://github.com/microsoft/NLWeb
 
   * impl "FERMENT" op
   * support substitutions

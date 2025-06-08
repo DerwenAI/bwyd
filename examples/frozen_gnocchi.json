@@ -349,5 +349,6 @@
         }
       ]
     }
-  ]
+  ],
+  "schema_org": "{\"@context\": \"https://schema.org\", \"@type\": \"Recipe\", \"name\": \"Frozen Gnocchi Dumplings\", \"description\": \"Make some yummy gnocchi from root veggies.\", \"keywords\": [\"Italian\", \"dumplings\", \"pasta\", \"quick\", \"starch\"], \"recipeYield\": \"80 frozen gnocchi dumplings\", \"recipeIngredient\": [\"1 large chicken egg\", \"250 g (1/2 pound) whole milk ricotta\", \"50 g (1/2 cup) grated parmesan\", \"1 g (1/8 tsp) freshly grated nutmeg\", \"250 g (1/2 pound) reduced veggie pur\\u00e9e\", \"350 g (2 cups) flour: rice, oat, etc.\", \"1 parchment paper, cut to line the baking dish\"], \"image\": \"https://www.instagram.com/p/Csu0b4yLOyZ/embed\", \"isBasedOn\": \"https://www.prouditaliancook.com/2020/11/butternut-squash-gnocchi-with-sage-and-brown-butter.html\", \"dateModified\": \"2023-04-10\", \"author\": \"Paco Nathan\", \"license\": \"https://spdx.org/licenses/CC-BY-NC-SA-4.0.html\"}"
 }

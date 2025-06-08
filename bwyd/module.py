@@ -10,8 +10,10 @@ from collections import OrderedDict
 from urllib.parse import ParseResult, urlparse
 import datetime
 import itertools
+import json
 import logging
 import pathlib
+import re
 import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
@@ -111,6 +113,53 @@ Accessor for a thumbnail URL.
         return img_url
 
 
+    def get_schema_org (
+        self,
+        ) -> dict:
+        """
+Accessor for composing Schema.org metadata in JSON-LD
+<https://schema.org/Recipe>
+        """
+        frag: dict = {
+            "@context": "https://schema.org",
+            "@type": "Recipe",
+            "name": self.title,
+            "description": self.text,
+            "keywords": self.collect_keywords(),
+            "recipeYield": self.total_yields()[0],
+            "recipeIngredient": [
+                measure.humanize_convert(entity.symbol, entity.external, self.converter) + " " + entity.text  # pylint: disable=C0301
+                for entity, measure in self.iter_ingredients()
+            ],
+        }
+
+        # optional metadata
+        img_url: str = self.get_image()
+
+        if len(img_url) > 0:
+            frag["image"] = img_url
+
+        if len(self.cites) > 0:
+            frag["isBasedOn"] = self.cites[0]
+
+        if self.updated is not None:
+            frag["dateModified"] = self.updated.isoformat()
+
+        if self.author is not None:
+            author: str = self.author
+            match: typing.Optional[ re.Match ] = re.match(r"^([\w\s]+).*$", author)
+
+            if match is not None:
+                author = match.group(1).strip()
+
+            frag["author"] = author
+
+        if self.spdx_id is not None:
+            frag["license"] = f"https://spdx.org/licenses/{self.spdx_id}.html"
+
+        return frag
+
+
     def get_model (
         self,
         ) -> dict:
@@ -172,6 +221,7 @@ one for each parsed Closure.
             "image": self.get_image(),
 
             "closures": closure_list,
+            "schema_org": json.dumps(self.get_schema_org()),
         }
 
 
