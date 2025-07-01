@@ -1,9 +1,10 @@
 ## TODOs
 
   * load graph into `KùzuDB`
-  * use `NetworkX` to build a dependency graph of closures from a corpus of modules
   * generate `KùzuDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
     + https://docs.kuzudb.com/extensions/vector/#create-the-vector-index
+
+  * use `NetworkX` to build a dependency graph of closures from a corpus of modules
 
   * convert existing recipes
 
