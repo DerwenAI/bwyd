@@ -102,7 +102,7 @@ filterwarnings = [
 
 [tool.poetry.group.test.dependencies]
 
-deepdiff = "^8.4.2"
+deepdiff = "^8.6.1"
 mypy = "^1.15.0"
 pylint = "^3.3.6"
 pytest = "^8.3.5"
