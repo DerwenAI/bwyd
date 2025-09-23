@@ -7,3 +7,4 @@ updates:
     directory: "/bwyd"
     schedule:
       interval: "daily"
+    open-pull-requests-limit: 0
