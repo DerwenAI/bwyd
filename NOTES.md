@@ -1,5 +1,8 @@
 ## TODOs
 
+  * AI sheets
+    + https://huggingface.co/blog/dvilasuero/how-to-analyze-images-with-ai
+
   * load graph into `KùzuDB`
   * generate `KùzuDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
     + https://docs.kuzudb.com/extensions/vector/#create-the-vector-index
@@ -18,7 +21,7 @@
   * impl "FERMENT" op
   * support substitutions
 
-  * use `BAML` to parse recipe elements for the DSL
+  * use `DSPy` to parse recipe elements for the DSL
 
   * allow measure abbrevs: "g" vs "gram", etc.
 
