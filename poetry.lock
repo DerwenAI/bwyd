@@ -3857,14 +3857,14 @@ testutils = ["gitpython (>3)"]
 
 [[package]]
 name = "pyparsing"
-version = "3.2.5"
+version = "3.3.0"
 description = "pyparsing - Classes and methods to define and execute parsing grammars"
 optional = false
 python-versions = ">=3.9"
 groups = ["main", "demo"]
 files = [
-    {file = "pyparsing-3.2.5-py3-none-any.whl", hash = "sha256:e38a4f02064cf41fe6593d328d0512495ad1f3d8a91c4f73fc401b3079a59a5e"},
-    {file = "pyparsing-3.2.5.tar.gz", hash = "sha256:2df8d5b7b2802ef88e8d016a2eb9c7aeaa923529cd251ed0fe4608275d4105b6"},
+    {file = "pyparsing-3.3.0-py3-none-any.whl", hash = "sha256:d15038408e0097d3a01e7e0846731f7f2450c5b6e4a75a52baabd6bbf24585be"},
+    {file = "pyparsing-3.3.0.tar.gz", hash = "sha256:0de16f2661afbab11fe6645d9472c3b96968d2fffea5b0cc9da88f5be286f039"},
 ]
 
 [package.extras]
@@ -5476,15 +5476,14 @@ zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 
 [[package]]
 name = "watermark"
-version = "2.5.1"
+version = "2.6.0"
 description = "IPython magic function to print date/time stamps and various system information."
 optional = false
 python-versions = ">=3.7"
 groups = ["demo"]
 files = [
-    {file = "watermark-2.5.1-py2.py3-none-any.whl", hash = "sha256:8d3f70c243afed8e10a2cf258c8744e61ef1215caa8d7862bc985e443219509d"},
-    {file = "watermark-2.5.1-py3-none-any.whl", hash = "sha256:c20c998eb09b2a97723644ec438aa3fb25d2a3fb5cee4b5453d2a012d6d2818b"},
-    {file = "watermark-2.5.1.tar.gz", hash = "sha256:19a807f504ce02b791a7ce8950df85515ffc876cacd37a84130ea23a0e1a783a"},
+    {file = "watermark-2.6.0-py3-none-any.whl", hash = "sha256:c925daf1c3f7db9aa5fe25aff3a5fd07df0619ff0bd271bf809bfd6b0c628332"},
+    {file = "watermark-2.6.0.tar.gz", hash = "sha256:ee4fadccbebe855a23ae48bb8a20c1da6ddb9d81f53b6c30c77de767c7161930"},
 ]
 
 [package.dependencies]
