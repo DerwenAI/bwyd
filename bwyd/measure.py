@@ -24,11 +24,13 @@ An enumeration class representing string literals for Measure units.
     TEASPOON = "tsp"
     CUP = enum.auto()
     POUND = enum.auto()
+    OUNCE = enum.auto()
     LITER = "l"
     MILLILITER = "ml"
     GRAM = "g"
     KILOGRAM = "kg"
 
+OUNCE_PER_POUND: float = 16.0
 CUP_PER_LITER: float = 4.226753
 POUND_PER_GRAM: float = 0.002204623
 
@@ -177,7 +179,13 @@ imperial conversion if available.
                 match self.units:
                     case MeasureUnits.GRAM.value:
                         imper_amount = self.amount * POUND_PER_GRAM
-                        human = self._humanize_generic(imper_amount, MeasureUnits.POUND)
+
+                        if imper_amount < 0.25:
+                            imper_amount *= OUNCE_PER_POUND
+                            human = self._humanize_generic(imper_amount, MeasureUnits.OUNCE)
+                        else:
+                            human = self._humanize_generic(imper_amount, MeasureUnits.POUND)
+
                         amount += human.denormalize()
                     case MeasureUnits.LITER.value:
                         imper_amount = self.amount * CUP_PER_LITER

@@ -1,0 +1,342 @@
+TITLE: "Potato Crust Quiche"
+TEXT: "A simple but hearty gluten-free option for making quiches."
+AUTHOR: "Paco Nathan https://derwen.ai/paco"
+LICENSE: "CC-BY-NC-SA-4.0"
+UPDATED: "2026-01-26"
+POST: "https://www.instagram.com/p/DSjdwOLFG8M/"
+CITE: "https://www.instagram.com/p/DSDDyL-iFDr/"
+CITE: "https://emilyepicure.com/how-much-baking-soda-when-boiling-potatoes/"
+
+CLOSURE: "prep the potatoes"
+    TEXT: "Clean the potatoes, removing visible defects but leaving skins on, then boil"
+
+    CONTAINER sink: "kitchen sink"
+    CONTAINER board: "cutting board"
+    CONTAINER pot: "small pot"
+
+    TOOL hand: "clean hands"
+    TOOL french_knife: "French chef knife"
+    TOOL pairing_knife: "small pairing knife"
+
+    INGREDIENT potatoes: "fresh, firm, medium or large-ish Yukon potatos, not fingerlings"
+    INGREDIENT water: "cold tap water"
+    INGREDIENT baking_soda: "baking soda"
+
+    FOCUS sink
+
+    ACTIVITY: "clean the potatoes"
+
+    ADD potatoes (.9 kg)
+    // about 3x medium Yukon potatoes
+
+    ACTION hand: "rinse in running cold water; don't peel"
+        UNTIL: "each potato is cleaned"
+        TIME (2 minute)
+
+    ACTION pairing_knife: "remove dark eyes and bruises"
+        UNTIL: "each potato looks clean"
+	TIME (5 minute)
+
+    FOCUS board
+
+    ACTIVITY: "cut each potato into quarters, one at a time"
+
+    TRANSFER potatoes
+
+    ACTION french_knife: "cut into quarters"
+        UNTIL: "cut chunks are roughly the same size, for evening cooking"
+	TIME (2 minute)
+
+    FOCUS pot
+
+    ACTIVITY: "boil the potatoes chunks"
+
+    TRANSFER potatoes
+
+    ADD water (1.5 l)
+    ADD baking_soda (6 g)
+
+    HEAT pot: "cover, then simmer over high heat"
+        UNTIL: "bring to a medium boil"
+        TIME (5 minute)
+
+    HEAT pot: "reduce the heat to medium and simmer"
+        UNTIL: "the potatoes are fork-tender, chunks should almost be falling off their skins"
+        TIME (10 minute)
+
+YIELDS boiled_potatoes (850 g) INTERMEDIATE
+
+
+CLOSURE: "make the pie crust"
+    TEXT: "Mold a potato crust and pre-bake"
+
+    CONTAINER pie_plate: "23 cm round glass pie plate"
+    CONTAINER bowl: "small bowl"
+
+    TOOL mug: "coffee mug"
+    TOOL fork: "small fork"
+    TOOL brush: "culinary brush"
+
+    INGREDIENT egg: "large chicken egg"
+    INGREDIENT oil: "avocado oil or similar with a high smoke temperature"
+    USE boiled_potatoes: "drained"
+
+    FOCUS bowl
+
+    ACTIVITY: "prep egg wash"
+
+    ADD egg (1)
+
+    ACTION fork: "beat the egg"
+        UNTIL: "lightly beaten"
+	TIME (30 second)
+
+    FOCUS pie_plate
+
+    ACTIVITY: "form potato chunks into a pie crust"
+
+    ADD boiled_potatoes (850 g)
+
+    ACTION mug: "smash potato chunks with the bottom of a coffee mug, forming an even layer"
+        UNTIL: "crust is evenly distributed, no more than 1 cm thick"
+        TIME (3 minute)
+
+    ACTION brush: "brush the beaten egg lightly onto the rim of the crust"
+        UNTIL: "evenly coated"
+	TIME (1 minute)
+
+    ACTION fork: "poke holes across the bottom of the crust"
+        UNTIL: "3 or 4 holes, to provide vents during pre-bake"
+	TIME (30 second)
+
+    ACTIVITY: "prep for pre-bake"
+
+    ADD oil (7 g): "thread the oil evenly across the bottom of the crust"
+
+    ACTIVITY: "place pie plate on a baking sheet in the oven, making sure it is level"
+
+    BAKE pie_plate: "set to convection bake"
+        AT: 177 C
+        UNTIL: "slightly golden, but not crispy"
+        TIME (15 minute)
+
+YIELDS pie_crust (1) INTERMEDIATE
+
+
+CLOSURE: "prep the quiche filling"
+    TEXT: "Prepare the veggies, cheese, and other proteins used in the quiche filling"
+
+    CONTAINER counter: "cleaned counter top"
+    CONTAINER pan: "medium saucepan"
+    CONTAINER board: "cutting board"
+    CONTAINER sink: "kitchen sink"
+
+    TOOL mandoline: "or use a sharp chef knife on a cutting board"
+    TOOL spatula: "silicone spatula"
+    TOOL french_knife: "French chef knife"
+    TOOL hand: "clean hands"
+
+    INGREDIENT cheese: "semi-firm mild cheese good for baking, such as Goat Jack"
+    INGREDIENT mushrooms: "fungi suitable for baking: shiitake, chanterelle, etc."
+    INGREDIENT sausage: "smoked duck sausage, or another interesting protein"
+    INGREDIENT leeks: "fresh leeks"
+    INGREDIENT oil: "avocado oil or similar with a high smoke temperature"
+    INGREDIENT salt: "sea salt, flaked"
+    INGREDIENT vermouth: "best to use a blanc, such as Molin"
+
+    FOCUS counter
+
+    ACTIVITY: "slice cheese"
+
+    ADD cheese (170 g)
+
+    ACTION mandoline: "slice thin, then set aside"
+        UNTIL: "entirely cut"
+	TIME (2 minute)
+
+    ACTIVITY: "slice sausage"
+
+    ADD sausage (100 g)
+
+    ACTION mandoline: "slice thin, then set aside"
+        UNTIL: "entirely cut"
+	TIME (2 minute)
+
+    FOCUS pan
+
+    ACTIVITY: "sautée sausage slices"
+
+    TRANSFER sausage
+
+    ADD oil (14 g)
+
+    HEAT pan: "stir over medium heat"
+        UNTIL: "lightly browned"
+        TIME (3 minute)
+
+    ACTION spatula: "stir, then set aside"
+        UNTIL: "avoid charring any pieces"
+	TIME (1 minute)
+
+    FOCUS board
+
+    ACTIVITY: "slice mushrooms"
+
+    ADD mushrooms (100 g)
+
+    ACTION french_knife: "slice into thick pieces, 1 cm"
+        UNTIL: "entirely cut"
+	TIME (2 minute)
+
+    FOCUS pan
+    
+    ACTIVITY: "sautée mushroom slices"
+
+    ADD oil (14 g)
+
+    HEAT pan: "over medium heat"
+        UNTIL: "oil begins to bead"
+        TIME (2 minute)
+
+    TRANSFER mushrooms
+
+    ACTION spatula: "stir, then set aside"
+        UNTIL: "slices begin to soften, and you smell their aroma"
+	TIME (3 minute)
+
+    FOCUS sink
+
+    ACTIVITY: "clean leeks"
+
+    ADD leeks (285 g)
+    // 2x medium leeks
+
+    ACTION hand: "peel back outter layer and wash to remove any dirt"
+        UNTIL: "leeks are clean of any dirt"
+	TIME (2 minute)
+
+    FOCUS board
+
+    ACTIVITY: "slice leeks"
+
+    TRANSFER leeks
+
+    ACTION french_knife: "remove rough ends, then slice thin"
+        UNTIL: "entirely cut"
+	TIME (2 minute)
+
+    FOCUS pan
+
+    ACTIVITY: "sautée leek slices"
+
+    TRANSFER leeks
+
+    ADD oil (75 g)
+    ADD salt (1 g)
+
+    HEAT pan: "over medium heat"
+        UNTIL: "leek slices begin to brown"
+        TIME (3 minute)
+
+    ADD vermouth (15 ml)
+
+    ACTION spatula: "stir to deglaze"
+        UNTIL: "alcohol evaporates"
+	TIME (1 minute)
+
+YIELDS quiche_filling (1) INTERMEDIATE
+
+
+CLOSURE: "grind the spices"
+    TEXT: "Grind together the mix of spices and dried herbs"
+
+    CONTAINER mortar: "suribachi or mortar/pestle"
+    TOOL pestle: "something to grind with"
+
+    INGREDIENT thyme: "fresh or dried thyme"
+    INGREDIENT cumin: "ground cumin"
+    INGREDIENT salt: "sea salt, flaked"
+    INGREDIENT pepper: "ground black pepper"
+    INGREDIENT chili: "smoked chilhuacle negro"
+
+    FOCUS mortar
+
+    ACTIVITY: "grind the spices together"
+
+    ADD thyme (1 g)
+    // 1 tsp
+    ADD cumin (2 g)
+    // .5 tsp
+    ADD salt (1 g)
+    ADD pepper (1 g)
+    ADD chili (1 g)
+
+    ACTION pestle: "grind"
+        UNTIL: "mix is a course powder"
+	TIME (1 minute)
+
+YIELDS spice_mix (1) INTERMEDIATE
+
+
+CLOSURE: "beat the egges and cream"
+    TEXT: "Beat the eggs, cream, and spices for the quiche filling"
+
+    CONTAINER bowl: "medium mixing bowl"
+
+    TOOL fork: "fork or small whisk"
+    TOOL spatula: "silicone spatula"
+
+    INGREDIENT egg: "large chicken egg"    
+    INGREDIENT sour_cream: "crème fraîche, sour cream, cashew cream, etc."
+    INGREDIENT milk: "goat or cow milk, oat milk, etc."
+    USE spice_mix: "scrape ground power from suribachi"
+
+    FOCUS bowl
+
+    ACTIVITY: "mix the eggs and other ingredients"
+
+    ADD egg (3) 
+
+    ACTION fork: "beat eggs"
+        UNTIL: "mixed evenly"
+	TIME (2 minute)
+
+    ADD spice_mix (1)
+    ADD sour_cream (200 g)
+    ADD milk (50 ml)
+
+    ACTION spatula: "fold in spices and cream"
+        UNTIL: "mixed evenly"
+	TIME (1 minute)
+
+YIELDS egg_mix (1) INTERMEDIATE
+
+
+CLOSURE: "bake the quiche"
+    TEXT: "Fill the pie crust and bake the quiche"
+    KEYWORDS: savory, entree, gluten_free
+
+    CONTAINER pie_plate: "23 cm round glass pie plate"
+
+    INGREDIENT pecorino: "ground pecorino cheese"
+    USE pie_crust: "in its pie plate"
+    USE quiche_filling: "layer evenly into the crust: mushrooms, sausage, leeks, cheese"
+    USE egg_mix: "pour evenly over filling"
+
+    FOCUS pie_plate
+
+    ACTIVITY: "assemble the crust and filling"
+
+    ADD pie_crust (1)
+    ADD quiche_filling (1)
+    ADD egg_mix (1)
+    ADD pecorino (10 g): "sprinkle on top"
+
+    ACTIVITY: "place pie plate on a baking sheet in the oven, making sure it is level"
+
+    BAKE pie_plate: "set to convection bake"
+        AT: 177 C
+        UNTIL: "top begins to bubble and brown, but cheese doesn't burn"
+        TIME (40 minute)
+
+YIELDS potato_crust_quiche (8)

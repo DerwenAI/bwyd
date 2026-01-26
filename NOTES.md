@@ -1,27 +1,24 @@
 ## TODOs
 
-  * AI sheets
-    + https://huggingface.co/blog/dvilasuero/how-to-analyze-images-with-ai
+  * convert existing recipes
 
-  * load graph into `KùzuDB`
-  * generate `KùzuDB` embeddings for ingredients, equipment, sequences/communities in actions, etc.
-    + https://docs.kuzudb.com/extensions/vector/#create-the-vector-index
+  * use `DSPy` to parse recipe elements for the DSL
 
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules
-
-  * convert existing recipes
+  * load embeddings into `LanceDB`
 
   * better support for search/discovery across a directory of recipes
   * optional load an RDF/SKOS taxonomy
-  * validate RDF
+  * validate RDF with SHACL
 
-  * support MLWeb too?
+  * AI sheets
+    + https://huggingface.co/blog/dvilasuero/how-to-analyze-images-with-ai
+
+  * support NLWeb too?
     + https://github.com/microsoft/NLWeb
 
   * impl "FERMENT" op
   * support substitutions
-
-  * use `DSPy` to parse recipe elements for the DSL
 
   * allow measure abbrevs: "g" vs "gram", etc.
 
@@ -110,6 +107,7 @@ content?
   - <https://skrub-data.org/stable/reference/generated/skrub.GapEncoder.html>
   - <https://huggingface.co/docs/setfit/index>
 
-Q: Can we use AI building blocks (e.g., language models, BAML functions,
-causal graphs, reinforcement learning, etc.) to restate sequences of `Step`
-procedures, i.e., to improve recipes?
+Q: How can we use AI building blocks (e.g., language models, DSPy
+declarative LLM integration, causal graphs, reinforcement learning,
+etc.) to restate sequences of `Step` procedures, i.e., to improve
+recipes?
