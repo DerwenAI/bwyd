@@ -43,10 +43,6 @@ dependencies = [
     # instrumentation, observability
     "icecream (>=2.1.4,<3.0.0)",
     "pyinstrument (>=5.0.2,<6.0.0)",
-
-    # TODO: move to group depdencies
-    "jupyterlab (>=4.3.5,<5.0.0)",
-    "types-requests (>=2.32.0.20250328,<3.0.0.0)",
 ]
 
 keywords = [
@@ -106,6 +102,9 @@ deepdiff = "^8.4.2"
 mypy = "^1.15.0"
 pylint = "^3.3.6"
 pytest = "^8.3.5"
+types-python-dateutil = "^2.9.0.20260124"
+types-requests = "^2.32.0.20250328"
+
 
 [tool.poetry.group.demo.dependencies]
 
