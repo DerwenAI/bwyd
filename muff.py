@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     modules: typing.List[ bwyd.Module ] = corpus.render_html_files(
         examples_path,
-        #glob = "bread*.bwyd",
+        #glob = "potato*.bwyd",
         #glob = "app*.bwyd",
         debug = True, # False
     )

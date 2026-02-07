@@ -289,7 +289,7 @@ CLOSURE: "beat the egges and cream"
     INGREDIENT egg: "large chicken egg"    
     INGREDIENT sour_cream: "crème fraîche, sour cream, cashew cream, etc."
     INGREDIENT milk: "goat or cow milk, oat milk, etc."
-    USE spice_mix: "scrape ground power from suribachi"
+    USE spice_mix: "scrape ground powder from suribachi"
 
     FOCUS bowl
 

@@ -182,11 +182,20 @@ imperial conversion if available.
 
                         if imper_amount < 0.25:
                             imper_amount *= OUNCE_PER_POUND
-                            human = self._humanize_generic(imper_amount, MeasureUnits.OUNCE)
+
+                            if imper_amount > 0.95:
+                                human = self._humanize_generic(imper_amount, MeasureUnits.OUNCE)
+                            else:
+                                human = Humanized(
+                                    amount = imper_amount,
+                                    human = str(round(imper_amount, 2)),
+                                    units = MeasureUnits.OUNCE,
+                                )
                         else:
                             human = self._humanize_generic(imper_amount, MeasureUnits.POUND)
 
                         amount += human.denormalize()
+
                     case MeasureUnits.LITER.value:
                         imper_amount = self.amount * CUP_PER_LITER
                         human = self._humanize_generic(imper_amount, MeasureUnits.CUP)
