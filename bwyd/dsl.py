@@ -15,6 +15,7 @@ import urllib.parse
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
 from rdflib.namespace import DCTERMS, RDF, SKOS, XSD  # pylint: disable=W0611
+import jinja2
 import rdflib
 import requests_cache
 import textx  # type: ignore  # pylint: disable=E0401
@@ -49,7 +50,7 @@ Constructor.
 
     def compose_iri (
         self,
-        names: typing.List[ str ],
+        names: list[ str ],
         ) -> rdflib.URIRef:
         """
 Compose an IRI in the Bwyd namespace.
@@ -62,7 +63,7 @@ Compose an IRI in the Bwyd namespace.
         self,
         inst_symbol: str,
         *,
-        sub_symbol: typing.Optional[ str ] = None,
+        sub_symbol: str | None = None,
         ) -> rdflib.URIRef:
         """
 Compose an IRI in the Bwyd namespace for an instance of a class.
@@ -142,8 +143,8 @@ Constructor.
     def get_cache (
         self,
         *,
-        cache_path: typing.Optional[ pathlib.Path ] = None,
-        cache_expire: typing.Optional[ int ] = None,
+        cache_path: pathlib.Path | None = None,
+        cache_expire: int | None = None,
         ) -> requests_cache.CachedSession:
         """
 Build a URL request cache session, optionally loading any
@@ -180,19 +181,16 @@ Iterator for listing the Bwyd modules in a given directory.
                 yield bwyd_path
 
 
-    def render_html_files (
+    def parse_modules (
         self,
         dir_path: pathlib.Path,
         *,
         glob: str = "*.bwyd",
-        suffix: str = ".html",
         debug: bool = False,
-        ) -> typing.List[ Module ]:
+        ) -> typing.Iterator[ Module ]:
         """
-Traverse the given directory, rendering Bwyd scripts as HTML in place.
-Return a count of the modules processed.
+Traverse the given directory, parsing Bwyd modules.
         """
-        modules: typing.List[ Module ] = []
         dsl: Bwyd = Bwyd()
 
         for bwyd_path in self.iter_files(dir_path, glob = glob):
@@ -212,21 +210,15 @@ Return a count of the modules processed.
                 debug = debug,
             )
 
-            modules.append(module)
-
-            # render HTML using the Jinja2 template
-            html_path: pathlib.Path = bwyd_path.with_suffix(suffix)
-
-            with open(html_path, "w", encoding = "utf-8") as fp:
-                fp.write(module.render_template())
-
-        return modules
+            yield module
 
 
     def render_discovery (
         self,
-        modules: typing.List[ Module ],
+        modules: list[ Module ],
         index_path: pathlib.Path,
+        *,
+        index_template: jinja2.Template = JINJA_INDEX_TEMPLATE,
         ) -> None:
         """
 Render an HTML index for search/discovery across a directory of recipes.
@@ -250,7 +242,7 @@ Render an HTML index for search/discovery across a directory of recipes.
             },
         }
 
-        html: str = JINJA_INDEX_TEMPLATE.render(mod_data)
+        html: str = index_template.render(mod_data)
 
         with open(index_path, "w", encoding = "utf-8") as fp:
             fp.write(html)
@@ -258,7 +250,7 @@ Render an HTML index for search/discovery across a directory of recipes.
 
     def build_graph (  # pylint: disable=R0914
         self,
-        modules: typing.List[ Module ],
+        modules: list[ Module ],
         *,
         debug: bool = False,  # pylint: disable=W0613
         ) -> Graph:
@@ -406,7 +398,7 @@ Bwyd DSL parser/interpreter.
     def __init__ (
         self,
         *,
-        config_path: typing.Optional[ pathlib.Path ] = None,
+        config_path: pathlib.Path | None = None,
         converter: Converter = UNIT_CONVERTER,
         ) -> None:
         """
@@ -423,7 +415,7 @@ Constructor.
 
     def extend_converter (
         self,
-        conversions: typing.List[ Conversion ],
+        conversions: list[ Conversion ],
         ) -> None:
         """
 Extend the measurements unit converter by merging with provided conversions.
@@ -436,7 +428,7 @@ Extend the measurements unit converter by merging with provided conversions.
         self,
         path: pathlib.Path,
         *,
-        slug: typing.Optional[ str ] = None,
+        slug: str | None = None,
         debug: bool = False,
         ) -> Module:
         """

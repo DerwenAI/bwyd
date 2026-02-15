@@ -8,9 +8,9 @@ dynamic = [
 ]
 
 description = "The seed crazy idea here is to consider how human cooks behave like robots, following recipes as instructions."
-license = { text = "MIT" }
 
 readme = "README.md"
+version = "0.2.2"
 
 authors = [
     { name = "derwen.ai", email = "info@derwen.ai" }
@@ -20,28 +20,35 @@ maintainers = [
     { name = "Paco Nathan", email = "paco@derwen.ai" }
 ]
 
+license = "MIT"
+
+license-files = [
+    "LICENSE",
+]
+
 requires-python = ">=3.11,<4.0.0"
 
 dependencies = [
     # DSL parser
-    "universal-pathlib (>=0.2.6,<0.3.0)",
+    "pydantic (>=2.12.5,<3.0.0)",
     "requests-cache (>=1.2.1,<2.0.0)",
     "textx (>=4.1.0,<5.0.0)",
+    "universal-pathlib (>=0.3,<1.0)",
 
     # graph
     "rdflib (>=7.1.4,<8.0.0)",
-    "pydantic-graph (>=0.0.36,<0.0.37)",
 
     # HTML rendering
-    "jinja2 (>=3.1.6,<4.0.0)",
-    "spdx-tools (>=0.8.3,<0.9.0)",
-    "spdx-license-list (>=3.26.0,<4.0.0)",
-    "minify-html (>=0.16.4,<0.17.0)",
     "inflect (>=7.5.0,<8.0.0)",
-    "pillow (>=11.2.1,<12.0.0)",
+    "jinja2 (>=3.1.6,<4.0.0)",
+    "minify-html (>=0.18,<1.0)",
+    "pillow (>=12.1,<13.0)",
+    "spdx-license-list (>=3.26.0,<4.0.0)",
+    "spdx-tools (>=0.8.3,<0.9.0)",
 
     # instrumentation, observability
     "icecream (>=2.1.4,<3.0.0)",
+    "ipykernel (>=7.2.0,<8.0.0)",
     "pyinstrument (>=5.0.2,<6.0.0)",
 ]
 
@@ -55,8 +62,6 @@ keywords = [
     "validation",
 ]
 
-
-version = "0.2.1"
 
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -84,6 +89,28 @@ classifiers = [
 repository = "https://github.com/DerwenAI/bwyd"
 
 
+[dependency-groups]
+
+test = [
+     "deepdiff (>=8.4,<9.0)",
+     "mypy (>=1.15,<2.0)",
+     "pylint (>=4.0,<5.0)",
+     "pytest (>=9.0,<10.0)",
+     "types-python-dateutil (>=2.9.0.20260124,<3.0)",
+     "types-requests (>=2.32.0.20250328,<3.0)",
+]
+
+demo = [
+     "ipympl (>=0.9,<1.0)",
+     "jupyterlab (>=4.4,<5.0)",
+     "jupyterlab-execute-time (>=3.2,<4.0)",
+     "polars (>=1.30,<2.0)",
+     "pyarrow (>=20.0,<24.0)",
+     "sentence-transformers (>=4.1,<6.0)",
+     "watermark (>=2.5,<3.0)",
+]
+
+
 [tool.pytest.ini_options]
 
 filterwarnings = [
@@ -92,27 +119,6 @@ filterwarnings = [
     'ignore:Jupyter is migrating:DeprecationWarning',
     'ignore:Parsing dates involving:DeprecationWarning',
 ]
-
-
-[tool.poetry.group.test.dependencies]
-
-deepdiff = "^8.4.2"
-mypy = "^1.15.0"
-pylint = "^3.3.6"
-pytest = "^8.3.5"
-types-python-dateutil = "^2.9.0.20260124"
-types-requests = "^2.32.0.20250328"
-
-
-[tool.poetry.group.demo.dependencies]
-
-ipympl = "^0.9.7"
-jupyterlab = "^4.4.1"
-jupyterlab-execute-time = "^3.2.0"
-polars = "^1.30.0"
-pyarrow = "^20.0.0"
-sentence-transformers = "^4.1.0"
-watermark = "^2.5.0"
 
 
 [build-system]
