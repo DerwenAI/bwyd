@@ -15,6 +15,7 @@ import urllib.parse
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
 from rdflib.namespace import DCTERMS, RDF, SKOS, XSD  # pylint: disable=W0611
+import jinja2
 import rdflib
 import requests_cache
 import textx  # type: ignore  # pylint: disable=E0401
@@ -216,6 +217,8 @@ Traverse the given directory, parsing Bwyd modules.
         self,
         modules: list[ Module ],
         index_path: pathlib.Path,
+        *,
+        index_template: jinja2.Template = JINJA_INDEX_TEMPLATE,
         ) -> None:
         """
 Render an HTML index for search/discovery across a directory of recipes.
@@ -239,7 +242,7 @@ Render an HTML index for search/discovery across a directory of recipes.
             },
         }
 
-        html: str = JINJA_INDEX_TEMPLATE.render(mod_data)
+        html: str = index_template.render(mod_data)
 
         with open(index_path, "w", encoding = "utf-8") as fp:
             fp.write(html)

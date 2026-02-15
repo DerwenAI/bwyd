@@ -955,14 +955,14 @@ Accessor for the collected keywords in one Bwyd module.
     def render_template (
         self,
         *,
-        template: jinja2.Template = JINJA_PAGE_TEMPLATE,
+        page_template: jinja2.Template = JINJA_PAGE_TEMPLATE,
         minify: bool = True,
         ) -> str:
         """
 Load a Jinja2 template and render the data model as HTML,
 which is by default minified.
         """
-        html: str = template.render(
+        html: str = page_template.render(
             module = self.get_model()
         )
 
