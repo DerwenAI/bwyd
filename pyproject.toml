@@ -11,6 +11,7 @@ description = "The seed crazy idea here is to consider how human cooks behave li
 license = { text = "MIT" }
 
 readme = "README.md"
+version = "0.2.2"
 
 authors = [
     { name = "derwen.ai", email = "info@derwen.ai" }
@@ -43,6 +44,7 @@ dependencies = [
     # instrumentation, observability
     "icecream (>=2.1.4,<3.0.0)",
     "pyinstrument (>=5.0.2,<6.0.0)",
+    "ipykernel (>=7.2.0,<8.0.0)",
 ]
 
 keywords = [
@@ -55,8 +57,6 @@ keywords = [
     "validation",
 ]
 
-
-version = "0.2.1"
 
 classifiers = [
     "Development Status :: 4 - Beta",
