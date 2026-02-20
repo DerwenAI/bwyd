@@ -2,12 +2,20 @@
 
   * convert existing recipes
 
-  * use `DSPy` to parse recipe elements for the DSL
+  * impl "FERMENT" op
+  * support substitutions
+
+  * allow measure abbrevs: "g" vs "gram", etc.
 
   * use `NetworkX` to build a dependency graph of closures from a corpus of modules
   * load embeddings into `LanceDB`
 
+  * use `DSPy` to parse recipe elements for the DSL
+    + https://victorjlamas.github.io/assets/papers/LLMXpertMODELS2024.pdf
+    + https://medium.com/itemis/large-language-models-for-domain-specific-language-generation-part-2-how-to-constrain-your-dragon-e0e2439b6a53
+
   * better support for search/discovery across a directory of recipes
+
   * optional load an RDF/SKOS taxonomy
   * validate RDF with SHACL
 
@@ -17,18 +25,15 @@
   * support NLWeb too?
     + https://github.com/microsoft/NLWeb
 
-  * impl "FERMENT" op
-  * support substitutions
-
-  * allow measure abbrevs: "g" vs "gram", etc.
-
   * leverage `pydantic-graph` to build trees from directed cliques
   * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
+
   * schedule use of appliances: oven, fridge, range, instantpot, etc.
   * PARALLEL/SERIAL for scaling durations
 
   * use `textX-LS` to generate a VS Code extension
-  
+    + https://github.com/textX/textX-LS  
+
 
 ## Taxonomy
 
