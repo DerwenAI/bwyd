@@ -226,8 +226,7 @@ Duration of this operation.
 Serializable representation for JSON.
         """
         return {
-            "action": {
-                "verb": self.modifier,
+            "wait": {
                 "text": self.until,
                 "time": self.duration.humanize(),
             }
