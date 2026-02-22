@@ -22,6 +22,7 @@ class MeasureUnits (enum.StrEnum):
 An enumeration class representing string literals for Measure units.
     """
     TEASPOON = "tsp"
+    TABLESPOON = "tbsp"
     CUP = enum.auto()
     POUND = enum.auto()
     OUNCE = enum.auto()
@@ -241,13 +242,43 @@ Private method to humanize imperial measurement ratios, for cup.
         units: MeasureUnits = MeasureUnits.CUP
         denom_limit: int = 4
 
+        if amount <= 0.0615:
+            return cls._humanize_tsp(amount * 48.0)
+
         if amount <= 0.24:
-            return cls._humanize_tsp(amount * 16.0)
+            return cls._humanize_tbsp(amount * 16.0)
 
         if amount >= 1.0:
             human: str = cls.fix_fraction(amount)
         else:
             human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
+
+        return Humanized(
+            amount = amount,
+            human = human,
+            units = units,
+        )
+
+
+    @classmethod
+    def _humanize_tbsp (
+        cls,
+        amount: float,
+        ) -> Humanized:
+        """
+Private method to humanize imperial measurement ratios, for tablespoon.
+        """
+        units: MeasureUnits = MeasureUnits.TABLESPOON
+        denom_limit: int = 8
+
+        if amount >= 0.95:
+            human: str = cls.fix_fraction(amount)
+        elif amount >= 0.4:
+            human = str(Fraction(round(amount, 1)).limit_denominator(denom_limit))
+        else:
+            human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
+
+        # plural for teaspoons is too easily confused with tablespoon
 
         return Humanized(
             amount = amount,

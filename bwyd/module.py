@@ -31,7 +31,7 @@ from .measure import Converter, \
     Measure, DurationUnits, Duration, Temperature
 
 from .ops import Dependency, \
-    OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpStore, OpHeat, OpChill, OpBake
+    OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpWait, OpStore, OpHeat, OpChill, OpBake
 
 from .resources import BWYD_SVG, JINJA_PAGE_TEMPLATE, URL_PATTERN
 
@@ -492,6 +492,24 @@ Interpret the steps within an activity.
             return OpAction(
                 loc = textx.get_location(op_parse),
                 tool = entity,
+                modifier = op_parse.modifier,
+                until = op_parse.until,
+                duration = duration,
+            )
+
+        if op_class_name == "Wait":
+            duration = Duration.build(op_parse.duration)
+
+            if debug:
+                ic(
+                    op_class_name,
+                    op_parse.modifier,
+                    op_parse.until,
+                    duration,
+                )
+
+            return OpWait(
+                loc = textx.get_location(op_parse),
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,

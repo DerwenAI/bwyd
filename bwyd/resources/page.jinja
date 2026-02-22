@@ -469,6 +469,14 @@ div#footer-content p {
 				({{ val.time }})
 			      </div>
 
+			      {% elif key == "wait" -%}
+			      <div class="activity_step">
+				<strong>{{ key }}</strong>
+				until <em>{{ val.text }}</em>
+				<br>
+				({{ val.time }})
+			      </div>
+
 			      {% elif key == "store" -%}
 			      <div class="activity_step">
 				store <strong>{{ val.text }}</strong>

@@ -1,0 +1,107 @@
+TITLE: "Panna Cotta"
+TEXT: "A light, creamy dessert which pairs with so many fruits"
+AUTHOR: "Paco Nathan https://derwen.ai/paco"
+LICENSE: "CC-BY-NC-SA-4.0"
+UPDATED: "2022-07-16"
+POST: "https://www.instagram.com/p/CgGYEZFL7Dx/"
+CITE: "https://www.thekitchn.com/how-to-make-panna-cotta-cooking-lessons-from-the-kitchn-200070"
+CITE: "https://mytastefulrecipes.com/almond-milk-panna-cotta-recipe/"
+
+
+CLOSURE: "mix the cream"
+    TEXT: "Prepare the cream filling"
+
+    CONTAINER pan: "medium pan"
+    TOOL spatula: "silicone spatula"
+
+    INGREDIENT gelatin: "powdered gelatin"
+    INGREDIENT cream: "half-and-half or cream"
+    INGREDIENT sugar: "granulated sugar"
+    INGREDIENT vanilla_extract: "vanilla extract"
+    INGREDIENT salt: "sea salt"
+
+    FOCUS pan
+
+    ACTIVITY: "bloom the gelatin"
+
+    ADD cream (180 ml)
+    NOTE: "substitute cream with almond milk for vegan; fresh pressed is better than commercial since additives tend to cause reflux"
+
+    ADD gelatin (5 g): "sprinkle evenly over the top"
+    NOTE: "substitute gelatin with agar-agar for vegetarian"
+
+    WAIT
+        UNTIL: "surface of the cream is wrinkled"
+	TIME (5 minute)
+
+    HEAT pan: "warm gently over low heat, stirring frequently; do not boil"
+        UNTIL: "gelatin is dissolved"
+        TIME (3 minute)
+
+    ACTIVITY: "dissolve the sugar"
+
+    ADD sugar (25 g)
+    // 2 Tbs
+
+    ACTION spatula: "stir sugar into the cream"
+        UNTIL: "sugar dissolves"
+	TIME (30 second)
+
+    ACTIVITY: "remove from heat, mix remaining ingredients"
+    
+    ADD cream (180 ml)
+    ADD vanilla_extract (5 ml)
+    // 1 tsp
+    ADD salt (1 g)
+
+    ACTION spatula: "whisk in remaining cream"
+        UNTIL: "well mixed"
+	TIME (30 second)
+
+    // known ratio
+    //  1 cup cream : 1 tsp gelatin
+    RATIO: "gel" =
+    	   cream,
+    	   gelatin
+
+YIELDS filling (1) INTERMEDIATE
+
+
+CLOSURE: "chill in containers"
+    TEXT: "Fill the ramekins and chill"
+    KEYWORDS: Italian, dessert
+
+    CONTAINER ramekin: "4x ramekins or 1 medium glass pan"
+    TOOL hand: "clean hands"
+    TOOL spatula: "silicone spatula"
+
+    INGREDIENT butter: "butter, cream- or plant-based"
+    USE filling: "cooled filling"
+
+    FOCUS ramekin
+
+    ACTIVITY: "grease the ramekins"
+
+    ADD butter (14 g)
+    // 1 tsp
+
+    ACTION hand: "coat the interior of ramekins with butter"
+        UNTIL: "walls are lightly coated"
+	TIME (30 second)
+
+    ACTIVITY: "mold and chill"
+
+    ADD filling (1)
+
+    ACTION spatula: "pour into the ramekins"
+        UNTIL: "filling is evenly divided"
+	TIME (30 second)
+
+    CHILL ramekin: "in refrigerator"
+        UNTIL: "filling is firm"
+        TIME (3 hour)
+
+    STORE ramekin: "in refrigerator"
+        UPTO (7 day)
+
+YIELDS panna_cotta (4)

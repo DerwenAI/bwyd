@@ -199,6 +199,40 @@ Serializable representation for JSON.
         }
 
 
+class OpWait (OpGeneric):  # pylint: disable=R0902
+    """
+Represents waiting for some time period or condition,
+as part of an Activity on the food within a specific
+Container.
+    """
+    modifier: str
+    until: str
+    duration: Duration
+
+
+    def get_duration (
+        self,
+        ) -> Duration:
+        """
+Duration of this operation.
+        """
+        return self.duration
+
+
+    def get_model (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "wait": {
+                "text": self.until,
+                "time": self.duration.humanize(),
+            }
+        }
+
+
 class OpStore (OpGeneric):  # pylint: disable=R0902
     """
 Represents the process of a Cook on a Container to store the yield of
@@ -307,6 +341,7 @@ OpsTypes = typing.Union[
     OpTransfer,
     OpAdd,
     OpAction,
+    OpWait,
     OpStore,
     OpHeat,
     OpChill,

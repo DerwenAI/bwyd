@@ -76,7 +76,7 @@ Activity:
 ;
 
 Op:
-  Note | Transfer | Add | Action | Store | Heat | Chill | Bake
+  Note | Transfer | Add | Action | Wait | Store | Heat | Chill | Bake
 ;
 
 Note:
@@ -93,6 +93,12 @@ Add:
 
 Action:
   "ACTION" symbol=ID (":" modifier=STRING)?
+    "UNTIL:" until=STRING
+    "TIME" duration=Duration
+;
+
+Wait:
+  "WAIT" (":" modifier=STRING)?
     "UNTIL:" until=STRING
     "TIME" duration=Duration
 ;

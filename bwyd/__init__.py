@@ -20,7 +20,7 @@ from .measure import Conversion, Converter, Humanized, \
 from .module import Module
 
 from .ops import Dependency, DependencyDict, Appliance, \
-    OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpStore, OpHeat, OpChill, OpBake
+    OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpWait, OpStore, OpHeat, OpChill, OpBake
 
 from .resources import BWYD_NAMESPACE, BWYD_SVG, \
     CONVERT_PATH, GRAMMAR_PATH, ICON_PATH, \

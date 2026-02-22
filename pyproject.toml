@@ -10,7 +10,7 @@ dynamic = [
 description = "The seed crazy idea here is to consider how human cooks behave like robots, following recipes as instructions."
 
 readme = "README.md"
-version = "0.2.2"
+version = "0.3.0"
 
 authors = [
     { name = "derwen.ai", email = "info@derwen.ai" }
