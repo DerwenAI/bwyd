@@ -7,17 +7,17 @@ dynamic = [
     "version",
 ]
 
-description = "The seed crazy idea here is to consider how human cooks behave like robots, following recipes as instructions."
+description = "The seed crazy idea here is to consider how human cooks behave partly like robots, following recipes as instructions."
 
 readme = "README.md"
 version = "0.3.0"
 
 authors = [
-    { name = "derwen.ai", email = "info@derwen.ai" }
+    { name = "Paco Nathan", email = "paco@derwen.ai" }
 ]
 
 maintainers = [
-    { name = "Paco Nathan", email = "paco@derwen.ai" }
+    { name = "derwen.ai", email = "info@derwen.ai" }
 ]
 
 license = "MIT"
@@ -26,30 +26,30 @@ license-files = [
     "LICENSE",
 ]
 
-requires-python = ">=3.11,<4.0.0"
+requires-python = ">=3.11,<4.0"
 
 dependencies = [
     # DSL parser
-    "pydantic (>=2.12.5,<3.0.0)",
-    "requests-cache (>=1.2.1,<2.0.0)",
-    "textx (>=4.1.0,<5.0.0)",
+    "pydantic (>=2.12.5,<3.0)",
+    "requests-cache (>=1.2.1,<2.0)",
+    "textx (>=4.1.0,<5.0)",
     "universal-pathlib (>=0.3,<1.0)",
 
     # graph
-    "rdflib (>=7.1.4,<8.0.0)",
+    "rdflib (>=7.1.4,<8.0)",
 
     # HTML rendering
-    "inflect (>=7.5.0,<8.0.0)",
-    "jinja2 (>=3.1.6,<4.0.0)",
+    "inflect (>=7.5.0,<8.0)",
+    "jinja2 (>=3.1.6,<4.0)",
     "minify-html (>=0.18,<1.0)",
     "pillow (>=12.1,<13.0)",
-    "spdx-license-list (>=3.26.0,<4.0.0)",
-    "spdx-tools (>=0.8.3,<0.9.0)",
+    "spdx-license-list (>=3.26.0,<4.0)",
+    "spdx-tools (>=0.8.3,<1.0)",
 
     # instrumentation, observability
-    "icecream (>=2.1.4,<3.0.0)",
-    "ipykernel (>=7.2.0,<8.0.0)",
-    "pyinstrument (>=5.0.2,<6.0.0)",
+    "icecream (>=2.1.4,<3.0)",
+    "ipykernel (>=7.2.0,<8.0)",
+    "pyinstrument (>=5.0.2,<6.0)",
 ]
 
 keywords = [
@@ -124,7 +124,7 @@ filterwarnings = [
 [build-system]
 
 requires = [
-    "poetry-core >=2.0.0,<3.0.0",
+    "poetry-core >=2.0,<3.0",
 ]
 
 build-backend = "poetry.core.masonry.api"

@@ -1,38 +1,85 @@
 ## TODOs
 
-  * convert existing recipes
+  * move FOCUS and TRANSFER into ACTIVITY
 
-  * impl "FERMENT" op
-  * support substitutions
+  * convert existing recipes
+    + cooked_beans
+
+  * support substitutions/pivots
 
   * allow measure abbrevs: "g" vs "gram", etc.
 
-  * use `NetworkX` to build a dependency graph of closures from a corpus of modules
-  * load embeddings into `LanceDB`
-
-  * use `DSPy` to parse recipe elements for the DSL
-    + https://victorjlamas.github.io/assets/papers/LLMXpertMODELS2024.pdf
-    + https://medium.com/itemis/large-language-models-for-domain-specific-language-generation-part-2-how-to-constrain-your-dragon-e0e2439b6a53
+  * PARALLEL/SERIAL for scaling durations
 
   * better support for search/discovery across a directory of recipes
-
-  * optional load an RDF/SKOS taxonomy
-  * validate RDF with SHACL
-
-  * AI sheets
-    + https://huggingface.co/blog/dvilasuero/how-to-analyze-images-with-ai
 
   * support NLWeb too?
     + https://github.com/microsoft/NLWeb
 
-  * leverage `pydantic-graph` to build trees from directed cliques
-  * generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
-
-  * schedule use of appliances: oven, fridge, range, instantpot, etc.
-  * PARALLEL/SERIAL for scaling durations
-
-  * use `textX-LS` to generate a VS Code extension
+  * use `textX-LS` to generate a VS Code extension?
     + https://github.com/textX/textX-LS  
+
+
+## Modeling
+
+Module (a named recipe)
+ - 1+ Closures (functional, multi-use components)
+   - 0+ Supers
+   - 0+ Keywords
+   - 1+ Activities (milestones)
+     - 1 each EMPTY/CLEAN events
+     - 0+ Appliances
+     - 0+ Containers
+     - 0+ Tools
+     - 1+ Inputs (e.g., ingredients or yields from components)
+     - 1+ Operations
+   - 0+ Storage
+   - 1+ Yields
+
+
+Parse a module to build Pydantic objects:
+  - Error handling:
+    - debug during edit
+    - validate parse
+  - Simulation:
+    - model semantics in RDF graph (down to Closures, Keywords, Yields)
+      - validate generated RDF with SHACL
+    - Gantt analysis of Activities, to identify critical paths
+      - generate a PERT chart as a network diagram
+      - schedule as a Petri net: Appliances/Containers/Tools through Operations
+      - plot timelines for Execution
+    - Validate reachabilitiy
+      - calculate aggregate measures
+        - totals for each Ingredient
+        - total Execution time
+	- inventory for Appliances, Containers, Tools
+        - complexity measure as Pareto front: Ingredient count, Operation count
+    - Visualize interactive Graph for edit
+
+  - Serialize as JSON
+    - Jinja2 render to HTML for discovery and execution
+    - DSPy integration here?
+
+  - edit an Execution Plan
+
+
+  * define an RDF/SKOS taxonomy
+    + optional load additional RDF ?
+
+  * Petri nets
+    + schedule use of appliances: oven, fridge, range, instantpot, etc.
+    + https://bpogroup.github.io/simpn/
+
+  * use `NetworkX` to build a dependency graph of closures from a corpus of modules
+    + include RDF triples
+    + optimize for total time, minimal downtime of appliances, etc.
+    + leverage `pydantic-graph` to build trees from directed cliques
+    + generate _mermaid diagrams_ for a graph (e.g., in Jupyter)
+    + load embeddings into `LanceDB`
+
+  * use `DSPy` to parse recipe elements for the DSL
+    + https://victorjlamas.github.io/assets/papers/LLMXpertMODELS2024.pdf
+    + https://medium.com/itemis/large-language-models-for-domain-specific-language-generation-part-2-how-to-constrain-your-dragon-e0e2439b6a53
 
 
 ## Taxonomy

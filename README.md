@@ -38,7 +38,7 @@ Now the popular services of
 ["Today's AI"](https://pangaro.com/designconversation/2021/08/newmacy-in-2021-pandemics-ai/)
 -- which are intended to provide _abstractive summarization_ --
 are beginning to show indications of republishing that degraded content.
-A positive feedback loop follows, and it won't be pretty.
+A positive feedback loop follows, and the results are ugly.
 
 Consequently this project is an application of contemporary software
 engineering -- particularly drawn from _functional programming_ --
