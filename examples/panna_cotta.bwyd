@@ -20,9 +20,7 @@ CLOSURE: "mix the cream"
     INGREDIENT vanilla_extract: "vanilla extract"
     INGREDIENT salt: "sea salt"
 
-    FOCUS pan
-
-    ACTIVITY: "bloom the gelatin"
+    ACTIVITY pan: "bloom the gelatin"
 
     ADD cream (180 ml)
     NOTE: "substitute cream with almond milk for vegan; fresh pressed is better than commercial since additives tend to cause reflux"
@@ -38,7 +36,7 @@ CLOSURE: "mix the cream"
         UNTIL: "gelatin is dissolved"
         TIME (3 minute)
 
-    ACTIVITY: "dissolve the sugar"
+    ACTIVITY pan: "dissolve the sugar"
 
     ADD sugar (25 g)
     // 2 Tbs
@@ -47,7 +45,7 @@ CLOSURE: "mix the cream"
         UNTIL: "sugar dissolves"
 	TIME (30 second)
 
-    ACTIVITY: "remove from heat, mix remaining ingredients"
+    ACTIVITY pan: "remove from heat, mix remaining ingredients"
     
     ADD cream (180 ml)
     ADD vanilla_extract (5 ml)
@@ -65,6 +63,7 @@ CLOSURE: "mix the cream"
     	   gelatin
 
 YIELDS filling (1) INTERMEDIATE
+;
 
 
 CLOSURE: "chill in containers"
@@ -78,9 +77,7 @@ CLOSURE: "chill in containers"
     INGREDIENT butter: "butter, cream- or plant-based"
     USE filling: "cooled filling"
 
-    FOCUS ramekin
-
-    ACTIVITY: "grease the ramekins"
+    ACTIVITY ramekin: "grease the ramekins"
 
     ADD butter (14 g)
     // 1 tsp
@@ -89,7 +86,7 @@ CLOSURE: "chill in containers"
         UNTIL: "walls are lightly coated"
 	TIME (30 second)
 
-    ACTIVITY: "mold and chill"
+    ACTIVITY ramekin: "mold and chill"
 
     ADD filling (1)
 
@@ -105,3 +102,4 @@ CLOSURE: "chill in containers"
         UPTO (7 day)
 
 YIELDS panna_cotta (4)
+;

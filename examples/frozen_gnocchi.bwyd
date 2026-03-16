@@ -21,9 +21,7 @@ CLOSURE: "gnocchi dough"
     INGREDIENT grated_parmesan: "grated parmesan"
     INGREDIENT nutmeg: "freshly grated nutmeg"
 
-    FOCUS bowl
-
-    ACTIVITY: "prep wet mix"
+    ACTIVITY bowl: "prep wet mix"
 
     ADD egg (1)
 
@@ -45,7 +43,7 @@ CLOSURE: "gnocchi dough"
         UNTIL: "lightly blended"
 	TIME (30 second)
 
-    ACTIVITY: "complete the dough"
+    ACTIVITY bowl: "complete the dough"
 
     ADD flour (340 g) : "only until the dough becomes no longer sticky"
 
@@ -58,6 +56,7 @@ CLOSURE: "gnocchi dough"
 	   egg
 
 YIELDS dough (900 g) INTERMEDIATE
+;
 
 
 CLOSURE: "cut dumplings"
@@ -71,9 +70,7 @@ CLOSURE: "cut dumplings"
     USE dough: "dough"
     INGREDIENT flour: "rice, semolina, etc."
 
-    FOCUS mat
-
-    ACTIVITY: "make ropes"
+    ACTIVITY mat: "make ropes"
 
     ADD flour (10 g)
 
@@ -87,13 +84,14 @@ CLOSURE: "cut dumplings"
         UNTIL: "2 cm diameter"
 	TIME (60 second)
 
-    ACTIVITY: "make pillows"
+    ACTIVITY mat: "make pillows"
 
     ACTION fork: "cut into 1.5 cm dumplings pieces, resembling little pillows"
         UNTIL: "entire rope is cut"
 	TIME (30 second)
 
 YIELDS dumplings (80) INTERMEDIATE
+;
 
 
 CLOSURE: "frozen gnocchi" AS dumplings, pasta
@@ -107,9 +105,7 @@ CLOSURE: "frozen gnocchi" AS dumplings, pasta
     INGREDIENT parchment: "parchment paper, cut to line the baking dish"
     USE dumplings: "raw cut dumplings"
 
-    FOCUS dish
-
-    ACTIVITY: "prep container"
+    ACTIVITY dish: "prep container"
 
     ADD parchment (1)
 
@@ -117,7 +113,7 @@ CLOSURE: "frozen gnocchi" AS dumplings, pasta
         UNTIL: "each layer is fully lined"
 	TIME (30 second)
 
-    ACTIVITY: "pack gnocchi"
+    ACTIVITY dish: "pack gnocchi"
 
     ADD dumplings (80)
 
@@ -132,3 +128,4 @@ CLOSURE: "frozen gnocchi" AS dumplings, pasta
         TIME (2 hour)
 
 YIELDS frozen_gnocchi_dumplings (80)
+;

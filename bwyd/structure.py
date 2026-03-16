@@ -122,6 +122,7 @@ class Activity (BaseModel):  # pylint: disable=R0902
     """
 A data class representing one Activity object.
     """
+    container: Dependency
     text: str
     ops: typing.List[ OpsTypes ] = []
 
@@ -134,6 +135,7 @@ A data class representing one Activity object.
 Serializable representation for JSON.
         """
         dat: dict = {
+            "container": self.container.symbol,
             "title": self.text,
             "steps": [
                 {
@@ -153,27 +155,6 @@ Serializable representation for JSON.
         return dat
 
 
-class Focus (BaseModel):  # pylint: disable=R0902
-    """
-A data class representing a parsed Focus object.
-    """
-    container: Dependency
-    activities: typing.List[ Activity ] = []
-
-
-    def get_model (
-        self,
-        converter: Converter,
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "container": self.container.symbol,
-            "activities": [ act.get_model(converter) for act in self.activities ],
-        }
-
-
 class Closure (BaseModel, arbitrary_types_allowed = True):  # pylint: disable=R0902
     """
 A data class representing one parsed Closure object.
@@ -186,7 +167,7 @@ A data class representing one parsed Closure object.
     containers: DependencyDict = DependencyDict()
     tools: DependencyDict = DependencyDict()
     ingredients: DependencyDict = DependencyDict()
-    foci: typing.List[ Focus ] = []
+    activities: typing.List[ Activity ] = []
     products: typing.List[ Product ] = []
 
 

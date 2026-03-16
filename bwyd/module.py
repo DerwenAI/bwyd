@@ -31,12 +31,11 @@ from .measure import Converter, \
     Measure, DurationUnits, Duration, Temperature
 
 from .ops import Dependency, \
-    OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpWait, OpStore, OpHeat, OpChill, OpBake
+    OpsTypes, OpNote, OpAdd, OpTransfer, OpAction, OpWait, OpStore, OpHeat, OpChill, OpBake
 
 from .resources import BWYD_SVG, JINJA_PAGE_TEMPLATE, URL_PATTERN
 
-from .structure import Post, Product, \
-    Activity, Focus, Closure
+from .structure import Activity, Closure, Post, Product
 
 
 ######################################################################
@@ -175,7 +174,7 @@ one for each parsed Closure.
                 "supers": closure.supers,
                 "keywords": closure.keywords,
                 "requires": closure.get_dependencies(),
-                "foci": [ focus.get_model(self.converter) for focus in closure.foci ],
+                "activities": [ activity.get_model(self.converter) for activity in closure.activities ],
             }
             for name, closure in self.closures.items()
         ]
@@ -369,6 +368,54 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
                 text = depend_parse.text,
                 external = True,
             )
+
+
+    def _interpret_activity (
+        self,
+        closure: Closure,
+        activity_parse: typing.Any,
+        *,
+        debug: bool = False,
+        ) -> None:
+        """
+Interpret the activities within a closure.
+        """
+        if debug:
+            ic(
+                activity_parse,
+                activity_parse.symbol,
+            )
+
+        # resolve local reference
+        if activity_parse.symbol in closure.containers:
+            entity: typing.Any = closure.containers[activity_parse.symbol]
+            entity.ref_count += 1
+        else:
+            loc: dict = textx.get_location(activity_parse)
+
+            raise BwydParserError(
+                f"CONTAINER `{activity_parse.symbol}` used but not defined {loc}",
+                symbol = activity_parse.symbol,
+            )
+
+        act: Activity = Activity(
+ 	    container = entity,
+            text = activity_parse.text,
+        )
+
+        if debug:
+            ic(act)
+
+        closure.activities.append(act)
+
+        for op_parse in activity_parse.ops:
+            op_obj: OpsTypes = self._interpret_op(  # type: ignore
+                closure,
+                op_parse,
+                debug = debug,
+            )
+
+            act.ops.append(op_obj)
 
 
     def _interpret_op (  # pylint: disable=R0911,R0912,R0915
@@ -649,63 +696,6 @@ Interpret the steps within an activity.
         return None
 
 
-    def _interpret_focus (
-        self,
-        closure: Closure,
-        focus_parse: typing.Any,
-        *,
-        debug: bool = False,
-        ) -> None:
-        """
-Interpret the activities within a focus.
-        """
-        if debug:
-            ic(
-                focus_parse,
-                focus_parse.symbol,
-            )
-
-        # resolve local reference
-        if focus_parse.symbol in closure.containers:
-            entity: typing.Any = closure.containers[focus_parse.symbol]
-            entity.ref_count += 1
-        else:
-            loc: dict = textx.get_location(focus_parse)
-
-            raise BwydParserError(
-                f"CONTAINER `{focus_parse.symbol}` used but not defined {loc}",
-                symbol = focus_parse.symbol,
-            )
-
-        focus = Focus(
-            container = entity,
-        )
-
-        closure.foci.append(focus)
-
-        for activity in focus_parse.activities:
-            if debug:
-                ic(
-                    activity,
-                    activity.text,
-                )
-
-            act: Activity = Activity(
-                text = activity.text,
-            )
-
-            focus.activities.append(act)
-
-            for op_parse in activity.ops:
-                op_obj: OpsTypes = self._interpret_op(  # type: ignore
-                    closure,
-                    op_parse,
-                    debug = debug,
-                )
-
-                act.ops.append(op_obj)
-
-
     def _interpret_ratio (
         self,
         closure: Closure,
@@ -802,11 +792,11 @@ Helper method to interpret one Closure.
                 debug = debug,
             )
 
-        # interpret each focus
-        for focus_parse in closure_parse.foci:
-            self._interpret_focus(
+        # interpret each activity
+        for activity_parse in closure_parse.activities:
+            self._interpret_activity(
                 closure,
-                focus_parse,
+                activity_parse,
                 debug = debug,
             )
 
@@ -893,8 +883,7 @@ Accessor for the total duration of one Bwyd module.
         total_sec: int = int(sum([  # type: ignore  # pylint: disable=R1728
             op.get_duration().normalize()
             for closure in self.closures.values()
-            for focus in closure.foci
-            for activity in focus.activities
+            for activity in closure.activities
             for op in activity.ops
         ]))
 
@@ -926,26 +915,25 @@ Iterator for the aggregate ingredients in one Bwyd module.
         ing: OrderedDict = OrderedDict()
 
         for closure in self.closures.values():  # pylint: disable=R1702
-            for focus in closure.foci:
-                for activity in focus.activities:
-                    for op in activity.ops:
-                        if isinstance(op, OpAdd) and not op.entity.external:
-                            measure: Measure = op.measure
-                            name: str = op.entity.symbol
+            for activity in closure.activities:
+                for op in activity.ops:
+                    if isinstance(op, OpAdd) and not op.entity.external:
+                        measure: Measure = op.measure
+                        name: str = op.entity.symbol
 
-                            if name not in ing:
-                                ing[name] = [
-                                    op.entity,
-                                    Measure(
-                                        amount = measure.amount,
-                                        units = measure.units,
-                                    ),
-                                ]
-                            elif measure.units == ing[name][1].units:
-                                ing[name][1].amount += measure.amount
-                            else:
-                                error_msg: str = f"wrong units for ingredient list: {measure.units}"
-                                logging.error(error_msg)
+                        if name not in ing:
+                            ing[name] = [
+                                op.entity,
+                                Measure(
+                                    amount = measure.amount,
+                                    units = measure.units,
+                                ),
+                            ]
+                        elif measure.units == ing[name][1].units:
+                            ing[name][1].amount += measure.amount
+                        else:
+                            error_msg: str = f"wrong units for ingredient list: {measure.units}"
+                            logging.error(error_msg)
 
         for entity, measure in ing.values():
             yield entity, measure

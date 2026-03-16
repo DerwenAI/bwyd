@@ -22,9 +22,7 @@ CLOSURE: "prep the potatoes"
     INGREDIENT water: "cold tap water"
     INGREDIENT baking_soda: "baking soda"
 
-    FOCUS sink
-
-    ACTIVITY: "clean the potatoes"
+    ACTIVITY sink: "clean the potatoes"
 
     ADD potatoes (.9 kg)
     // about 3x medium Yukon potatoes
@@ -37,9 +35,7 @@ CLOSURE: "prep the potatoes"
         UNTIL: "each potato looks clean"
 	TIME (5 minute)
 
-    FOCUS board
-
-    ACTIVITY: "cut each potato into quarters, one at a time"
+    ACTIVITY board: "cut each potato into quarters, one at a time"
 
     TRANSFER potatoes
 
@@ -47,9 +43,7 @@ CLOSURE: "prep the potatoes"
         UNTIL: "cut chunks are roughly the same size, for evening cooking"
 	TIME (2 minute)
 
-    FOCUS pot
-
-    ACTIVITY: "boil the potatoes chunks"
+    ACTIVITY pot: "boil the potatoes chunks"
 
     TRANSFER potatoes
 
@@ -65,12 +59,13 @@ CLOSURE: "prep the potatoes"
         TIME (10 minute)
 
 YIELDS boiled_potatoes (850 g) INTERMEDIATE
+;
 
 
 CLOSURE: "make the pie crust"
     TEXT: "Mold a potato crust and pre-bake"
 
-    CONTAINER pie_plate: "23 cm round glass pie plate"
+    CONTAINER pie_dish: "23 cm round glass pie plate"
     CONTAINER bowl: "small bowl"
 
     TOOL mug: "coffee mug"
@@ -81,9 +76,7 @@ CLOSURE: "make the pie crust"
     INGREDIENT oil: "avocado oil or similar with a high smoke temperature"
     USE boiled_potatoes: "drained"
 
-    FOCUS bowl
-
-    ACTIVITY: "prep egg wash"
+    ACTIVITY bowl: "prep egg wash"
 
     ADD egg (1)
 
@@ -91,9 +84,7 @@ CLOSURE: "make the pie crust"
         UNTIL: "lightly beaten"
 	TIME (30 second)
 
-    FOCUS pie_plate
-
-    ACTIVITY: "form potato chunks into a pie crust"
+    ACTIVITY pie_dish: "form potato chunks into a pie crust"
 
     ADD boiled_potatoes (850 g)
 
@@ -109,18 +100,19 @@ CLOSURE: "make the pie crust"
         UNTIL: "3 or 4 holes, to provide vents during pre-bake"
 	TIME (30 second)
 
-    ACTIVITY: "prep for pre-bake"
+    ACTIVITY pie_dish: "prep for pre-bake"
 
     ADD oil (7 g): "thread the oil evenly across the bottom of the crust"
 
-    ACTIVITY: "place pie plate on a baking sheet in the oven, making sure it is level"
+    ACTIVITY pie_dish: "place pie plate on a baking sheet in the oven, making sure it is level"
 
-    BAKE pie_plate: "set to convection bake"
+    BAKE pie_dish: "set to convection bake"
         AT: 177 C
         UNTIL: "slightly golden, but not crispy"
         TIME (15 minute)
 
 YIELDS pie_crust (1) INTERMEDIATE
+;
 
 
 CLOSURE: "prep the quiche filling"
@@ -144,9 +136,7 @@ CLOSURE: "prep the quiche filling"
     INGREDIENT salt: "sea salt, flaked"
     INGREDIENT vermouth: "best to use a blanc, such as Molin"
 
-    FOCUS counter
-
-    ACTIVITY: "slice cheese"
+    ACTIVITY counter: "slice cheese"
 
     ADD cheese (170 g)
 
@@ -154,7 +144,7 @@ CLOSURE: "prep the quiche filling"
         UNTIL: "entirely cut"
 	TIME (2 minute)
 
-    ACTIVITY: "slice sausage"
+    ACTIVITY counter: "slice sausage"
 
     ADD sausage (100 g)
 
@@ -162,9 +152,7 @@ CLOSURE: "prep the quiche filling"
         UNTIL: "entirely cut"
 	TIME (2 minute)
 
-    FOCUS pan
-
-    ACTIVITY: "sautée sausage slices"
+    ACTIVITY pan: "sautée sausage slices"
 
     TRANSFER sausage
 
@@ -178,9 +166,7 @@ CLOSURE: "prep the quiche filling"
         UNTIL: "avoid charring any pieces"
 	TIME (1 minute)
 
-    FOCUS board
-
-    ACTIVITY: "slice mushrooms"
+    ACTIVITY board: "slice mushrooms"
 
     ADD mushrooms (100 g)
 
@@ -188,9 +174,7 @@ CLOSURE: "prep the quiche filling"
         UNTIL: "entirely cut"
 	TIME (2 minute)
 
-    FOCUS pan
-    
-    ACTIVITY: "sautée mushroom slices"
+    ACTIVITY pan: "sautée mushroom slices"
 
     ADD oil (14 g)
 
@@ -204,9 +188,7 @@ CLOSURE: "prep the quiche filling"
         UNTIL: "slices begin to soften, and you smell their aroma"
 	TIME (3 minute)
 
-    FOCUS sink
-
-    ACTIVITY: "clean leeks"
+    ACTIVITY sink: "clean leeks"
 
     ADD leeks (285 g)
     // 2x medium leeks
@@ -215,9 +197,7 @@ CLOSURE: "prep the quiche filling"
         UNTIL: "leeks are clean of any dirt"
 	TIME (2 minute)
 
-    FOCUS board
-
-    ACTIVITY: "slice leeks"
+    ACTIVITY board: "slice leeks"
 
     TRANSFER leeks
 
@@ -225,9 +205,7 @@ CLOSURE: "prep the quiche filling"
         UNTIL: "entirely cut"
 	TIME (2 minute)
 
-    FOCUS pan
-
-    ACTIVITY: "sautée leek slices"
+    ACTIVITY pan: "sautée leek slices"
 
     TRANSFER leeks
 
@@ -245,6 +223,7 @@ CLOSURE: "prep the quiche filling"
 	TIME (1 minute)
 
 YIELDS quiche_filling (1) INTERMEDIATE
+;
 
 
 CLOSURE: "grind the spices"
@@ -259,9 +238,7 @@ CLOSURE: "grind the spices"
     INGREDIENT pepper: "ground black pepper"
     INGREDIENT chili: "smoked chilhuacle negro"
 
-    FOCUS mortar
-
-    ACTIVITY: "grind the spices together"
+    ACTIVITY mortar: "grind the spices together"
 
     ADD thyme (1 g)
     // 1 tsp
@@ -276,6 +253,7 @@ CLOSURE: "grind the spices"
 	TIME (1 minute)
 
 YIELDS spice_mix (1) INTERMEDIATE
+;
 
 
 CLOSURE: "beat the egges and cream"
@@ -291,9 +269,7 @@ CLOSURE: "beat the egges and cream"
     INGREDIENT milk: "goat or cow milk, oat milk, etc."
     USE spice_mix: "scrape ground powder from suribachi"
 
-    FOCUS bowl
-
-    ACTIVITY: "mix the eggs and other ingredients"
+    ACTIVITY bowl: "mix the eggs and other ingredients"
 
     ADD egg (3) 
 
@@ -310,33 +286,33 @@ CLOSURE: "beat the egges and cream"
 	TIME (1 minute)
 
 YIELDS egg_mix (1) INTERMEDIATE
+;
 
 
 CLOSURE: "bake the quiche"
     TEXT: "Fill the pie crust and bake the quiche"
     KEYWORDS: savory, entree, gluten_free
 
-    CONTAINER pie_plate: "23 cm round glass pie plate"
+    CONTAINER pie_dish: "23 cm round glass pie plate"
 
     INGREDIENT pecorino: "ground pecorino cheese"
     USE pie_crust: "in its pie plate"
     USE quiche_filling: "layer evenly into the crust: mushrooms, sausage, leeks, cheese"
     USE egg_mix: "pour evenly over filling"
 
-    FOCUS pie_plate
-
-    ACTIVITY: "assemble the crust and filling"
+    ACTIVITY pie_dish: "assemble the crust and filling"
 
     ADD pie_crust (1)
     ADD quiche_filling (1)
     ADD egg_mix (1)
     ADD pecorino (10 g): "sprinkle on top"
 
-    ACTIVITY: "place pie plate on a baking sheet in the oven, making sure it is level"
+    ACTIVITY pie_dish: "place pie plate on a baking sheet in the oven, making sure it is level"
 
-    BAKE pie_plate: "set to convection bake"
+    BAKE pie_dish: "set to convection bake"
         AT: 177 C
         UNTIL: "top begins to bubble and brown, but cheese doesn't burn"
         TIME (40 minute)
 
 YIELDS potato_crust_quiche (8)
+;

@@ -20,12 +20,11 @@ from .measure import Conversion, Converter, Humanized, \
 from .module import Module
 
 from .ops import Dependency, DependencyDict, Appliance, \
-    OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpWait, OpStore, OpHeat, OpChill, OpBake
+    OpsTypes, OpNote, OpAdd, OpTransfer, OpAction, OpWait, OpStore, OpHeat, OpChill, OpBake
 
 from .resources import BWYD_NAMESPACE, BWYD_SVG, \
     CONVERT_PATH, GRAMMAR_PATH, ICON_PATH, \
     JINJA_PAGE_TEMPLATE, JINJA_INDEX_TEMPLATE, \
     URL_PATTERN
 
-from .structure import Post, Product, \
-    Activity, Focus, Closure
+from .structure import Activity, Closure, Post, Product

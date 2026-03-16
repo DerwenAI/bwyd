@@ -17,9 +17,7 @@ CLOSURE: "prep the fillet"
 
     INGREDIENT salmon: "skin-on salmon fillets, thick part, fresh and wild-caught"
 
-    FOCUS sink
-
-    ACTIVITY: "clean the fish"
+    ACTIVITY sink: "clean the fish"
 
     ADD salmon (227 g)
     // .5 lb small fillet
@@ -34,6 +32,7 @@ CLOSURE: "prep the fillet"
 	TIME (5 minute)
 
 YIELDS fillet (227 g) INTERMEDIATE
+;
 
 
 CLOSURE: "prep curing bag"
@@ -51,9 +50,7 @@ CLOSURE: "prep curing bag"
     INGREDIENT ground_pepper: "freshly ground black pepper"
     INGREDIENT fresh_dill: "coarsely chopped dill fronds"
 
-    FOCUS bag
-
-    ACTIVITY: "place fillet into curing bag, skin side down"
+    ACTIVITY bag: "place fillet into curing bag, skin side down"
 
     ADD fillet (227 g)
     ADD vodka (14 g)
@@ -81,11 +78,9 @@ CLOSURE: "prep curing bag"
         UNTIL: "fillet flesh is evenly covered"
 	TIME (30 second)
 
-    FOCUS pan
+    ACTIVITY pan: "cure gravlax in the fridge"
 
-    ACTIVITY: "cure gravlax in the fridge"
-
-    ACTION hand: "pack the curing into the pan"
+    ACTION hand: "pack the curing mix into the pan"
         UNTIL: "fillet in bag is level with the bottom of the pan"
 	TIME (30 second)
 
@@ -94,6 +89,7 @@ CLOSURE: "prep curing bag"
         TIME (2 day)
 
 YIELDS cured_fillet (1) INTERMEDIATE
+;
 
 
 CLOSURE: "gravlax ready to eat"
@@ -106,9 +102,7 @@ CLOSURE: "gravlax ready to eat"
 
     USE cured_fillet: "drained"
 
-    FOCUS board
-
-    ACTIVITY: "slice cured fillet"
+    ACTIVITY board: "slice cured fillet"
 
     ADD cured_fillet (1)
 
@@ -118,9 +112,7 @@ CLOSURE: "gravlax ready to eat"
 
     NOTE: "Sauté the skin with oil for a crispy snack"
 
-    FOCUS jar
-
-    ACTIVITY: "prepare for storage"
+    ACTIVITY jar: "prepare for storage"
 
     TRANSFER cured_fillet
 
@@ -128,4 +120,4 @@ CLOSURE: "gravlax ready to eat"
         UPTO (4 day)
 
 YIELDS gravlax (200 g)
-
+;

@@ -31,9 +31,7 @@ CLOSURE: "prep batter"
     INGREDIENT chopped_walnuts: "chopped walnuts"
     INGREDIENT flour: "all-purpose flour"
 
-    FOCUS bowl
-
-    ACTIVITY: "prep dry mix"
+    ACTIVITY bowl: "prep dry mix"
 
     ADD sugar (61 g)
     // 1/3 cup granulated sugar
@@ -50,7 +48,7 @@ CLOSURE: "prep batter"
         UNTIL: "well mixed, breaking any clumps"
 	TIME (30 second)
 
-    ACTIVITY: "prep wet mix"
+    ACTIVITY bowl: "prep wet mix"
 
     ADD applesauce (381 g)
     // 1.5 cups unsweetened applesauce
@@ -68,7 +66,7 @@ CLOSURE: "prep batter"
         UNTIL: "lightly blended"
 	TIME (30 second)
 
-    ACTIVITY: "prep chunky mix"
+    ACTIVITY bowl: "prep chunky mix"
 
     ADD rolled_oats (102 g)
     // 1 cup rolled oats
@@ -87,7 +85,7 @@ CLOSURE: "prep batter"
         UNTIL: "thoroughly mixed"
 	TIME (1 minute)
 
-    ACTIVITY: "complete the batter"
+    ACTIVITY bowl: "complete the batter"
 
     ADD flour (170 g) : "only until incorporated into the batter; do not overmix"
     // 1 cup all-purpose flour
@@ -105,6 +103,7 @@ CLOSURE: "prep batter"
 	   avocado_oil
 
 YIELDS batter (1 l) INTERMEDIATE
+;
 
 
 CLOSURE: "bake muffins" AS muffin
@@ -119,9 +118,7 @@ CLOSURE: "bake muffins" AS muffin
 
     USE batter: "mixed batter"
 
-    FOCUS pan
-
-    ACTIVITY: "fill with batter"
+    ACTIVITY pan: "fill with batter"
 
     ADD batter (1 l)
 
@@ -129,7 +126,7 @@ CLOSURE: "bake muffins" AS muffin
         UNTIL: "evenly distributed"
 	TIME (3 minute)
 
-    ACTIVITY: "place pan on a baking sheet, make level"
+    ACTIVITY pan: "place pan on a baking sheet, make level"
 
     BAKE pan: "set to convection bake"
         AT: 177 C
@@ -141,3 +138,4 @@ CLOSURE: "bake muffins" AS muffin
         TIME (10 second)
 
 YIELDS applesauce_muffins (11)
+;

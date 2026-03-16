@@ -34,9 +34,10 @@ Closure:
     ("TEXT:" text=STRING)?
     ("KEYWORDS:" keywords=IDList)?
     depend+=Dependency
-    foci+=Focus
+    activities+=Activity
     ratio=Ratio?
   prods+=Yield
+  ";"
 ;
 
 IDList: ids+=ID[","];
@@ -65,30 +66,25 @@ Use:
   "USE" symbol=ID ":" text=STRING
 ;
 
-Focus:
-  "FOCUS" symbol=ID
-  activities+=Activity
-;
-
 Activity:
-  "ACTIVITY:" text=STRING
+  "ACTIVITY" symbol=ID ":" text=STRING
    ops+=Op
 ;
 
 Op:
-  Note | Transfer | Add | Action | Wait | Store | Heat | Chill | Bake
+  Note | Add | Transfer | Action | Wait | Store | Heat | Chill | Bake
 ;
 
 Note:
   "NOTE:" text=STRING
 ;
 
-Transfer:
-  "TRANSFER" symbol=ID
-;
-
 Add:
   "ADD" symbol=ID measure=Measure (":" text=STRING)?
+;
+
+Transfer:
+  "TRANSFER" symbol=ID
 ;
 
 Action:

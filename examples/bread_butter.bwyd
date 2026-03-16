@@ -21,9 +21,7 @@ CLOSURE: "leached veggies"
     INGREDIENT onion: "small white onion"
     INGREDIENT salt: "pickling salt"
 
-    FOCUS sink
-
-    ACTIVITY: "clean cucumbers"
+    ACTIVITY sink: "clean cucumbers"
 
     ADD cucumbers (500 g)
     // 5 medium sized
@@ -32,9 +30,7 @@ CLOSURE: "leached veggies"
         UNTIL: "cukes are clean, and any extra gunk has been removed"
         TIME (2 minute)
 
-    FOCUS board
-
-    ACTIVITY: "prep cucumbers"
+    ACTIVITY board: "prep cucumbers"
 
     ADD onion (100 g)
     // 1 small white onion
@@ -49,9 +45,7 @@ CLOSURE: "leached veggies"
         UNTIL: "slice cukes and onion to .5 cm thick pieces"
 	TIME (4 minute)
 
-    FOCUS bowl
-
-    ACTIVITY: "leaching"
+    ACTIVITY bowl: "leaching"
 
     TRANSFER cucumbers
     TRANSFER onion
@@ -69,15 +63,14 @@ CLOSURE: "leached veggies"
         UNTIL: "liquid from cukes has leeched out"
         TIME (1.5 hour)
 
-    FOCUS sink
-
-    ACTIVITY: "rinse"
+    ACTIVITY sink: "rinse"
 
     ACTION hand: "rinse in running cold water"
         UNTIL: "remove the bitterness of the brine"
         TIME (1 minute)
 
 YIELDS leached_veggies (400 g) INTERMEDIATE
+;
 
 
 CLOSURE: "brine the pickles"
@@ -94,9 +87,7 @@ CLOSURE: "brine the pickles"
     INGREDIENT vinegar: "raw apple cider vinegar, or white wine"
     USE leached_veggies: "drained"
 
-    FOCUS pan
-
-    ACTIVITY: "prep brine"
+    ACTIVITY pan: "prep brine"
 
     ADD mustard_powder (2 g)
     // 1 tsp
@@ -119,7 +110,7 @@ CLOSURE: "brine the pickles"
         UNTIL: "bring to a light boil"
         TIME (5 minute)
 
-    ACTIVITY: "cook brine"
+    ACTIVITY pan: "cook brine"
 
     ADD leached_veggies (400 g)
 
@@ -128,6 +119,7 @@ CLOSURE: "brine the pickles"
         TIME (3 minute)
 
 YIELDS brined_veggies (.9 l) INTERMEDIATE
+;
 
 
 CLOSURE: "bread and butter pickles" AS pickels
@@ -140,9 +132,7 @@ CLOSURE: "bread and butter pickles" AS pickels
 
     USE brined_veggies: "veggies and brine both"
 
-    FOCUS jar
-
-    ACTIVITY: "pack jar"
+    ACTIVITY jar: "pack jar"
 
     ADD brined_veggies (.9 l)
 
@@ -150,7 +140,7 @@ CLOSURE: "bread and butter pickles" AS pickels
         UNTIL: "jar is almost filled, with 1 cm air gap from top"
 	TIME (30 second)
 
-    ACTIVITY: "let cool"
+    ACTIVITY jar: "let cool"
 
     ACTION hand: "shake jar to loosen any bubbles, then seal"
         UNTIL: "jar is sealed"
@@ -168,7 +158,7 @@ CLOSURE: "bread and butter pickles" AS pickels
         UPTO (30 day)
 
 YIELDS pickles (.9 l)
-
+;
 
 // modify cucumber/liquid ratio to increase veggies by 1/3
 // substitute: sugar with 2/3 honey

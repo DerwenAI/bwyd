@@ -1,6 +1,10 @@
 ## TODOs
 
-  * move FOCUS and TRANSFER into ACTIVITY
+  * refactor YIELD into ACTIVITY
+    + ADD or TRANSFER as initial operation
+    + bookend with EMPTY and CLEAN events for each Container/Tool
+
+  * integrate _material procurement_ schedules, material lead times, and inventory as task constraints in planning
 
   * convert existing recipes
     + cooked_beans
@@ -27,14 +31,27 @@ Module (a named recipe)
    - 0+ Supers
    - 0+ Keywords
    - 1+ Activities (milestones)
-     - 1 each EMPTY/CLEAN events
+     - bookend EMPTY/CLEAN events for each Container/Tool
      - 0+ Appliances
      - 0+ Containers
      - 0+ Tools
-     - 1+ Inputs (e.g., ingredients or yields from components)
+     - 1+ Inputs (e.g., Ingredients, or Yields from other Closures)
      - 1+ Operations
-   - 0+ Storage
-   - 1+ Yields
+     - 1+ Yields
+       - 0+ Storage
+
+Equipment Inventory
+  - Appliances
+  - Containers
+  - Tools
+
+Ingredient Procurement
+  - Supplier
+    - Costs
+  - Ingredients
+    - Conversions
+    - Substitutions
+Permits
 
 
 Parse a module to build Pydantic objects:
@@ -48,20 +65,25 @@ Parse a module to build Pydantic objects:
       - generate a PERT chart as a network diagram
       - schedule as a Petri net: Appliances/Containers/Tools through Operations
       - plot timelines for Execution
+    - Analyze seasonality vs. substitutions (supply network)
     - Validate reachabilitiy
-      - calculate aggregate measures
-        - totals for each Ingredient
-        - total Execution time
-	- inventory for Appliances, Containers, Tools
-        - complexity measure as Pareto front: Ingredient count, Operation count
-    - Visualize interactive Graph for edit
+    - Calculate aggregate measures
+      - totals for each Ingredient (BOM)
+      - total cost, based on inventory vs. suppliers
+      - total Execution time
+      - inventory for Appliances, Containers, Tools (resource planning)
+      - complexity measure as Pareto front: Ingredient count, Operation count
 
   - Serialize as JSON
     - Jinja2 render to HTML for discovery and execution
     - DSPy integration here?
 
+  - Visualize interactive Graph for edit
   - edit an Execution Plan
-
+  - edit Suppliers network
+    + Kanban analysis of Ingredients inventory
+  - edit Appliances/Containers/Tools inventory
+  
 
   * define an RDF/SKOS taxonomy
     + optional load additional RDF ?
@@ -87,18 +109,21 @@ Parse a module to build Pydantic objects:
 At the core, the configuration of the **Bwyd** language is based on a
 _knowledge graph_.
 
-  - ingredients
-  - tools, containers
-  - appliances
-  - techniques
-  - conversions
-  - prepped itermediates
-  - ratios
-  - substitutions
-  - keywords
-  - author notes to cooks
+  - modules (recipes)
   - citations
   - posts describing results
+  - closures (components with multiple uses)
+  - supers
+  - keywords
+  - tools, containers
+  - appliances
+  - ingredients
+  - author notes to cooks
+  - techniques
+  - conversions
+  - ratios
+  - prepped itermediates
+  - substitutions
 
 See: <https://foodon.org/>
 

@@ -160,6 +160,7 @@ p.closure_meta {
 
 p.focus {
     margin-top: 0;
+    margin-left: .3em;
 }
 
 p.focus span {
@@ -356,6 +357,7 @@ div#footer-content p {
 	      {% endif %}
 	    </div>
 	  </div>
+
 	  <!-- recipe directions -->
 	  <h4 class="bg-tertiary-subtle">directions:</h4>
 	  <div class="accordion" id="accordionExample">
@@ -366,9 +368,11 @@ div#footer-content p {
 		  <span class="closure_title">{{ closure.title }}</span>
 		</button>
 	      </h3>
+
 	      <div id="collapse{{ loop.index }}" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
 		<div class="accordion-body">
 		  <div class="row">
+
 		    <!-- closure metadata -->
 		    <div class="col">
 		      <div class="card closure_meta">
@@ -393,6 +397,7 @@ div#footer-content p {
 			</div>
 		      </div>
 		    </div>
+
 		    <!-- closure requires -->
 		    <div class="col">
 		      <dl>
@@ -406,133 +411,129 @@ div#footer-content p {
 			{% endfor %}
 		      </dl>
 		    </div>
-		  </div>
-		  {% for focus in closure.foci %}
-		  <!-- focus -->
-		  <dl>
-		    <dt>
-		      <p class="focus">
-			into
-			<span class="badge text-bg-primary">{{ focus.container }}</span><strong>&nbsp;:</strong>
-		      </p>
-		    </dt>
-		    {% for act in focus.activities %}
+
+		    {% for act in closure.activities %}
 		    <!-- activity -->
-		    <dd>
-		      <div class="row">
-			<div class="col">
-			  <div class="card activity">
-			    <div class="alert alert-secondary activity_title" role="alert">
-			      {{ act.title }}
-			    </div>
-			    <div class="card-text activity_text">
-			      {% for step_dict in act.steps %}
-			      {% for key, val in step_dict.items() %}
+		    <div class="row">
+		      <div class="col">
+			<div class="card activity">
+			  <div class="alert alert-secondary activity_title" role="alert">
+			    {{ act.title }}
+			  </div>
 
-			      {% if key == "note" -%}
-			      <details
-				>
-				<summary><i class="bi bi-journal-text"></i></summary>
-				<div class="alert alert-tertiary activity_note" role="alert">
-				  <p>{{ val.text }}</p>
-				</div>
-			      </details>
+			  <div class="card-text activity_text">
+			    <p class="focus">
+			      in
+			      <span class="badge text-bg-primary">{{ act.container }}</span><strong>&nbsp;:</strong>
+			    </p>
 
-			      {% elif key == "ingredients" -%}
-			      <ul class="list-group list-group-flush">
-				{% for item in val %}
-				<li class="list-group-item">
-				  add <strong>{{ item.name }}</strong>: {{ item.amount }}
-				  {% if item.text|length %}
-				  <em>&nbsp;&hellip; {{ item.text }}</em>
-				  {% endif %}
-				</li>
-				{% endfor %}
-			      </ul>
-			      <hr>
+			    {% for step_dict in act.steps %}
+			    {% for key, val in step_dict.items() %}
 
-			      {% elif key == "transfer" -%}
-			      <div class="activity_step">
-				transfer <strong>{{ val.name }}</strong>
+			    {% if key == "note" -%}
+			    <details
+			      >
+			      <summary><i class="bi bi-journal-text"></i></summary>
+			      <div class="alert alert-tertiary activity_note" role="alert">
+				<p>{{ val.text }}</p>
 			      </div>
+			    </details>
 
-			      {% elif key == "action" -%}
-			      <div class="activity_step">
-				with
-				<span class="badge text-bg-primary action_span">
-				  {{ val.tool }}
-				</span><strong>&nbsp;:</strong>
-				<br>
-				<strong>{{ val.verb }}</strong>
-				until <em>{{ val.text }}</em>
-				<br>
-				({{ val.time }})
-			      </div>
-
-			      {% elif key == "wait" -%}
-			      <div class="activity_step">
-				<strong>{{ key }}</strong>
-				until <em>{{ val.text }}</em>
-				<br>
-				({{ val.time }})
-			      </div>
-
-			      {% elif key == "store" -%}
-			      <div class="activity_step">
-				store <strong>{{ val.text }}</strong>
-				<br>
-				upto <em>{{ val.upto }}</em>
-			      </div>
-
-			      {% elif key == "stove" -%}
-			      <div class="activity_step">
-				<strong>{{ val.text }}</strong>
-				<br>
-				until <em>{{ val.until }}</em>
-				<br>
-				({{ val.time }})
-			      </div>
-
-			      {% elif key == "cooler" -%}
-			      <div class="activity_step">
-				<strong>{{ val.text }}</strong>
-				<br>
-				until <em>{{ val.until }}</em>
-				<br>
-				({{ val.time }})
-			      </div>
-
-			      {% elif key == "oven" -%}
-			      <div class="activity_step">
-				<strong>{{ val.mode }}</strong> at <strong>{{ val.temperature }}</strong> 
-				{% if val.text|length %}
-				<em>&nbsp;&hellip; {{ val.text }}</em>
+			    {% elif key == "ingredients" -%}
+			    <ul class="list-group list-group-flush">
+			      {% for item in val %}
+			      <li class="list-group-item">
+				add <strong>{{ item.name }}</strong>: {{ item.amount }}
+				{% if item.text|length %}
+				<em>&nbsp;&hellip; {{ item.text }}</em>
 				{% endif %}
-				<br>
-				until <em>{{ val.until }}</em>
-				<br>
-				({{ val.time }})
-			      </div>
+			      </li>
+			      {% endfor %}
+			    </ul>
+			    <hr>
 
-			      {% endif %}
-			      {% endfor %}
-			      {% endfor %}
+			    {% elif key == "transfer" -%}
+			    <div class="activity_step">
+			      transfer <strong>{{ val.name }}</strong>
 			    </div>
+
+			    {% elif key == "action" -%}
+			    <div class="activity_step">
+			      with
+			      <span class="badge text-bg-primary action_span">
+				{{ val.tool }}
+			      </span><strong>&nbsp;:</strong>
+			      <br>
+			      <strong>{{ val.verb }}</strong>
+			      until <em>{{ val.text }}</em>
+			      <br>
+			      ({{ val.time }})
+			    </div>
+
+			    {% elif key == "wait" -%}
+			    <div class="activity_step">
+			      <strong>{{ key }}</strong>
+			      until <em>{{ val.text }}</em>
+			      <br>
+			      ({{ val.time }})
+			    </div>
+
+			    {% elif key == "store" -%}
+			    <div class="activity_step">
+			      store <strong>{{ val.text }}</strong>
+			      <br>
+			      upto <em>{{ val.upto }}</em>
+			    </div>
+			  
+			    {% elif key == "stove" -%}
+			    <div class="activity_step">
+			      <strong>{{ val.text }}</strong>
+			      <br>
+			      until <em>{{ val.until }}</em>
+			      <br>
+			      ({{ val.time }})
+			    </div>
+
+			    {% elif key == "cooler" -%}
+			    <div class="activity_step">
+			      <strong>{{ val.text }}</strong>
+			      <br>
+			      until <em>{{ val.until }}</em>
+			      <br>
+			      ({{ val.time }})
+			    </div>
+
+			    {% elif key == "oven" -%}
+			    <div class="activity_step">
+			      <strong>{{ val.mode }}</strong> at <strong>{{ val.temperature }}</strong> 
+			      {% if val.text|length %}
+			      <em>&nbsp;&hellip; {{ val.text }}</em>
+			      {% endif %}
+			      <br>
+			      until <em>{{ val.until }}</em>
+			      <br>
+			      ({{ val.time }})
+			    </div>
+
+			    {% endif %}
+
+			    {% endfor %}
+			    {% endfor %}
+			  </div>
+			  <div class="col">
+			    &nbsp;
 			  </div>
 			</div>
-			<div class="col">
-			  &nbsp;
-			</div>
 		      </div>
-		    </dd>
+		    </div>
 		    {% endfor %}
-		  </dl>
-		  {% endfor %}
+		  </div>
 		</div>
 	      </div>
 	    </div>
 	    {% endfor %}
 	  </div>
+
 	  <!-- license -->
 	  {% set lic = module.license %}
 	  <footer>

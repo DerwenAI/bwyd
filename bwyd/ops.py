@@ -110,28 +110,6 @@ Serializable representation for JSON.
         }
 
 
-class OpTransfer (OpGeneric):  # pylint: disable=R0902
-    """
-Represents the action of a Cook to Transfer an intermediate into
-a Container from another Focus, still *within* the same Closure.
-    """
-    symbol: str
-    entity: Dependency
-
-
-    def get_model (
-        self,
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "transfer": {
-                "name": self.symbol,
-            },
-        }
-
-
 class OpAdd (OpGeneric):  # pylint: disable=R0902
     """
 Represents the action of a Cook to Add a measured amount of an
@@ -160,6 +138,28 @@ Serializable representation for JSON.
             "name": self.symbol,
             "amount": amount,
             "text": self.text,
+        }
+
+
+class OpTransfer (OpGeneric):  # pylint: disable=R0902
+    """
+Represents the action to Transfer an intermediate product into a
+Container from another Activity, still *within* the same Closure.
+    """
+    symbol: str
+    entity: Dependency
+
+
+    def get_model (
+        self,
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "transfer": {
+                "name": self.symbol,
+            },
         }
 
 
@@ -338,8 +338,8 @@ Serializable representation for JSON.
 
 OpsTypes = typing.Union[
     OpNote,
-    OpTransfer,
     OpAdd,
+    OpTransfer,
     OpAction,
     OpWait,
     OpStore,

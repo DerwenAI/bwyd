@@ -1,10 +1,9 @@
 TITLE: "Creamed Eggs on Toast"
-TEXT: "An American variant of Oeufs durs à la Béchamel, using a roux instead. Based on childhood memories of spending days at a seaside diner."
+TEXT: "American variant of Oeufs durs à la Béchamel. Based on childhood memories of spending days at a seaside diner."
 AUTHOR: "Paco Nathan https://derwen.ai/paco"
 LICENSE: "CC-BY-NC-SA-4.0"
 UPDATED: "2021-06-26"
 POST: "https://www.instagram.com/p/CQmIExNL-yl/"
-CITE: "https://comfort.crisprecipes.com/gratin-doeufs-durs-a-la-bechamel/"
 CITE: "https://lacuisine.recipesown.com/2024/09/20/gratin-doeufs-durs-a-la-bechamel/"
 
 CLOSURE: "oeufs dur à la sauce roux"
@@ -23,9 +22,7 @@ CLOSURE: "oeufs dur à la sauce roux"
     INGREDIENT milk: "whole milk, half-and-half, or cream"
     INGREDIENT wine: "white wine, dry sherry, or sweet vermouth"
 
-    FOCUS pan
-
-    ACTIVITY: "make a roux"
+    ACTIVITY pan: "make a roux"
 
     ADD flour (32 g)
     // 3 Tbs flour
@@ -85,6 +82,7 @@ CLOSURE: "oeufs dur à la sauce roux"
         TIME (1 minute)
 
 YIELDS creamed_eggs (1) INTERMEDIATE
+;
 
 
 CLOSURE: "creamed eggs on toast"
@@ -97,9 +95,7 @@ CLOSURE: "creamed eggs on toast"
     INGREDIENT toast: "slice toasted bread"
     USE creamed_eggs: "all for one serving"
 
-    FOCUS plate
-
-    ACTIVITY: "plating"
+    ACTIVITY plate: "plating"
     
     ADD toast (1): "fit on plate"
     ADD creamed_eggs (1)
@@ -111,3 +107,4 @@ CLOSURE: "creamed eggs on toast"
     NOTE: "garnish plate with dried sumac, minced green onion, fresh thyme, etc."
 
 YIELDS creamed_eggs_on_toast (1)
+;
