@@ -455,14 +455,14 @@ Interpret the steps within an activity.
             # resolve local reference
             entity: typing.Optional[ typing.Any ] = None
 
-            if op_parse.symbol in closure.ingredients:
-                entity = closure.ingredients[op_parse.symbol]
+            if op_parse.symbol in closure.containers:
+                entity = closure.containers[op_parse.symbol]
                 entity.ref_count += 1
             else:
                 loc: dict = textx.get_location(op_parse)
 
                 raise BwydParserError(
-                    f"INGREDIENT `{op_parse.symbol}` used but not defined {loc}",
+                    f"CONTAINER `{op_parse.symbol}` used but not defined {loc}",
                     symbol = op_parse.symbol,
                 )
 

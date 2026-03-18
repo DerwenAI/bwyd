@@ -138,13 +138,15 @@ Serializable representation for JSON.
             "name": self.symbol,
             "amount": amount,
             "text": self.text,
+            "external": self.entity.external,
         }
 
 
 class OpTransfer (OpGeneric):  # pylint: disable=R0902
     """
-Represents the action to Transfer an intermediate product into a
-Container from another Activity, still *within* the same Closure.
+Represents the action to Transfer an intermediate product from one
+Container into the Container used in a subsequent Activity, both
+*within* the same Closure.
     """
     symbol: str
     entity: Dependency

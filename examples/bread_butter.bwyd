@@ -39,7 +39,7 @@ CLOSURE: "leached veggies"
         UNTIL: "cut off ends, peel off outer/paper skin"
         TIME (30 second)
 
-    TRANSFER cucumbers
+    TRANSFER sink
 
     ACTION knife: "blend"
         UNTIL: "slice cukes and onion to .5 cm thick pieces"
@@ -47,8 +47,8 @@ CLOSURE: "leached veggies"
 
     ACTIVITY bowl: "leaching"
 
-    TRANSFER cucumbers
-    TRANSFER onion
+    TRANSFER board
+
     ADD salt (25 g)
 
     ACTION spatula: "toss slices with salt"

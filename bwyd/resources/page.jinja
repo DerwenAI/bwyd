@@ -443,7 +443,12 @@ div#footer-content p {
 			    <ul class="list-group list-group-flush">
 			      {% for item in val %}
 			      <li class="list-group-item">
-				add <strong>{{ item.name }}</strong>: {{ item.amount }}
+				{% if item.external %}
+				use
+				{% else %}
+				add
+				{% endif %}
+				<strong>{{ item.name }}</strong>: {{ item.amount }}
 				{% if item.text|length %}
 				<em>&nbsp;&hellip; {{ item.text }}</em>
 				{% endif %}
@@ -454,7 +459,7 @@ div#footer-content p {
 
 			    {% elif key == "transfer" -%}
 			    <div class="activity_step">
-			      transfer <strong>{{ val.name }}</strong>
+			      transfer from <strong>{{ val.name }}</strong>
 			    </div>
 
 			    {% elif key == "action" -%}

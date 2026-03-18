@@ -19,7 +19,7 @@ from upath import UPath
 import requests
 import requests_cache
 
-from .measure import Measure, Converter
+from .measure import Converter, Measure, PLURAL
 
 from .ops import Dependency, DependencyDict, \
     OpsTypes, OpAdd
@@ -201,7 +201,12 @@ Accessor for the total, non-intermediate yields of one Closure object.
                     None,
                 )
 
-                html: str = f"{amount} {product.symbol}".replace("_", " ").strip()
+                portions: str = "portion"
+
+                if amount != "1":
+                    portions = PLURAL.plural(portions)
+
+                html: str = f"{amount} {portions} {product.symbol}".replace("_", " ").strip()
                 yields_list.append(html)
 
         return yields_list
