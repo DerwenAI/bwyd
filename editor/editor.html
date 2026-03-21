@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="editor.css">
+
+<title>Bwyd Editor</title>
+</head>
+
+<body>
+<div class="editor">
+  <h1>Bwyd Editor</h1>
+
+  <!-- Name -->
+  <div class="field">
+    <label for="doc-name">Name</label>
+    <input type="text" id="doc-name" placeholder="My Document">
+  </div>
+
+  <!-- URL -->
+  <div class="field url-field">
+    <label for="doc-url">URL</label>
+    <input type="url" id="doc-url" placeholder="https://example.com">
+  </div>
+
+  <!-- Keywords -->
+  <div class="field">
+    <label>Keywords</label>
+    <div class="tag-box" id="kw-box">
+      <input type="text" class="tag-input" id="kw-input" placeholder="Add a keyword…">
+    </div>
+    <div class="hint">Press <strong>Enter</strong> or <strong>,</strong> to add — <strong>Backspace</strong> to remove</div>
+  </div>
+
+  <!-- Activities -->
+  <div class="activities-header">
+    <h2>Activities</h2>
+    <button class="btn btn--primary" id="add-activity-btn">+ Add Activity</button>
+  </div>
+  <div id="activities-container">
+    <div class="empty-state" id="empty-msg">No activities yet. Click <strong>+ Add Activity</strong> to get started.</div>
+  </div>
+
+  <!-- JSON Output -->
+  <div class="output-section">
+    <div class="output-header">
+      <label>Live JSON</label>
+      <button class="btn btn--ghost btn--sm copy-btn" id="copy-btn">Copy</button>
+    </div>
+    <pre id="json-output"></pre>
+  </div>
+</div>
+
+<script src="editor.js"></script>
+</body>
+</html>
