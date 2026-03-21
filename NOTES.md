@@ -1,13 +1,17 @@
 ## TODOs
 
+  * convert existing recipes
+    + cooked_beans => bean_sauce
+
+  * generate layers:
+    - RDF semantics
+    - network diagram for Activities
+
   * refactor YIELD(+STORE) into ACTIVITY
     + ADD/TRANSFER as initial operation
     + bookend with EMPTY and CLEAN events for each Container/Tool
 
   * integrate _material procurement_ schedules, material lead times, and inventory as task constraints in planning
-
-  * convert existing recipes
-    + cooked_beans
 
   * support substitutions/pivots
 
