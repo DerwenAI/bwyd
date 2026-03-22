@@ -1,21 +1,25 @@
-// ── State ──
+// ── document model state ──
 
 let keywords = [];
 let activities = []; // { name, ingredients:[], steps:[] }
 
 // ── DOM refs ──
 
-const nameInput = document.getElementById("doc-name");
-const urlInput  = document.getElementById("doc-url");
-const kwBox     = document.getElementById("kw-box");
-const kwInput   = document.getElementById("kw-input");
-const jsonOut   = document.getElementById("json-output");
-const copyBtn   = document.getElementById("copy-btn");
+const title_input = document.getElementById("doc-title");
+const source_input = document.getElementById("doc-source");
+
+const kwBox = document.getElementById("kw-box");
+const kwInput = document.getElementById("kw-input");
+
 const actContainer = document.getElementById("activities-container");
-const emptyMsg  = document.getElementById("empty-msg");
+const emptyMsg = document.getElementById("empty-msg");
 const addActBtn = document.getElementById("add-activity-btn");
 
-// ── Helper Functions ──
+const jsonOut = document.getElementById("json-output");
+const copyBtn = document.getElementById("copy-btn");
+
+
+// ── helper functions ──
 
 function esc (s) {
     const d = document.createElement("div");
@@ -25,8 +29,8 @@ function esc (s) {
 
 function renderJSON () {
     const doc = {
-	name: nameInput.value,
-	url: urlInput.value,
+	title: title_input.value,
+	source: source_input.value,
 	keywords,
 	activities: activities.map(a => ({
             name: a.name,
@@ -38,49 +42,68 @@ function renderJSON () {
     jsonOut.textContent = JSON.stringify(doc, null, 2);
 }
 
-// ── Tag input factory ──
 
-function initTagBox(box, input, getList, setList, tagClass) {
-    function renderTags() {
-      box.querySelectorAll(".tag").forEach(t => t.remove());
-      getList().forEach((val, i) => {
-        const tag = document.createElement("span");
-        tag.className = `tag ${tagClass}`;
-        tag.innerHTML = `${esc(val)}<button data-i="${i}">&times;</button>`;
-        box.insertBefore(tag, input);
-      });
-      renderJSON();
+// ── tag input factory ──
+
+function initTagBox (box, input, getList, setList, tagClass) {
+    function renderTags () {
+	box.querySelectorAll(".tag").forEach(t => t.remove());
+
+	getList().forEach((val, i) => {
+            const tag = document.createElement("span");
+            tag.className = `tag ${tagClass}`;
+            tag.innerHTML = `${esc(val)}<button data-i="${i}">&times;</button>`;
+            box.insertBefore(tag, input);
+	});
+
+	renderJSON();
     }
 
-    function add(raw) {
-      const v = raw.trim();
-      const list = getList();
-      if (v && !list.includes(v)) { list.push(v); setList(list); renderTags(); }
+    function add (raw) {
+	const v = raw.trim();
+	const list = getList();
+
+	if (v && !list.includes(v)) {
+	    list.push(v);
+	    setList(list);
+	    renderTags();
+	}
     }
 
     input.addEventListener("keydown", e => {
-      if ((e.key === "Enter" || e.key === ",") && input.value.replace(",","").trim()) {
-        e.preventDefault();
-        add(input.value.replace(",",""));
-        input.value = "";
-      }
-      if (e.key === "Backspace" && !input.value && getList().length) {
-        const list = getList(); list.pop(); setList(list); renderTags();
-      }
+	if ((e.key === "Enter" || e.key === ",") && input.value.replace(",", "").trim()) {
+            e.preventDefault();
+            add(input.value.replace(",", ""));
+            input.value = "";
+	}
+
+	if (e.key === "Backspace" && !input.value && getList().length) {
+            const list = getList();
+	    list.pop();
+	    setList(list);
+	    renderTags();
+	}
     });
 
     input.addEventListener("input", () => {
-      if (input.value.includes(",")) {
-        input.value.split(",").forEach(p => { if (p.trim()) add(p); });
-        input.value = "";
-      }
+	if (input.value.includes(",")) {
+            input.value.split(",").forEach(p => {
+		if (p.trim()) add(p);
+	    });
+
+            input.value = "";
+	}
     });
 
     box.addEventListener("click", e => {
-      if (e.target.tagName === "BUTTON" && e.target.dataset.i !== undefined) {
-        const list = getList(); list.splice(Number(e.target.dataset.i), 1); setList(list); renderTags();
-      }
-      input.focus();
+	if (e.target.tagName === "BUTTON" && e.target.dataset.i !== undefined) {
+            const list = getList();
+	    list.splice(Number(e.target.dataset.i), 1);
+	    setList(list);
+	    renderTags();
+	}
+
+	input.focus();
     });
 
     input.addEventListener("focus", () => box.classList.add("focused"));
@@ -89,10 +112,14 @@ function initTagBox(box, input, getList, setList, tagClass) {
     return renderTags;
   }
 
-// ── Keywords tag box ──
+
+// ── keywords tag box ──
+
 initTagBox(kwBox, kwInput, () => keywords, l => { keywords = l; }, "tag--kw");
 
-// ── Activities ──
+
+// ── activities ──
+
 function renderActivities () {
     emptyMsg.style.display = activities.length ? "none" : "block";
 
@@ -105,7 +132,7 @@ function renderActivities () {
 	card.innerHTML = `
         <div class="activity-title-row">
           <input type="text" class="act-name" value="${esc(act.name)}" placeholder="Activity name">
-          <button class="btn btn--danger btn--sm remove-act-btn">Remove</button>
+          <button class="btn btn--danger btn--sm remove-act-btn"><i class="bi bi-x-lg"></i></button>
         </div>
         <div class="sub-section">
           <label>Ingredients</label>
@@ -119,7 +146,7 @@ function renderActivities () {
           <ol class="steps-list"></ol>
           <div class="add-step-row">
             <input type="text" class="step-new-input" placeholder="Describe this step…">
-            <button class="btn btn--ghost btn--sm add-step-btn">+ Add</button>
+            <button class="btn btn--ghost btn--sm add-step-btn"><i class="bi bi-plus-lg"></i></button>
           </div>
         </div>
        `;
@@ -128,7 +155,11 @@ function renderActivities () {
 
 	// activity name
 	const nameIn = card.querySelector(".act-name");
-	nameIn.addEventListener("input", () => { act.name = nameIn.value; renderJSON(); });
+
+	nameIn.addEventListener("input", () => {
+	    act.name = nameIn.value;
+	    renderJSON();
+	});
 
 	// remove activity
 	card.querySelector(".remove-act-btn").addEventListener("click", () => {
@@ -155,26 +186,39 @@ function renderActivities () {
 
 	function renderSteps () {
             stepsList.innerHTML = "";
+
             act.steps.forEach((step, si) => {
 		const li = document.createElement("li");
 		li.className = "step-item";
+
 		li.innerHTML = `
             <span class="step-num">${si + 1}</span>
             <textarea rows="1">${esc(step)}</textarea>
             <button class="btn btn--danger btn--sm">×</button>
                `;
+
 		stepsList.appendChild(li);
 
 		const ta = li.querySelector("textarea");
-		ta.addEventListener("input", () => { act.steps[si] = ta.value; renderJSON(); });
+
+		ta.addEventListener("input", () => {
+		    act.steps[si] = ta.value;
+		    renderJSON();
+		});
 
 		// auto-resize
 		ta.style.height = "auto";
 		ta.style.height = ta.scrollHeight + "px";
-		ta.addEventListener("input", () => { ta.style.height = "auto"; ta.style.height = ta.scrollHeight + "px"; });
+
+		ta.addEventListener("input", () => {
+		    ta.style.height = "auto";
+		    ta.style.height = ta.scrollHeight + "px";
+		});
 
 		li.querySelector(".btn--danger").addEventListener("click", () => {
-		    act.steps.splice(si, 1); renderSteps(); renderJSON();
+		    act.steps.splice(si, 1);
+		    renderSteps();
+		    renderJSON();
 		});
             });
 
@@ -193,7 +237,12 @@ function renderActivities () {
 	}
 
 	addStepBtn.addEventListener("click", addStep);
-	stepNewInput.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); addStep(); } });
+
+	stepNewInput.addEventListener("keydown", e => {
+	    if (e.key === "Enter") {
+		e.preventDefault(); addStep();
+	    }
+	});
 
 	renderSteps();
     });
@@ -205,26 +254,33 @@ addActBtn.addEventListener("click", () => {
     activities.push({ name: "", ingredients: [], steps: [] });
     renderActivities();
 
-    // focus the new card"s name input
+    // focus the new card's name input
     const cards = actContainer.querySelectorAll(".activity-card");
     cards[cards.length - 1].querySelector(".act-name").focus();
 });
 
-// ── Copy ──
+
+// ── copy JSON ──
+
 copyBtn.addEventListener("click", () => {
     navigator.clipboard.writeText(jsonOut.textContent).then(() => {
 	copyBtn.textContent = "Copied!";
 	copyBtn.classList.add("copied");
-	setTimeout(() => { copyBtn.textContent = "Copy"; copyBtn.classList.remove("copied"); }, 1500);
+
+	setTimeout(() => {
+	    copyBtn.textContent = "Copy";
+	    copyBtn.classList.remove("copied");
+	}, 1500);
     });
 });
 
 
-// ── Global change listeners ──
+// ── global change listeners ──
 
-nameInput.addEventListener("input", renderJSON);
-urlInput.addEventListener("input", renderJSON);
+title_input.addEventListener("input", renderJSON);
+source_input.addEventListener("input", renderJSON);
 
-// Initialize the DOM
+
+// initialize the DOM
 
 renderJSON();
