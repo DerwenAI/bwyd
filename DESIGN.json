@@ -1,0 +1,126 @@
+{
+    "type": [
+        {
+            "field": {
+                "name": "TITLE",
+                "count": "one",
+                "type": "text"
+            }
+        },
+        {
+            "field": {
+                "name": "TEXT",
+                "count": "one",
+                "type": "text"
+            }
+        },
+        {
+            "list": {
+                "name": "CITE",
+                "count": "zero-many",
+                "type": "url"
+            }
+        },
+        {
+            "list": {
+                "name": "POST",
+                "count": "zero-many",
+                "type": "url"
+            }
+        },
+        {
+            "list": {
+                "name": "CLOSURE",
+                "count": "one-many",
+                "type": [
+                    {
+                        "field": {
+                            "name": "TITLE",
+                            "type": "text",
+                            "count": "one"
+                        }
+                    },
+                    {
+                        "field": {
+                            "name": "TEXT",
+                            "type": "text",
+                            "count": "one"
+                        }
+                    },
+                    {
+                        "list": {
+                            "name": "SUPER",
+                            "count": "zero-many",
+                            "type": "keyword"
+                        }
+                    },
+                    {
+                        "list": {
+                            "name": "KEYWORD",
+                            "count": "zero-many",
+                            "type": "keyword"
+                        }
+                    },
+                    {
+                        "list": {
+                            "name": "CONTAINER",
+                            "count": "one-many",
+                            "type": "symbol"
+                        }
+                    },
+                    {
+                        "list": {
+                            "name": "TOOL",
+                            "count": "zero-many",
+                            "type": "symbol"
+                        }
+                    },
+                    {
+                        "list": {
+                            "name": "INGREDIENT",
+                            "count": "one-many",
+                            "type": "symbol"
+                        }
+                    },
+                    {
+                        "list": {
+                            "name": "USE",
+                            "count": "zero-many",
+                            "type": "symbol"
+                        }
+                    },
+                    {
+                        "list": {
+                            "name": "ACTIVITY",
+                            "count": "one-many",
+                            "type": [
+                                {
+                                    "name": "Input",
+                                    "count": "one",
+                                    "select": [
+                                        "ADD",
+                                        "TRANSFER"
+                                    ]
+                                },
+                                {
+                                    "list": {
+                                        "name": "Operation",
+                                        "count": "one-many",
+                                        "select": [
+                                            "ACTION",
+                                            "WAIT",
+                                            "HEAT",
+                                            "CHILL",
+                                            "BAKE",
+                                            "YIELD"
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
