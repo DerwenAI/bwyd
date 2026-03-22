@@ -1,16 +1,53 @@
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* fonts, icons */
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+/* structural */
+html, h1, h2, h3, h4, h5, p, span, cite, figcaption, button, input, select, textarea {
+    font-family: "Atkinson Hyperlegible", sans-serif;
+}
+
+body {
+    color: hsl(0, 0%, 40%);
     background: #f4f5f7;
-    color: #1a1a2e;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     padding: 40px 20px;
-  }
+}
 
-  .editor {
+h2 {
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+p {
+    font-weight: normal;
+    font-size: 1.1em;
+    line-height: 1.3em;
+    margin: 1.2em 0 1.2em 0;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"],
+[type="image"],
+[type="checkbox"],
+[type="radio"],
+summary {
+    cursor: pointer;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* generated */
+
+.editor {
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
@@ -20,11 +57,17 @@
     height: fit-content;
   }
 
-  h1 { font-size: 1.35rem; font-weight: 700; margin-bottom: 28px; }
+h1 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 28px;
+}
 
-  .field { margin-bottom: 20px; }
+.field {
+    margin-bottom: 20px;
+}
 
-  label {
+label {
     display: block;
     font-size: 0.8rem;
     font-weight: 600;
@@ -34,9 +77,9 @@
     margin-bottom: 5px;
   }
 
-  input[type="text"],
-  input[type="url"],
-  textarea {
+input[type="text"],
+input[type="url"],
+textarea {
     width: 100%;
     padding: 9px 13px;
     font-size: 0.93rem;
@@ -48,17 +91,21 @@
     color: #1a1a2e;
   }
 
-  input:focus, textarea:focus {
+input:focus, textarea:focus {
     border-color: #4f6ef7;
     box-shadow: 0 0 0 3px rgba(79,110,247,0.15);
-  }
+}
 
-  input::placeholder, textarea::placeholder { color: #aaa; }
+input::placeholder, textarea::placeholder {
+    color: #aaa;
+}
 
-  .url-field input { font-family: 'SF Mono','Consolas','Menlo', monospace; font-size: 0.86rem; }
+.url-field input {
+    font-family: 'SF Mono','Consolas','Menlo', monospace; font-size: 0.86rem;
+}
 
-  /* Tag input (shared for keywords & ingredients) */
-  .tag-box {
+/* tag input (shared for keywords & ingredients) */
+.tag-box {
     border: 1.5px solid #d0d5dd;
     border-radius: 8px;
     padding: 7px 9px;
@@ -69,9 +116,13 @@
     cursor: text;
     transition: border-color 0.15s, box-shadow 0.15s;
   }
-  .tag-box.focused { border-color: #4f6ef7; box-shadow: 0 0 0 3px rgba(79,110,247,0.15); }
 
-  .tag {
+.tag-box.focused {
+    border-color: #4f6ef7;
+    box-shadow: 0 0 0 3px rgba(79,110,247,0.15);
+}
+
+.tag {
     display: inline-flex;
     align-items: center;
     gap: 3px;
@@ -80,11 +131,12 @@
     padding: 3px 7px 3px 9px;
     border-radius: 6px;
     animation: popIn 0.15s ease;
-  }
-  .tag--kw  { background: #eef1fb; color: #3b5bdb; }
-  .tag--ing { background: #fef3e2; color: #c2780e; }
+}
 
-  @keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.tag--kw  { background: #eef1fb; color: #3b5bdb; }
+.tag--ing { background: #fef3e2; color: #c2780e; }
+
+@keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
   .tag button {
     background: none; border: none; cursor: pointer;
