@@ -32,6 +32,16 @@ const dsl_design = [
 	    "placeholder": "Source URL",
         }
     },
+    {
+        "list": {
+            "grammar": "POST",
+            "type": "url",
+            "count": "zero-many",
+	    "label": "Gallery",
+	    "id": "post-list",
+	    "placeholder": "Gallery URL",
+        }
+    },
 ]
 
 
@@ -48,6 +58,8 @@ function build_frag (frag, design) {
 	    frag.appendChild(elem);
 
 	    elem = document.createElement("input");
+	    dsl_locate[dat["id"]] = dat;
+
 	    elem.setAttribute("class", "form-control");
 	    elem.setAttribute("id", dat["id"]);
 	    elem.setAttribute("type", dat["type"]);
@@ -56,11 +68,15 @@ function build_frag (frag, design) {
 	    break;
 
 	case "list":
+	    const group_id = dat["id"];
+	    var callback = `list_add('${group_id}')`;
+
 	    elem = document.createElement("br");
 	    frag.appendChild(elem);
 
 	    elem = document.createElement("label");
 	    elem.setAttribute("class", "form-label");
+	    elem.setAttribute("for", group_id);
 	    elem.appendChild(document.createTextNode(dat["label"]));
 	    frag.appendChild(elem);
 
@@ -70,13 +86,12 @@ function build_frag (frag, design) {
 	    elem.setAttribute("role", "button");
 	    elem.appendChild(document.createTextNode("+"));
 
-	    const group_id = dat["id"];
-	    var callback = `list_add('${group_id}')`;
 	    elem.setAttribute("onclick", callback);
-	    dsl_locate[group_id] = dat;
 	    frag.appendChild(elem);
 
 	    elem = document.createElement("div");
+	    dsl_locate[group_id] = dat;
+
 	    elem.setAttribute("class", "list-group");
 	    elem.setAttribute("id", group_id);
 	    frag.appendChild(elem);
@@ -114,7 +129,9 @@ function list_add (group_id) {
     elem.setAttribute("class", "row list-group-item");
 
     var input = document.createElement("input");
-    input.setAttribute("class", "form-control");
+    dsl_locate[item_id] = dat;
+
+    input.setAttribute("class", "form-control url-field");
     input.setAttribute("id", item_id);
     input.setAttribute("type", dat["type"]);
     input.setAttribute("placeholder", dat["placeholder"]);
@@ -156,6 +173,19 @@ function list_del (group_id, item_id) {
 	const item = document.getElementById(item_id);
 	item.parentNode.remove();
 	list_del(group_id, 0);
+    };
+};
+
+
+// encode the current editor content into DSL
+
+function encode_dsl () {
+    var base = document.querySelectorAll("input");
+
+    for (var i = 0; i < base.length; i++) {
+	var elem = base[i];
+	var code = `${dsl_locate[elem.id].grammar} ${elem.value};`;
+	console.log(code);
     };
 };
 

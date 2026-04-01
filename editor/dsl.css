@@ -64,3 +64,29 @@ summary {
 .form-label {
     margin-top: .5em;
 }
+
+input[type="text"],
+input[type="url"],
+textarea {
+    width: 100%;
+    padding: 9px 13px;
+    font-size: 0.93rem;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    font-family: inherit;
+}
+
+input:focus, textarea:focus {
+    border-color: #4f6ef7;
+    box-shadow: 0 0 0 3px rgba(79,110,247,0.15);
+}
+
+input::placeholder, textarea::placeholder {
+    color: #aaa;
+}
+
+.url-field input {
+    font-family: 'Consolas','Menlo','SF Mono', monospace; font-size: 0.86rem;
+}
