@@ -1,0 +1,66 @@
+/* fonts, icons */
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+/* structural */
+html, h1, h2, h3, h4, h5, p, span, cite, figcaption, button, input, select, textarea {
+    font-family: "Atkinson Hyperlegible", sans-serif;
+}
+
+body {
+    color: hsl(0, 0%, 40%);
+    background: #f4f5f7;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+h1 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 1em;
+}
+
+h2 {
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+p {
+    font-weight: normal;
+    font-size: 1.1em;
+    line-height: 1.3em;
+    margin: 1.2em 0 1.2em 0;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"],
+[type="image"],
+[type="checkbox"],
+[type="radio"],
+summary {
+    cursor: pointer;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+.editor {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+    width: 100%;
+    max-width: 620px;
+    padding: 32px;
+    height: fit-content;
+}
+
+.form-label {
+    margin-top: .5em;
+}
