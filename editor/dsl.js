@@ -1,7 +1,9 @@
-const dsl_stack = [];
-const dsl_locate = {};
+const BWYD_DEBUG = [];
+const CALLBACK_QUEUE = [];
 
-const dsl_design = [
+const ELEM_META = {};
+
+const DESIGN_META = [
     {
         "field": {
             "grammar": "TITLE",
@@ -48,27 +50,27 @@ const dsl_design = [
 function build_frag (frag, design) {
     var elem = null;
 
-    for (const [kind, dat] of Object.entries(design)) {
+    for (const [kind, meta] of Object.entries(design)) {
 	switch (kind) {
 	case "field":
 	    elem = document.createElement("label");
 	    elem.setAttribute("class", "form-label");
-	    elem.setAttribute("for", dat["id"]);
-	    elem.appendChild(document.createTextNode(dat["label"]));
+	    elem.setAttribute("for", meta["id"]);
+	    elem.appendChild(document.createTextNode(meta["label"]));
 	    frag.appendChild(elem);
 
 	    elem = document.createElement("input");
-	    dsl_locate[dat["id"]] = dat;
+	    ELEM_META[meta["id"]] = meta;
 
 	    elem.setAttribute("class", "form-control");
-	    elem.setAttribute("id", dat["id"]);
-	    elem.setAttribute("type", dat["type"]);
-	    elem.setAttribute("placeholder", dat["placeholder"]);
+	    elem.setAttribute("id", meta["id"]);
+	    elem.setAttribute("type", meta["type"]);
+	    elem.setAttribute("placeholder", meta["placeholder"]);
 	    frag.appendChild(elem);
 	    break;
 
 	case "list":
-	    const group_id = dat["id"];
+	    const group_id = meta["id"];
 	    var callback = `list_add('${group_id}')`;
 
 	    elem = document.createElement("br");
@@ -77,7 +79,7 @@ function build_frag (frag, design) {
 	    elem = document.createElement("label");
 	    elem.setAttribute("class", "form-label");
 	    elem.setAttribute("for", group_id);
-	    elem.appendChild(document.createTextNode(dat["label"]));
+	    elem.appendChild(document.createTextNode(meta["label"]));
 	    frag.appendChild(elem);
 
 	    elem = document.createElement("a");
@@ -90,14 +92,20 @@ function build_frag (frag, design) {
 	    frag.appendChild(elem);
 
 	    elem = document.createElement("div");
-	    dsl_locate[group_id] = dat;
+	    ELEM_META[group_id] = meta;
 
 	    elem.setAttribute("class", "list-group");
 	    elem.setAttribute("id", group_id);
+
+	    new Sortable(elem, {
+		animation: 150,
+		ghostClass: "blue-background-class",
+	    });
+
 	    frag.appendChild(elem);
 
 	    callback = `list_del('${group_id}', 0)`;
-	    dsl_stack.push(callback);
+	    CALLBACK_QUEUE.push(callback);
 	    break;
 
 	default:
@@ -108,6 +116,8 @@ function build_frag (frag, design) {
     return frag;
 };
 
+
+// list add/delete handling
 
 function list_add (group_id) {
     const list_group = document.getElementById(group_id);
@@ -122,20 +132,28 @@ function list_add (group_id) {
     };
 
     // append another element
-    const dat = dsl_locate[group_id];
+    const meta = ELEM_META[group_id];
     const item_id = self.crypto.randomUUID();
 
     var elem = document.createElement("div");
     elem.setAttribute("class", "row list-group-item");
+    elem.setAttribute("draggable", true);
 
     var input = document.createElement("input");
-    dsl_locate[item_id] = dat;
+    ELEM_META[item_id] = meta;
 
     input.setAttribute("class", "form-control url-field");
     input.setAttribute("id", item_id);
-    input.setAttribute("type", dat["type"]);
-    input.setAttribute("placeholder", dat["placeholder"]);
+    input.setAttribute("type", meta["type"]);
+    input.setAttribute("placeholder", meta["placeholder"]);
+    input.setAttribute("required", true);
     input.setAttribute("style", "display: inline-block; width: 93%;");
+
+    if (meta["type"] === "url") {
+	// const URL_PATTERN = new RegExp('(?:http[s]?:\\\/\\\/.)?(?:www\\.)?[-a-zA-Z0-9@%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b(?:[-a-zA-Z0-9@:%_\\+.~#?&\\\/\\\/=]*)', 'gm')
+	// "^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-]*)*$";
+	// input.setAttribute("pattern", URL_PATTERN);
+    };
 
     var button = document.createElement("button");
     button.setAttribute("class", "btn btn-light btn-sm float-end");
@@ -163,10 +181,10 @@ function list_del (group_id, item_id) {
 	elem.setAttribute("class", "list-group-item disabled");
 	elem.setAttribute("href", "#");
 
-	var sub = document.createElement("em");
-	sub.appendChild(document.createTextNode("(empty)"));
+	var empty = document.createElement("em");
+	empty.appendChild(document.createTextNode("(empty)"));
 
-	elem.appendChild(sub);
+	elem.appendChild(empty);
 	list_group.appendChild(elem);
     }
     else if (item_id != 0){
@@ -177,16 +195,65 @@ function list_del (group_id, item_id) {
 };
 
 
-// encode the current editor content into DSL
+// encode the current editor content into the DSL language
 
-function encode_dsl () {
-    var base = document.querySelectorAll("input");
+function encode_statement (elem, code, line) {
+    const num_lines = code.split(/\r\n|\r|\n/).length;
 
-    for (var i = 0; i < base.length; i++) {
-	var elem = base[i];
-	var code = `${dsl_locate[elem.id].grammar} ${elem.value};`;
-	console.log(code);
+    // track HTML element vs. Bwyd script line number, for debugging
+    var debug = {
+	elem_id: elem.id,
+	code: code,
+	min_line: line,
+	max_line: line + num_lines - 1,
     };
+
+    console.log(debug);
+    BWYD_DEBUG.push(debug);
+
+    return line + num_lines;
+};
+
+
+function encode_dom () {
+    var script = [];
+    var line = 1;
+
+    // top-level inputs for the module
+    var input_list = document.querySelectorAll("#editor-inputs > input");
+
+    for (var i = 0; i < input_list.length; i++) {
+	var elem = input_list[i];
+	var verb = ELEM_META[elem.id].grammar;
+	var code = `${verb} ${elem.value};`;
+	line = encode_statement(elem, code, line);
+	script.push(code);
+    };
+
+    // encode the CITE list
+    input_list = document.querySelectorAll("#cite-list > .list-group-item > input");
+
+    for (var i = 0; i < input_list.length; i++) {
+	var elem = input_list[i];
+	var verb = ELEM_META["cite-list"].grammar;
+	var code = `${verb} ${elem.value};`;
+	line = encode_statement(elem, code, line);
+	script.push(code);
+    };
+
+    // encode the POST list
+    input_list = document.querySelectorAll("#post-list > .list-group-item > input");
+
+    for (var i = 0; i < input_list.length; i++) {
+	var elem = input_list[i];
+	var verb = ELEM_META["post-list"].grammar;
+	var code = `${verb} ${elem.value};`;
+	line = encode_statement(elem, code, line);
+	script.push(code);
+    };
+
+    // update the <textarea/> display
+    document.getElementById("bwyd-script").value = script.join("\n");
 };
 
 
@@ -194,18 +261,18 @@ function encode_dsl () {
 
 window.addEventListener("load", function() {
     // build the default editor
-    for (var i = 0; i < dsl_design.length; i++) {
+    for (var i = 0; i < DESIGN_META.length; i++) {
 	document.getElementById("editor-inputs").appendChild(
 	    build_frag(
 		document.createDocumentFragment(),
-		dsl_design[i],
+		DESIGN_META[i],
 	    )
 	);
     };
 
     // clean-up at end
-    while (dsl_stack.length > 0) {
-	const callback = dsl_stack.pop();
+    while (CALLBACK_QUEUE.length > 0) {
+	const callback = CALLBACK_QUEUE.pop();
 	eval(callback);
     };
 });
