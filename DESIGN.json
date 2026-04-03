@@ -35,7 +35,7 @@
                 "type": [
                     {
                         "field": {
-                            "name": "TITLE",
+                            "name": "NAME",
                             "type": "text",
                             "count": "one"
                         }
@@ -112,7 +112,7 @@
                                             "HEAT",
                                             "CHILL",
                                             "BAKE",
-                                            "YIELD"
+                                            "NOTE"
                                         ]
                                     }
                                 }

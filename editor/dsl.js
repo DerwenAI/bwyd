@@ -1,56 +1,67 @@
-const BWYD_DEBUG = [];
-const CALLBACK_QUEUE = [];
-
-const ELEM_META = {};
+var BWYD_DEBUG = [];
+var CALLBACK_QUEUE = [];
+var ELEM_META = {};
 
 const DESIGN_META = [
     {
         "field": {
+            "count": "one",
+	    "id": "module-title",
+	    "label": "Title",
+	    "placeholder": "My Recipe",
             "grammar": "TITLE",
             "type": "text",
-            "count": "one",
-	    "label": "Title",
-	    "id": "module-title",
-	    "placeholder": "My Recipe",
         }
     },
     {
         "field": {
+            "count": "one",
+	    "id": "module-text",
+	    "label": "Text",
+	    "placeholder": "Text Description",
             "grammar": "TEXT",
             "type": "text",
-            "count": "one",
-	    "label": "Text",
-	    "id": "module-text",
-	    "placeholder": "Text Description",
 	}
     },
     {
         "list": {
+            "count": "zero-many",
+	    "id": "cite-list",
+	    "label": "Sources",
+	    "placeholder": "Source URL",
             "grammar": "CITE",
             "type": "url",
-            "count": "zero-many",
-	    "label": "Sources",
-	    "id": "cite-list",
-	    "placeholder": "Source URL",
         }
     },
     {
         "list": {
+            "count": "zero-many",
+	    "id": "post-list",
+	    "label": "Gallery",
+	    "placeholder": "Gallery URL",
             "grammar": "POST",
             "type": "url",
-            "count": "zero-many",
-	    "label": "Gallery",
-	    "id": "post-list",
-	    "placeholder": "Gallery URL",
+        }
+    },
+    {
+        "list": {
+            "count": "one-many",
+	    "id": "closure-list",
+	    "label": "Closure",
+	    "placeholder": "Text Description",
+            "grammar": "CLOSURE",
+            "type": "text",
         }
     },
 ]
 
 
-function build_frag (frag, design) {
+// design-build -- from both file and user
+
+function build_frag (frag, design_meta) {
     var elem = null;
 
-    for (const [kind, meta] of Object.entries(design)) {
+    for (const [kind, meta] of Object.entries(design_meta)) {
 	switch (kind) {
 	case "field":
 	    elem = document.createElement("label");
@@ -117,7 +128,7 @@ function build_frag (frag, design) {
 };
 
 
-// list add/delete handling
+// list handling
 
 function list_add (group_id) {
     const list_group = document.getElementById(group_id);
@@ -139,20 +150,32 @@ function list_add (group_id) {
     elem.setAttribute("class", "row list-group-item");
     elem.setAttribute("draggable", true);
 
-    var input = document.createElement("input");
+    var is_structured = false;
     ELEM_META[item_id] = meta;
 
-    input.setAttribute("class", "form-control url-field");
-    input.setAttribute("id", item_id);
-    input.setAttribute("type", meta["type"]);
-    input.setAttribute("placeholder", meta["placeholder"]);
-    input.setAttribute("required", true);
-    input.setAttribute("style", "display: inline-block; width: 93%;");
+    if (["text", "url"].includes(meta["type"])) {
+	var input = document.createElement("input");
+	input.setAttribute("class", "form-control url-field");
+	input.setAttribute("id", item_id);
+	input.setAttribute("type", meta["type"]);
+	input.setAttribute("placeholder", meta["placeholder"]);
+	input.setAttribute("required", true);
+	input.setAttribute("style", "display: inline-block; width: 93%;");
 
-    if (meta["type"] === "url") {
-	// const URL_PATTERN = new RegExp('(?:http[s]?:\\\/\\\/.)?(?:www\\.)?[-a-zA-Z0-9@%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b(?:[-a-zA-Z0-9@:%_\\+.~#?&\\\/\\\/=]*)', 'gm')
-	// "^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-]*)*$";
-	// input.setAttribute("pattern", URL_PATTERN);
+	// can we use URL pattern validation?
+	if (meta["type"] === "url") {
+	    // "^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-]*)*$";
+	    // input.setAttribute("pattern", URL_PATTERN);
+	};
+
+	elem.appendChild(input);
+    } else {
+	is_structured = true;
+
+	// recursion to handle structured/compound types,
+	// this gets interesting
+
+	//build_frag(elem, meta["type"]);
     };
 
     var button = document.createElement("button");
@@ -166,9 +189,7 @@ function list_add (group_id) {
     var callback = `list_del('${group_id}', '${item_id}')`;
     button.setAttribute("onclick", callback);
 
-    elem.appendChild(input);
     elem.appendChild(button);
-
     list_group.appendChild(elem);
 };
 
@@ -215,9 +236,10 @@ function encode_statement (elem, code, line) {
 };
 
 
-function encode_dom () {
+function encode_module () {
     var script = [];
     var line = 1;
+    BWYD_DEBUG = [];
 
     // top-level inputs for the module
     var input_list = document.querySelectorAll("#editor-inputs > input");
@@ -225,7 +247,7 @@ function encode_dom () {
     for (var i = 0; i < input_list.length; i++) {
 	var elem = input_list[i];
 	var verb = ELEM_META[elem.id].grammar;
-	var code = `${verb} ${elem.value};`;
+	var code = `${verb} "${elem.value}"`;
 	line = encode_statement(elem, code, line);
 	script.push(code);
     };
@@ -236,7 +258,7 @@ function encode_dom () {
     for (var i = 0; i < input_list.length; i++) {
 	var elem = input_list[i];
 	var verb = ELEM_META["cite-list"].grammar;
-	var code = `${verb} ${elem.value};`;
+	var code = `${verb} "${elem.value}"`;
 	line = encode_statement(elem, code, line);
 	script.push(code);
     };
@@ -247,12 +269,23 @@ function encode_dom () {
     for (var i = 0; i < input_list.length; i++) {
 	var elem = input_list[i];
 	var verb = ELEM_META["post-list"].grammar;
-	var code = `${verb} ${elem.value};`;
+	var code = `${verb} "${elem.value}"`;
 	line = encode_statement(elem, code, line);
 	script.push(code);
     };
 
-    // update the <textarea/> display
+    // encode the CLOSURE list
+    input_list = document.querySelectorAll("#closure-list > .list-group-item > input");
+
+    for (var i = 0; i < input_list.length; i++) {
+	var elem = input_list[i];
+	var verb = ELEM_META["closure-list"].grammar;
+	var code = `${verb} "${elem.value}"`;
+	line = encode_statement(elem, code, line);
+	script.push(code);
+    };
+
+    // update the <textarea/> script display
     document.getElementById("bwyd-script").value = script.join("\n");
 };
 
