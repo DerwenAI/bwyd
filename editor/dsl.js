@@ -47,18 +47,30 @@ const DESIGN_META = [
         "list": {
             "count": "one-many",
 	    "id": "closure-list",
-	    "label": "Closure",
+	    "label": "Closures",
 	    "placeholder": "Text Description",
             "grammar": "CLOSURE",
-            "type": "text",
-        }
+            "type": [
+		{
+		    "field": {
+			"count": "one",
+			"id": "closure-name-",
+			"label": "Name",
+			"placeholder": "Closure Name",
+			"grammar": "NAME",
+			"type": "text",
+		    },
+		},
+	    ],
+        },
     },
 ]
 
 
-// design-build -- from both file and user
+// build from the given design metadata fragment,
+// driven by both file and user
 
-function build_frag (frag, design_meta) {
+function design_build (frag, design_meta) {
     var elem = null;
 
     for (const [kind, meta] of Object.entries(design_meta)) {
@@ -170,12 +182,19 @@ function list_add (group_id) {
 
 	elem.appendChild(input);
     } else {
-	is_structured = true;
-
 	// recursion to handle structured/compound types,
 	// this gets interesting
 
-	//build_frag(elem, meta["type"]);
+	is_structured = true;
+
+	meta["type"].forEach(function(struct_meta) {
+	    elem.appendChild(
+		design_build(
+		    document.createDocumentFragment(),
+		    struct_meta,
+		)
+	    );
+	});
     };
 
     var button = document.createElement("button");
@@ -186,11 +205,17 @@ function list_add (group_id) {
     icon.setAttribute("class", "bi bi-x");
     button.appendChild(icon);
 
+    elem.appendChild(button);
+    list_group.appendChild(elem);
+
     var callback = `list_del('${group_id}', '${item_id}')`;
     button.setAttribute("onclick", callback);
 
-    elem.appendChild(button);
-    list_group.appendChild(elem);
+    // for structured types, be sure to set the generated ID
+    if (is_structured) {
+	var first_input = document.querySelector(`#${group_id} > .list-group-item > input:first-of-type`);
+	first_input.setAttribute("id", item_id);
+    };
 };
 
 
@@ -295,11 +320,10 @@ function encode_module () {
 window.addEventListener("load", function() {
     // build the default editor
     for (var i = 0; i < DESIGN_META.length; i++) {
+	var frag = document.createDocumentFragment();
+
 	document.getElementById("editor-inputs").appendChild(
-	    build_frag(
-		document.createDocumentFragment(),
-		DESIGN_META[i],
-	    )
+	    design_build(frag, DESIGN_META[i])
 	);
     };
 
