@@ -9,7 +9,7 @@ const DESIGN_META = [
 	    "id": "module-title",
 	    "label": "Title",
 	    "placeholder": "Recipe name",
-            "grammar": "TITLE",
+            "verb": "TITLE",
             "type": "text",
         }
     },
@@ -19,7 +19,7 @@ const DESIGN_META = [
 	    "id": "module-text",
 	    "label": "Text",
 	    "placeholder": "Text description",
-            "grammar": "TEXT",
+            "verb": "TEXT",
             "type": "text",
 	}
     },
@@ -29,7 +29,7 @@ const DESIGN_META = [
 	    "id": "cite-list",
 	    "label": "Sources",
 	    "placeholder": "Source URL",
-            "grammar": "CITE",
+            "verb": "CITE",
             "type": "url",
         }
     },
@@ -39,7 +39,7 @@ const DESIGN_META = [
 	    "id": "post-list",
 	    "label": "Gallery",
 	    "placeholder": "Gallery URL",
-            "grammar": "POST",
+            "verb": "POST",
             "type": "url",
         }
     },
@@ -49,7 +49,7 @@ const DESIGN_META = [
 	    "id": "closure-list",
 	    "label": "Closures",
 	    "placeholder": "Text description",
-            "grammar": "CLOSURE",
+            "verb": "CLOSURE",
             "type": [
 		{
 		    "field": {
@@ -57,7 +57,7 @@ const DESIGN_META = [
 			"id": "closure-name-%",
 			"label": "Name",
 			"placeholder": "Closure name",
-			"grammar": "NAME",
+			"verb": "NAME",
 			"type": "text",
 		    },
 		},
@@ -67,7 +67,7 @@ const DESIGN_META = [
 			"id": "closure-text-%",
 			"label": "Text",
 			"placeholder": "Closure text description",
-			"grammar": "TEXT",
+			"verb": "TEXT",
 			"type": "text",
 		    },
 		},
@@ -77,8 +77,29 @@ const DESIGN_META = [
 			"id": "container-list-%",
 			"label": "Containers",
 			"placeholder": "Container symbol",
-			"grammar": "CONTAINER",
-			"type": "text",
+			"verb": "CONTAINER",
+			"type": [
+			    {
+				"field": {
+				    "count": "one",
+				    "id": "container-name-%",
+				    "label": "Name",
+				    "placeholder": "Container name",
+				    "verb": "NAME",
+				    "type": "text",
+				},
+			    },
+			    {
+				"field": {
+				    "count": "one",
+				    "id": "container-text-%",
+				    "label": "Text",
+				    "placeholder": "Container text description",
+				    "verb": "TEXT",
+				    "type": "text",
+				},
+			    },
+			],
 		    },
 		},
 	    ],
@@ -87,7 +108,7 @@ const DESIGN_META = [
 ]
 
 
-// add a UUID as a relative component to an ID
+// append a UUID as a relative component to an ID
 
 function get_rel_id (id) {
     if (id.slice(-1) === "%") {
@@ -98,16 +119,17 @@ function get_rel_id (id) {
 };
 
 
-// build from the given design metadata fragment,
-// driven by both file and user
+// build UI from the design metadata fragment,
+// driven by the context of both input files and user edits
 
-function design_build (frag, design_meta) {
+function design_build (design_meta) {
+    const frag = document.createDocumentFragment();
     var elem = null;
 
     for (const [kind, meta] of Object.entries(design_meta)) {
 	switch (kind) {
 	case "field":
-	    var item_id = get_rel_id(meta["id"]);
+	    const item_id = get_rel_id(meta["id"]);
 
 	    elem = document.createElement("label");
 	    elem.setAttribute("class", "form-label");
@@ -139,11 +161,11 @@ function design_build (frag, design_meta) {
 	    elem.appendChild(document.createTextNode(meta["label"]));
 	    frag.appendChild(elem);
 
-	    var button = document.createElement("button");
+	    const button = document.createElement("button");
 	    button.setAttribute("class", "btn btn-primary btn-sm float-end");
 	    button.setAttribute("style", "width: 2.1em;");
 
-	    var icon = document.createElement("i");
+	    const icon = document.createElement("i");
 	    icon.setAttribute("class", "bi bi-plus");
 	    button.appendChild(icon);
 
@@ -183,10 +205,10 @@ function list_add (group_id) {
 
     // remove any "empty" placeholder element
     if (list_group.children.length == 1) {
-	var first = list_group.children[0];
+	const first_item = list_group.children[0];
 
-	if (first.classList.contains("disabled")) {
-	    list_group.removeChild(first);
+	if (first_item.classList.contains("disabled")) {
+	    list_group.removeChild(first_item);
 	};
     };
 
@@ -194,14 +216,14 @@ function list_add (group_id) {
     const meta = ELEM_META[group_id];
     var item_id = self.crypto.randomUUID();
 
-    var elem = document.createElement("div");
+    const elem = document.createElement("div");
     elem.setAttribute("class", "row list-group-item");
 
     var is_structured = false;
     ELEM_META[item_id] = meta;
 
     if (["text", "url"].includes(meta["type"])) {
-	var input = document.createElement("input");
+	const input = document.createElement("input");
 	input.setAttribute("class", "form-control url-field");
 	input.setAttribute("id", item_id);
 	input.setAttribute("type", meta["type"]);
@@ -221,20 +243,16 @@ function list_add (group_id) {
 	is_structured = true;
 
 	meta["type"].forEach(function(struct_meta) {
-	    var item = design_build(
-		document.createDocumentFragment(),
-		struct_meta,
-	    );
-
+	    const item = design_build(struct_meta);
 	    elem.appendChild(item);
 	});
     };
 
-    var button = document.createElement("button");
+    const button = document.createElement("button");
     button.setAttribute("class", "btn btn-sm float-end");
     button.setAttribute("style", "width: 2.1em;");
 
-    var icon = document.createElement("i");
+    const icon = document.createElement("i");
     icon.setAttribute("class", "bi bi-x");
     button.appendChild(icon);
 
@@ -245,7 +263,8 @@ function list_add (group_id) {
     // for structured types, be sure to use the generated ID
     // NB: must follow `appendChild()` calls above, or IDs won't be in the DOM
     if (is_structured) {
-	var first_input = document.querySelector(`#${group_id} > .list-group-item > input:first-of-type`);
+	const selector = `#${group_id} > .list-group-item > input:first-of-type`;
+	const first_input = document.querySelector(selector);
 	item_id = first_input.id;
 
 	button.classList.add("btn-outline-danger");
@@ -255,10 +274,11 @@ function list_add (group_id) {
 	button.classList.add("btn-light");
     };
 
-    var callback = `list_del('${group_id}', '${item_id}')`;
+    const callback = `list_del('${group_id}', '${item_id}')`;
     button.setAttribute("onclick", callback);
 
     process_callbacks();
+    console.log(ELEM_META);
 };
 
 
@@ -266,11 +286,11 @@ function list_del (group_id, item_id) {
     const list_group = document.getElementById(group_id);
 
     if (list_group.children.length == 0) {
-	var elem = document.createElement("a");
+	const elem = document.createElement("a");
 	elem.setAttribute("class", "list-group-item disabled");
 	elem.setAttribute("href", "#");
 
-	var empty = document.createElement("em");
+	const empty = document.createElement("em");
 	empty.appendChild(document.createTextNode("(empty)"));
 
 	elem.appendChild(empty);
@@ -286,12 +306,17 @@ function list_del (group_id, item_id) {
 
 // encode the current editor content into the DSL language
 
-function encode_statement (elem, code, line) {
+function encode_statement (elem, code, line, script) {
     const num_lines = code.split(/\r\n|\r|\n/).length;
+    var elem_id = null;
+
+    if (elem != null) {
+	elem_id = elem.id;
+    };
 
     // track DOM element vs. Bwyd script line number, for debug
-    var debug = {
-	elem_id: elem.id,
+    const debug = {
+	elem_id: elem_id,
 	code: code,
 	min_line: line,
 	max_line: line + num_lines - 1,
@@ -300,98 +325,113 @@ function encode_statement (elem, code, line) {
     console.log(debug);
     BWYD_DEBUG.push(debug);
 
+    script.push(code);
+
     return line + num_lines;
 };
 
 
+function encode_dependency (elem, kind, line, script) {
+    const selector = `#${elem.id} > .list-group-item`;
+    const item_list = document.querySelectorAll(selector);
+    const verb = ELEM_META[elem.id].verb;
+
+    for (var k = 0; k < item_list.length; k++) {
+	const item = item_list[k];
+	var first_input = null;
+	var text = "";
+
+	for (var l = 0; l < item.children.length; l++) {
+	    const input = item.children[l];
+
+	    if (input.nodeName === "INPUT") {
+		if (input.id.startsWith(`${kind}-name`)) {
+		    first_input = input;
+		}
+		else if (input.id.startsWith(`${kind}-text`)) {
+		    text = input.value.trim();
+		};
+	    };
+	};
+
+	var code = `${verb} ${first_input.value.trim()}:`;
+
+	if (text.length > 0) {
+	    code = `${code} "${text}"`;
+	};
+
+	line = encode_statement(first_input, code, line, script);
+    };
+
+    return line;
+};
+
+
+function encode_list (selector, line, script) {
+    const input_list = document.querySelectorAll(selector);
+
+    for (var i = 0; i < input_list.length; i++) {
+	const elem = input_list[i];
+	const verb = ELEM_META[elem.id].verb;
+	const code = `${verb}: "${elem.value.trim()}"`;
+
+	line = encode_statement(elem, code, line, script);
+    };
+
+    return line;
+};
+
+
 function encode_module () {
-    var script = [];
+    const script = [];
     var line = 1;
+    var code = null;
     BWYD_DEBUG = [];
 
-    // top-level inputs for the module
-    var input_list = document.querySelectorAll("#editor-inputs > input");
+    // encode top-level inputs for the module
+    var selector = "#editor-inputs > input";
+    line = encode_list(selector, line, script);
 
-    for (var i = 0; i < input_list.length; i++) {
-	var elem = input_list[i];
-	var verb = ELEM_META[elem.id].grammar;
-	var code = `${verb}: "${elem.value}"`;
-	line = encode_statement(elem, code, line);
-	script.push(code);
-    };
+    selector = "#cite-list > .list-group-item > input";
+    line = encode_list(selector, line, script);
 
-    // encode the CITE list
-    input_list = document.querySelectorAll("#cite-list > .list-group-item > input");
+    selector = "#post-list > .list-group-item > input";
+    line = encode_list(selector, line, script);
 
-    for (var i = 0; i < input_list.length; i++) {
-	var elem = input_list[i];
-	var verb = ELEM_META["cite-list"].grammar;
-	var code = `${verb}: "${elem.value}"`;
-	line = encode_statement(elem, code, line);
-	script.push(code);
-    };
-
-    // encode the POST list
-    input_list = document.querySelectorAll("#post-list > .list-group-item > input");
-
-    for (var i = 0; i < input_list.length; i++) {
-	var elem = input_list[i];
-	var verb = ELEM_META["post-list"].grammar;
-	var code = `${verb}: "${elem.value}"`;
-	line = encode_statement(elem, code, line);
-	script.push(code);
-    };
-
-    // encode the CLOSURE list's compound elements
+    // encode the CLOSURE list, each of which have compound elements
     const closure_list = document.getElementById("closure-list").children;
 
     for (var i = 0; i < closure_list.length; i++) {
-	var closure = closure_list[i];
+	const closure = closure_list[i];
 	console.log("clos", closure);
 
-	var name = "";
-	var text = "";
-	var containers = [];
-	
 	for (var j = 0; j < closure.children.length; j++) {
 	    var elem = closure.children[j];
 
 	    if (elem.nodeName === "INPUT") {
 		if (elem.id.startsWith("closure-name")) {
-		    name = elem.value;
+		    code = `CLOSURE: "${elem.value.trim()}"`;
+		    line = encode_statement(elem, code, line, script);
 		}
 		else if (elem.id.startsWith("closure-text")) {
-		    text = elem.value;
+		    code = `TEXT: "${elem.value.trim()}"`;
+		    line = encode_statement(elem, code, line, script);
 		};
 	    } else if (elem.nodeName === "DIV") {
 		if (elem.id.startsWith("container-list")) {
-		    var input_list = document.querySelectorAll(`#${elem.id} > .list-group-item > input`);
-
-		    for (var k = 0; k < input_list.length; k++) {
-			containers.push(input_list[k].value);
-		    };
+		    line = encode_dependency(elem, "container", line, script);
 		};
 	    };
 	};
 
-	var lines = [""];
-	lines.push(`CLOSURE: "${name}"`);
-	lines.push(`TEXT: "${text}"`);
-
-	for (var j = 0; j < containers.length; j++) {
-	    lines.push(`CONTAINER ${containers[j]}`);
-	};
-
-	lines.push(";");
-
-	var code = lines.join("\n");
-	line = encode_statement(closure, code, line);
-	script.push(code);
+	// add a trailing separator
+	line = encode_statement(null, ";", line, script);
     };
 
-    // update the <textarea/> script display
+    // debug: update the <textarea/> script display
     document.getElementById("bwyd-script").value = script.join("\n");
-    // TODO: send update to server for validation
+
+    // TODO: roundtrip with server for parsing and validation
 };
 
 
@@ -411,10 +451,8 @@ function process_callbacks () {
 window.addEventListener("load", function() {
     // build the default editor
     for (var i = 0; i < DESIGN_META.length; i++) {
-	var frag = document.createDocumentFragment();
-
 	document.getElementById("editor-inputs").appendChild(
-	    design_build(frag, DESIGN_META[i])
+	    design_build(DESIGN_META[i])
 	);
     };
 
