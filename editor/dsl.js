@@ -18,7 +18,7 @@ const DESIGN_META = [
             "count": "one",
 	    "id": "module-text",
 	    "label": "Text",
-	    "placeholder": "Text description",
+	    "placeholder": "Recipe description",
             "verb": "TEXT",
             "type": "text",
 	}
@@ -28,7 +28,7 @@ const DESIGN_META = [
             "count": "zero-many",
 	    "id": "cite-list",
 	    "label": "Sources",
-	    "placeholder": "Source URL",
+	    "placeholder": "Source link",
             "verb": "CITE",
             "type": "url",
         }
@@ -38,7 +38,7 @@ const DESIGN_META = [
             "count": "zero-many",
 	    "id": "post-list",
 	    "label": "Gallery",
-	    "placeholder": "Gallery URL",
+	    "placeholder": "Gallery link",
             "verb": "POST",
             "type": "url",
         }
@@ -48,7 +48,6 @@ const DESIGN_META = [
             "count": "one-many",
 	    "id": "closure-list",
 	    "label": "Closures",
-	    "placeholder": "Text description",
             "verb": "CLOSURE",
             "type": [
 		{
@@ -66,7 +65,7 @@ const DESIGN_META = [
 			"count": "one",
 			"id": "closure-text-%",
 			"label": "Text",
-			"placeholder": "Closure text description",
+			"placeholder": "Closure description",
 			"verb": "TEXT",
 			"type": "text",
 		    },
@@ -76,7 +75,6 @@ const DESIGN_META = [
 			"count": "one-many",
 			"id": "container-list-%",
 			"label": "Containers",
-			"placeholder": "Container symbol",
 			"verb": "CONTAINER",
 			"type": [
 			    {
@@ -94,7 +92,97 @@ const DESIGN_META = [
 				    "count": "one",
 				    "id": "container-text-%",
 				    "label": "Text",
-				    "placeholder": "Container text description",
+				    "placeholder": "Container description",
+				    "verb": "TEXT",
+				    "type": "text",
+				},
+			    },
+			],
+		    },
+		},
+		{
+		    "list": {
+			"count": "one-many",
+			"id": "tool-list-%",
+			"label": "Tools",
+			"verb": "TOOL",
+			"type": [
+			    {
+				"field": {
+				    "count": "one",
+				    "id": "tool-name-%",
+				    "label": "Name",
+				    "placeholder": "Tool name",
+				    "verb": "NAME",
+				    "type": "text",
+				},
+			    },
+			    {
+				"field": {
+				    "count": "one",
+				    "id": "tool-text-%",
+				    "label": "Text",
+				    "placeholder": "Tool description",
+				    "verb": "TEXT",
+				    "type": "text",
+				},
+			    },
+			],
+		    },
+		},
+		{
+		    "list": {
+			"count": "one-many",
+			"id": "ingredient-list-%",
+			"label": "Ingredients",
+			"verb": "INGREDIENT",
+			"type": [
+			    {
+				"field": {
+				    "count": "one",
+				    "id": "ingredient-name-%",
+				    "label": "Name",
+				    "placeholder": "Ingredient name",
+				    "verb": "NAME",
+				    "type": "text",
+				},
+			    },
+			    {
+				"field": {
+				    "count": "one",
+				    "id": "ingredient-text-%",
+				    "label": "Text",
+				    "placeholder": "Ingredient description",
+				    "verb": "TEXT",
+				    "type": "text",
+				},
+			    },
+			],
+		    },
+		},
+		{
+		    "list": {
+			"count": "one-many",
+			"id": "use-list-%",
+			"label": "Uses",
+			"verb": "USE",
+			"type": [
+			    {
+				"field": {
+				    "count": "one",
+				    "id": "use-name-%",
+				    "label": "Name",
+				    "placeholder": "Use name",
+				    "verb": "NAME",
+				    "type": "text",
+				},
+			    },
+			    {
+				"field": {
+				    "count": "one",
+				    "id": "use-text-%",
+				    "label": "Text",
+				    "placeholder": "Use description",
 				    "verb": "TEXT",
 				    "type": "text",
 				},
@@ -238,7 +326,8 @@ function list_add (group_id) {
 	};
 
 	elem.appendChild(input);
-    } else {
+    }
+    else {
 	// recursion to handle structured/compound types
 	is_structured = true;
 
@@ -270,7 +359,8 @@ function list_add (group_id) {
 	button.classList.add("btn-outline-danger");
 	elem.removeChild(button);
 	elem.prepend(button);
-    } else {
+    }
+    else {
 	button.classList.add("btn-light");
     };
 
@@ -417,9 +507,19 @@ function encode_module () {
 		    code = `TEXT: "${elem.value.trim()}"`;
 		    line = encode_statement(elem, code, line, script);
 		};
-	    } else if (elem.nodeName === "DIV") {
+	    }
+	    else if (elem.nodeName === "DIV") {
 		if (elem.id.startsWith("container-list")) {
 		    line = encode_dependency(elem, "container", line, script);
+		}
+		else if (elem.id.startsWith("tool-list")) {
+		    line = encode_dependency(elem, "tool", line, script);
+		}
+		else if (elem.id.startsWith("ingredient-list")) {
+		    line = encode_dependency(elem, "ingredient", line, script);
+		}
+		else if (elem.id.startsWith("use-list")) {
+		    line = encode_dependency(elem, "use", line, script);
 		};
 	    };
 	};

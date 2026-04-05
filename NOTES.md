@@ -7,9 +7,10 @@
     - RDF semantics
     - network diagram for Activities
 
-  * refactor YIELD(+STORE) into ACTIVITY
-    + ADD/TRANSFER as initial operation
+  * refactor ACTIVITY
     + bookend with EMPTY and CLEAN events for each Container/Tool
+    + ADD/TRANSFER as initial operation
+    + move YIELD(+STORE) to end of ACTION
 
   * integrate _material procurement_ schedules, material lead times, and inventory as task constraints in planning
 
@@ -36,15 +37,16 @@ Module (a named recipe)
  - 1+ Closures (functional, multi-use components)
    - 0+ Supers
    - 0+ Keywords
-   - 1+ Activities (milestones)
+   - 1+ Activities (timeline => milestone)
      - bookend EMPTY/CLEAN events for each Container/Tool
      - 0+ Appliances
      - 0+ Containers
      - 0+ Tools
      - 1+ Inputs (e.g., Ingredients, or Yields from other Closures)
      - 1+ Operations
-     - 1+ Yields
-       - 0+ Storage
+       - 1+ Yields
+         - 0+ Storage
+     - 1 Ratio
 
 Equipment Inventory
   - Appliances
