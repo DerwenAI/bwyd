@@ -36,15 +36,10 @@ Closure:
     depend+=Dependency
     activities+=Activity
     ratio=Ratio?
-  prods+=Yield
   ";"
 ;
 
 IDList: ids+=ID[","];
-
-Yield:
-"YIELDS" symbol=ID measure=Measure (intermediate="INTERMEDIATE")?
-;
 
 Dependency:
   Container | Tool | Ingredient | Use
@@ -68,15 +63,16 @@ Use:
 
 Activity:
   "ACTIVITY" symbol=ID ":" text=STRING
+   input+=Input
    ops+=Op
 ;
 
 Op:
-  Note | Add | Transfer | Action | Wait | Store | Heat | Chill | Bake
+  Transform | Heat | Chill | Bake | Note
 ;
 
-Note:
-  "NOTE:" text=STRING
+Input:
+  Add | Transfer
 ;
 
 Add:
@@ -85,6 +81,11 @@ Add:
 
 Transfer:
   "TRANSFER" symbol=ID
+;
+
+Transform:
+  Action | Wait
+  (prods+=Yields)?
 ;
 
 Action:
@@ -99,8 +100,13 @@ Wait:
     "TIME" duration=Duration
 ;
 
+Yields:
+  "YIELDS" symbol=ID measure=Measure (intermediate="INTERMEDIATE")?
+  (store=Store)?
+;
+
 Store:
-  "STORE" symbol=ID (":" modifier=STRING)?
+  "STORE" (":" modifier=STRING)?
      "UPTO" duration=Duration
 ;
 
@@ -157,6 +163,10 @@ Ratio:
 
 RatioPart:
     symbol=ID ('[' components+=ID[','] ']')?
+;
+
+Note:
+  "NOTE:" text=STRING
 ;
 
 Comment:

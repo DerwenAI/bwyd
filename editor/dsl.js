@@ -190,6 +190,38 @@ const DESIGN_META = [
 			],
 		    },
 		},
+		{
+		    "list": {
+			"count": "one-many",
+			"id": "activity-list-%",
+			"label": "Activities",
+			"verb": "ACTIVITY",
+			"type": [
+			    {
+				"list": {
+				    "count": "one-many",
+				    "id": "input-list-%",
+				    "label": "Inputs",
+				    "verb": "INPUT",
+				    "type": [
+					{
+					    "select": {
+						"count": "one",
+						"id": "input-%",
+						"type": {
+						    "transfer": {
+						    },
+						    "add": {
+						    },
+						},
+					    },
+					},
+				    ],
+				},
+			    },
+			],
+		    },
+		},
 	    ],
         },
     },
@@ -212,14 +244,12 @@ function get_rel_id (id) {
 
 function design_build (design_meta) {
     const frag = document.createDocumentFragment();
-    var elem = null;
 
     for (const [kind, meta] of Object.entries(design_meta)) {
 	switch (kind) {
 	case "field":
-	    const item_id = get_rel_id(meta["id"]);
-
-	    elem = document.createElement("label");
+	    var item_id = get_rel_id(meta["id"]);
+	    var elem = document.createElement("label");
 	    elem.setAttribute("class", "form-label");
 	    elem.setAttribute("for", item_id);
 	    elem.appendChild(document.createTextNode(meta["label"]));
@@ -236,10 +266,8 @@ function design_build (design_meta) {
 	    break;
 
 	case "list":
-	    const group_id = get_rel_id(meta["id"]);
-	    var callback = `list_add('${group_id}')`;
-
-	    elem = document.createElement("br");
+	    var group_id = get_rel_id(meta["id"]);
+	    var elem = document.createElement("br");
 	    frag.appendChild(elem);
 
 	    elem = document.createElement("label");
@@ -249,36 +277,67 @@ function design_build (design_meta) {
 	    elem.appendChild(document.createTextNode(meta["label"]));
 	    frag.appendChild(elem);
 
-	    const button = document.createElement("button");
-	    button.setAttribute("class", "btn btn-primary btn-sm float-end");
-	    button.setAttribute("style", "width: 2.1em;");
-
-	    const icon = document.createElement("i");
-	    icon.setAttribute("class", "bi bi-plus");
-	    button.appendChild(icon);
-
-	    button.setAttribute("onclick", callback);
-	    frag.appendChild(button);
-
-	    elem = document.createElement("div");
+	    var list_group = document.createElement("div");
 	    ELEM_META[group_id] = meta;
 
-	    elem.setAttribute("class", "list-group");
-	    elem.setAttribute("id", group_id);
+	    list_group.setAttribute("class", "list-group");
+	    list_group.setAttribute("id", group_id);
+	    frag.appendChild(list_group);
 
-	    new Sortable(elem, {
+	    new Sortable(list_group, {
 		animation: 150,
 		ghostClass: "blue-background-class",
 	    });
 
-	    frag.appendChild(elem);
+	    // add a "caboose" button
+	    elem = document.createElement("div");
+	    elem.setAttribute("id", get_rel_id("caboose-%"));
+	    elem.setAttribute("class", "list-group-item");
 
-	    callback = `list_del("${group_id}", 0)`;
-	    CALLBACK_QUEUE.push(callback);
+	    var button = document.createElement("button");
+	    button.setAttribute("class", "btn btn-outline-primary btn-sm");
+	    button.setAttribute("style", "width: 2.1em; display: inline;");
+
+	    var callback = `list_add('${group_id}')`;
+	    button.setAttribute("onclick", callback);
+
+	    var icon = document.createElement("i");
+	    icon.setAttribute("class", "bi bi-plus");
+	    button.appendChild(icon);
+	    elem.appendChild(button);
+
+	    var para = document.createElement("span");
+	    var text = `add new ${meta["label"].toLowerCase()}`;
+	    para.appendChild(document.createTextNode(text));
+	    para.setAttribute("style", "font-size: .75em; font-style: oblique; color: #aaa; margin-left: 1em;");
+
+	    elem.appendChild(para);
+	    list_group.appendChild(elem);
+	    break;
+
+	case "select":
+	    var item_id = get_rel_id(meta["id"]);
+	    elem = document.createElement("select");
+	    elem.setAttribute("class", "form-control");
+	    elem.setAttribute("id", item_id);
+	    elem.setAttribute("style", "display: inline-block; width: 93%;");
+
+	    // TODO: needs callback to reconfigure structure
+
+	    for (const [key, value] of Object.entries(meta["type"])) {
+		var option = document.createElement("option");
+		option.setAttribute("value", key);
+		option.appendChild(document.createTextNode(key));
+		elem.appendChild(option);
+	    };
+
+	    ELEM_META[item_id] = meta;
+	    frag.appendChild(elem);
 	    break;
 
 	default:
-	    break;
+	    console.log("UNKNOWN DESIGN:", kind, meta);
+	    break
 	};
     };
 
@@ -291,16 +350,7 @@ function design_build (design_meta) {
 function list_add (group_id) {
     const list_group = document.getElementById(group_id);
 
-    // remove any "empty" placeholder element
-    if (list_group.children.length == 1) {
-	const first_item = list_group.children[0];
-
-	if (first_item.classList.contains("disabled")) {
-	    list_group.removeChild(first_item);
-	};
-    };
-
-    // append another element
+    // build a new item to insert
     const meta = ELEM_META[group_id];
     var item_id = self.crypto.randomUUID();
 
@@ -328,7 +378,7 @@ function list_add (group_id) {
 	elem.appendChild(input);
     }
     else {
-	// recursion to handle structured/compound types
+	// recursion handles structured/compound types
 	is_structured = true;
 
 	meta["type"].forEach(function(struct_meta) {
@@ -347,18 +397,27 @@ function list_add (group_id) {
 
     elem.setAttribute("draggable", true);
     elem.appendChild(button);
-    list_group.appendChild(elem);
 
-    // for structured types, be sure to use the generated ID
-    // NB: must follow `appendChild()` calls above, or IDs won't be in the DOM
+    // insert item just before the "caboose" at the end
+    list_group.insertBefore(elem, list_group.lastElementChild);
+
+    // for structured types, be sure to use the generated ID from
+    // the first child which has class "form-control"
+    // NB: must follow `insertBefore` above, or IDs won't be in the DOM
     if (is_structured) {
-	const selector = `#${group_id} > .list-group-item > input:first-of-type`;
-	const first_input = document.querySelector(selector);
-	item_id = first_input.id;
+	const built_elem = list_group.lastChild.previousElementSibling;
+
+	for (var i = 0; i < built_elem.children.length; i++) {
+	    if (built_elem.children[i].classList.contains("form-control")) {
+		item_id = built_elem.children[i].id;
+		break;
+	    }
+	};
 
 	button.classList.add("btn-outline-danger");
-	elem.removeChild(button);
-	elem.prepend(button);
+
+	built_elem.removeChild(button);
+	built_elem.prepend(button);
     }
     else {
 	button.classList.add("btn-light");
@@ -366,30 +425,15 @@ function list_add (group_id) {
 
     const callback = `list_del('${group_id}', '${item_id}')`;
     button.setAttribute("onclick", callback);
-
-    process_callbacks();
-    console.log(ELEM_META);
 };
 
 
 function list_del (group_id, item_id) {
     const list_group = document.getElementById(group_id);
 
-    if (list_group.children.length == 0) {
-	const elem = document.createElement("a");
-	elem.setAttribute("class", "list-group-item disabled");
-	elem.setAttribute("href", "#");
-
-	const empty = document.createElement("em");
-	empty.appendChild(document.createTextNode("(empty)"));
-
-	elem.appendChild(empty);
-	list_group.appendChild(elem);
-    }
-    else if (item_id != 0){
+    if (item_id != null) {
 	const item = document.getElementById(item_id);
 	item.parentNode.remove();
-	list_del(group_id, 0);
     };
 };
 
@@ -412,9 +456,7 @@ function encode_statement (elem, code, line, script) {
 	max_line: line + num_lines - 1,
     };
 
-    console.log(debug);
     BWYD_DEBUG.push(debug);
-
     script.push(code);
 
     return line + num_lines;
@@ -434,7 +476,7 @@ function encode_dependency (elem, kind, line, script) {
 	for (var l = 0; l < item.children.length; l++) {
 	    const input = item.children[l];
 
-	    if (input.nodeName === "INPUT") {
+	    if (!input.id.startsWith("caboose-") && (input.nodeName === "INPUT")) {
 		if (input.id.startsWith(`${kind}-name`)) {
 		    first_input = input;
 		}
@@ -444,13 +486,15 @@ function encode_dependency (elem, kind, line, script) {
 	    };
 	};
 
-	var code = `${verb} ${first_input.value.trim()}:`;
+	if (first_input != null) {
+	    var code = `${verb} ${first_input.value.trim()}:`;
 
-	if (text.length > 0) {
-	    code = `${code} "${text}"`;
+	    if (text.length > 0) {
+		code = `${code} "${text}"`;
+	    };
+
+	    line = encode_statement(first_input, code, line, script);
 	};
-
-	line = encode_statement(first_input, code, line, script);
     };
 
     return line;
@@ -462,10 +506,13 @@ function encode_list (selector, line, script) {
 
     for (var i = 0; i < input_list.length; i++) {
 	const elem = input_list[i];
-	const verb = ELEM_META[elem.id].verb;
-	const code = `${verb}: "${elem.value.trim()}"`;
 
-	line = encode_statement(elem, code, line, script);
+	if (!elem.id.startsWith("caboose-")) {
+	    const verb = ELEM_META[elem.id].verb;
+	    const code = `${verb}: "${elem.value.trim()}"`;
+
+	    line = encode_statement(elem, code, line, script);
+	};
     };
 
     return line;
@@ -493,39 +540,40 @@ function encode_module () {
 
     for (var i = 0; i < closure_list.length; i++) {
 	const closure = closure_list[i];
-	console.log("clos", closure);
 
-	for (var j = 0; j < closure.children.length; j++) {
-	    var elem = closure.children[j];
+	if (!closure.id.startsWith("caboose-")) {
+	    for (var j = 0; j < closure.children.length; j++) {
+		var elem = closure.children[j];
 
-	    if (elem.nodeName === "INPUT") {
-		if (elem.id.startsWith("closure-name")) {
-		    code = `CLOSURE: "${elem.value.trim()}"`;
-		    line = encode_statement(elem, code, line, script);
+		if (elem.nodeName === "INPUT") {
+		    if (elem.id.startsWith("closure-name")) {
+			code = `CLOSURE: "${elem.value.trim()}"`;
+			line = encode_statement(elem, code, line, script);
+		    }
+		    else if (elem.id.startsWith("closure-text")) {
+			code = `TEXT: "${elem.value.trim()}"`;
+			line = encode_statement(elem, code, line, script);
+		    };
 		}
-		else if (elem.id.startsWith("closure-text")) {
-		    code = `TEXT: "${elem.value.trim()}"`;
-		    line = encode_statement(elem, code, line, script);
-		};
-	    }
-	    else if (elem.nodeName === "DIV") {
-		if (elem.id.startsWith("container-list")) {
-		    line = encode_dependency(elem, "container", line, script);
-		}
-		else if (elem.id.startsWith("tool-list")) {
-		    line = encode_dependency(elem, "tool", line, script);
-		}
-		else if (elem.id.startsWith("ingredient-list")) {
-		    line = encode_dependency(elem, "ingredient", line, script);
-		}
-		else if (elem.id.startsWith("use-list")) {
-		    line = encode_dependency(elem, "use", line, script);
+		else if (elem.nodeName === "DIV") {
+		    if (elem.id.startsWith("container-list")) {
+			line = encode_dependency(elem, "container", line, script);
+		    }
+		    else if (elem.id.startsWith("tool-list")) {
+			line = encode_dependency(elem, "tool", line, script);
+		    }
+		    else if (elem.id.startsWith("ingredient-list")) {
+			line = encode_dependency(elem, "ingredient", line, script);
+		    }
+		    else if (elem.id.startsWith("use-list")) {
+			line = encode_dependency(elem, "use", line, script);
+		    };
 		};
 	    };
-	};
 
-	// add a trailing separator
-	line = encode_statement(null, ";", line, script);
+	    // add a trailing separator
+	    line = encode_statement(null, ";", line, script);
+	};
     };
 
     // debug: update the <textarea/> script display
@@ -533,7 +581,6 @@ function encode_module () {
 
     // TODO: roundtrip with server for parsing and validation
 };
-
 
 
 // use callbacks to clean-up after creating DOM elements
