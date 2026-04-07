@@ -255,6 +255,84 @@ const DESIGN_META = [
 				    ],
 				},
 			    },
+			    {
+				"list": {
+				    "count": "one-many",
+				    "id": "operation-list-%",
+				    "label": "Ops",
+				    "verb": "OP",
+				    "type": [
+					{
+					    "select": {
+						"count": "one",
+						"id": "operation-%",
+						"type": {
+						    "action": [
+							{
+							    "field": {
+								"count": "one",
+								"id": "action-name-%",
+								"label": "Name",
+								"placeholder": "Action name",
+								"verb": "ACTION",
+								"type": "text",
+							    },
+							},
+						    ],
+						    "wait": [
+							{
+							    "field": {
+								"count": "one",
+								"id": "wait-name-%",
+								"label": "Name",
+								"placeholder": "Wait name",
+								"verb": "WAIT",
+								"type": "text",
+							    },
+							},
+						    ],
+						    "heat": [
+							{
+							    "field": {
+								"count": "one",
+								"id": "heat-name-%",
+								"label": "Name",
+								"placeholder": "Heat name",
+								"verb": "HEAT",
+								"type": "text",
+							    },
+							},
+						    ],
+						    "chill": [
+							{
+							    "field": {
+								"count": "one",
+								"id": "chill-name-%",
+								"label": "Name",
+								"placeholder": "Chill name",
+								"verb": "CHILL",
+								"type": "text",
+							    },
+							},
+						    ],
+						    "bake": [
+							{
+							    "field": {
+								"count": "one",
+								"id": "bake-name-%",
+								"label": "Name",
+								"placeholder": "Bake name",
+								"verb": "BAKE",
+								"type": "text",
+							    },
+							},
+						    ],
+						},
+					    },
+					}
+				    ],
+				},
+			    },
 			],
 		    },
 		},
