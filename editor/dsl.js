@@ -2,232 +2,6 @@ var BWYD_DEBUG = [];
 var CALLBACK_QUEUE = [];
 var ELEM_META = {};
 
-const DESIGN_META = [
-    {
-        "field": {
-            "count": "one",
-	    "id": "module-title",
-	    "label": "Title",
-	    "placeholder": "Recipe name",
-            "verb": "TITLE",
-            "type": "text",
-        }
-    },
-    {
-        "field": {
-            "count": "one",
-	    "id": "module-text",
-	    "label": "Text",
-	    "placeholder": "Recipe description",
-            "verb": "TEXT",
-            "type": "text",
-	}
-    },
-    {
-        "list": {
-            "count": "zero-many",
-	    "id": "cite-list",
-	    "label": "Sources",
-	    "placeholder": "Source link",
-            "verb": "CITE",
-            "type": "url",
-        }
-    },
-    {
-        "list": {
-            "count": "zero-many",
-	    "id": "post-list",
-	    "label": "Gallery",
-	    "placeholder": "Gallery link",
-            "verb": "POST",
-            "type": "url",
-        }
-    },
-    {
-        "list": {
-            "count": "one-many",
-	    "id": "closure-list",
-	    "label": "Closures",
-            "verb": "CLOSURE",
-            "type": [
-		{
-		    "field": {
-			"count": "one",
-			"id": "closure-name-%",
-			"label": "Name",
-			"placeholder": "Closure name",
-			"verb": "NAME",
-			"type": "text",
-		    },
-		},
-		{
-		    "field": {
-			"count": "one",
-			"id": "closure-text-%",
-			"label": "Text",
-			"placeholder": "Closure description",
-			"verb": "TEXT",
-			"type": "text",
-		    },
-		},
-		{
-		    "list": {
-			"count": "one-many",
-			"id": "container-list-%",
-			"label": "Containers",
-			"verb": "CONTAINER",
-			"type": [
-			    {
-				"field": {
-				    "count": "one",
-				    "id": "container-name-%",
-				    "label": "Name",
-				    "placeholder": "Container name",
-				    "verb": "NAME",
-				    "type": "text",
-				},
-			    },
-			    {
-				"field": {
-				    "count": "one",
-				    "id": "container-text-%",
-				    "label": "Text",
-				    "placeholder": "Container description",
-				    "verb": "TEXT",
-				    "type": "text",
-				},
-			    },
-			],
-		    },
-		},
-		{
-		    "list": {
-			"count": "one-many",
-			"id": "tool-list-%",
-			"label": "Tools",
-			"verb": "TOOL",
-			"type": [
-			    {
-				"field": {
-				    "count": "one",
-				    "id": "tool-name-%",
-				    "label": "Name",
-				    "placeholder": "Tool name",
-				    "verb": "NAME",
-				    "type": "text",
-				},
-			    },
-			    {
-				"field": {
-				    "count": "one",
-				    "id": "tool-text-%",
-				    "label": "Text",
-				    "placeholder": "Tool description",
-				    "verb": "TEXT",
-				    "type": "text",
-				},
-			    },
-			],
-		    },
-		},
-		{
-		    "list": {
-			"count": "one-many",
-			"id": "ingredient-list-%",
-			"label": "Ingredients",
-			"verb": "INGREDIENT",
-			"type": [
-			    {
-				"field": {
-				    "count": "one",
-				    "id": "ingredient-name-%",
-				    "label": "Name",
-				    "placeholder": "Ingredient name",
-				    "verb": "NAME",
-				    "type": "text",
-				},
-			    },
-			    {
-				"field": {
-				    "count": "one",
-				    "id": "ingredient-text-%",
-				    "label": "Text",
-				    "placeholder": "Ingredient description",
-				    "verb": "TEXT",
-				    "type": "text",
-				},
-			    },
-			],
-		    },
-		},
-		{
-		    "list": {
-			"count": "one-many",
-			"id": "use-list-%",
-			"label": "Uses",
-			"verb": "USE",
-			"type": [
-			    {
-				"field": {
-				    "count": "one",
-				    "id": "use-name-%",
-				    "label": "Name",
-				    "placeholder": "Use name",
-				    "verb": "NAME",
-				    "type": "text",
-				},
-			    },
-			    {
-				"field": {
-				    "count": "one",
-				    "id": "use-text-%",
-				    "label": "Text",
-				    "placeholder": "Use description",
-				    "verb": "TEXT",
-				    "type": "text",
-				},
-			    },
-			],
-		    },
-		},
-		{
-		    "list": {
-			"count": "one-many",
-			"id": "activity-list-%",
-			"label": "Activities",
-			"verb": "ACTIVITY",
-			"type": [
-			    {
-				"list": {
-				    "count": "one-many",
-				    "id": "input-list-%",
-				    "label": "Inputs",
-				    "verb": "INPUT",
-				    "type": [
-					{
-					    "select": {
-						"count": "one",
-						"id": "input-%",
-						"type": {
-						    "transfer": {
-						    },
-						    "add": {
-						    },
-						},
-					    },
-					},
-				    ],
-				},
-			    },
-			],
-		    },
-		},
-	    ],
-        },
-    },
-]
-
-
 // append a UUID as a relative component to an ID
 
 function get_rel_id (id) {
@@ -317,22 +91,35 @@ function design_build (design_meta) {
 
 	case "select":
 	    var item_id = get_rel_id(meta["id"]);
-	    elem = document.createElement("select");
-	    elem.setAttribute("class", "form-control");
-	    elem.setAttribute("id", item_id);
-	    elem.setAttribute("style", "display: inline-block; width: 93%;");
+	    var select = document.createElement("select");
+	    select.setAttribute("class", "form-control");
+	    select.setAttribute("id", item_id);
+	    select.setAttribute("style", "display: inline-block; width: 93%;");
 
-	    // TODO: needs callback to reconfigure structure
+	    var option = document.createElement("option");
+	    option.setAttribute("disabled", true);
+	    option.setAttribute("selected", true);
+	    option.setAttribute("value", null);
+
+	    var para = document.createElement("span");
+	    para.setAttribute("style", "font-style: oblique; color: #aaa;");
+	    para.appendChild(document.createTextNode("(select an option)"));
+	    option.appendChild(para);
+	    select.appendChild(option);
 
 	    for (const [key, value] of Object.entries(meta["type"])) {
-		var option = document.createElement("option");
+		option = document.createElement("option");
 		option.setAttribute("value", key);
 		option.appendChild(document.createTextNode(key));
-		elem.appendChild(option);
+		select.appendChild(option);
 	    };
 
+	    // TODO: needs callback to reconfigure structure
+	    var callback = `menu_select('${item_id}')`;
+	    select.setAttribute("onchange", callback);
+
 	    ELEM_META[item_id] = meta;
-	    frag.appendChild(elem);
+	    frag.appendChild(select);
 	    break;
 
 	default:
@@ -343,6 +130,32 @@ function design_build (design_meta) {
 
     return frag;
 };
+
+
+// menu handling
+
+function menu_select (menu_id) {
+    const menu = document.getElementById(menu_id);
+    const meta = ELEM_META[menu_id].type[menu.value];
+    const item = menu.parentElement;
+    const prev_elems = [];
+
+    // collect and remove all pre-existing structured elements:
+    // everthing which follows the <select/> and delete <button/>
+    for (var i = 2; i < item.childNodes.length; i++) {
+	prev_elems.push(item.childNodes[i]);
+    };
+
+    for (var i = 0; i < prev_elems.length; i++) {
+	item.removeChild(prev_elems[i]);
+    }
+
+    // add the new structured elements
+    meta.forEach(function(struct_meta) {
+	const elem = design_build(struct_meta);
+	item.appendChild(elem);
+    });
+}
 
 
 // list handling
@@ -401,12 +214,20 @@ function list_add (group_id) {
     // insert item just before the "caboose" at the end
     list_group.insertBefore(elem, list_group.lastElementChild);
 
+    // reset the focus to the newly built element
+    const built_elem = list_group.lastChild.previousElementSibling;
+
+    built_elem.focus({
+	focusVisible: true,
+	preventScroll: false,
+    });
+
+    built_elem.scrollIntoView();
+
     // for structured types, be sure to use the generated ID from
     // the first child which has class "form-control"
     // NB: must follow `insertBefore` above, or IDs won't be in the DOM
     if (is_structured) {
-	const built_elem = list_group.lastChild.previousElementSibling;
-
 	for (var i = 0; i < built_elem.children.length; i++) {
 	    if (built_elem.children[i].classList.contains("form-control")) {
 		item_id = built_elem.children[i].id;
@@ -423,6 +244,7 @@ function list_add (group_id) {
 	button.classList.add("btn-light");
     };
 
+    // set up the delete button
     const callback = `list_del('${group_id}', '${item_id}')`;
     button.setAttribute("onclick", callback);
 };
@@ -597,11 +419,13 @@ function process_callbacks () {
 
 window.addEventListener("load", function() {
     // build the default editor
-    for (var i = 0; i < DESIGN_META.length; i++) {
-	document.getElementById("editor-inputs").appendChild(
-	    design_build(DESIGN_META[i])
-	);
-    };
+    const item = document.getElementById("editor-inputs");
 
+    DESIGN_META.forEach(function(struct_meta) {
+	const elem = design_build(struct_meta);
+	item.appendChild(elem);
+    });
+
+    // "clean-up in post", if any
     process_callbacks();
 });
