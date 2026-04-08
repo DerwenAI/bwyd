@@ -16,7 +16,7 @@ function get_rel_id (id) {
 // build UI from the design metadata fragment,
 // driven by the context of both input files and user edits
 
-function design_build (design_meta) {
+function design_build (design_meta, depth) {
     const frag = document.createDocumentFragment();
 
     for (const [kind, meta] of Object.entries(design_meta)) {
@@ -29,7 +29,7 @@ function design_build (design_meta) {
 	    elem.appendChild(document.createTextNode(meta["label"]));
 	    frag.appendChild(elem);
 
-	    elem = document.createElement("input");
+	    elem = document.createElement("textarea");
 	    ELEM_META[item_id] = meta;
 
 	    elem.setAttribute("class", "form-control");
@@ -41,22 +41,37 @@ function design_build (design_meta) {
 
 	case "list":
 	    var group_id = get_rel_id(meta["id"]);
-	    var elem = document.createElement("br");
-	    frag.appendChild(elem);
+	    var color = Math.round((1.0 - (depth * .03)) * 100.0);
 
-	    elem = document.createElement("label");
+	    console.log(depth, color);
+
+	    var row = document.createElement("div");
+	    row.setAttribute("class", "row");
+	    row.setAttribute("style", `min-height: 8rem; width: 100%; margin-top: 2rem; margin-left: -2rem; background: hsl(0 0 ${color});`);
+	    frag.appendChild(row);
+
+	    var col = document.createElement("div");
+	    col.setAttribute("class", "col-1");
+	    col.setAttribute("style", "padding: 0;");
+	    row.appendChild(col);
+
+	    var elem = document.createElement("label");
 	    elem.setAttribute("class", "form-label");
 	    elem.setAttribute("for", group_id);
-	    elem.setAttribute("style", "display: inline-block; width: 93%;");
+	    elem.setAttribute("style", "margin-top: 1rem; rotate: 270deg; color: hsl(0, 0%, 75%); font-weight: bold; padding-left: 0;");
 	    elem.appendChild(document.createTextNode(meta["label"]));
-	    frag.appendChild(elem);
+	    col.appendChild(elem);
+
+	    col = document.createElement("div");
+	    col.setAttribute("class", "col-8");
+	    row.appendChild(col);
 
 	    var list_group = document.createElement("div");
 	    ELEM_META[group_id] = meta;
 
 	    list_group.setAttribute("class", "list-group");
 	    list_group.setAttribute("id", group_id);
-	    frag.appendChild(list_group);
+	    col.appendChild(list_group);
 
 	    new Sortable(list_group, {
 		animation: 150,
@@ -72,7 +87,7 @@ function design_build (design_meta) {
 	    button.setAttribute("class", "btn btn-outline-primary btn-sm");
 	    button.setAttribute("style", "width: 2.1em; display: inline;");
 
-	    var callback = `list_add('${group_id}')`;
+	    var callback = `list_add('${group_id}', ${depth})`;
 	    button.setAttribute("onclick", callback);
 
 	    var icon = document.createElement("i");
@@ -91,6 +106,13 @@ function design_build (design_meta) {
 
 	case "select":
 	    var item_id = get_rel_id(meta["id"]);
+
+	    if ("label" in meta) {
+		var label = document.createElement("span");
+		label.appendChild(document.createTextNode(meta["label"]));
+		frag.appendChild(label);
+	    };
+
 	    var select = document.createElement("select");
 	    select.setAttribute("class", "form-control");
 	    select.setAttribute("id", item_id);
@@ -115,7 +137,7 @@ function design_build (design_meta) {
 	    };
 
 	    // TODO: needs callback to reconfigure structure
-	    var callback = `menu_select('${item_id}')`;
+	    var callback = `menu_select('${item_id}', ${depth})`;
 	    select.setAttribute("onchange", callback);
 
 	    ELEM_META[item_id] = meta;
@@ -134,33 +156,35 @@ function design_build (design_meta) {
 
 // menu handling
 
-function menu_select (menu_id) {
+function menu_select (menu_id, depth) {
     const menu = document.getElementById(menu_id);
     const meta = ELEM_META[menu_id].type[menu.value];
     const item = menu.parentElement;
     const prev_elems = [];
 
-    // collect and remove all pre-existing structured elements:
-    // everthing which follows the <select/> and delete <button/>
-    for (var i = 2; i < item.childNodes.length; i++) {
-	prev_elems.push(item.childNodes[i]);
+    if (meta.length > 0) {
+	// collect and remove all pre-existing structured elements:
+	// everthing which follows the <select/> and delete <button/>
+	for (var i = 2; i < item.childNodes.length; i++) {
+	    prev_elems.push(item.childNodes[i]);
+	};
+
+	for (var i = 0; i < prev_elems.length; i++) {
+	    item.removeChild(prev_elems[i]);
+	}
+
+	// add the new structured elements
+	meta.forEach(function(struct_meta) {
+	    const elem = design_build(struct_meta, depth + 1);
+	    item.appendChild(elem);
+	});
     };
-
-    for (var i = 0; i < prev_elems.length; i++) {
-	item.removeChild(prev_elems[i]);
-    }
-
-    // add the new structured elements
-    meta.forEach(function(struct_meta) {
-	const elem = design_build(struct_meta);
-	item.appendChild(elem);
-    });
 }
 
 
 // list handling
 
-function list_add (group_id) {
+function list_add (group_id, depth) {
     const list_group = document.getElementById(group_id);
 
     // build a new item to insert
@@ -174,13 +198,13 @@ function list_add (group_id) {
     ELEM_META[item_id] = meta;
 
     if (["text", "url"].includes(meta["type"])) {
-	const input = document.createElement("input");
+	const input = document.createElement("textarea");
 	input.setAttribute("class", "form-control url-field");
 	input.setAttribute("id", item_id);
 	input.setAttribute("type", meta["type"]);
 	input.setAttribute("placeholder", meta["placeholder"]);
 	input.setAttribute("required", true);
-	input.setAttribute("style", "display: inline-block; width: 93%;");
+	input.setAttribute("style", "display: inline-block; width: 87%;");
 
 	// can we use URL pattern validation?
 	if (meta["type"] === "url") {
@@ -195,7 +219,7 @@ function list_add (group_id) {
 	is_structured = true;
 
 	meta["type"].forEach(function(struct_meta) {
-	    const item = design_build(struct_meta);
+	    const item = design_build(struct_meta, depth + 1);
 	    elem.appendChild(item);
 	});
     };
@@ -298,7 +322,7 @@ function encode_dependency (elem, kind, line, script) {
 	for (var l = 0; l < item.children.length; l++) {
 	    const input = item.children[l];
 
-	    if (!input.id.startsWith("caboose-") && (input.nodeName === "INPUT")) {
+	    if (!input.id.startsWith("caboose-") && (input.nodeName === "TEXTAREA")) {
 		if (input.id.startsWith(`${kind}-name`)) {
 		    first_input = input;
 		}
@@ -367,7 +391,7 @@ function encode_module () {
 	    for (var j = 0; j < closure.children.length; j++) {
 		var elem = closure.children[j];
 
-		if (elem.nodeName === "INPUT") {
+		if (elem.nodeName === "TEXTAREA") {
 		    if (elem.id.startsWith("closure-name")) {
 			code = `CLOSURE: "${elem.value.trim()}"`;
 			line = encode_statement(elem, code, line, script);
@@ -422,7 +446,7 @@ window.addEventListener("load", function() {
     const item = document.getElementById("editor-inputs");
 
     DESIGN_META.forEach(function(struct_meta) {
-	const elem = design_build(struct_meta);
+	const elem = design_build(struct_meta, 0);
 	item.appendChild(elem);
     });
 

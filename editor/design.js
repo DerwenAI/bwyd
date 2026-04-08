@@ -58,7 +58,7 @@ const DESIGN_META = [
 		},
 		{
 		    "field": {
-			"count": "one",
+			"count": "zero-one",
 			"id": "closure-text-%",
 			"label": "Text",
 			"placeholder": "Closure description",
@@ -228,7 +228,7 @@ const DESIGN_META = [
 							},
 							{
 							    "field": {
-								"count": "one",
+								"count": "zero-one",
 								"id": "add-text-%",
 								"label": "Text",
 								"placeholder": "Add description",
@@ -278,15 +278,65 @@ const DESIGN_META = [
 								"type": "text",
 							    },
 							},
+							{
+							    "field": {
+								"count": "zero-one",
+								"id": "action-text-%",
+								"label": "Description",
+								"placeholder": "Action description",
+								"verb": "TEXT",
+								"type": "text",
+							    },
+							},
+							{
+							    "field": {
+								"count": "one",
+								"id": "action-until-%",
+								"label": "Until",
+								"placeholder": "Action until",
+								"verb": "UNTIL",
+								"type": "text",
+							    },
+							},
+							{
+							    "field": {
+								"count": "one",
+								"id": "action-duration-%",
+								"label": "Duration",
+								"placeholder": "Action duration",
+								"verb": "DURATION",
+								"type": "text",
+							    },
+							},
 						    ],
 						    "wait": [
 							{
 							    "field": {
+								"count": "zero-one",
+								"id": "wait-text-%",
+								"label": "Description",
+								"placeholder": "Wait description",
+								"verb": "TEXT",
+								"type": "text",
+							    },
+							},
+							{
+							    "field": {
 								"count": "one",
-								"id": "wait-name-%",
-								"label": "Name",
-								"placeholder": "Wait name",
-								"verb": "WAIT",
+								"id": "wait-until-%",
+								"label": "Until",
+								"placeholder": "Wait until",
+								"verb": "UNTIL",
+								"type": "text",
+							    },
+							},
+							{
+							    "field": {
+								"count": "one",
+								"id": "wait-duration-%",
+								"label": "Duration",
+								"placeholder": "Wait duration",
+								"verb": "DURATION",
 								"type": "text",
 							    },
 							},
@@ -302,6 +352,36 @@ const DESIGN_META = [
 								"type": "text",
 							    },
 							},
+							{
+							    "field": {
+								"count": "zero-one",
+								"id": "heat-text-%",
+								"label": "Description",
+								"placeholder": "Heat description",
+								"verb": "TEXT",
+								"type": "text",
+							    },
+							},
+							{
+							    "field": {
+								"count": "one",
+								"id": "heat-until-%",
+								"label": "Until",
+								"placeholder": "Heat until",
+								"verb": "UNTIL",
+								"type": "text",
+							    },
+							},
+							{
+							    "field": {
+								"count": "one",
+								"id": "heat-duration-%",
+								"label": "Duration",
+								"placeholder": "Heat duration",
+								"verb": "DURATION",
+								"type": "text",
+							    },
+							},
 						    ],
 						    "chill": [
 							{
@@ -314,8 +394,51 @@ const DESIGN_META = [
 								"type": "text",
 							    },
 							},
+							{
+							    "field": {
+								"count": "zero-one",
+								"id": "chill-text-%",
+								"label": "Description",
+								"placeholder": "Chill description",
+								"verb": "TEXT",
+								"type": "text",
+							    },
+							},
+							{
+							    "field": {
+								"count": "one",
+								"id": "chill-until-%",
+								"label": "Until",
+								"placeholder": "Chill until",
+								"verb": "UNTIL",
+								"type": "text",
+							    },
+							},
+							{
+							    "field": {
+								"count": "one",
+								"id": "chill-duration-%",
+								"label": "Duration",
+								"placeholder": "Chill duration",
+								"verb": "DURATION",
+								"type": "text",
+							    },
+							},
 						    ],
 						    "bake": [
+							{
+							    "select": {
+								"count": "one",
+								"id": "bake-mode-%",
+								"label": "Oven Mode",
+								"type": {
+								    "bake": [],
+								    "toast": [],
+								    "broil": [],
+								    "roast": [],
+								},
+							    },
+							},
 							{
 							    "field": {
 								"count": "one",
@@ -323,6 +446,46 @@ const DESIGN_META = [
 								"label": "Name",
 								"placeholder": "Bake name",
 								"verb": "BAKE",
+								"type": "text",
+							    },
+							},
+							{
+							    "field": {
+								"count": "zero-one",
+								"id": "bake-text-%",
+								"label": "Description",
+								"placeholder": "Bake description",
+								"verb": "TEXT",
+								"type": "text",
+							    },
+							},
+							{
+							    "field": {
+								"count": "one",
+								"id": "bake-at-%",
+								"label": "At",
+								"placeholder": "Bake temperature",
+								"verb": "AT",
+								"type": "text",
+							    },
+							},
+							{
+							    "field": {
+								"count": "one",
+								"id": "bake-until-%",
+								"label": "Until",
+								"placeholder": "Bake until",
+								"verb": "UNTIL",
+								"type": "text",
+							    },
+							},
+							{
+							    "field": {
+								"count": "one",
+								"id": "bake-duration-%",
+								"label": "Duration",
+								"placeholder": "Bake duration",
+								"verb": "DURATION",
 								"type": "text",
 							    },
 							},
