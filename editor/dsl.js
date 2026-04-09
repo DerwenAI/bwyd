@@ -16,6 +16,21 @@ function get_rel_id (id) {
 // build UI from the design metadata fragment,
 // driven by the context of both input files and user edits
 
+function build_input (meta) {
+    var input = null;
+
+    if (["text", "symbol", "url"].includes(meta["type"])) {
+	input = document.createElement("input");
+	input.setAttribute("type", "text");
+    }
+    else if (["textarea"].includes(meta["type"])) {
+	input = document.createElement("textarea");
+    };
+
+    return input;
+};
+
+
 function design_build (design_meta, depth) {
     const frag = document.createDocumentFragment();
 
@@ -23,30 +38,28 @@ function design_build (design_meta, depth) {
 	switch (kind) {
 	case "field":
 	    var item_id = get_rel_id(meta["id"]);
-	    var elem = document.createElement("label");
-	    elem.setAttribute("class", "form-label");
-	    elem.setAttribute("for", item_id);
-	    elem.appendChild(document.createTextNode(meta["label"]));
-	    frag.appendChild(elem);
-
-	    elem = document.createElement("textarea");
 	    ELEM_META[item_id] = meta;
 
-	    elem.setAttribute("class", "form-control");
-	    elem.setAttribute("id", item_id);
-	    elem.setAttribute("type", meta["type"]);
-	    elem.setAttribute("placeholder", meta["placeholder"]);
-	    frag.appendChild(elem);
+	    var label = document.createElement("label");
+	    label.setAttribute("class", "form-label");
+	    label.setAttribute("for", item_id);
+	    label.appendChild(document.createTextNode(meta["label"]));
+	    frag.appendChild(label);
+
+	    var input = build_input(meta);
+	    input.setAttribute("class", "form-control");
+	    input.setAttribute("id", item_id);
+	    input.setAttribute("placeholder", meta["placeholder"]);
+	    frag.appendChild(input);
 	    break;
 
 	case "list":
 	    var group_id = get_rel_id(meta["id"]);
 	    var color = Math.round((1.0 - (depth * .03)) * 100.0);
 
-	    console.log(depth, color);
-
 	    var row = document.createElement("div");
 	    row.setAttribute("class", "row");
+	    row.setAttribute("id", get_rel_id("%"));
 	    row.setAttribute("style", `min-height: 8rem; width: 100%; margin-top: 2rem; margin-left: -2rem; background: hsl(0 0 ${color});`);
 	    frag.appendChild(row);
 
@@ -55,12 +68,12 @@ function design_build (design_meta, depth) {
 	    col.setAttribute("style", "padding: 0;");
 	    row.appendChild(col);
 
-	    var elem = document.createElement("label");
-	    elem.setAttribute("class", "form-label");
-	    elem.setAttribute("for", group_id);
-	    elem.setAttribute("style", "margin-top: 1rem; rotate: 270deg; color: hsl(0, 0%, 75%); font-weight: bold; padding-left: 0;");
-	    elem.appendChild(document.createTextNode(meta["label"]));
-	    col.appendChild(elem);
+	    var label = document.createElement("label");
+	    label.setAttribute("class", "form-label");
+	    label.setAttribute("for", group_id);
+	    label.setAttribute("style", "margin-top: 1rem; rotate: 270deg; color: hsl(0, 0%, 75%); font-weight: bold; padding-left: 0;");
+	    label.appendChild(document.createTextNode(meta["label"]));
+	    col.appendChild(label);
 
 	    col = document.createElement("div");
 	    col.setAttribute("class", "col-8");
@@ -79,9 +92,9 @@ function design_build (design_meta, depth) {
 	    });
 
 	    // add a "caboose" button
-	    elem = document.createElement("div");
-	    elem.setAttribute("id", get_rel_id("caboose-%"));
-	    elem.setAttribute("class", "list-group-item");
+	    var caboose = document.createElement("div");
+	    caboose.setAttribute("id", get_rel_id("caboose-%"));
+	    caboose.setAttribute("class", "list-group-item");
 
 	    var button = document.createElement("button");
 	    button.setAttribute("class", "btn btn-outline-primary btn-sm");
@@ -93,19 +106,20 @@ function design_build (design_meta, depth) {
 	    var icon = document.createElement("i");
 	    icon.setAttribute("class", "bi bi-plus");
 	    button.appendChild(icon);
-	    elem.appendChild(button);
+	    caboose.appendChild(button);
 
 	    var para = document.createElement("span");
 	    var text = `add new ${meta["label"].toLowerCase()}`;
 	    para.appendChild(document.createTextNode(text));
 	    para.setAttribute("style", "font-size: .75em; font-style: oblique; color: #aaa; margin-left: 1em;");
 
-	    elem.appendChild(para);
-	    list_group.appendChild(elem);
+	    caboose.appendChild(para);
+	    list_group.appendChild(caboose);
 	    break;
 
 	case "select":
 	    var item_id = get_rel_id(meta["id"]);
+	    ELEM_META[item_id] = meta;
 
 	    if ("label" in meta) {
 		var label = document.createElement("span");
@@ -139,8 +153,6 @@ function design_build (design_meta, depth) {
 	    // TODO: needs callback to reconfigure structure
 	    var callback = `menu_select('${item_id}', ${depth})`;
 	    select.setAttribute("onchange", callback);
-
-	    ELEM_META[item_id] = meta;
 	    frag.appendChild(select);
 	    break;
 
@@ -154,34 +166,6 @@ function design_build (design_meta, depth) {
 };
 
 
-// menu handling
-
-function menu_select (menu_id, depth) {
-    const menu = document.getElementById(menu_id);
-    const meta = ELEM_META[menu_id].type[menu.value];
-    const item = menu.parentElement;
-    const prev_elems = [];
-
-    if (meta.length > 0) {
-	// collect and remove all pre-existing structured elements:
-	// everthing which follows the <select/> and delete <button/>
-	for (var i = 2; i < item.childNodes.length; i++) {
-	    prev_elems.push(item.childNodes[i]);
-	};
-
-	for (var i = 0; i < prev_elems.length; i++) {
-	    item.removeChild(prev_elems[i]);
-	}
-
-	// add the new structured elements
-	meta.forEach(function(struct_meta) {
-	    const elem = design_build(struct_meta, depth + 1);
-	    item.appendChild(elem);
-	});
-    };
-}
-
-
 // list handling
 
 function list_add (group_id, depth) {
@@ -190,18 +174,17 @@ function list_add (group_id, depth) {
     // build a new item to insert
     const meta = ELEM_META[group_id];
     var item_id = self.crypto.randomUUID();
+    ELEM_META[item_id] = meta;
+
+    var is_structured = false;
 
     const elem = document.createElement("div");
     elem.setAttribute("class", "row list-group-item");
 
-    var is_structured = false;
-    ELEM_META[item_id] = meta;
-
-    if (["text", "url"].includes(meta["type"])) {
-	const input = document.createElement("textarea");
+    if (["text", "textarea", "symbol", "url"].includes(meta["type"])) {
+	var input = build_input(meta);
 	input.setAttribute("class", "form-control url-field");
 	input.setAttribute("id", item_id);
-	input.setAttribute("type", meta["type"]);
 	input.setAttribute("placeholder", meta["placeholder"]);
 	input.setAttribute("required", true);
 	input.setAttribute("style", "display: inline-block; width: 87%;");
@@ -284,6 +267,34 @@ function list_del (group_id, item_id) {
 };
 
 
+// menu handling
+
+function menu_select (menu_id, depth) {
+    const menu = document.getElementById(menu_id);
+    const meta = ELEM_META[menu_id].type[menu.value];
+    const item = menu.parentElement;
+    const prev_elems = [];
+
+    if (meta.length > 0) {
+	// collect and remove all pre-existing structured elements:
+	// everthing which follows the <select/> and delete <button/>
+	for (var i = 2; i < item.childNodes.length; i++) {
+	    prev_elems.push(item.childNodes[i]);
+	};
+
+	for (var i = 0; i < prev_elems.length; i++) {
+	    item.removeChild(prev_elems[i]);
+	}
+
+	// add the new structured elements
+	meta.forEach(function(struct_meta) {
+	    const elem = design_build(struct_meta, depth + 1);
+	    item.appendChild(elem);
+	});
+    };
+}
+
+
 // encode the current editor content into the DSL language
 
 function encode_statement (elem, code, line, script) {
@@ -309,10 +320,109 @@ function encode_statement (elem, code, line, script) {
 };
 
 
-function encode_dependency (elem, kind, line, script) {
-    const selector = `#${elem.id} > .list-group-item`;
-    const item_list = document.querySelectorAll(selector);
-    const verb = ELEM_META[elem.id].verb;
+function encode_inputs (list_group, line, script) {
+    for (var i = 0; i < list_group.children.length; i++) {
+	var item = list_group.children[i];
+
+	if (!item.id.startsWith("caboose-")) {
+	    var select = item.children[1];
+	    var kind = select.value;
+
+	    var first_input = null;
+	    var measure = "";
+	    var text = "";
+
+	    for (var j = 2; j < item.children.length; j++) {
+		var input = item.children[j];
+
+		if (["INPUT", "TEXTAREA"].includes(input.nodeName)) {
+		    switch (kind) {
+		    case "add":
+			if (input.id.startsWith(`${kind}-name`)) {
+			    first_input = input;
+			}
+			else if (input.id.startsWith(`${kind}-measure`)) {
+			    measure = input.value.trim();
+			}
+			else if (input.id.startsWith(`${kind}-text`)) {
+			    text = input.value.trim();
+			};
+			break;
+
+		    case "transfer":
+			if (input.id.startsWith(`${kind}-name`)) {
+			    first_input = input;
+			}
+			break;
+		    };
+		};
+	    };
+
+	    if (first_input != null) {
+		var code = null;
+
+		switch (kind) {
+		case "add":
+		    code = `ADD ${first_input.value.trim()} (${measure})`;
+
+		    if (text.length > 0) {
+			code = `${code}: "${text}"`;
+		    };
+		    break;
+		case "transfer":
+		    code = `TRANSFER ${first_input.value.trim()}`;
+		    break;
+		};
+		
+		if (code != null) {
+		    line = encode_statement(first_input, code, line, script);
+		};
+	    };
+	};
+    };
+
+    return line;
+};
+
+
+function encode_operations (list_group, line, script) {
+    return line;
+};
+
+
+function encode_activities (group_id, line, script) {
+    const act_group = document.getElementById(group_id);
+    const activity = act_group.children;
+
+    for (var i = 0; i < activity.length; i++) {
+	const stage = activity[i];
+
+	if (!stage.id.startsWith("caboose-")) {
+	    for (var j = 0; j < stage.children.length; j++) {
+		const elem = stage.children[j];
+
+		if (elem.nodeName === "DIV") {
+		    const list_group = elem.children[1].children[0];
+
+		    if (list_group.id.startsWith("input-list")) {
+			line = encode_inputs(list_group, line, script);
+		    }
+		    else if (list_group.id.startsWith("operation-list")) {
+			line = encode_operations(list_group, line, script);
+		    };
+		};
+	    };
+	};
+    };
+
+    return line;
+};
+
+
+function encode_dependency (group_id, kind, line, script) {
+    const list_group = document.getElementById(group_id);
+    const item_list = list_group.children;
+    const verb = ELEM_META[group_id].verb;
 
     for (var k = 0; k < item_list.length; k++) {
 	const item = item_list[k];
@@ -322,12 +432,14 @@ function encode_dependency (elem, kind, line, script) {
 	for (var l = 0; l < item.children.length; l++) {
 	    const input = item.children[l];
 
-	    if (!input.id.startsWith("caboose-") && (input.nodeName === "TEXTAREA")) {
-		if (input.id.startsWith(`${kind}-name`)) {
-		    first_input = input;
-		}
-		else if (input.id.startsWith(`${kind}-text`)) {
-		    text = input.value.trim();
+	    if (!input.id.startsWith("caboose-") && (input.id in ELEM_META)) {
+		if (["INPUT", "TEXTAREA"].includes(input.nodeName)) {
+		    if (input.id.startsWith(`${kind}-name`)) {
+			first_input = input;
+		    }
+		    else if (input.id.startsWith(`${kind}-text`)) {
+			text = input.value.trim();
+		    };
 		};
 	    };
 	};
@@ -348,16 +460,22 @@ function encode_dependency (elem, kind, line, script) {
 
 
 function encode_list (selector, line, script) {
-    const input_list = document.querySelectorAll(selector);
+    const item_list = document.querySelectorAll(selector);
 
-    for (var i = 0; i < input_list.length; i++) {
-	const elem = input_list[i];
+    for (var i = 0; i < item_list.length; i++) {
+	const item = item_list[i];
 
-	if (!elem.id.startsWith("caboose-")) {
-	    const verb = ELEM_META[elem.id].verb;
-	    const code = `${verb}: "${elem.value.trim()}"`;
+	for (var j = 0; j < item.children.length; j++) {
+	    const input = item.children[j];
 
-	    line = encode_statement(elem, code, line, script);
+	    if (!input.id.startsWith("caboose-") && (input.id in ELEM_META)) {
+		if (["INPUT", "TEXTAREA"].includes(input.nodeName)) {
+		    const verb = ELEM_META[input.id].verb;
+		    const code = `${verb}: "${input.value.trim()}"`;
+
+		    line = encode_statement(input, code, line, script);
+		};
+	    };
 	};
     };
 
@@ -372,13 +490,13 @@ function encode_module () {
     BWYD_DEBUG = [];
 
     // encode top-level inputs for the module
-    var selector = "#editor-inputs > input";
+    var selector = "#editor-inputs";
     line = encode_list(selector, line, script);
 
-    selector = "#cite-list > .list-group-item > input";
+    selector = "#cite-list > .list-group-item";
     line = encode_list(selector, line, script);
 
-    selector = "#post-list > .list-group-item > input";
+    selector = "#post-list > .list-group-item";
     line = encode_list(selector, line, script);
 
     // encode the CLOSURE list, each of which have compound elements
@@ -391,7 +509,7 @@ function encode_module () {
 	    for (var j = 0; j < closure.children.length; j++) {
 		var elem = closure.children[j];
 
-		if (elem.nodeName === "TEXTAREA") {
+		if (["INPUT", "TEXTAREA"].includes(elem.nodeName)) {
 		    if (elem.id.startsWith("closure-name")) {
 			code = `CLOSURE: "${elem.value.trim()}"`;
 			line = encode_statement(elem, code, line, script);
@@ -402,17 +520,22 @@ function encode_module () {
 		    };
 		}
 		else if (elem.nodeName === "DIV") {
-		    if (elem.id.startsWith("container-list")) {
-			line = encode_dependency(elem, "container", line, script);
+		    var group = elem.children[1].children[0];
+
+		    if (group.id.startsWith("container-list")) {
+			line = encode_dependency(group.id, "container", line, script);
 		    }
-		    else if (elem.id.startsWith("tool-list")) {
-			line = encode_dependency(elem, "tool", line, script);
+		    else if (group.id.startsWith("tool-list")) {
+			line = encode_dependency(group.id, "tool", line, script);
 		    }
-		    else if (elem.id.startsWith("ingredient-list")) {
-			line = encode_dependency(elem, "ingredient", line, script);
+		    else if (group.id.startsWith("ingredient-list")) {
+			line = encode_dependency(group.id, "ingredient", line, script);
 		    }
-		    else if (elem.id.startsWith("use-list")) {
-			line = encode_dependency(elem, "use", line, script);
+		    else if (group.id.startsWith("use-list")) {
+			line = encode_dependency(group.id, "use", line, script);
+		    }
+		    else if (group.id.startsWith("activity-list")) {
+			line = encode_activities(group.id, line, script);
 		    };
 		};
 	    };

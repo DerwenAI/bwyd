@@ -16,7 +16,7 @@ const DESIGN_META = [
 	    "label": "Text",
 	    "placeholder": "Recipe description",
             "verb": "TEXT",
-            "type": "text",
+            "type": "textarea",
 	}
     },
     {
@@ -33,8 +33,8 @@ const DESIGN_META = [
         "list": {
             "count": "zero-many",
 	    "id": "post-list",
-	    "label": "Gallery",
-	    "placeholder": "Gallery link",
+	    "label": "Galleries",
+	    "placeholder": "Galleries link",
             "verb": "POST",
             "type": "url",
         }
@@ -63,7 +63,7 @@ const DESIGN_META = [
 			"label": "Text",
 			"placeholder": "Closure description",
 			"verb": "TEXT",
-			"type": "text",
+			"type": "textarea",
 		    },
 		},
 		{
@@ -80,7 +80,7 @@ const DESIGN_META = [
 				    "label": "Name",
 				    "placeholder": "Container name",
 				    "verb": "NAME",
-				    "type": "text",
+				    "type": "symbol",
 				},
 			    },
 			    {
@@ -90,7 +90,7 @@ const DESIGN_META = [
 				    "label": "Text",
 				    "placeholder": "Container description",
 				    "verb": "TEXT",
-				    "type": "text",
+				    "type": "textarea",
 				},
 			    },
 			],
@@ -110,7 +110,7 @@ const DESIGN_META = [
 				    "label": "Name",
 				    "placeholder": "Tool name",
 				    "verb": "NAME",
-				    "type": "text",
+				    "type": "symbol",
 				},
 			    },
 			    {
@@ -120,7 +120,7 @@ const DESIGN_META = [
 				    "label": "Text",
 				    "placeholder": "Tool description",
 				    "verb": "TEXT",
-				    "type": "text",
+				    "type": "textarea",
 				},
 			    },
 			],
@@ -140,7 +140,7 @@ const DESIGN_META = [
 				    "label": "Name",
 				    "placeholder": "Ingredient name",
 				    "verb": "NAME",
-				    "type": "text",
+				    "type": "symbol",
 				},
 			    },
 			    {
@@ -150,7 +150,7 @@ const DESIGN_META = [
 				    "label": "Text",
 				    "placeholder": "Ingredient description",
 				    "verb": "TEXT",
-				    "type": "text",
+				    "type": "textarea",
 				},
 			    },
 			],
@@ -170,7 +170,7 @@ const DESIGN_META = [
 				    "label": "Name",
 				    "placeholder": "Use name",
 				    "verb": "NAME",
-				    "type": "text",
+				    "type": "symbol",
 				},
 			    },
 			    {
@@ -180,7 +180,7 @@ const DESIGN_META = [
 				    "label": "Text",
 				    "placeholder": "Use description",
 				    "verb": "TEXT",
-				    "type": "text",
+				    "type": "textarea",
 				},
 			    },
 			],
@@ -213,7 +213,7 @@ const DESIGN_META = [
 								"label": "Name",
 								"placeholder": "Add name",
 								"verb": "ADD",
-								"type": "text",
+								"type": "symbol",
 							    },
 							},
 							{
@@ -233,7 +233,7 @@ const DESIGN_META = [
 								"label": "Text",
 								"placeholder": "Add description",
 								"verb": "TEXT",
-								"type": "text",
+								"type": "textarea",
 							    },
 							},
 						    ],
@@ -245,7 +245,7 @@ const DESIGN_META = [
 								"label": "Name",
 								"placeholder": "Transfer name",
 								"verb": "TRANSFER",
-								"type": "text",
+								"type": "symbol",
 							    },
 							},
 						    ],
@@ -275,7 +275,7 @@ const DESIGN_META = [
 								"label": "Name",
 								"placeholder": "Action name",
 								"verb": "ACTION",
-								"type": "text",
+								"type": "symbol",
 							    },
 							},
 							{
@@ -285,7 +285,7 @@ const DESIGN_META = [
 								"label": "Description",
 								"placeholder": "Action description",
 								"verb": "TEXT",
-								"type": "text",
+								"type": "textarea",
 							    },
 							},
 							{
@@ -317,7 +317,7 @@ const DESIGN_META = [
 								"label": "Description",
 								"placeholder": "Wait description",
 								"verb": "TEXT",
-								"type": "text",
+								"type": "textarea",
 							    },
 							},
 							{
@@ -349,7 +349,7 @@ const DESIGN_META = [
 								"label": "Name",
 								"placeholder": "Heat name",
 								"verb": "HEAT",
-								"type": "text",
+								"type": "symbol",
 							    },
 							},
 							{
@@ -359,7 +359,7 @@ const DESIGN_META = [
 								"label": "Description",
 								"placeholder": "Heat description",
 								"verb": "TEXT",
-								"type": "text",
+								"type": "textarea",
 							    },
 							},
 							{
@@ -391,7 +391,7 @@ const DESIGN_META = [
 								"label": "Name",
 								"placeholder": "Chill name",
 								"verb": "CHILL",
-								"type": "text",
+								"type": "symbol",
 							    },
 							},
 							{
@@ -401,7 +401,7 @@ const DESIGN_META = [
 								"label": "Description",
 								"placeholder": "Chill description",
 								"verb": "TEXT",
-								"type": "text",
+								"type": "textarea",
 							    },
 							},
 							{
@@ -446,7 +446,7 @@ const DESIGN_META = [
 								"label": "Name",
 								"placeholder": "Bake name",
 								"verb": "BAKE",
-								"type": "text",
+								"type": "symbol",
 							    },
 							},
 							{
@@ -456,7 +456,7 @@ const DESIGN_META = [
 								"label": "Description",
 								"placeholder": "Bake description",
 								"verb": "TEXT",
-								"type": "text",
+								"type": "textarea",
 							    },
 							},
 							{
