@@ -13,6 +13,30 @@ function get_rel_id (id) {
 };
 
 
+// generators for filtering the "caboose" from item lists
+
+function* gen_items (list_group) {
+    for (var i = 0; i < list_group.children.length; i++) {
+	var item = list_group.children[i];
+
+        if (!item.id.startsWith("caboose-")) {
+	    yield item;
+	};
+    };
+};
+
+
+function* gen_inputs (item, node_names, skip) {
+    for (var i = skip; i < item.children.length; i++) {
+	var input = item.children[i];
+
+	if (node_names.includes(input.nodeName)) {
+	    yield input;
+	};
+    };
+};
+
+
 // build UI from the design metadata fragment,
 // driven by the context of both input files and user edits
 
@@ -321,62 +345,55 @@ function encode_statement (elem, code, line, script) {
 
 
 function encode_inputs (list_group, line, script) {
-    for (var i = 0; i < list_group.children.length; i++) {
-	var item = list_group.children[i];
+    for (const item of gen_items(list_group)) {
+	var select = item.children[1];
+	var kind = select.value;
 
-	if (!item.id.startsWith("caboose-")) {
-	    var select = item.children[1];
-	    var kind = select.value;
+	var first_input = null;
+	var measure = "";
+	var text = "";
 
-	    var first_input = null;
-	    var measure = "";
-	    var text = "";
-
-	    for (var j = 2; j < item.children.length; j++) {
-		var input = item.children[j];
-
-		if (["INPUT", "TEXTAREA"].includes(input.nodeName)) {
-		    switch (kind) {
-		    case "add":
-			if (input.id.startsWith(`${kind}-name`)) {
-			    first_input = input;
-			}
-			else if (input.id.startsWith(`${kind}-measure`)) {
-			    measure = input.value.trim();
-			}
-			else if (input.id.startsWith(`${kind}-text`)) {
-			    text = input.value.trim();
-			};
-			break;
-
-		    case "transfer":
-			if (input.id.startsWith(`${kind}-name`)) {
-			    first_input = input;
-			}
-			break;
-		    };
+	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA"], 2)) {
+	    switch (kind) {
+	    case "add":
+		if (input.id.startsWith(`${kind}-name`)) {
+		    first_input = input;
+		}
+		else if (input.id.startsWith(`${kind}-measure`)) {
+		    measure = input.value.trim();
+		}
+		else if (input.id.startsWith(`${kind}-text`)) {
+		    text = input.value.trim();
 		};
+		break;
+
+	    case "transfer":
+		if (input.id.startsWith(`${kind}-name`)) {
+		    first_input = input;
+		}
+		break;
 	    };
+	};
 
-	    if (first_input != null) {
-		var code = null;
+	if (first_input != null) {
+	    var code = null;
 
-		switch (kind) {
-		case "add":
-		    code = `ADD ${first_input.value.trim()} (${measure})`;
+	    switch (kind) {
+	    case "add":
+		code = `ADD ${first_input.value.trim()} (${measure})`;
 
-		    if (text.length > 0) {
-			code = `${code}: "${text}"`;
-		    };
-		    break;
-		case "transfer":
-		    code = `TRANSFER ${first_input.value.trim()}`;
-		    break;
+		if (text.length > 0) {
+		    code = `${code}: "${text}"`;
 		};
+		break;
+
+	    case "transfer":
+		code = `TRANSFER ${first_input.value.trim()}`;
+		break;
+	    };
 		
-		if (code != null) {
-		    line = encode_statement(first_input, code, line, script);
-		};
+	    if (code != null) {
+		line = encode_statement(first_input, code, line, script);
 	    };
 	};
     };
@@ -386,6 +403,78 @@ function encode_inputs (list_group, line, script) {
 
 
 function encode_operations (list_group, line, script) {
+    for (const item of gen_items(list_group)) {
+	var select = item.children[1];
+	var kind = select.value;
+
+	var first_input = null;
+	var text = "";
+	var until = "";
+	var duration = "";
+
+	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA"], 2)) {
+	    switch (kind) {
+	    case "action":
+		if (input.id.startsWith(`${kind}-name`)) {
+		    first_input = input;
+		}
+		else if (input.id.startsWith(`${kind}-text`)) {
+		    text = input.value.trim();
+		}
+		else if (input.id.startsWith(`${kind}-until`)) {
+		    until = input.value.trim();
+		}
+		else if (input.id.startsWith(`${kind}-duration`)) {
+		    duration = input.value.trim();
+		};
+		break;
+
+	    case "wait":
+		if (input.id.startsWith(`${kind}-text`)) {
+		    text = input.value.trim();
+		}
+		else if (input.id.startsWith(`${kind}-until`)) {
+		    first_input = input;
+		    until = input.value.trim();
+		}
+		else if (input.id.startsWith(`${kind}-duration`)) {
+		    duration = input.value.trim();
+		};
+		break;
+	    };
+	};
+
+	if (first_input != null) {
+	    var code = null;
+
+	    switch (kind) {
+	    case "action":
+		code = `ACTION ${first_input.value.trim()}`;
+
+		if (text.length > 0) {
+		    code = `${code}: "${text}"`;
+		};
+
+		code =`${code} \n UNTIL: "${until}" \n TIME (${duration})`;
+		break;
+
+	    case "wait":
+		code = `WAIT`;
+
+		if (text.length > 0) {
+		    code = `${code}: "${text}"`;
+		};
+
+		code =`${code} \n UNTIL: "${until}" \n TIME (${duration})`;
+		break;
+	    };
+		
+	    if (code != null) {
+		line = encode_statement(first_input, code, line, script);
+	    };
+	};
+    };
+
     return line;
 };
 
