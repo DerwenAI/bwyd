@@ -16,9 +16,7 @@ function get_rel_id (id) {
 // generators for filtering the "caboose" from item lists
 
 function* gen_items (list_group) {
-    for (var i = 0; i < list_group.children.length; i++) {
-	var item = list_group.children[i];
-
+    for (item of list_group.children) {
         if (!item.id.startsWith("caboose-")) {
 	    yield item;
 	};
@@ -26,10 +24,8 @@ function* gen_items (list_group) {
 };
 
 
-function* gen_inputs (item, node_names, skip) {
-    for (var i = skip; i < item.children.length; i++) {
-	var input = item.children[i];
-
+function* gen_inputs (item, node_names) {
+    for (input of item.children) {
 	if (node_names.includes(input.nodeName)) {
 	    yield input;
 	};
@@ -226,7 +222,7 @@ function list_add (group_id, depth) {
 	is_structured = true;
 
 	meta["type"].forEach(function(struct_meta) {
-	    const item = design_build(struct_meta, depth + 1);
+	    var item = design_build(struct_meta, depth + 1);
 	    elem.appendChild(item);
 	});
     };
@@ -259,6 +255,7 @@ function list_add (group_id, depth) {
     // the first child which has class "form-control"
     // NB: must follow `insertBefore` above, or IDs won't be in the DOM
     if (is_structured) {
+	// TODO
 	for (var i = 0; i < built_elem.children.length; i++) {
 	    if (built_elem.children[i].classList.contains("form-control")) {
 		item_id = built_elem.children[i].id;
@@ -353,7 +350,7 @@ function encode_inputs (list_group, line, script) {
 	var measure = "";
 	var text = "";
 
-	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA"], 2)) {
+	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA"])) {
 	    switch (kind) {
 	    case "add":
 		if (input.id.startsWith(`${kind}-name`)) {
@@ -412,7 +409,7 @@ function encode_operations (list_group, line, script) {
 	var until = "";
 	var duration = "";
 
-	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA"], 2)) {
+	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA"])) {
 	    switch (kind) {
 	    case "action":
 		if (input.id.startsWith(`${kind}-name`)) {
@@ -480,26 +477,15 @@ function encode_operations (list_group, line, script) {
 
 
 function encode_activities (group_id, line, script) {
-    const act_group = document.getElementById(group_id);
-    const activity = act_group.children;
+    for (const item of gen_items(document.getElementById(group_id))) {
+	for (const elem of gen_inputs(item, ["DIV"])) {
+	    const group = elem.children[1].children[0];
 
-    for (var i = 0; i < activity.length; i++) {
-	const stage = activity[i];
-
-	if (!stage.id.startsWith("caboose-")) {
-	    for (var j = 0; j < stage.children.length; j++) {
-		const elem = stage.children[j];
-
-		if (elem.nodeName === "DIV") {
-		    const list_group = elem.children[1].children[0];
-
-		    if (list_group.id.startsWith("input-list")) {
-			line = encode_inputs(list_group, line, script);
-		    }
-		    else if (list_group.id.startsWith("operation-list")) {
-			line = encode_operations(list_group, line, script);
-		    };
-		};
+	    if (group.id.startsWith("input-list")) {
+		line = encode_inputs(group, line, script);
+	    }
+	    else if (group.id.startsWith("operation-list")) {
+		line = encode_operations(group, line, script);
 	    };
 	};
     };
@@ -510,9 +496,10 @@ function encode_activities (group_id, line, script) {
 
 function encode_dependency (group_id, kind, line, script) {
     const list_group = document.getElementById(group_id);
-    const item_list = list_group.children;
     const verb = ELEM_META[group_id].verb;
+    const item_list = list_group.children;
 
+    // TODO
     for (var k = 0; k < item_list.length; k++) {
 	const item = item_list[k];
 	var first_input = null;
@@ -551,6 +538,7 @@ function encode_dependency (group_id, kind, line, script) {
 function encode_list (selector, line, script) {
     const item_list = document.querySelectorAll(selector);
 
+    // TODO
     for (var i = 0; i < item_list.length; i++) {
 	const item = item_list[i];
 
@@ -589,49 +577,40 @@ function encode_module () {
     line = encode_list(selector, line, script);
 
     // encode the CLOSURE list, each of which have compound elements
-    const closure_list = document.getElementById("closure-list").children;
-
-    for (var i = 0; i < closure_list.length; i++) {
-	const closure = closure_list[i];
-
-	if (!closure.id.startsWith("caboose-")) {
-	    for (var j = 0; j < closure.children.length; j++) {
-		var elem = closure.children[j];
-
-		if (["INPUT", "TEXTAREA"].includes(elem.nodeName)) {
-		    if (elem.id.startsWith("closure-name")) {
-			code = `CLOSURE: "${elem.value.trim()}"`;
-			line = encode_statement(elem, code, line, script);
-		    }
-		    else if (elem.id.startsWith("closure-text")) {
-			code = `TEXT: "${elem.value.trim()}"`;
-			line = encode_statement(elem, code, line, script);
-		    };
-		}
-		else if (elem.nodeName === "DIV") {
-		    var group = elem.children[1].children[0];
-
-		    if (group.id.startsWith("container-list")) {
-			line = encode_dependency(group.id, "container", line, script);
-		    }
-		    else if (group.id.startsWith("tool-list")) {
-			line = encode_dependency(group.id, "tool", line, script);
-		    }
-		    else if (group.id.startsWith("ingredient-list")) {
-			line = encode_dependency(group.id, "ingredient", line, script);
-		    }
-		    else if (group.id.startsWith("use-list")) {
-			line = encode_dependency(group.id, "use", line, script);
-		    }
-		    else if (group.id.startsWith("activity-list")) {
-			line = encode_activities(group.id, line, script);
-		    };
-		};
+    for (const closure of gen_items(document.getElementById("closure-list"))) {
+	for (const input of gen_inputs(closure, ["INPUT", "TEXTAREA"])) {
+	    if (input.id.startsWith("closure-name")) {
+		code = `CLOSURE: "${input.value.trim()}"`;
+		line = encode_statement(input, code, line, script);
+	    }
+	    else if (input.id.startsWith("closure-text")) {
+		code = `TEXT: "${input.value.trim()}"`;
+		line = encode_statement(input, code, line, script);
 	    };
-
-	    // add a trailing separator
-	    line = encode_statement(null, ";", line, script);
 	};
+
+	for (const input of gen_inputs(closure, ["DIV"])) {
+	    var group = input.children[1].children[0];
+
+	    if (group.id.startsWith("container-list")) {
+		line = encode_dependency(group.id, "container", line, script);
+	    }
+	    else if (group.id.startsWith("tool-list")) {
+		line = encode_dependency(group.id, "tool", line, script);
+	    }
+	    else if (group.id.startsWith("ingredient-list")) {
+		line = encode_dependency(group.id, "ingredient", line, script);
+	    }
+	    else if (group.id.startsWith("use-list")) {
+		line = encode_dependency(group.id, "use", line, script);
+	    }
+	    else if (group.id.startsWith("activity-list")) {
+		line = encode_activities(group.id, line, script);
+	    };
+	};
+
+	// add a trailing separator
+	line = encode_statement(null, ";", line, script);
     };
 
     // debug: update the <textarea/> script display
