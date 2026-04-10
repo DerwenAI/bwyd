@@ -170,7 +170,6 @@ function design_build (design_meta, depth) {
 		select.appendChild(option);
 	    };
 
-	    // TODO: needs callback to reconfigure structure
 	    var callback = `menu_select('${item_id}', ${depth})`;
 	    select.setAttribute("onchange", callback);
 	    frag.appendChild(select);
@@ -495,38 +494,25 @@ function encode_activities (group_id, line, script) {
 
 
 function encode_dependency (group_id, kind, line, script) {
-    const list_group = document.getElementById(group_id);
     const verb = ELEM_META[group_id].verb;
-    const item_list = list_group.children;
 
-    // TODO
-    for (var k = 0; k < item_list.length; k++) {
-	const item = item_list[k];
+    for (item of document.getElementById(group_id).children) {
 	var first_input = null;
 	var text = "";
 
-	for (var l = 0; l < item.children.length; l++) {
-	    const input = item.children[l];
-
-	    if (!input.id.startsWith("caboose-") && (input.id in ELEM_META)) {
-		if (["INPUT", "TEXTAREA"].includes(input.nodeName)) {
-		    if (input.id.startsWith(`${kind}-name`)) {
-			first_input = input;
-		    }
-		    else if (input.id.startsWith(`${kind}-text`)) {
-			text = input.value.trim();
-		    };
+	for (input of item.children) {
+	    if (!input.id.startsWith("caboose-") && (input.id in ELEM_META) && ["INPUT", "TEXTAREA"].includes(input.nodeName)) {
+		if (input.id.startsWith(`${kind}-name`)) {
+		    first_input = input;
+		}
+		else if (input.id.startsWith(`${kind}-text`)) {
+		    text = input.value.trim();
 		};
 	    };
 	};
 
 	if (first_input != null) {
-	    var code = `${verb} ${first_input.value.trim()}:`;
-
-	    if (text.length > 0) {
-		code = `${code} "${text}"`;
-	    };
-
+	    var code = `${verb} ${first_input.value.trim()}: "${text}"`;
 	    line = encode_statement(first_input, code, line, script);
 	};
     };
@@ -535,26 +521,37 @@ function encode_dependency (group_id, kind, line, script) {
 };
 
 
-function encode_list (selector, line, script) {
-    const item_list = document.querySelectorAll(selector);
+function encode_list (group_id, line, script) {
+    document.getElementById(group_id).childNodes.forEach(
+	function(item, index) {
+	    item.childNodes.forEach(
+		function(input, index) {
+		    if (!input.id.startsWith("caboose-") && (input.id in ELEM_META)) {
+			const verb = ELEM_META[input.id].verb;
+			const code = `${verb}: "${input.value.trim()}"`;
 
-    // TODO
-    for (var i = 0; i < item_list.length; i++) {
-	const item = item_list[i];
+			line = encode_statement(input, code, line, script);
+		    };
+		}
+	    );
+	}
+    );
 
-	for (var j = 0; j < item.children.length; j++) {
-	    const input = item.children[j];
+    return line;
+};
 
-	    if (!input.id.startsWith("caboose-") && (input.id in ELEM_META)) {
-		if (["INPUT", "TEXTAREA"].includes(input.nodeName)) {
-		    const verb = ELEM_META[input.id].verb;
-		    const code = `${verb}: "${input.value.trim()}"`;
 
-		    line = encode_statement(input, code, line, script);
-		};
+function encode_head (group_id, line, script) {
+    document.getElementById(group_id).childNodes.forEach(
+	function(input, index) {
+	    if (["INPUT", "TEXTAREA"].includes(input.nodeName) && (input.id in ELEM_META)) {
+		const verb = ELEM_META[input.id].verb;
+		const code = `${verb}: "${input.value.trim()}"`;
+
+		line = encode_statement(input, code, line, script);
 	    };
-	};
-    };
+	}
+    );
 
     return line;
 };
@@ -567,14 +564,14 @@ function encode_module () {
     BWYD_DEBUG = [];
 
     // encode top-level inputs for the module
-    var selector = "#editor-inputs";
-    line = encode_list(selector, line, script);
+    var group_id = "editor-inputs";
+    line = encode_head(group_id, line, script);
 
-    selector = "#cite-list > .list-group-item";
-    line = encode_list(selector, line, script);
+    group_id = "cite-list";
+    line = encode_list(group_id, line, script);
 
-    selector = "#post-list > .list-group-item";
-    line = encode_list(selector, line, script);
+    group_id = "post-list";
+    line = encode_list(group_id, line, script);
 
     // encode the CLOSURE list, each of which have compound elements
     for (const closure of gen_items(document.getElementById("closure-list"))) {
