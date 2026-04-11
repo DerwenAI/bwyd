@@ -130,7 +130,7 @@ Bake:
 ;
 
 OvenMode:
-  "BAKE" | "BROIL" | "ROAST" | "TOAST"
+  "BAKE" | "ROAST" | "BROIL" | "TOAST" | "PRESSURE"
 ;
 
 Measure:

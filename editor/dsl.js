@@ -1,9 +1,16 @@
+//////////////////////////////////////////////////////////////////////
+// global data structures
+
 var BWYD_DEBUG = [];
 var CALLBACK_QUEUE = [];
 var ELEM_META = {};
 
-// append a UUID as a relative component to an ID
 
+//////////////////////////////////////////////////////////////////////
+// utility methods for navigating dynamic HTML
+
+
+// append a UUID as a relative component to an ID
 function get_rel_id (id) {
     if (id.slice(-1) === "%") {
 	return id.replace(/%/g, self.crypto.randomUUID());
@@ -14,9 +21,8 @@ function get_rel_id (id) {
 
 
 // generators for filtering the "caboose" from item lists
-
 function* gen_items (list_group) {
-    for (item of list_group.children) {
+    for (const item of list_group.children) {
         if (!item.id.startsWith("caboose-")) {
 	    yield item;
 	};
@@ -25,7 +31,7 @@ function* gen_items (list_group) {
 
 
 function* gen_inputs (item, node_names) {
-    for (input of item.children) {
+    for (const input of item.children) {
 	if (node_names.includes(input.nodeName)) {
 	    yield input;
 	};
@@ -33,8 +39,9 @@ function* gen_inputs (item, node_names) {
 };
 
 
-// build UI from the design metadata fragment,
-// driven by the context of both input files and user edits
+//////////////////////////////////////////////////////////////////////
+// dynamically generate HTML from design metadata fragments,
+// driven by context from: input files, user edits
 
 function build_input (meta) {
     var input = null;
@@ -51,132 +58,147 @@ function build_input (meta) {
 };
 
 
+function build_field (frag, meta, depth) {
+    var item_id = get_rel_id(meta["id"]);
+    ELEM_META[item_id] = meta;
+
+    var label = document.createElement("label");
+    label.setAttribute("class", "form-label");
+    label.setAttribute("for", item_id);
+    label.appendChild(document.createTextNode(meta["label"]));
+    frag.appendChild(label);
+
+    var input = build_input(meta);
+    input.setAttribute("class", "form-control");
+    input.setAttribute("id", item_id);
+    input.setAttribute("placeholder", meta["placeholder"]);
+    frag.appendChild(input);
+};
+
+
+function build_list (frag, meta, depth) {
+    var group_id = get_rel_id(meta["id"]);
+    var color = Math.round((1.0 - (depth * .03)) * 100.0);
+
+    var row = document.createElement("div");
+    row.setAttribute("class", "row");
+    row.setAttribute("id", get_rel_id("%"));
+    row.setAttribute("style", `min-height: 8rem; width: 100%; margin-top: 2rem; margin-left: -2rem; background: hsl(0 0 ${color});`);
+    frag.appendChild(row);
+
+    var col = document.createElement("div");
+    col.setAttribute("class", "col-1");
+    col.setAttribute("style", "padding: 0;");
+    row.appendChild(col);
+
+    var label = document.createElement("label");
+    label.setAttribute("class", "form-label");
+    label.setAttribute("for", group_id);
+    label.setAttribute("style", "margin-top: 1rem; rotate: 270deg; color: hsl(0, 0%, 75%); font-weight: bold; padding-left: 0;");
+    label.appendChild(document.createTextNode(meta["label"]));
+    col.appendChild(label);
+
+    col = document.createElement("div");
+    col.setAttribute("class", "col-8");
+    row.appendChild(col);
+
+    var list_group = document.createElement("div");
+    ELEM_META[group_id] = meta;
+
+    list_group.setAttribute("class", "list-group");
+    list_group.setAttribute("id", group_id);
+    col.appendChild(list_group);
+
+    new Sortable(list_group, {
+	animation: 150,
+	ghostClass: "blue-background-class",
+    });
+
+    // add a "caboose" button
+    var caboose = document.createElement("div");
+    caboose.setAttribute("id", get_rel_id("caboose-%"));
+    caboose.setAttribute("class", "list-group-item");
+
+    var button = document.createElement("button");
+    button.setAttribute("class", "btn btn-outline-primary btn-sm");
+    button.setAttribute("style", "width: 2.1em; display: inline;");
+
+    var callback = `list_add('${group_id}', ${depth})`;
+    button.setAttribute("onclick", callback);
+
+    var icon = document.createElement("i");
+    icon.setAttribute("class", "bi bi-plus");
+    button.appendChild(icon);
+    caboose.appendChild(button);
+
+    var para = document.createElement("span");
+    var text = `add new ${meta["label"].toLowerCase()}`;
+    para.appendChild(document.createTextNode(text));
+    para.setAttribute("style", "font-size: .75em; font-style: oblique; color: #aaa; margin-left: 1em;");
+
+    caboose.appendChild(para);
+    list_group.appendChild(caboose);
+};
+
+
+function build_select (frag, meta, depth) {
+    var item_id = get_rel_id(meta["id"]);
+    ELEM_META[item_id] = meta;
+
+    if ("label" in meta) {
+	var label = document.createElement("span");
+	label.appendChild(document.createTextNode(meta["label"]));
+	frag.appendChild(label);
+    };
+
+    var select = document.createElement("select");
+    select.setAttribute("class", "form-control");
+    select.setAttribute("id", item_id);
+    select.setAttribute("style", "display: inline-block; width: 93%;");
+
+    var option = document.createElement("option");
+    option.setAttribute("disabled", true);
+    option.setAttribute("selected", true);
+    option.setAttribute("value", null);
+
+    var para = document.createElement("span");
+    para.setAttribute("style", "font-style: oblique; color: #aaa;");
+    para.appendChild(document.createTextNode("(select an option)"));
+    option.appendChild(para);
+    select.appendChild(option);
+
+    for (const [key, value] of Object.entries(meta["type"])) {
+	option = document.createElement("option");
+	option.setAttribute("value", key);
+	option.appendChild(document.createTextNode(key));
+	select.appendChild(option);
+    };
+
+    var callback = `menu_select('${item_id}', ${depth})`;
+    select.setAttribute("onchange", callback);
+    frag.appendChild(select);
+};
+
+
 function design_build (design_meta, depth) {
     const frag = document.createDocumentFragment();
 
     for (const [kind, meta] of Object.entries(design_meta)) {
 	switch (kind) {
 	case "field":
-	    var item_id = get_rel_id(meta["id"]);
-	    ELEM_META[item_id] = meta;
-
-	    var label = document.createElement("label");
-	    label.setAttribute("class", "form-label");
-	    label.setAttribute("for", item_id);
-	    label.appendChild(document.createTextNode(meta["label"]));
-	    frag.appendChild(label);
-
-	    var input = build_input(meta);
-	    input.setAttribute("class", "form-control");
-	    input.setAttribute("id", item_id);
-	    input.setAttribute("placeholder", meta["placeholder"]);
-	    frag.appendChild(input);
+	    build_field(frag, meta, depth);
 	    break;
 
 	case "list":
-	    var group_id = get_rel_id(meta["id"]);
-	    var color = Math.round((1.0 - (depth * .03)) * 100.0);
-
-	    var row = document.createElement("div");
-	    row.setAttribute("class", "row");
-	    row.setAttribute("id", get_rel_id("%"));
-	    row.setAttribute("style", `min-height: 8rem; width: 100%; margin-top: 2rem; margin-left: -2rem; background: hsl(0 0 ${color});`);
-	    frag.appendChild(row);
-
-	    var col = document.createElement("div");
-	    col.setAttribute("class", "col-1");
-	    col.setAttribute("style", "padding: 0;");
-	    row.appendChild(col);
-
-	    var label = document.createElement("label");
-	    label.setAttribute("class", "form-label");
-	    label.setAttribute("for", group_id);
-	    label.setAttribute("style", "margin-top: 1rem; rotate: 270deg; color: hsl(0, 0%, 75%); font-weight: bold; padding-left: 0;");
-	    label.appendChild(document.createTextNode(meta["label"]));
-	    col.appendChild(label);
-
-	    col = document.createElement("div");
-	    col.setAttribute("class", "col-8");
-	    row.appendChild(col);
-
-	    var list_group = document.createElement("div");
-	    ELEM_META[group_id] = meta;
-
-	    list_group.setAttribute("class", "list-group");
-	    list_group.setAttribute("id", group_id);
-	    col.appendChild(list_group);
-
-	    new Sortable(list_group, {
-		animation: 150,
-		ghostClass: "blue-background-class",
-	    });
-
-	    // add a "caboose" button
-	    var caboose = document.createElement("div");
-	    caboose.setAttribute("id", get_rel_id("caboose-%"));
-	    caboose.setAttribute("class", "list-group-item");
-
-	    var button = document.createElement("button");
-	    button.setAttribute("class", "btn btn-outline-primary btn-sm");
-	    button.setAttribute("style", "width: 2.1em; display: inline;");
-
-	    var callback = `list_add('${group_id}', ${depth})`;
-	    button.setAttribute("onclick", callback);
-
-	    var icon = document.createElement("i");
-	    icon.setAttribute("class", "bi bi-plus");
-	    button.appendChild(icon);
-	    caboose.appendChild(button);
-
-	    var para = document.createElement("span");
-	    var text = `add new ${meta["label"].toLowerCase()}`;
-	    para.appendChild(document.createTextNode(text));
-	    para.setAttribute("style", "font-size: .75em; font-style: oblique; color: #aaa; margin-left: 1em;");
-
-	    caboose.appendChild(para);
-	    list_group.appendChild(caboose);
+	    build_list(frag, meta, depth);
 	    break;
 
 	case "select":
-	    var item_id = get_rel_id(meta["id"]);
-	    ELEM_META[item_id] = meta;
-
-	    if ("label" in meta) {
-		var label = document.createElement("span");
-		label.appendChild(document.createTextNode(meta["label"]));
-		frag.appendChild(label);
-	    };
-
-	    var select = document.createElement("select");
-	    select.setAttribute("class", "form-control");
-	    select.setAttribute("id", item_id);
-	    select.setAttribute("style", "display: inline-block; width: 93%;");
-
-	    var option = document.createElement("option");
-	    option.setAttribute("disabled", true);
-	    option.setAttribute("selected", true);
-	    option.setAttribute("value", null);
-
-	    var para = document.createElement("span");
-	    para.setAttribute("style", "font-style: oblique; color: #aaa;");
-	    para.appendChild(document.createTextNode("(select an option)"));
-	    option.appendChild(para);
-	    select.appendChild(option);
-
-	    for (const [key, value] of Object.entries(meta["type"])) {
-		option = document.createElement("option");
-		option.setAttribute("value", key);
-		option.appendChild(document.createTextNode(key));
-		select.appendChild(option);
-	    };
-
-	    var callback = `menu_select('${item_id}', ${depth})`;
-	    select.setAttribute("onchange", callback);
-	    frag.appendChild(select);
+	    build_select(frag, meta, depth);
 	    break;
 
 	default:
-	    console.log("UNKNOWN DESIGN:", kind, meta);
+	    console.log("UNKNOWN DESIGN:", kind, meta, depth);
 	    break
 	};
     };
@@ -185,17 +207,18 @@ function design_build (design_meta, depth) {
 };
 
 
+//////////////////////////////////////////////////////////////////////
 // list handling
 
 function list_add (group_id, depth) {
     const list_group = document.getElementById(group_id);
+    var is_structured = false;
 
     // build a new item to insert
     const meta = ELEM_META[group_id];
     var item_id = self.crypto.randomUUID();
-    ELEM_META[item_id] = meta;
 
-    var is_structured = false;
+    ELEM_META[item_id] = meta;
 
     const elem = document.createElement("div");
     elem.setAttribute("class", "row list-group-item");
@@ -254,12 +277,11 @@ function list_add (group_id, depth) {
     // the first child which has class "form-control"
     // NB: must follow `insertBefore` above, or IDs won't be in the DOM
     if (is_structured) {
-	// TODO
-	for (var i = 0; i < built_elem.children.length; i++) {
-	    if (built_elem.children[i].classList.contains("form-control")) {
-		item_id = built_elem.children[i].id;
+	for (const item of built_elem.children) {
+	    if ((item.classList != null) && item.classList.contains("form-control")) {
+		item_id = item.id;
 		break;
-	    }
+	    };
 	};
 
 	button.classList.add("btn-outline-danger");
@@ -287,6 +309,7 @@ function list_del (group_id, item_id) {
 };
 
 
+//////////////////////////////////////////////////////////////////////
 // menu handling
 
 function menu_select (menu_id, depth) {
@@ -315,7 +338,8 @@ function menu_select (menu_id, depth) {
 }
 
 
-// encode the current editor content into the DSL language
+//////////////////////////////////////////////////////////////////////
+// encode the current editor content in the DSL language
 
 function encode_statement (elem, code, line, script) {
     const num_lines = code.split(/\r\n|\r|\n/).length;
@@ -342,8 +366,7 @@ function encode_statement (elem, code, line, script) {
 
 function encode_inputs (list_group, line, script) {
     for (const item of gen_items(list_group)) {
-	var select = item.children[1];
-	var kind = select.value;
+	var kind = item.children[1].value;
 
 	var first_input = null;
 	var measure = "";
@@ -400,15 +423,15 @@ function encode_inputs (list_group, line, script) {
 
 function encode_operations (list_group, line, script) {
     for (const item of gen_items(list_group)) {
-	var select = item.children[1];
-	var kind = select.value;
+	var kind = item.children[1].value;
 
 	var first_input = null;
+	var mode = "";
 	var text = "";
 	var until = "";
 	var duration = "";
 
-	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA"])) {
+	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA", "SELECT"])) {
 	    switch (kind) {
 	    case "action":
 		if (input.id.startsWith(`${kind}-name`)) {
@@ -437,6 +460,54 @@ function encode_operations (list_group, line, script) {
 		    duration = input.value.trim();
 		};
 		break;
+
+	    case "heat":
+		if (input.id.startsWith(`${kind}-name`)) {
+		    first_input = input;
+		}
+		else if (input.id.startsWith(`${kind}-text`)) {
+		    text = input.value.trim();
+		}
+		else if (input.id.startsWith(`${kind}-until`)) {
+		    until = input.value.trim();
+		}
+		else if (input.id.startsWith(`${kind}-duration`)) {
+		    duration = input.value.trim();
+		};
+		break;
+
+	    case "chill":
+		if (input.id.startsWith(`${kind}-name`)) {
+		    first_input = input;
+		}
+		else if (input.id.startsWith(`${kind}-text`)) {
+		    text = input.value.trim();
+		}
+		else if (input.id.startsWith(`${kind}-until`)) {
+		    until = input.value.trim();
+		}
+		else if (input.id.startsWith(`${kind}-duration`)) {
+		    duration = input.value.trim();
+		};
+		break;
+
+	    case "bake":
+		if (input.id.startsWith(`${kind}-name`)) {
+		    first_input = input;
+		}
+		else if (input.id.startsWith(`${kind}-mode`)) {
+		    mode = input.value.toUpperCase();
+		}
+		else if (input.id.startsWith(`${kind}-text`)) {
+		    text = input.value.trim();
+		}
+		else if (input.id.startsWith(`${kind}-until`)) {
+		    until = input.value.trim();
+		}
+		else if (input.id.startsWith(`${kind}-duration`)) {
+		    duration = input.value.trim();
+		};
+		break;
 	    };
 	};
 
@@ -456,6 +527,36 @@ function encode_operations (list_group, line, script) {
 
 	    case "wait":
 		code = `WAIT`;
+
+		if (text.length > 0) {
+		    code = `${code}: "${text}"`;
+		};
+
+		code =`${code} \n UNTIL: "${until}" \n TIME (${duration})`;
+		break;
+
+	    case "heat":
+		code = `HEAT ${first_input.value.trim()}`;
+
+		if (text.length > 0) {
+		    code = `${code}: "${text}"`;
+		};
+
+		code =`${code} \n UNTIL: "${until}" \n TIME (${duration})`;
+		break;
+
+	    case "chill":
+		code = `CHILL ${first_input.value.trim()}`;
+
+		if (text.length > 0) {
+		    code = `${code}: "${text}"`;
+		};
+
+		code =`${code} \n UNTIL: "${until}" \n TIME (${duration})`;
+		break;
+
+	    case "bake":
+		code = `${mode} ${first_input.value.trim()}`;
 
 		if (text.length > 0) {
 		    code = `${code}: "${text}"`;
@@ -496,12 +597,12 @@ function encode_activities (group_id, line, script) {
 function encode_dependency (group_id, kind, line, script) {
     const verb = ELEM_META[group_id].verb;
 
-    for (item of document.getElementById(group_id).children) {
+    for (const item of document.getElementById(group_id).children) {
 	var first_input = null;
 	var text = "";
 
-	for (input of item.children) {
-	    if (!input.id.startsWith("caboose-") && (input.id in ELEM_META) && ["INPUT", "TEXTAREA"].includes(input.nodeName)) {
+	for (const input of item.children) {
+	    if ((input.id in ELEM_META) && !input.id.startsWith("caboose-") && ["INPUT", "TEXTAREA"].includes(input.nodeName)) {
 		if (input.id.startsWith(`${kind}-name`)) {
 		    first_input = input;
 		}
@@ -526,10 +627,9 @@ function encode_list (group_id, line, script) {
 	function(item, index) {
 	    item.childNodes.forEach(
 		function(input, index) {
-		    if (!input.id.startsWith("caboose-") && (input.id in ELEM_META)) {
+		    if ((input.id in ELEM_META) && !input.id.startsWith("caboose-")) {
 			const verb = ELEM_META[input.id].verb;
 			const code = `${verb}: "${input.value.trim()}"`;
-
 			line = encode_statement(input, code, line, script);
 		    };
 		}
@@ -544,10 +644,9 @@ function encode_list (group_id, line, script) {
 function encode_head (group_id, line, script) {
     document.getElementById(group_id).childNodes.forEach(
 	function(input, index) {
-	    if (["INPUT", "TEXTAREA"].includes(input.nodeName) && (input.id in ELEM_META)) {
+	    if ((input.id in ELEM_META) && ["INPUT", "TEXTAREA"].includes(input.nodeName)) {
 		const verb = ELEM_META[input.id].verb;
 		const code = `${verb}: "${input.value.trim()}"`;
-
 		line = encode_statement(input, code, line, script);
 	    };
 	}
@@ -561,6 +660,7 @@ function encode_module () {
     const script = [];
     var line = 1;
     var code = null;
+
     BWYD_DEBUG = [];
 
     // encode top-level inputs for the module
@@ -575,6 +675,9 @@ function encode_module () {
 
     // encode the CLOSURE list, each of which have compound elements
     for (const closure of gen_items(document.getElementById("closure-list"))) {
+	// add a leading separator
+	line = encode_statement(null, "", line, script);
+
 	for (const input of gen_inputs(closure, ["INPUT", "TEXTAREA"])) {
 	    if (input.id.startsWith("closure-name")) {
 		code = `CLOSURE: "${input.value.trim()}"`;
@@ -617,20 +720,11 @@ function encode_module () {
 };
 
 
-// use callbacks to clean-up after creating DOM elements
-
-function process_callbacks () {
-    while (CALLBACK_QUEUE.length > 0) {
-	const callback = CALLBACK_QUEUE.pop();
-	eval(callback);
-    };
-};
-
-
-// run after the page loads
+//////////////////////////////////////////////////////////////////////
+// run these steps *AFTER* the HTML page loads
 
 window.addEventListener("load", function() {
-    // build the default editor
+    // build a default editor page from the design metadata
     const item = document.getElementById("editor-inputs");
 
     DESIGN_META.forEach(function(struct_meta) {
@@ -639,5 +733,8 @@ window.addEventListener("load", function() {
     });
 
     // "clean-up in post", if any
-    process_callbacks();
+    while (CALLBACK_QUEUE.length > 0) {
+	const callback = CALLBACK_QUEUE.pop();
+	eval(callback);
+    };
 });

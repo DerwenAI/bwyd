@@ -433,9 +433,10 @@ const DESIGN_META = [
 								"label": "Oven Mode",
 								"type": {
 								    "bake": [],
-								    "toast": [],
 								    "broil": [],
 								    "roast": [],
+								    "toast": [],
+								    "pressure": [],
 								},
 							    },
 							},
