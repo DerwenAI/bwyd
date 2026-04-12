@@ -7,7 +7,7 @@ const DESIGN_META = [
 	    "placeholder": "Recipe name",
             "verb": "TITLE",
             "type": "text",
-        }
+        },
     },
     {
         "field": {
@@ -17,7 +17,7 @@ const DESIGN_META = [
 	    "placeholder": "Recipe description",
             "verb": "TEXT",
             "type": "textarea",
-	}
+	},
     },
     {
         "list": {
@@ -27,7 +27,7 @@ const DESIGN_META = [
 	    "placeholder": "Source link",
             "verb": "CITE",
             "type": "url",
-        }
+        },
     },
     {
         "list": {
@@ -37,7 +37,7 @@ const DESIGN_META = [
 	    "placeholder": "Galleries link",
             "verb": "POST",
             "type": "url",
-        }
+        },
     },
     {
         "list": {
@@ -64,6 +64,26 @@ const DESIGN_META = [
 			"placeholder": "Closure description",
 			"verb": "TEXT",
 			"type": "textarea",
+		    },
+		},
+		{
+		    "list": {
+			"count": "zero-many",
+			"id": "super-list-%",
+			"label": "Supers",
+			"placeholder": "Supers",
+			"verb": "SUPER",
+			"type": "symbol",
+		    },
+		},
+		{
+		    "list": {
+			"count": "zero-many",
+			"id": "keyword-list-%",
+			"label": "Keywords",
+			"placeholder": "Keywords",
+			"verb": "KEYWORD",
+			"type": "symbol",
 		    },
 		},
 		{

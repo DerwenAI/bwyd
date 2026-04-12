@@ -8,7 +8,7 @@ var ELEM_META = {};
 
 //////////////////////////////////////////////////////////////////////
 // utility methods for navigating dynamic HTML
-
+//
 
 // append a UUID as a relative component to an ID
 function get_rel_id (id) {
@@ -42,6 +42,7 @@ function* gen_inputs (item, node_names) {
 //////////////////////////////////////////////////////////////////////
 // dynamically generate HTML from design metadata fragments,
 // driven by context from: input files, user edits
+//
 
 function build_input (meta) {
     var input = null;
@@ -209,6 +210,7 @@ function design_build (design_meta, depth) {
 
 //////////////////////////////////////////////////////////////////////
 // list handling
+//
 
 function list_add (group_id, depth) {
     const list_group = document.getElementById(group_id);
@@ -311,6 +313,7 @@ function list_del (group_id, item_id) {
 
 //////////////////////////////////////////////////////////////////////
 // menu handling
+//
 
 function menu_select (menu_id, depth) {
     const menu = document.getElementById(menu_id);
@@ -340,6 +343,7 @@ function menu_select (menu_id, depth) {
 
 //////////////////////////////////////////////////////////////////////
 // encode the current editor content in the DSL language
+//
 
 function encode_statement (elem, code, line, script) {
     const num_lines = code.split(/\r\n|\r|\n/).length;
@@ -692,7 +696,13 @@ function encode_module () {
 	for (const input of gen_inputs(closure, ["DIV"])) {
 	    var group = input.children[1].children[0];
 
-	    if (group.id.startsWith("container-list")) {
+	    if (group.id.startsWith("super-list")) {
+		line = encode_list(group.id, line, script);
+	    }
+	    else if (group.id.startsWith("keyword-list")) {
+		line = encode_list(group.id, line, script);
+	    }
+	    else if (group.id.startsWith("container-list")) {
 		line = encode_dependency(group.id, "container", line, script);
 	    }
 	    else if (group.id.startsWith("tool-list")) {
@@ -721,7 +731,8 @@ function encode_module () {
 
 
 //////////////////////////////////////////////////////////////////////
-// run these steps *AFTER* the HTML page loads
+// start-up: run these steps *AFTER* the HTML page loads
+//
 
 window.addEventListener("load", function() {
     // build a default editor page from the design metadata

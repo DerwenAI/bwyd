@@ -30,19 +30,19 @@ Post:
 ;
 
 Closure:
-  "CLOSURE:" name=STRING ("AS" supers=IDList)?
+  "CLOSURE:" name=STRING
     ("TEXT:" text=STRING)?
-    ("KEYWORDS:" keywords=IDList)?
+    ("SUPER:" super=ID)?
+    ("KEYWORD:" keyword=ID)?
     depend+=Dependency
     activities+=Activity
     ratio=Ratio?
   ";"
 ;
 
-IDList: ids+=ID[","];
-
 Dependency:
   Container | Tool | Ingredient | Use
+  (node=Note)?
 ;
 
 Container:
@@ -68,11 +68,13 @@ Activity:
 ;
 
 Op:
-  Transform | Heat | Chill | Bake | Note
+  Transform | Heat | Chill | Bake
+  (node=Note)?
 ;
 
 Input:
   Add | Transfer
+  (node=Note)?
 ;
 
 Add:
@@ -85,7 +87,7 @@ Transfer:
 
 Transform:
   Action | Wait
-  (prods+=Yields)?
+  (yields+=Yields)?
 ;
 
 Action:
