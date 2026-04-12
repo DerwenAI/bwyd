@@ -181,6 +181,29 @@ function build_select (frag, meta, depth) {
 };
 
 
+function build_summary (frag, meta, depth) {
+    const details = document.createElement("details");
+    details.open = true;
+
+    const summary = document.createElement("summary");
+    const para = document.createElement("span");
+    const text = meta["label"].toLowerCase();
+
+    para.appendChild(document.createTextNode(text));
+    para.setAttribute("style", "font-size: .75em; font-style: oblique; color: #aaa; margin-left: 1em;");
+
+    summary.appendChild(para);
+    details.appendChild(summary);
+
+    meta["type"].forEach(function(struct_meta) {
+	var item = design_build(struct_meta, depth);
+	details.appendChild(item);
+    });
+
+    frag.appendChild(details);
+};
+
+
 function design_build (design_meta, depth) {
     const frag = document.createDocumentFragment();
 
@@ -196,6 +219,10 @@ function design_build (design_meta, depth) {
 
 	case "select":
 	    build_select(frag, meta, depth);
+	    break;
+
+	case "summary":
+	    build_summary(frag, meta, depth);
 	    break;
 
 	default:
