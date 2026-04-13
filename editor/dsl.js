@@ -44,15 +44,27 @@ function* gen_inputs (item, node_names) {
 // driven by context from: input files, user edits
 //
 
-function build_input (meta) {
+function build_input (meta, item_id) {
     var input = null;
 
     if (["text", "symbol", "url"].includes(meta["type"])) {
 	input = document.createElement("input");
 	input.setAttribute("type", "text");
+	input.setAttribute("class", "form-control");
+	input.setAttribute("id", item_id);
     }
     else if (["textarea"].includes(meta["type"])) {
 	input = document.createElement("textarea");
+	input.setAttribute("class", "form-control");
+	input.setAttribute("id", item_id);
+    }
+    else if (["checkbox"].includes(meta["type"])) {
+	input = document.createElement("input");
+	input.setAttribute("type", "checkbox");
+	input.setAttribute("class", "form-check-input");
+	input.setAttribute("id", item_id);
+	input.setAttribute("name", item_id);
+	input.setAttribute("value", meta["label"]);
     };
 
     return input;
@@ -69,12 +81,26 @@ function build_field (frag, meta, depth) {
     label.appendChild(document.createTextNode(meta["label"]));
     frag.appendChild(label);
 
-    var input = build_input(meta);
-    console.log(meta, input);
-    input.setAttribute("class", "form-control");
-    input.setAttribute("id", item_id);
+    var input = build_input(meta, item_id);
     input.setAttribute("placeholder", meta["placeholder"]);
     frag.appendChild(input);
+};
+
+
+function build_checkbox (frag, meta, depth) {
+    var item_id = get_rel_id(meta["id"]);
+    ELEM_META[item_id] = meta;
+
+    var input = build_input(meta, item_id);
+    input.setAttribute("style", "margin-top: 1rem;");
+    frag.appendChild(input);
+
+    var label = document.createElement("label");
+    label.setAttribute("class", "form-check-label");
+    label.setAttribute("for", item_id);
+    label.setAttribute("style", "margin-left: 1rem; margin-top: .7rem;");
+    label.appendChild(document.createTextNode(meta["label"]));
+    frag.appendChild(label);
 };
 
 
@@ -214,6 +240,10 @@ function design_build (design_meta, depth) {
 	    build_field(frag, meta, depth);
 	    break;
 
+	case "checkbox":
+	    build_checkbox(frag, meta, depth);
+	    break;
+
 	case "list":
 	    build_list(frag, meta, depth);
 	    break;
@@ -253,11 +283,10 @@ function list_add (group_id, depth) {
     const elem = document.createElement("div");
     elem.setAttribute("class", "row list-group-item");
 
-    if (["text", "textarea", "symbol", "url"].includes(meta["type"])) {
-	var input = build_input(meta);
-	input.setAttribute("class", "form-control url-field");
-	input.setAttribute("id", item_id);
+    if (["text", "textarea", "symbol", "url", "checkbox"].includes(meta["type"])) {
+	var input = build_input(meta, item_id);
 	input.setAttribute("placeholder", meta["placeholder"]);
+	input.setAttribute("class", "url-field");
 	input.setAttribute("required", true);
 	input.setAttribute("style", "display: inline-block; width: 87%;");
 

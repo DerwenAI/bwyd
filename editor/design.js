@@ -388,13 +388,13 @@ const DESIGN_META = [
 												},
 											    },
 											    {
-												"field": {
+												"checkbox": {
 												    "count": "one",
 												    "id": "yield-intermediate-%",
 												    "label": "Intermediate",
 												    "placeholder": "Yield intermediate",
 												    "verb": "INTERMEDIATE",
-												    "type": "text",
+												    "type": "checkbox",
 												},
 											    },
 											],
