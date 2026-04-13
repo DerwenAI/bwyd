@@ -70,6 +70,7 @@ function build_field (frag, meta, depth) {
     frag.appendChild(label);
 
     var input = build_input(meta);
+    console.log(meta, input);
     input.setAttribute("class", "form-control");
     input.setAttribute("id", item_id);
     input.setAttribute("placeholder", meta["placeholder"]);

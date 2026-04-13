@@ -22,6 +22,7 @@ const DESIGN_META = [
     {
 	"summary": {
 	    "label": "header",
+	    "open": true,
 	    "type": [
 		{
 		    "list": {
@@ -56,6 +57,7 @@ const DESIGN_META = [
 		{
 		    "summary": {
 			"label": "closure",
+			"open": true,
 			"type": [
 
 			    {
@@ -81,6 +83,7 @@ const DESIGN_META = [
 			    {
 				"summary": {
 				    "label": "header",
+				    "open": true,
 				    "type": [
 					{
 					    "list": {
@@ -108,6 +111,7 @@ const DESIGN_META = [
 			    {
 				"summary": {
 				    "label": "dependencies",
+				    "open": true,
 				    "type": [
 					{
 					    "list": {
@@ -242,6 +246,7 @@ const DESIGN_META = [
 					{
 					    "summary": {
 						"label": "activity",
+						"open": true,
 						"type": [
 						    {
 							"list": {
@@ -356,6 +361,43 @@ const DESIGN_META = [
 											"placeholder": "Action duration",
 											"verb": "DURATION",
 											"type": "text",
+										    },
+										},
+										{
+										    "summary": {
+											"label": "yields",
+											"type": [
+											    {
+												"field": {
+												    "count": "one",
+												    "id": "yield-name-%",
+												    "label": "Name",
+												    "placeholder": "Yield name",
+												    "verb": "YIELD",
+												    "type": "symbol",
+												},
+											    },
+											    {
+												"field": {
+												    "count": "one",
+												    "id": "yield-measure-%",
+												    "label": "Measure",
+												    "placeholder": "Yield measure",
+												    "verb": "MEASURE",
+												    "type": "text",
+												},
+											    },
+											    {
+												"field": {
+												    "count": "one",
+												    "id": "yield-intermediate-%",
+												    "label": "Intermediate",
+												    "placeholder": "Yield intermediate",
+												    "verb": "INTERMEDIATE",
+												    "type": "text",
+												},
+											    },
+											],
 										    },
 										},
 									    ],

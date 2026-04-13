@@ -1,11 +1,10 @@
 
 ## TODO:
 
- - collapsable <summary/>
+ - YIELD
+   + INTERMEDIATE option
+   + STORE option
 
- - SUPERS list
- - KEYWORDS list
- - YIELD, STORE options
  - RATIO
  - dynamic NOTES ??
 
