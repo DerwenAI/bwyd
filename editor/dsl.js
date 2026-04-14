@@ -20,6 +20,16 @@ function get_rel_id (id) {
 };
 
 
+function unravel_summary (item) {
+    if ((item.children.length > 1) && (item.children[1].nodeName == "DETAILS")) {
+	return item.children[1];
+    }
+    else {
+	return item;
+    };
+};
+
+
 // generators for filtering the "caboose" from item lists
 function* gen_items (list_group) {
     for (const item of list_group.children) {
@@ -210,7 +220,10 @@ function build_select (frag, meta, depth) {
 
 function build_summary (frag, meta, depth) {
     const details = document.createElement("details");
-    details.open = true;
+
+    if (("open" in meta) && meta["open"]) {
+	details.open = true;
+    };
 
     const summary = document.createElement("summary");
     const para = document.createElement("span");
@@ -254,6 +267,13 @@ function design_build (design_meta, depth) {
 
 	case "summary":
 	    build_summary(frag, meta, depth);
+	    break;
+
+	case "lookup":
+	    DESIGN_META[meta].forEach(function(struct_meta) {
+		var item = design_build(struct_meta, depth);
+		frag.appendChild(item);
+	    });
 	    break;
 
 	default:
@@ -638,7 +658,9 @@ function encode_operations (list_group, line, script) {
 
 
 function encode_activities (group_id, line, script) {
-    for (const item of gen_items(document.getElementById(group_id))) {
+    for (var item of gen_items(document.getElementById(group_id))) {
+	item = unravel_summary(item);
+
 	for (const elem of gen_inputs(item, ["DIV"])) {
 	    const group = elem.children[1].children[0];
 
@@ -735,11 +757,14 @@ function encode_module () {
     line = encode_list(group_id, line, script);
 
     // encode the CLOSURE list, each of which have compound elements
-    for (const closure of gen_items(document.getElementById("closure-list"))) {
+    for (var closure of gen_items(document.getElementById("closure-list"))) {
+	closure = unravel_summary(closure);
+
 	// add a leading separator
 	line = encode_statement(null, "", line, script);
 
-	for (const input of gen_inputs(closure, ["INPUT", "TEXTAREA"])) {
+	// encode top-level inputs for the closure
+	for (var input of gen_inputs(closure, ["INPUT", "TEXTAREA"])) {
 	    if (input.id.startsWith("closure-name")) {
 		code = `CLOSURE: "${input.value.trim()}"`;
 		line = encode_statement(input, code, line, script);
@@ -750,28 +775,35 @@ function encode_module () {
 	    };
 	};
 
-	for (const input of gen_inputs(closure, ["DIV"])) {
-	    var group = input.children[1].children[0];
+	for (var details of gen_inputs(closure, ["DETAILS"])) {
+	    for (var div of gen_inputs(unravel_summary(details), ["DIV"])) {
+		var group = div.children[1].children[0];
 
-	    if (group.id.startsWith("super-list")) {
-		line = encode_list(group.id, line, script);
-	    }
-	    else if (group.id.startsWith("keyword-list")) {
-		line = encode_list(group.id, line, script);
-	    }
-	    else if (group.id.startsWith("container-list")) {
-		line = encode_dependency(group.id, "container", line, script);
-	    }
-	    else if (group.id.startsWith("tool-list")) {
-		line = encode_dependency(group.id, "tool", line, script);
-	    }
-	    else if (group.id.startsWith("ingredient-list")) {
-		line = encode_dependency(group.id, "ingredient", line, script);
-	    }
-	    else if (group.id.startsWith("use-list")) {
-		line = encode_dependency(group.id, "use", line, script);
-	    }
-	    else if (group.id.startsWith("activity-list")) {
+		if (group.id.startsWith("super-list")) {
+		    line = encode_list(group.id, line, script);
+		}
+		else if (group.id.startsWith("keyword-list")) {
+		    line = encode_list(group.id, line, script);
+		}
+		else if (group.id.startsWith("container-list")) {
+		    line = encode_dependency(group.id, "container", line, script);
+		}
+		else if (group.id.startsWith("tool-list")) {
+		    line = encode_dependency(group.id, "tool", line, script);
+		}
+		else if (group.id.startsWith("ingredient-list")) {
+		    line = encode_dependency(group.id, "ingredient", line, script);
+		}
+		else if (group.id.startsWith("use-list")) {
+		    line = encode_dependency(group.id, "use", line, script);
+		};
+	    };
+	};
+
+	for (var div of gen_inputs(closure, ["DIV"])) {
+	    var group = unravel_summary(div).children[1].children[0];
+
+	    if (group.id.startsWith("activity-list")) {
 		line = encode_activities(group.id, line, script);
 	    };
 	};
@@ -795,7 +827,7 @@ window.addEventListener("load", function() {
     // build a default editor page from the design metadata
     const item = document.getElementById("editor-inputs");
 
-    DESIGN_META.forEach(function(struct_meta) {
+    DESIGN_META["editor"].forEach(function(struct_meta) {
 	const elem = design_build(struct_meta, 0);
 	item.appendChild(elem);
     });
