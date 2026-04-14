@@ -399,6 +399,10 @@ const DESIGN_META = {
 											    "type": "text",
 											},
 										    },
+										    {
+											"lookup": "yields",
+										    },
+
 										],
 										"heat": [
 										    {
@@ -577,19 +581,19 @@ const DESIGN_META = {
 		    {
 			"field": {
 			    "count": "zero-one",
-			    "id": "yield-name-%",
+			    "id": "yields-name-%",
 			    "label": "Name",
-			    "placeholder": "Yield name",
-			    "verb": "YIELD",
+			    "placeholder": "Yields name",
+			    "verb": "YIELDS",
 			    "type": "symbol",
 			},
 		    },
 		    {
 			"field": {
 			    "count": "one",
-			    "id": "yield-measure-%",
+			    "id": "yields-measure-%",
 			    "label": "Measure",
-			    "placeholder": "Yield measure",
+			    "placeholder": "Yields measure",
 			    "verb": "MEASURE",
 			    "type": "text",
 			},
@@ -597,9 +601,9 @@ const DESIGN_META = {
 		    {
 			"checkbox": {
 			    "count": "one",
-			    "id": "yield-intermediate-%",
+			    "id": "yields-intermediate-%",
 			    "label": "Intermediate",
-			    "placeholder": "Yield intermediate",
+			    "placeholder": "Yields intermediate",
 			    "verb": "INTERMEDIATE",
 			    "type": "checkbox",
 			},

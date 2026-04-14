@@ -2,11 +2,11 @@
 ## TODO:
 
  - YIELD
-   + INTERMEDIATE option
    + STORE option
 
- - RATIO
  - dynamic NOTES ??
+
+ - RATIO
 
  - rework TextX grammar for Bwyd module examples
 

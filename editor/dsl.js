@@ -21,7 +21,7 @@ function get_rel_id (id) {
 
 
 function unravel_summary (item) {
-    if ((item.children.length > 1) && (item.children[1].nodeName == "DETAILS")) {
+    if ((item.children.length > 1) && (item.children[1].nodeName === "DETAILS")) {
 	return item.children[1];
     }
     else {
@@ -512,6 +512,10 @@ function encode_operations (list_group, line, script) {
 	var until = "";
 	var duration = "";
 
+	var yields_name = "";
+	var yields_measure = "";
+	var yields_intermediate = false;
+
 	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA", "SELECT"])) {
 	    switch (kind) {
 	    case "action":
@@ -592,6 +596,24 @@ function encode_operations (list_group, line, script) {
 	    };
 	};
 
+	for (var details of gen_inputs(item, ["DETAILS"])) {
+	    var summary = details.children[0].children[0].textContent;
+
+	    if (summary === "yields") {
+		for (var input of gen_inputs(unravel_summary(details), ["INPUT", "TEXTAREA", "CHECKBOX"])) {
+		    if (input.id.startsWith("yields-name")) {
+			yields_name = input.value.trim();
+		    }
+		    else if (input.id.startsWith("yields-measure")) {
+			yields_measure = input.value.trim();
+		    }
+		    else if (input.id.startsWith("yields-intermediate")) {
+			yields_intermediate = input.checked;
+		    };
+		};
+	    };
+	};
+
 	if (first_input != null) {
 	    var code = null;
 
@@ -647,6 +669,14 @@ function encode_operations (list_group, line, script) {
 		break;
 	    };
 		
+	    if (yields_name != "") {
+		code = `${code} \n YIELDS ${yields_name} (${yields_measure})`;
+
+		if (yields_intermediate) {
+		    code = `${code} INTERMEDIATE`;
+		};
+	    };
+
 	    if (code != null) {
 		line = encode_statement(first_input, code, line, script);
 	    };
