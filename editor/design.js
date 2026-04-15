@@ -608,6 +608,33 @@ const DESIGN_META = {
 			    "type": "checkbox",
 			},
 		    },
+		    {
+			"summary": {
+			    "label": "store",
+			    "type": [
+				{
+				    "field": {
+					"count": "zero-one",
+					"id": "store-text-%",
+					"label": "Storage",
+					"placeholder": "Store description",
+					"verb": "STORE",
+					"type": "text",
+				    },
+				},
+				{
+				    "field": {
+					"count": "one",
+					"id": "store-duration-%",
+					"label": "Duration",
+					"placeholder": "Store duration",
+					"verb": "DURATION",
+					"type": "text",
+				    },
+				},
+			    ],
+			},
+		    },
 		],
 	    },
 	},

@@ -1,8 +1,7 @@
 
 ## TODO:
 
- - YIELD
-   + STORE option
+ - indent spaces as a function in JavaScript
 
  - dynamic NOTES ??
 

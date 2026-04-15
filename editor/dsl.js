@@ -515,6 +515,8 @@ function encode_operations (list_group, line, script) {
 	var yields_name = "";
 	var yields_measure = "";
 	var yields_intermediate = false;
+	var store_text = "";
+	var store_duration = "";
 
 	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA", "SELECT"])) {
 	    switch (kind) {
@@ -600,7 +602,9 @@ function encode_operations (list_group, line, script) {
 	    var summary = details.children[0].children[0].textContent;
 
 	    if (summary === "yields") {
-		for (var input of gen_inputs(unravel_summary(details), ["INPUT", "TEXTAREA", "CHECKBOX"])) {
+		var deets = unravel_summary(details);
+
+		for (var input of gen_inputs(deets, ["INPUT", "TEXTAREA", "CHECKBOX"])) {
 		    if (input.id.startsWith("yields-name")) {
 			yields_name = input.value.trim();
 		    }
@@ -609,6 +613,17 @@ function encode_operations (list_group, line, script) {
 		    }
 		    else if (input.id.startsWith("yields-intermediate")) {
 			yields_intermediate = input.checked;
+		    };
+		};
+
+		var store = deets.children[deets.children.length - 1];
+
+		for (var input of gen_inputs(store, ["INPUT", "TEXTAREA"])) {
+		    if (input.id.startsWith("store-text")) {
+			store_text = input.value.trim();
+		    }
+		    else if (input.id.startsWith("store-duration")) {
+			store_duration = input.value.trim();
 		    };
 		};
 	    };
@@ -674,6 +689,10 @@ function encode_operations (list_group, line, script) {
 
 		if (yields_intermediate) {
 		    code = `${code} INTERMEDIATE`;
+		};
+
+		if (store_text != "") {
+		    code = `${code} \n STORE: "${store_text}" \n UPTO (${store_duration})`;
 		};
 	    };
 
