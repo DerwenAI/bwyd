@@ -6,7 +6,7 @@ const DESIGN_META = {
 		"id": "module-title",
 		"label": "Title",
 		"placeholder": "Recipe name",
-		"verb": "TITLE",
+		"verb": "MODULE",
 		"type": "text",
             },
 	},
@@ -250,6 +250,26 @@ const DESIGN_META = {
 						    "open": true,
 						    "type": [
 							{
+							    "field": {
+								"count": "one",
+								"id": "activity-name-%",
+								"label": "Name",
+								"placeholder": "Activity name",
+								"verb": "ACTIVITY",
+								"type": "symbol",
+							    },
+							},
+							{
+							    "field": {
+								"count": "one",
+								"id": "activity-text-%",
+								"label": "Text",
+								"placeholder": "Activity description",
+								"verb": "TEXT",
+								"type": "textarea",
+							    },
+							},
+							{
 							    "list": {
 								"count": "one-many",
 								"id": "input-list-%",
@@ -402,7 +422,6 @@ const DESIGN_META = {
 										    {
 											"lookup": "yields",
 										    },
-
 										],
 										"heat": [
 										    {
@@ -633,6 +652,25 @@ const DESIGN_META = {
 				    },
 				},
 			    ],
+			},
+		    },
+		],
+	    },
+	},
+    ],
+    "note": [
+	{
+	    "summary": {
+		"label": "note",
+		"type": [
+		    {
+			"field": {
+			    "count": "zero-one",
+			    "id": "note-text-%",
+			    "label": "Note",
+			    "placeholder": "Text description",
+			    "verb": "NOTE",
+			    "type": "textarea",
 			},
 		    },
 		],

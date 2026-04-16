@@ -710,6 +710,23 @@ function encode_activities (group_id, line, script) {
     for (var item of gen_items(document.getElementById(group_id))) {
 	item = unravel_summary(item);
 
+	var first_input = null;
+	var text = "";
+
+	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA"])) {
+	    if (input.id.startsWith("activity-name")) {
+		first_input = input;
+	    }
+	    else if (input.id.startsWith("activity-text")) {
+		text = input.value.trim();
+	    };
+	};
+
+	if (first_input != null) {
+	    var code = `ACTIVITY ${first_input.value.trim()} : "${text}"`;
+	    var line = encode_statement(first_input, code, line, script);
+	};
+
 	for (const elem of gen_inputs(item, ["DIV"])) {
 	    const group = elem.children[1].children[0];
 
