@@ -7,6 +7,7 @@ An example module in the Bwyd language.
 
 import json
 import pathlib
+import sys
 
 from icecream import ic
 import bwyd
@@ -14,7 +15,8 @@ import bwyd
 
 if __name__ == "__main__":
     examples_path: pathlib.Path = pathlib.Path("examples")
-    slug: str = "potato_quiche"
+    examples_path = pathlib.Path("test")
+    slug: str = "min_eval"
 
     # parse an example Bwyd module
     dsl: bwyd.Bwyd = bwyd.Bwyd(
@@ -26,6 +28,9 @@ if __name__ == "__main__":
         slug = slug,
         debug = False, # True
     )
+
+    # only go this far
+    sys.exit(0)
 
     # interpret the parsed module
     module.interpret(

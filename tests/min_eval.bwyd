@@ -1,0 +1,41 @@
+MODULE: "Panna Cotta"
+    TEXT: "A light, creamy dessert which pairs with so many fruits"
+
+    AUTHOR: "Paco Nathan https://derwen.ai/paco"
+    LICENSE: "CC-BY-NC-SA-4.0"
+    UPDATED: "2022-07-16"
+
+    POST: "https://www.instagram.com/p/CgGYEZFL7Dx/"
+    CITE: "https://www.thekitchn.com/how-to-make-panna-cotta-cooking-lessons-from-the-kitchn-200070"
+
+
+CLOSURE: "mix the cream"
+    TEXT: "Prepare the cream filling"
+
+    CONTAINER pan: "medium pan"
+    TOOL spatula: "silicone spatula"
+
+    INGREDIENT cream: "half-and-half or cream"
+    INGREDIENT gelatin: "powdered gelatin"
+
+    ACTIVITY pan: "bloom the gelatin"
+
+    ADD cream (180 ml)
+    ADD gelatin (5 g): "sprinkle evenly over the top"
+
+    WAIT
+        UNTIL: "surface of the cream is wrinkled"
+	TIME (5 minute)
+
+    HEAT pan: "warm gently over low heat, stirring frequently; do not boil"
+        UNTIL: "gelatin is dissolved"
+        TIME (3 minute)
+
+    ACTION spatula: "whisk the cream"
+        UNTIL: "well mixed"
+	TIME (30 second)
+        YIELDS filling (1) INTERMEDIATE
+            STORE: "in frigo"
+            UPTO (3 day)
+        NOTE: "foo bar"
+;

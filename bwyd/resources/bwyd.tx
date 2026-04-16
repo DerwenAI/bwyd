@@ -1,5 +1,5 @@
 Module:
-  "TITLE:" title=STRING
+  "MODULE:" title=STRING
   "TEXT:" text=STRING
   meta+=Module_Metadata
   closures+=Closure
@@ -42,23 +42,26 @@ Closure:
 
 Dependency:
   Container | Tool | Ingredient | Use
-  (node=Note)?
 ;
 
 Container:
   "CONTAINER" symbol=ID ":" text=STRING
+  (note=Note)?
 ;
 
 Tool:
   "TOOL" symbol=ID ":" text=STRING
+  (note=Note)?
 ;
 
 Ingredient:
   "INGREDIENT" symbol=ID ":" text=STRING
+  (note=Note)?
 ;
 
 Use:
   "USE" symbol=ID ":" text=STRING
+  (note=Note)?
 ;
 
 Activity:
@@ -67,39 +70,42 @@ Activity:
    ops+=Op
 ;
 
-Op:
-  Transform | Heat | Chill | Bake
-  (node=Note)?
-;
-
 Input:
   Add | Transfer
-  (node=Note)?
 ;
 
 Add:
   "ADD" symbol=ID measure=Measure (":" text=STRING)?
+  (note=Note)?
 ;
 
 Transfer:
   "TRANSFER" symbol=ID
+  (note=Note)?
+;
+
+Op:
+  Transform | Heat | Chill | Bake
 ;
 
 Transform:
   Action | Wait
-  (yields+=Yields)?
 ;
 
 Action:
   "ACTION" symbol=ID (":" modifier=STRING)?
     "UNTIL:" until=STRING
     "TIME" duration=Duration
+    (yields=Yields)?
+    (note=Note)?
 ;
 
 Wait:
   "WAIT" (":" modifier=STRING)?
     "UNTIL:" until=STRING
     "TIME" duration=Duration
+    (yields=Yields)?
+    (note=Note)?
 ;
 
 Yields:
@@ -116,12 +122,14 @@ Heat:
   "HEAT" symbol=ID (":" modifier=STRING)?
     "UNTIL:" until=STRING
     "TIME" duration=Duration
+    (note=Note)?
 ;
 
 Chill:
   "CHILL" symbol=ID (":" modifier=STRING)?
     "UNTIL:" until=STRING
     "TIME" duration=Duration
+    (note=Note)?
 ;
 
 Bake:
@@ -129,6 +137,7 @@ Bake:
     "AT:" temperature=Temperature
     "UNTIL:" until=STRING
     "TIME" duration=Duration
+    (note=Note)?
 ;
 
 OvenMode:
