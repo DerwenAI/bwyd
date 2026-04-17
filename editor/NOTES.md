@@ -1,9 +1,7 @@
 
 ## TODO:
 
- - indent spaces as a function in JavaScript
- - dynamic NOTES
-
+ - NOTES
  - RATIO
 
  - rework TextX grammar to sync with editor UI changes

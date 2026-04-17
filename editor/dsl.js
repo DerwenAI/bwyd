@@ -422,7 +422,7 @@ function menu_select (menu_id, depth) {
 // encode the current editor content in the DSL language
 //
 
-function encode_statement (elem, code, line, script) {
+function encode_statement (elem, code, indent, line, script) {
     const num_lines = code.split(/\r\n|\r|\n/).length;
     var elem_id = null;
 
@@ -439,13 +439,15 @@ function encode_statement (elem, code, line, script) {
     };
 
     BWYD_DEBUG.push(debug);
-    script.push(code);
+
+    const spaces = " ".repeat(indent * 2);
+    script.push(`${spaces}${code}`);
 
     return line + num_lines;
 };
 
 
-function encode_inputs (list_group, line, script) {
+function encode_inputs (list_group, indent, line, script) {
     for (const item of gen_items(list_group)) {
 	var kind = item.children[1].value;
 
@@ -493,7 +495,7 @@ function encode_inputs (list_group, line, script) {
 	    };
 		
 	    if (code != null) {
-		line = encode_statement(first_input, code, line, script);
+		line = encode_statement(first_input, code, indent, line, script);
 	    };
 	};
     };
@@ -502,7 +504,7 @@ function encode_inputs (list_group, line, script) {
 };
 
 
-function encode_operations (list_group, line, script) {
+function encode_operations (list_group, indent, line, script) {
     for (const item of gen_items(list_group)) {
 	var kind = item.children[1].value;
 
@@ -631,6 +633,7 @@ function encode_operations (list_group, line, script) {
 
 	if (first_input != null) {
 	    var code = null;
+	    var spaces = " ".repeat((indent + 1) * 2);
 
 	    switch (kind) {
 	    case "action":
@@ -640,9 +643,9 @@ function encode_operations (list_group, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code} \n UNTIL: "${until}" \n TIME (${duration})`;
+		code =`${code} \n${spaces}UNTIL: "${until}" \n${spaces}TIME (${duration})`;
 		break;
-
+		
 	    case "wait":
 		code = `WAIT`;
 
@@ -650,7 +653,7 @@ function encode_operations (list_group, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code} \n UNTIL: "${until}" \n TIME (${duration})`;
+		code =`${code} \n${spaces}UNTIL: "${until}" \n${spaces}TIME (${duration})`;
 		break;
 
 	    case "heat":
@@ -660,7 +663,7 @@ function encode_operations (list_group, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code} \n UNTIL: "${until}" \n TIME (${duration})`;
+		code =`${code} \n${spaces}UNTIL: "${until}" \n${spaces}TIME (${duration})`;
 		break;
 
 	    case "chill":
@@ -670,7 +673,7 @@ function encode_operations (list_group, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code} \n UNTIL: "${until}" \n TIME (${duration})`;
+		code =`${code} \n${spaces}UNTIL: "${until}" \n${spaces}TIME (${duration})`;
 		break;
 
 	    case "bake":
@@ -680,24 +683,24 @@ function encode_operations (list_group, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code} \n UNTIL: "${until}" \n TIME (${duration})`;
+		code =`${code} \n${spaces}UNTIL: "${until}" \n${spaces}TIME (${duration})`;
 		break;
 	    };
 		
 	    if (yields_name != "") {
-		code = `${code} \n YIELDS ${yields_name} (${yields_measure})`;
+		code = `${code} \n${spaces}YIELDS ${yields_name} (${yields_measure})`;
 
 		if (yields_intermediate) {
 		    code = `${code} INTERMEDIATE`;
 		};
 
 		if (store_text != "") {
-		    code = `${code} \n STORE: "${store_text}" \n UPTO (${store_duration})`;
+		    code = `${code} \n${spaces}STORE: "${store_text}" \n${spaces}UPTO (${store_duration})`;
 		};
 	    };
 
 	    if (code != null) {
-		line = encode_statement(first_input, code, line, script);
+		line = encode_statement(first_input, code, indent, line, script);
 	    };
 	};
     };
@@ -706,7 +709,7 @@ function encode_operations (list_group, line, script) {
 };
 
 
-function encode_activities (group_id, line, script) {
+function encode_activities (group_id, indent, line, script) {
     for (var item of gen_items(document.getElementById(group_id))) {
 	item = unravel_summary(item);
 
@@ -723,18 +726,21 @@ function encode_activities (group_id, line, script) {
 	};
 
 	if (first_input != null) {
+	// add a leading separator
+	    line = encode_statement(null, "", 0, line, script);
+
 	    var code = `ACTIVITY ${first_input.value.trim()} : "${text}"`;
-	    var line = encode_statement(first_input, code, line, script);
+	    line = encode_statement(first_input, code, indent, line, script);
 	};
 
 	for (const elem of gen_inputs(item, ["DIV"])) {
 	    const group = elem.children[1].children[0];
 
 	    if (group.id.startsWith("input-list")) {
-		line = encode_inputs(group, line, script);
+		line = encode_inputs(group, indent + 1, line, script);
 	    }
 	    else if (group.id.startsWith("operation-list")) {
-		line = encode_operations(group, line, script);
+		line = encode_operations(group, indent + 1, line, script);
 	    };
 	};
     };
@@ -743,7 +749,7 @@ function encode_activities (group_id, line, script) {
 };
 
 
-function encode_dependency (group_id, kind, line, script) {
+function encode_dependency (group_id, kind, indent, line, script) {
     const verb = ELEM_META[group_id].verb;
 
     for (const item of document.getElementById(group_id).children) {
@@ -763,7 +769,7 @@ function encode_dependency (group_id, kind, line, script) {
 
 	if (first_input != null) {
 	    var code = `${verb} ${first_input.value.trim()}: "${text}"`;
-	    line = encode_statement(first_input, code, line, script);
+	    line = encode_statement(first_input, code, indent, line, script);
 	};
     };
 
@@ -771,7 +777,7 @@ function encode_dependency (group_id, kind, line, script) {
 };
 
 
-function encode_list (group_id, line, script) {
+function encode_list (group_id, indent, line, script) {
     document.getElementById(group_id).childNodes.forEach(
 	function(item, index) {
 	    item.childNodes.forEach(
@@ -779,7 +785,7 @@ function encode_list (group_id, line, script) {
 		    if ((input.id in ELEM_META) && !input.id.startsWith("caboose-")) {
 			const verb = ELEM_META[input.id].verb;
 			const code = `${verb}: "${input.value.trim()}"`;
-			line = encode_statement(input, code, line, script);
+			line = encode_statement(input, code, indent, line, script);
 		    };
 		}
 	    );
@@ -790,13 +796,13 @@ function encode_list (group_id, line, script) {
 };
 
 
-function encode_head (group_id, line, script) {
+function encode_head (group_id, indent, line, script) {
     document.getElementById(group_id).childNodes.forEach(
 	function(input, index) {
 	    if ((input.id in ELEM_META) && ["INPUT", "TEXTAREA"].includes(input.nodeName)) {
 		const verb = ELEM_META[input.id].verb;
 		const code = `${verb}: "${input.value.trim()}"`;
-		line = encode_statement(input, code, line, script);
+		line = encode_statement(input, code, indent, line, script);
 	    };
 	}
     );
@@ -814,30 +820,30 @@ function encode_module () {
 
     // encode top-level inputs for the module
     var group_id = "editor-inputs";
-    line = encode_head(group_id, line, script);
+    line = encode_head(group_id, 0, line, script);
 
     group_id = "cite-list";
-    line = encode_list(group_id, line, script);
+    line = encode_list(group_id, 1, line, script);
 
     group_id = "post-list";
-    line = encode_list(group_id, line, script);
+    line = encode_list(group_id, 1, line, script);
 
     // encode the CLOSURE list, each of which have compound elements
     for (var closure of gen_items(document.getElementById("closure-list"))) {
 	closure = unravel_summary(closure);
 
 	// add a leading separator
-	line = encode_statement(null, "", line, script);
+	line = encode_statement(null, "", 0, line, script);
 
 	// encode top-level inputs for the closure
 	for (var input of gen_inputs(closure, ["INPUT", "TEXTAREA"])) {
 	    if (input.id.startsWith("closure-name")) {
 		code = `CLOSURE: "${input.value.trim()}"`;
-		line = encode_statement(input, code, line, script);
+		line = encode_statement(input, code, 0, line, script);
 	    }
 	    else if (input.id.startsWith("closure-text")) {
 		code = `TEXT: "${input.value.trim()}"`;
-		line = encode_statement(input, code, line, script);
+		line = encode_statement(input, code, 0, line, script);
 	    };
 	};
 
@@ -846,22 +852,22 @@ function encode_module () {
 		var group = div.children[1].children[0];
 
 		if (group.id.startsWith("super-list")) {
-		    line = encode_list(group.id, line, script);
+		    line = encode_list(group.id, 1, line, script);
 		}
 		else if (group.id.startsWith("keyword-list")) {
-		    line = encode_list(group.id, line, script);
+		    line = encode_list(group.id, 1, line, script);
 		}
 		else if (group.id.startsWith("container-list")) {
-		    line = encode_dependency(group.id, "container", line, script);
+		    line = encode_dependency(group.id, "container", 1, line, script);
 		}
 		else if (group.id.startsWith("tool-list")) {
-		    line = encode_dependency(group.id, "tool", line, script);
+		    line = encode_dependency(group.id, "tool", 1, line, script);
 		}
 		else if (group.id.startsWith("ingredient-list")) {
-		    line = encode_dependency(group.id, "ingredient", line, script);
+		    line = encode_dependency(group.id, "ingredient", 1, line, script);
 		}
 		else if (group.id.startsWith("use-list")) {
-		    line = encode_dependency(group.id, "use", line, script);
+		    line = encode_dependency(group.id, "use", 1, line, script);
 		};
 	    };
 	};
@@ -870,12 +876,12 @@ function encode_module () {
 	    var group = unravel_summary(div).children[1].children[0];
 
 	    if (group.id.startsWith("activity-list")) {
-		line = encode_activities(group.id, line, script);
+		line = encode_activities(group.id, 1, line, script);
 	    };
 	};
 
 	// add a trailing separator
-	line = encode_statement(null, ";", line, script);
+	line = encode_statement(null, ";", 0, line, script);
     };
 
     // debug: update the <textarea/> script display
