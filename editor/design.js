@@ -141,6 +141,9 @@ const DESIGN_META = {
 								"type": "textarea",
 							    },
 							},
+							{
+							    "lookup": "note",
+							},
 						    ],
 						},
 					    },
@@ -170,6 +173,9 @@ const DESIGN_META = {
 								"verb": "TEXT",
 								"type": "textarea",
 							    },
+							},
+							{
+							    "lookup": "note",
 							},
 						    ],
 						},
@@ -201,6 +207,9 @@ const DESIGN_META = {
 								"type": "textarea",
 							    },
 							},
+							{
+							    "lookup": "note",
+							},
 						    ],
 						},
 					    },
@@ -230,6 +239,9 @@ const DESIGN_META = {
 								"verb": "TEXT",
 								"type": "textarea",
 							    },
+							},
+							{
+							    "lookup": "note",
 							},
 						    ],
 						},
@@ -312,6 +324,9 @@ const DESIGN_META = {
 											    "type": "textarea",
 											},
 										    },
+										    {
+											"lookup": "note",
+										    },
 										],
 										"transfer": [
 										    {
@@ -323,6 +338,9 @@ const DESIGN_META = {
 											    "verb": "TRANSFER",
 											    "type": "symbol",
 											},
+										    },
+										    {
+											"lookup": "note",
 										    },
 										],
 									    },
@@ -387,6 +405,9 @@ const DESIGN_META = {
 										    {
 											"lookup": "yields",
 										    },
+										    {
+											"lookup": "note",
+										    },
 										],
 										"wait": [
 										    {
@@ -421,6 +442,9 @@ const DESIGN_META = {
 										    },
 										    {
 											"lookup": "yields",
+										    },
+										    {
+											"lookup": "note",
 										    },
 										],
 										"heat": [
@@ -464,6 +488,9 @@ const DESIGN_META = {
 											    "type": "text",
 											},
 										    },
+										    {
+											"lookup": "note",
+										    },
 										],
 										"chill": [
 										    {
@@ -505,6 +532,9 @@ const DESIGN_META = {
 											    "verb": "DURATION",
 											    "type": "text",
 											},
+										    },
+										    {
+											"lookup": "note",
 										    },
 										],
 										"bake": [
@@ -571,6 +601,9 @@ const DESIGN_META = {
 											    "verb": "DURATION",
 											    "type": "text",
 											},
+										    },
+										    {
+											"lookup": "note",
 										    },
 										],
 									    },

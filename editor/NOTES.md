@@ -1,7 +1,8 @@
 
 ## TODO:
 
- - NOTES
+ - descriptions for each type, e.g., to distinguish among <select/> options
+
  - RATIO
 
  - rework TextX grammar to sync with editor UI changes

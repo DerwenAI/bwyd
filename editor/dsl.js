@@ -1,9 +1,11 @@
 //////////////////////////////////////////////////////////////////////
 // global data structures
 
+const CALLBACK_QUEUE = [];
+const ELEM_META = {};
+const SPACES_PER_TAB = 2;
+
 var BWYD_DEBUG = [];
-var CALLBACK_QUEUE = [];
-var ELEM_META = {};
 
 
 //////////////////////////////////////////////////////////////////////
@@ -27,6 +29,11 @@ function unravel_summary (item) {
     else {
 	return item;
     };
+};
+
+
+function gen_spaces (indent) {
+    return " ".repeat(indent * SPACES_PER_TAB);
 };
 
 
@@ -82,30 +89,30 @@ function build_input (meta, item_id) {
 
 
 function build_field (frag, meta, depth) {
-    var item_id = get_rel_id(meta["id"]);
+    const item_id = get_rel_id(meta["id"]);
     ELEM_META[item_id] = meta;
 
-    var label = document.createElement("label");
+    const label = document.createElement("label");
     label.setAttribute("class", "form-label");
     label.setAttribute("for", item_id);
     label.appendChild(document.createTextNode(meta["label"]));
     frag.appendChild(label);
 
-    var input = build_input(meta, item_id);
+    const input = build_input(meta, item_id);
     input.setAttribute("placeholder", meta["placeholder"]);
     frag.appendChild(input);
 };
 
 
 function build_checkbox (frag, meta, depth) {
-    var item_id = get_rel_id(meta["id"]);
+    const item_id = get_rel_id(meta["id"]);
     ELEM_META[item_id] = meta;
 
-    var input = build_input(meta, item_id);
+    const input = build_input(meta, item_id);
     input.setAttribute("style", "margin-top: 1rem;");
     frag.appendChild(input);
 
-    var label = document.createElement("label");
+    const label = document.createElement("label");
     label.setAttribute("class", "form-check-label");
     label.setAttribute("for", item_id);
     label.setAttribute("style", "margin-left: 1rem; margin-top: .7rem;");
@@ -115,10 +122,10 @@ function build_checkbox (frag, meta, depth) {
 
 
 function build_list (frag, meta, depth) {
-    var group_id = get_rel_id(meta["id"]);
-    var color = Math.round((1.0 - (depth * .03)) * 100.0);
+    const group_id = get_rel_id(meta["id"]);
+    const color = Math.round((1.0 - (depth * .03)) * 100.0);
 
-    var row = document.createElement("div");
+    const row = document.createElement("div");
     row.setAttribute("class", "row");
     row.setAttribute("id", get_rel_id("%"));
     row.setAttribute("style", `min-height: 8rem; width: 100%; margin-top: 2rem; margin-left: -2rem; background: hsl(0 0 ${color});`);
@@ -129,7 +136,7 @@ function build_list (frag, meta, depth) {
     col.setAttribute("style", "padding: 0;");
     row.appendChild(col);
 
-    var label = document.createElement("label");
+    const label = document.createElement("label");
     label.setAttribute("class", "form-label");
     label.setAttribute("for", group_id);
     label.setAttribute("style", "margin-top: 1rem; rotate: 270deg; color: hsl(0, 0%, 75%); font-weight: bold; padding-left: 0;");
@@ -140,7 +147,7 @@ function build_list (frag, meta, depth) {
     col.setAttribute("class", "col-8");
     row.appendChild(col);
 
-    var list_group = document.createElement("div");
+    const list_group = document.createElement("div");
     ELEM_META[group_id] = meta;
 
     list_group.setAttribute("class", "list-group");
@@ -153,24 +160,24 @@ function build_list (frag, meta, depth) {
     });
 
     // add a "caboose" button
-    var caboose = document.createElement("div");
+    const caboose = document.createElement("div");
     caboose.setAttribute("id", get_rel_id("caboose-%"));
     caboose.setAttribute("class", "list-group-item");
 
-    var button = document.createElement("button");
+    const button = document.createElement("button");
     button.setAttribute("class", "btn btn-outline-primary btn-sm");
     button.setAttribute("style", "width: 2.1em; display: inline;");
 
-    var callback = `list_add('${group_id}', ${depth})`;
+    const callback = `list_add('${group_id}', ${depth})`;
     button.setAttribute("onclick", callback);
 
-    var icon = document.createElement("i");
+    const icon = document.createElement("i");
     icon.setAttribute("class", "bi bi-plus");
     button.appendChild(icon);
     caboose.appendChild(button);
 
-    var para = document.createElement("span");
-    var text = `add new ${meta["label"].toLowerCase()}`;
+    const para = document.createElement("span");
+    const text = `add new ${meta["label"].toLowerCase()}`;
     para.appendChild(document.createTextNode(text));
     para.setAttribute("style", "font-size: .75em; font-style: oblique; color: #aaa; margin-left: 1em;");
 
@@ -180,16 +187,16 @@ function build_list (frag, meta, depth) {
 
 
 function build_select (frag, meta, depth) {
-    var item_id = get_rel_id(meta["id"]);
+    const item_id = get_rel_id(meta["id"]);
     ELEM_META[item_id] = meta;
 
     if ("label" in meta) {
-	var label = document.createElement("span");
+	const label = document.createElement("span");
 	label.appendChild(document.createTextNode(meta["label"]));
 	frag.appendChild(label);
     };
 
-    var select = document.createElement("select");
+    const select = document.createElement("select");
     select.setAttribute("class", "form-control");
     select.setAttribute("id", item_id);
     select.setAttribute("style", "display: inline-block; width: 93%;");
@@ -199,7 +206,7 @@ function build_select (frag, meta, depth) {
     option.setAttribute("selected", true);
     option.setAttribute("value", null);
 
-    var para = document.createElement("span");
+    const para = document.createElement("span");
     para.setAttribute("style", "font-style: oblique; color: #aaa;");
     para.appendChild(document.createTextNode("(select an option)"));
     option.appendChild(para);
@@ -212,7 +219,7 @@ function build_select (frag, meta, depth) {
 	select.appendChild(option);
     };
 
-    var callback = `menu_select('${item_id}', ${depth})`;
+    const callback = `menu_select('${item_id}', ${depth})`;
     select.setAttribute("onchange", callback);
     frag.appendChild(select);
 };
@@ -236,7 +243,7 @@ function build_summary (frag, meta, depth) {
     details.appendChild(summary);
 
     meta["type"].forEach(function(struct_meta) {
-	var item = design_build(struct_meta, depth);
+	const item = design_build(struct_meta, depth);
 	details.appendChild(item);
     });
 
@@ -304,7 +311,7 @@ function list_add (group_id, depth) {
     elem.setAttribute("class", "row list-group-item");
 
     if (["text", "textarea", "symbol", "url", "checkbox"].includes(meta["type"])) {
-	var input = build_input(meta, item_id);
+	const input = build_input(meta, item_id);
 	input.setAttribute("placeholder", meta["placeholder"]);
 	input.setAttribute("class", "url-field");
 	input.setAttribute("required", true);
@@ -323,7 +330,7 @@ function list_add (group_id, depth) {
 	is_structured = true;
 
 	meta["type"].forEach(function(struct_meta) {
-	    var item = design_build(struct_meta, depth + 1);
+	    const item = design_build(struct_meta, depth + 1);
 	    elem.appendChild(item);
 	});
     };
@@ -357,7 +364,7 @@ function list_add (group_id, depth) {
     // NB: must follow `insertBefore` above, or IDs won't be in the DOM
     if (is_structured) {
 	for (const item of built_elem.children) {
-	    if ((item.classList != null) && item.classList.contains("form-control")) {
+	    if ((item.classList !== null) && item.classList.contains("form-control")) {
 		item_id = item.id;
 		break;
 	    };
@@ -381,7 +388,7 @@ function list_add (group_id, depth) {
 function list_del (group_id, item_id) {
     const list_group = document.getElementById(group_id);
 
-    if (item_id != null) {
+    if (item_id !== null) {
 	const item = document.getElementById(item_id);
 	item.parentNode.remove();
     };
@@ -426,7 +433,7 @@ function encode_statement (elem, code, indent, line, script) {
     const num_lines = code.split(/\r\n|\r|\n/).length;
     var elem_id = null;
 
-    if (elem != null) {
+    if (elem !== null) {
 	elem_id = elem.id;
     };
 
@@ -440,7 +447,7 @@ function encode_statement (elem, code, indent, line, script) {
 
     BWYD_DEBUG.push(debug);
 
-    const spaces = " ".repeat(indent * 2);
+    const spaces = gen_spaces(indent);
     script.push(`${spaces}${code}`);
 
     return line + num_lines;
@@ -448,12 +455,16 @@ function encode_statement (elem, code, indent, line, script) {
 
 
 function encode_inputs (list_group, indent, line, script) {
+    const spaces = gen_spaces(indent);
+
     for (const item of gen_items(list_group)) {
-	var kind = item.children[1].value;
+	const kind = item.children[1].value;
 
 	var first_input = null;
 	var measure = "";
 	var text = "";
+
+	var note_text = "";
 
 	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA"])) {
 	    switch (kind) {
@@ -477,7 +488,23 @@ function encode_inputs (list_group, indent, line, script) {
 	    };
 	};
 
-	if (first_input != null) {
+	for (var details of gen_inputs(item, ["DETAILS"])) {
+	    const summary = details.children[0].children[0].textContent;
+	    const deets = unravel_summary(details);
+
+	    switch (summary) {
+	    case "note":
+		for (var input of gen_inputs(deets, ["TEXTAREA"])) {
+		    if (input.id.startsWith("note-text")) {
+			note_text = input.value.trim();
+		    };
+		};
+
+		break;
+	    };
+	};
+
+	if (first_input !== null) {
 	    var code = null;
 
 	    switch (kind) {
@@ -493,8 +520,12 @@ function encode_inputs (list_group, indent, line, script) {
 		code = `TRANSFER ${first_input.value.trim()}`;
 		break;
 	    };
-		
-	    if (code != null) {
+
+	    if (note_text !== "") {
+		code = `${code}\n${spaces}NOTE: "${note_text}"`;
+	    };
+
+	    if (code !== null) {
 		line = encode_statement(first_input, code, indent, line, script);
 	    };
 	};
@@ -505,8 +536,10 @@ function encode_inputs (list_group, indent, line, script) {
 
 
 function encode_operations (list_group, indent, line, script) {
+    const spaces = gen_spaces(indent);
+
     for (const item of gen_items(list_group)) {
-	var kind = item.children[1].value;
+	const kind = item.children[1].value;
 
 	var first_input = null;
 	var mode = "";
@@ -519,6 +552,8 @@ function encode_operations (list_group, indent, line, script) {
 	var yields_intermediate = false;
 	var store_text = "";
 	var store_duration = "";
+
+	var note_text = "";
 
 	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA", "SELECT"])) {
 	    switch (kind) {
@@ -601,11 +636,11 @@ function encode_operations (list_group, indent, line, script) {
 	};
 
 	for (var details of gen_inputs(item, ["DETAILS"])) {
-	    var summary = details.children[0].children[0].textContent;
+	    const summary = details.children[0].children[0].textContent;
+	    const deets = unravel_summary(details);
 
-	    if (summary === "yields") {
-		var deets = unravel_summary(details);
-
+	    switch (summary) {
+	    case "yields":
 		for (var input of gen_inputs(deets, ["INPUT", "TEXTAREA", "CHECKBOX"])) {
 		    if (input.id.startsWith("yields-name")) {
 			yields_name = input.value.trim();
@@ -618,7 +653,7 @@ function encode_operations (list_group, indent, line, script) {
 		    };
 		};
 
-		var store = deets.children[deets.children.length - 1];
+		const store = deets.children[deets.children.length - 1];
 
 		for (var input of gen_inputs(store, ["INPUT", "TEXTAREA"])) {
 		    if (input.id.startsWith("store-text")) {
@@ -628,12 +663,22 @@ function encode_operations (list_group, indent, line, script) {
 			store_duration = input.value.trim();
 		    };
 		};
+
+		break;
+
+	    case "note":
+		for (var input of gen_inputs(deets, ["TEXTAREA"])) {
+		    if (input.id.startsWith("note-text")) {
+			note_text = input.value.trim();
+		    };
+		};
+
+		break;
 	    };
 	};
 
-	if (first_input != null) {
+	if (first_input !== null) {
 	    var code = null;
-	    var spaces = " ".repeat((indent + 1) * 2);
 
 	    switch (kind) {
 	    case "action":
@@ -643,7 +688,7 @@ function encode_operations (list_group, indent, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code} \n${spaces}UNTIL: "${until}" \n${spaces}TIME (${duration})`;
+		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces}TIME (${duration})`;
 		break;
 		
 	    case "wait":
@@ -653,7 +698,7 @@ function encode_operations (list_group, indent, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code} \n${spaces}UNTIL: "${until}" \n${spaces}TIME (${duration})`;
+		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces}TIME (${duration})`;
 		break;
 
 	    case "heat":
@@ -663,7 +708,7 @@ function encode_operations (list_group, indent, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code} \n${spaces}UNTIL: "${until}" \n${spaces}TIME (${duration})`;
+		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces}TIME (${duration})`;
 		break;
 
 	    case "chill":
@@ -673,7 +718,7 @@ function encode_operations (list_group, indent, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code} \n${spaces}UNTIL: "${until}" \n${spaces}TIME (${duration})`;
+		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces}TIME (${duration})`;
 		break;
 
 	    case "bake":
@@ -683,23 +728,27 @@ function encode_operations (list_group, indent, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code} \n${spaces}UNTIL: "${until}" \n${spaces}TIME (${duration})`;
+		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces}TIME (${duration})`;
 		break;
 	    };
 		
-	    if (yields_name != "") {
-		code = `${code} \n${spaces}YIELDS ${yields_name} (${yields_measure})`;
+	    if (yields_name !== "") {
+		code = `${code}\n${spaces}YIELDS ${yields_name} (${yields_measure})`;
 
 		if (yields_intermediate) {
 		    code = `${code} INTERMEDIATE`;
 		};
 
-		if (store_text != "") {
-		    code = `${code} \n${spaces}STORE: "${store_text}" \n${spaces}UPTO (${store_duration})`;
+		if (store_text !== "") {
+		    code = `${code}\n${spaces}STORE: "${store_text}"\n${spaces}UPTO (${store_duration})`;
 		};
 	    };
 
-	    if (code != null) {
+	    if (note_text !== "") {
+		code = `${code}\n${spaces}NOTE: "${note_text}"`;
+	    };
+
+	    if (code !== null) {
 		line = encode_statement(first_input, code, indent, line, script);
 	    };
 	};
@@ -725,8 +774,8 @@ function encode_activities (group_id, indent, line, script) {
 	    };
 	};
 
-	if (first_input != null) {
-	// add a leading separator
+	if (first_input !== null) {
+	    // add a leading separator
 	    line = encode_statement(null, "", 0, line, script);
 
 	    var code = `ACTIVITY ${first_input.value.trim()} : "${text}"`;
@@ -751,10 +800,13 @@ function encode_activities (group_id, indent, line, script) {
 
 function encode_dependency (group_id, kind, indent, line, script) {
     const verb = ELEM_META[group_id].verb;
+    const spaces = gen_spaces(indent);
 
     for (const item of document.getElementById(group_id).children) {
 	var first_input = null;
 	var text = "";
+
+	var note_text = "";
 
 	for (const input of item.children) {
 	    if ((input.id in ELEM_META) && !input.id.startsWith("caboose-") && ["INPUT", "TEXTAREA"].includes(input.nodeName)) {
@@ -767,8 +819,29 @@ function encode_dependency (group_id, kind, indent, line, script) {
 	    };
 	};
 
-	if (first_input != null) {
+	for (var details of gen_inputs(item, ["DETAILS"])) {
+	    const summary = details.children[0].children[0].textContent;
+	    const deets = unravel_summary(details);
+
+	    switch (summary) {
+	    case "note":
+		for (var input of gen_inputs(deets, ["TEXTAREA"])) {
+		    if (input.id.startsWith("note-text")) {
+			note_text = input.value.trim();
+		    };
+		};
+
+		break;
+	    };
+	};
+
+	if (first_input !== null) {
 	    var code = `${verb} ${first_input.value.trim()}: "${text}"`;
+
+	    if (note_text !== "") {
+		code = `${code}\n${spaces}NOTE: "${note_text}"`;
+	    };
+
 	    line = encode_statement(first_input, code, indent, line, script);
 	};
     };
