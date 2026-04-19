@@ -1,16 +1,15 @@
 
 ## TODO:
 
- - descriptions for each type, e.g., to distinguish among <select/> options
-
- - RATIO
-
- - rework TextX grammar to sync with editor UI changes
-   + migrate existing Bwyd module examples
-
  - simplify CSS from Bootstrap examples in use
    + refactor dynamic style into `dsl.css`
    + make the UI/UX more compact, especially for lists
+
+ - rework TextX grammar to sync with editor UI changes
+   + migrate existing Bwyd module examples
+   + update Pydantic classes to read parse trees
+
+ - descriptions for each type, e.g., to distinguish among <select/> options
 
  - impl FastAPI webapp
    + load Bwyd module examples to confirm roundtrip
