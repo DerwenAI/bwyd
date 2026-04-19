@@ -454,8 +454,28 @@ function encode_statement (elem, code, indent, line, script) {
 };
 
 
+function encode_note (item) {
+    var note_text = "";
+
+    for (var details of gen_inputs(item, ["DETAILS"])) {
+	const summary = details.children[0].children[0].textContent;
+	const deets = unravel_summary(details);
+
+	if (summary === "note") {
+	    for (var input of gen_inputs(deets, ["TEXTAREA"])) {
+		if (input.id.startsWith("note-text")) {
+		    note_text = input.value.trim();
+		};
+	    };
+	};
+    };
+
+    return note_text;
+};
+
+
 function encode_inputs (list_group, indent, line, script) {
-    const spaces = gen_spaces(indent);
+    const spaces = gen_spaces(indent + 1);
 
     for (const item of gen_items(list_group)) {
 	const kind = item.children[1].value;
@@ -464,7 +484,7 @@ function encode_inputs (list_group, indent, line, script) {
 	var measure = "";
 	var text = "";
 
-	var note_text = "";
+	var note_text = encode_note(item);
 
 	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA"])) {
 	    switch (kind) {
@@ -484,22 +504,6 @@ function encode_inputs (list_group, indent, line, script) {
 		if (input.id.startsWith(`${kind}-name`)) {
 		    first_input = input;
 		}
-		break;
-	    };
-	};
-
-	for (var details of gen_inputs(item, ["DETAILS"])) {
-	    const summary = details.children[0].children[0].textContent;
-	    const deets = unravel_summary(details);
-
-	    switch (summary) {
-	    case "note":
-		for (var input of gen_inputs(deets, ["TEXTAREA"])) {
-		    if (input.id.startsWith("note-text")) {
-			note_text = input.value.trim();
-		    };
-		};
-
 		break;
 	    };
 	};
@@ -536,7 +540,8 @@ function encode_inputs (list_group, indent, line, script) {
 
 
 function encode_operations (list_group, indent, line, script) {
-    const spaces = gen_spaces(indent);
+    const spaces = gen_spaces(indent + 1);
+    const spaces_2 = gen_spaces(indent + 2);
 
     for (const item of gen_items(list_group)) {
 	const kind = item.children[1].value;
@@ -553,7 +558,7 @@ function encode_operations (list_group, indent, line, script) {
 	var store_text = "";
 	var store_duration = "";
 
-	var note_text = "";
+	var note_text = encode_note(item);
 
 	for (const input of gen_inputs(item, ["INPUT", "TEXTAREA", "SELECT"])) {
 	    switch (kind) {
@@ -639,8 +644,7 @@ function encode_operations (list_group, indent, line, script) {
 	    const summary = details.children[0].children[0].textContent;
 	    const deets = unravel_summary(details);
 
-	    switch (summary) {
-	    case "yields":
+	    if (summary === "yields") {
 		for (var input of gen_inputs(deets, ["INPUT", "TEXTAREA", "CHECKBOX"])) {
 		    if (input.id.startsWith("yields-name")) {
 			yields_name = input.value.trim();
@@ -663,17 +667,6 @@ function encode_operations (list_group, indent, line, script) {
 			store_duration = input.value.trim();
 		    };
 		};
-
-		break;
-
-	    case "note":
-		for (var input of gen_inputs(deets, ["TEXTAREA"])) {
-		    if (input.id.startsWith("note-text")) {
-			note_text = input.value.trim();
-		    };
-		};
-
-		break;
 	    };
 	};
 
@@ -688,7 +681,7 @@ function encode_operations (list_group, indent, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces}TIME (${duration})`;
+		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces_2}TIME (${duration})`;
 		break;
 		
 	    case "wait":
@@ -698,7 +691,7 @@ function encode_operations (list_group, indent, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces}TIME (${duration})`;
+		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces_2}TIME (${duration})`;
 		break;
 
 	    case "heat":
@@ -708,7 +701,7 @@ function encode_operations (list_group, indent, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces}TIME (${duration})`;
+		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces_2}TIME (${duration})`;
 		break;
 
 	    case "chill":
@@ -718,7 +711,7 @@ function encode_operations (list_group, indent, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces}TIME (${duration})`;
+		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces_2}TIME (${duration})`;
 		break;
 
 	    case "bake":
@@ -728,7 +721,7 @@ function encode_operations (list_group, indent, line, script) {
 		    code = `${code}: "${text}"`;
 		};
 
-		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces}TIME (${duration})`;
+		code =`${code}\n${spaces}UNTIL: "${until}"\n${spaces_2}TIME (${duration})`;
 		break;
 	    };
 		
@@ -740,12 +733,12 @@ function encode_operations (list_group, indent, line, script) {
 		};
 
 		if (store_text !== "") {
-		    code = `${code}\n${spaces}STORE: "${store_text}"\n${spaces}UPTO (${store_duration})`;
+		    code = `${code}\n${spaces}STORE: "${store_text}"\n${spaces_2}UPTO (${store_duration})`;
 		};
 	    };
 
 	    if (note_text !== "") {
-		code = `${code}\n${spaces}NOTE: "${note_text}"`;
+		code = `${code}\n${spaces_2}NOTE: "${note_text}"`;
 	    };
 
 	    if (code !== null) {
@@ -800,13 +793,13 @@ function encode_activities (group_id, indent, line, script) {
 
 function encode_dependency (group_id, kind, indent, line, script) {
     const verb = ELEM_META[group_id].verb;
-    const spaces = gen_spaces(indent);
+    const spaces = gen_spaces(indent + 1);
 
     for (const item of document.getElementById(group_id).children) {
 	var first_input = null;
 	var text = "";
 
-	var note_text = "";
+	var note_text = encode_note(item);
 
 	for (const input of item.children) {
 	    if ((input.id in ELEM_META) && !input.id.startsWith("caboose-") && ["INPUT", "TEXTAREA"].includes(input.nodeName)) {
@@ -819,22 +812,6 @@ function encode_dependency (group_id, kind, indent, line, script) {
 	    };
 	};
 
-	for (var details of gen_inputs(item, ["DETAILS"])) {
-	    const summary = details.children[0].children[0].textContent;
-	    const deets = unravel_summary(details);
-
-	    switch (summary) {
-	    case "note":
-		for (var input of gen_inputs(deets, ["TEXTAREA"])) {
-		    if (input.id.startsWith("note-text")) {
-			note_text = input.value.trim();
-		    };
-		};
-
-		break;
-	    };
-	};
-
 	if (first_input !== null) {
 	    var code = `${verb} ${first_input.value.trim()}: "${text}"`;
 
@@ -844,6 +821,41 @@ function encode_dependency (group_id, kind, indent, line, script) {
 
 	    line = encode_statement(first_input, code, indent, line, script);
 	};
+    };
+
+    return line;
+};
+
+
+function encode_ratio (details, indent, line, script) {
+    const spaces = gen_spaces(indent + 1);
+    const deets = unravel_summary(details);
+
+    var first_input = null;
+    var ratio_parts = "";
+
+    var note_text = encode_note(deets);
+
+    for (var input of gen_inputs(deets, ["INPUT", "TEXTAREA"])) {
+	if (input.id.startsWith("ratio-name")) {
+	    first_input = input;
+	}
+	else if (input.id.startsWith("ratio-parts")) {
+	    ratio_parts = input.value.trim();
+	};
+    };
+
+    if (first_input !== null) {
+	var code = `RATIO "${first_input.value.trim()}" = ${ratio_parts}`;
+
+	// add a leading separator
+	line = encode_statement(null, "", 0, line, script);
+
+	if (note_text !== "") {
+	    code = `${code}\n${spaces}NOTE: "${note_text}"`;
+	};
+
+	line = encode_statement(first_input, code, indent, line, script);
     };
 
     return line;
@@ -921,26 +933,33 @@ function encode_recipe () {
 	};
 
 	for (var details of gen_inputs(closure, ["DETAILS"])) {
-	    for (var div of gen_inputs(unravel_summary(details), ["DIV"])) {
-		var group = div.children[1].children[0];
+	    const summary = details.children[0].children[0].textContent;
 
-		if (group.id.startsWith("super-list")) {
-		    line = encode_list(group.id, 1, line, script);
-		}
-		else if (group.id.startsWith("keyword-list")) {
-		    line = encode_list(group.id, 1, line, script);
-		}
-		else if (group.id.startsWith("container-list")) {
-		    line = encode_dependency(group.id, "container", 1, line, script);
-		}
-		else if (group.id.startsWith("tool-list")) {
-		    line = encode_dependency(group.id, "tool", 1, line, script);
-		}
-		else if (group.id.startsWith("ingredient-list")) {
-		    line = encode_dependency(group.id, "ingredient", 1, line, script);
-		}
-		else if (group.id.startsWith("use-list")) {
-		    line = encode_dependency(group.id, "use", 1, line, script);
+	    if (summary === "ratio") {
+		line = encode_ratio(details, 1, line, script);
+	    }
+	    else {
+		for (var div of gen_inputs(unravel_summary(details), ["DIV"])) {
+		    var group = div.children[1].children[0];
+
+		    if (group.id.startsWith("super-list")) {
+			line = encode_list(group.id, 1, line, script);
+		    }
+		    else if (group.id.startsWith("keyword-list")) {
+			line = encode_list(group.id, 1, line, script);
+		    }
+		    else if (group.id.startsWith("container-list")) {
+			line = encode_dependency(group.id, "container", 1, line, script);
+		    }
+		    else if (group.id.startsWith("tool-list")) {
+			line = encode_dependency(group.id, "tool", 1, line, script);
+		    }
+		    else if (group.id.startsWith("ingredient-list")) {
+			line = encode_dependency(group.id, "ingredient", 1, line, script);
+		    }
+		    else if (group.id.startsWith("use-list")) {
+			line = encode_dependency(group.id, "use", 1, line, script);
+		    };
 		};
 	    };
 	};
