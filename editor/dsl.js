@@ -987,6 +987,27 @@ function encode_recipe () {
 
 
 //////////////////////////////////////////////////////////////////////
+// read a JSON file asynchronously, then execute a callback on completion
+//
+
+function read_json_file (path, callback) {
+    const req = new XMLHttpRequest();
+
+    // set MIME type to interpret response as JSON
+    req.overrideMimeType("application/json");
+    req.open("GET", path, true); // true for asynchronous
+    
+    req.onreadystatechange = function() {
+        if ((req.readyState === 4) && (req.status == "200")) {
+            callback(req.responseText);
+        };
+    };
+
+    req.send(null);
+}
+
+
+//////////////////////////////////////////////////////////////////////
 // start-up: run these steps *AFTER* the HTML page loads
 //
 
@@ -1004,4 +1025,7 @@ window.addEventListener("load", function() {
 	const callback = CALLBACK_QUEUE.pop();
 	eval(callback);
     };
+
+    const BWYD_DATA = JSON.parse(document.getElementById("BWYD_DATA").textContent);
+    console.log(BWYD_DATA);
 });

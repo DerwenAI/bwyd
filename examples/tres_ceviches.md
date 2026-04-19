@@ -20,6 +20,7 @@ Ingredients:
  - 1 small tomatillo, chuncked
  - 1 small heirloom tomato, chunked
  - 1 small mango, minced finely
+ - 1 Tbsp sliced black olives
 
  - 1/4 cup cilantro, choppd
  - 1/2 tsp powered coriander
