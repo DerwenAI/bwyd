@@ -3,17 +3,17 @@ const DESIGN_META = {
 	{
             "field": {
 		"count": "one",
-		"id": "module-title",
+		"id": "recipe-title",
 		"label": "Title",
 		"placeholder": "Recipe name",
-		"verb": "MODULE",
+		"verb": "RECIPE",
 		"type": "text",
             },
 	},
 	{
             "field": {
 		"count": "one",
-		"id": "module-text",
+		"id": "recipe-text",
 		"label": "Text",
 		"placeholder": "Recipe description",
 		"verb": "TEXT",
@@ -60,7 +60,6 @@ const DESIGN_META = {
 			    "label": "closure",
 			    "open": true,
 			    "type": [
-
 				{
 				    "field": {
 					"count": "one",
@@ -618,6 +617,36 @@ const DESIGN_META = {
 					],
 				    },
 				},
+				{
+				    "summary": {
+					"label": "ratio",
+					"type": [
+					    {
+						"field": {
+						    "count": "zero-one",
+						    "id": "ratio-name-%",
+						    "label": "Name",
+						    "placeholder": "Ratio name",
+						    "verb": "RATIO",
+						    "type": "text",
+						},
+					    },
+					    {
+						"field": {
+						    "count": "zero-one",
+						    "id": "ratio-parts-%",
+						    "label": "Parts",
+						    "placeholder": "Ratio parts",
+						    "verb": "PARTS",
+						    "type": "textarea",
+						},
+					    },
+					    {
+						"lookup": "note",
+					    },
+					],
+				    },
+				},
 			    ],
 			},
 		    },
@@ -687,7 +716,7 @@ const DESIGN_META = {
 			    ],
 			},
 		    },
-		],
+		],  
 	    },
 	},
     ],

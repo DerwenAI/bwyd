@@ -884,14 +884,14 @@ function encode_head (group_id, indent, line, script) {
 };
 
 
-function encode_module () {
+function encode_recipe () {
     const script = [];
     var line = 1;
     var code = null;
 
     BWYD_DEBUG = [];
 
-    // encode top-level inputs for the module
+    // encode top-level inputs for the recipe
     var group_id = "editor-inputs";
     line = encode_head(group_id, 0, line, script);
 

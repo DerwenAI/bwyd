@@ -1,11 +1,11 @@
-Module:
-  "MODULE:" title=STRING
+Recipe:
+  "RECIPE:" title=STRING
   "TEXT:" text=STRING
-  meta+=Module_Metadata
+  meta+=Recipe_Metadata
   closures+=Closure
 ;
 
-Module_Metadata:
+Recipe_Metadata:
   Author | Updated | License | Post | Cite
 ;
 
@@ -170,6 +170,7 @@ TemperatureUnits:
 
 Ratio:
   "RATIO:" name=STRING "=" (parts+=RatioPart[','])
+  (note=Note)?
 ;
 
 RatioPart:

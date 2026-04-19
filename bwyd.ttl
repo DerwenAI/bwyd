@@ -54,7 +54,7 @@ bwyd:Keyword a skos:Concept ;
 
 bwyd:Recipe a skos:Concept, bbo:DataObject ;
   dc:identifier wd:Q219239 ;
-  skos:definition "Recipe is a set of instructions for preparing a processed food item"@en ;
+  skos:definition "Recipe is a set of instructions (a recipe) for preparing a processed food item"@en ;
   skos:inScheme bwyd:BwydScheme ;
   skos:topConceptOf bwyd:BwydScheme ;
   skos:prefLabel "Recipe"@en, "Recette"@fr ;
@@ -63,7 +63,7 @@ bwyd:Recipe a skos:Concept, bbo:DataObject ;
 
 bwyd:Closure a skos:Concept ;
   dc:identifier wd:Q320346 , wd:Q1751609 ;
-  skos:definition "Closure is a component of other recipes, which may be reused in multiple ways"@en ;
+  skos:definition "Closure is an intermiate component of one or more recipes"@en ;
   skos:inScheme bwyd:BwydScheme ;
   skos:topConceptOf bwyd:BwydScheme ;
   skos:prefLabel "Closure"@en, "Clôture"@fr ;

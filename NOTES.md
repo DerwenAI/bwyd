@@ -31,7 +31,7 @@
 
 ## Modeling
 
-Module (a named recipe)
+Recipe (a named module)
  - 1+ Cites
  - 1+ Posts
  - 1+ Closures (functional, multi-use components)

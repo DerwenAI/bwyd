@@ -1,5 +1,5 @@
-MODULE: "Panna Cotta"
-    TEXT: "A light, creamy dessert which pairs with so many fruits"
+RECIPE: "Panna Cotta"
+    TEXT: "A light, creamy dessert which pairs well with so many fruits"
 
     AUTHOR: "Paco Nathan https://derwen.ai/paco"
     LICENSE: "CC-BY-NC-SA-4.0"
@@ -16,19 +16,19 @@ CLOSURE: "mix the cream"
     TOOL spatula: "silicone spatula"
 
     INGREDIENT cream: "half-and-half or cream"
-    INGREDIENT gelatin: "powdered gelatin"
+    INGREDIENT agar_agar: "powdered agar agar"
 
-    ACTIVITY pan: "bloom the gelatin"
+    ACTIVITY pan: "bloom the agar agar"
 
     ADD cream (180 ml)
-    ADD gelatin (5 g): "sprinkle evenly over the top"
+    ADD agar_agar (3.5 g): "sprinkle evenly over the top"
 
     WAIT
         UNTIL: "surface of the cream is wrinkled"
 	TIME (5 minute)
 
     HEAT pan: "warm gently over low heat, stirring frequently; do not boil"
-        UNTIL: "gelatin is dissolved"
+        UNTIL: "agar agar is dissolved"
         TIME (3 minute)
 
     ACTION spatula: "whisk the cream"
