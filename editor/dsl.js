@@ -935,31 +935,26 @@ function encode_recipe () {
 	for (var details of gen_inputs(closure, ["DETAILS"])) {
 	    const summary = details.children[0].children[0].textContent;
 
-	    if (summary === "ratio") {
-		line = encode_ratio(details, 1, line, script);
-	    }
-	    else {
-		for (var div of gen_inputs(unravel_summary(details), ["DIV"])) {
-		    var group = div.children[1].children[0];
+	    for (var div of gen_inputs(unravel_summary(details), ["DIV"])) {
+		var group = div.children[1].children[0];
 
-		    if (group.id.startsWith("super-list")) {
-			line = encode_list(group.id, 1, line, script);
-		    }
-		    else if (group.id.startsWith("keyword-list")) {
-			line = encode_list(group.id, 1, line, script);
-		    }
-		    else if (group.id.startsWith("container-list")) {
-			line = encode_dependency(group.id, "container", 1, line, script);
-		    }
-		    else if (group.id.startsWith("tool-list")) {
-			line = encode_dependency(group.id, "tool", 1, line, script);
-		    }
-		    else if (group.id.startsWith("ingredient-list")) {
-			line = encode_dependency(group.id, "ingredient", 1, line, script);
-		    }
-		    else if (group.id.startsWith("use-list")) {
-			line = encode_dependency(group.id, "use", 1, line, script);
-		    };
+		if (group.id.startsWith("super-list")) {
+		    line = encode_list(group.id, 1, line, script);
+		}
+		else if (group.id.startsWith("keyword-list")) {
+		    line = encode_list(group.id, 1, line, script);
+		}
+		else if (group.id.startsWith("container-list")) {
+		    line = encode_dependency(group.id, "container", 1, line, script);
+		}
+		else if (group.id.startsWith("tool-list")) {
+		    line = encode_dependency(group.id, "tool", 1, line, script);
+		}
+		else if (group.id.startsWith("ingredient-list")) {
+		    line = encode_dependency(group.id, "ingredient", 1, line, script);
+		}
+		else if (group.id.startsWith("use-list")) {
+		    line = encode_dependency(group.id, "use", 1, line, script);
 		};
 	    };
 	};
@@ -972,7 +967,15 @@ function encode_recipe () {
 	    };
 	};
 
-	// add a trailing separator
+	for (var details of gen_inputs(closure, ["DETAILS"])) {
+	    const summary = details.children[0].children[0].textContent;
+
+	    if (summary === "ratio") {
+		line = encode_ratio(details, 1, line, script);
+	    };
+	};
+
+	// add the trailing separator
 	line = encode_statement(null, ";", 0, line, script);
     };
 
