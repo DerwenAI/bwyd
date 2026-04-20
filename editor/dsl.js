@@ -2,7 +2,7 @@
 // global data structures
 
 const ELEM_META = {};
-const ELEM_DATA = {};
+const FRAG_ELEM = {};
 
 const CALLBACK_QUEUE = [];
 const SPACES_PER_TAB = 2;
@@ -63,7 +63,7 @@ function* gen_inputs (item, node_names) {
 // driven by context from: input files, user edits
 //
 
-function build_input (meta, item_id, data = null) {
+function build_input (meta, item_id, is_callback, data = null) {
     var input = null;
 
     if (["text", "symbol", "url"].includes(meta["type"])) {
@@ -88,17 +88,24 @@ function build_input (meta, item_id, data = null) {
 
     // fuck
     // populate data
-    if ((data !== null) && ("json_loc" in meta)) {
-	var json_loc = meta["json_loc"];
-	console.log(input, json_loc, data[json_loc]);
-	input.value = data[json_loc];
+    if (data !== null) {
+	if ("json_loc" in meta) {
+	    var json_loc = meta["json_loc"];
+	    console.log(input, json_loc, data[json_loc], is_callback);
+	    input.value = data[json_loc];
+	}
+	else {
+	    // from a list, use data directly
+	    console.log(input, data);
+	    input.value = data;
+	}
     };
 
     return input;
 };
 
 
-function build_field (frag, meta, depth, data = null) {
+function build_field (frag, meta, depth, is_callback, data = null) {
     const item_id = get_rel_id(meta["id"]);
     ELEM_META[item_id] = meta;
 
@@ -108,17 +115,17 @@ function build_field (frag, meta, depth, data = null) {
     label.appendChild(document.createTextNode(meta["label"]));
     frag.appendChild(label);
 
-    const input = build_input(meta, item_id, data);
+    const input = build_input(meta, item_id, is_callback, data);
     input.setAttribute("placeholder", meta["placeholder"]);
     frag.appendChild(input);
 };
 
 
-function build_checkbox (frag, meta, depth, data = null) {
+function build_checkbox (frag, meta, depth, is_callback, data = null) {
     const item_id = get_rel_id(meta["id"]);
     ELEM_META[item_id] = meta;
 
-    const input = build_input(meta, item_id, data);
+    const input = build_input(meta, item_id, is_callback, data);
     input.setAttribute("style", "margin-top: 1rem;");
     frag.appendChild(input);
 
@@ -131,7 +138,7 @@ function build_checkbox (frag, meta, depth, data = null) {
 };
 
 
-function build_list (frag, meta, depth, data = null) {
+function build_list (frag, meta, depth, is_callback, data = null) {
     const group_id = get_rel_id(meta["id"]);
     const color = Math.round((1.0 - (depth * .03)) * 100.0);
 
@@ -194,12 +201,24 @@ function build_list (frag, meta, depth, data = null) {
     caboose.appendChild(para);
     list_group.appendChild(caboose);
 
+    FRAG_ELEM[group_id] = list_group;
+
     // fuck
-    // TODO: apply data here
+    // populate data
+    if (!is_callback && (data !== null)) {
+	if ("json_loc" in meta) {
+	    var json_loc = meta["json_loc"];
+
+	    for (var item_data of data[json_loc]) {
+		console.log("list:", group_id, list_group, json_loc, item_data);
+		list_add(group_id, depth, false, item_data);
+	    };
+	};
+    };
 };
 
 
-function build_select (frag, meta, depth, data = null) {
+function build_select (frag, meta, depth, is_callback, data = null) {
     const item_id = get_rel_id(meta["id"]);
     ELEM_META[item_id] = meta;
 
@@ -238,7 +257,7 @@ function build_select (frag, meta, depth, data = null) {
 };
 
 
-function build_summary (frag, meta, depth, data = null) {
+function build_summary (frag, meta, depth, is_callback, data = null) {
     const details = document.createElement("details");
 
     if (("open" in meta) && meta["open"]) {
@@ -256,7 +275,7 @@ function build_summary (frag, meta, depth, data = null) {
     details.appendChild(summary);
 
     meta["type"].forEach(function(struct_meta) {
-	const item = design_build(struct_meta, depth, data);
+	const item = design_build(struct_meta, depth, is_callback, data);
 	details.appendChild(item);
     });
 
@@ -264,40 +283,40 @@ function build_summary (frag, meta, depth, data = null) {
 };
 
 
-function design_build (design_meta, depth, data = null) {
+function design_build (design_meta, depth, is_callback, data = null) {
     const frag = document.createDocumentFragment();
 
     for (const [kind, meta] of Object.entries(design_meta)) {
 	switch (kind) {
 	case "field":
-	    build_field(frag, meta, depth, data);
+	    build_field(frag, meta, depth, is_callback, data);
 	    break;
 
 	case "checkbox":
-	    build_checkbox(frag, meta, depth, data);
+	    build_checkbox(frag, meta, depth, is_callback, data);
 	    break;
 
 	case "list":
-	    build_list(frag, meta, depth, data);
+	    build_list(frag, meta, depth, is_callback, data);
 	    break;
 
 	case "select":
-	    build_select(frag, meta, depth, data);
+	    build_select(frag, meta, depth, is_callback, data);
 	    break;
 
 	case "summary":
-	    build_summary(frag, meta, depth, data);
+	    build_summary(frag, meta, depth, is_callback, data);
 	    break;
 
 	case "lookup":
 	    DESIGN_META[meta].forEach(function(struct_meta) {
-		var item = design_build(struct_meta, depth, data);
+		var item = design_build(struct_meta, depth, is_callback, data);
 		frag.appendChild(item);
 	    });
 	    break;
 
 	default:
-	    console.log("UNKNOWN DESIGN:", kind, meta, depth, data);
+	    console.log("UNKNOWN DESIGN:", kind, meta, depth, is_callback, data);
 	    break
 	};
     };
@@ -310,23 +329,27 @@ function design_build (design_meta, depth, data = null) {
 // list handling
 //
 
-function list_add (group_id, depth, data = null) {
-    console.log("list_add:", group_id, depth, data);
-
-    const list_group = document.getElementById(group_id);
+function list_add (group_id, depth, is_callback = true, data = null) {
     var is_structured = false;
+    var list_group = document.getElementById(group_id);
+
+    if (!is_callback) {
+	list_group = FRAG_ELEM[group_id];
+    };
 
     // build a new item to insert
     const meta = ELEM_META[group_id];
     var item_id = self.crypto.randomUUID();
-
     ELEM_META[item_id] = meta;
+
+    console.log("list_add:", group_id, depth, meta, is_callback, data, list_group);
 
     const elem = document.createElement("div");
     elem.setAttribute("class", "row list-group-item");
 
     if (["text", "textarea", "symbol", "url", "checkbox"].includes(meta["type"])) {
-	const input = build_input(meta, item_id, data);
+	// fuck
+	const input = build_input(meta, item_id, is_callback, data);
 	input.setAttribute("placeholder", meta["placeholder"]);
 	input.setAttribute("class", "url-field");
 	input.setAttribute("required", true);
@@ -345,7 +368,7 @@ function list_add (group_id, depth, data = null) {
 	is_structured = true;
 
 	meta["type"].forEach(function(struct_meta) {
-	    const item = design_build(struct_meta, depth + 1, data);
+	    const item = design_build(struct_meta, depth + 1, is_callback, data);
 	    elem.appendChild(item);
 	});
     };
@@ -362,6 +385,8 @@ function list_add (group_id, depth, data = null) {
     elem.appendChild(button);
 
     // insert item just before the "caboose" at the end
+    // fuck
+    console.log(elem, group_id, list_group);
     list_group.insertBefore(elem, list_group.lastElementChild);
 
     // reset the focus to the newly built element
@@ -414,7 +439,7 @@ function list_del (group_id, item_id) {
 // menu handling
 //
 
-function menu_select (menu_id, depth, data = null) {
+function menu_select (menu_id, depth, is_callback = true, data = null) {
     const menu = document.getElementById(menu_id);
     const meta = ELEM_META[menu_id].type[menu.value];
     const item = menu.parentElement;
@@ -433,7 +458,7 @@ function menu_select (menu_id, depth, data = null) {
 
 	// add the new structured elements
 	meta.forEach(function(struct_meta) {
-	    const elem = design_build(struct_meta, depth + 1, data);
+	    const elem = design_build(struct_meta, depth + 1, is_callback, data);
 	    item.appendChild(elem);
 	});
     };
@@ -1002,38 +1027,6 @@ function encode_recipe () {
 
 
 //////////////////////////////////////////////////////////////////////
-// load JSON data into the editor
-//
-
-function decode_module (data) {
-    document.getElementById("recipe-title").value = data["title"];
-    document.getElementById("recipe-text").value = data["text"];
-
-    var depth = 0;
-    var group_id = "cite-list";
-
-    for (var url of data["sources"]) {
-	list_add(group_id, depth, url);
-    };
-
-    group_id = "post-list";
-
-    for (var url of data["gallery"]) {
-	list_add(group_id, depth, url);
-    };
-
-    // fuck
-    group_id = "closure-list";
-    console.log(ELEM_META[group_id]);
-
-    for (var closure of data["closures"]) {
-	console.log(closure);
-	//list_add(group_id, depth, url);
-    };
-};
-
-
-//////////////////////////////////////////////////////////////////////
 // start-up: run these steps *AFTER* the HTML page loads
 //
 
@@ -1045,7 +1038,7 @@ window.addEventListener("load", function() {
     const item = document.getElementById("editor-inputs");
 
     DESIGN_META["editor"].forEach(function(struct_meta) {
-	const elem = design_build(struct_meta, 0, data);
+	const elem = design_build(struct_meta, 0, false, data);
 	item.appendChild(elem);
     });
 
