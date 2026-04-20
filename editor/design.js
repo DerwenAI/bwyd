@@ -7,6 +7,7 @@ const DESIGN_META = {
 		"label": "Title",
 		"placeholder": "Recipe name",
 		"verb": "RECIPE",
+		"json_loc": "title",
 		"type": "text",
             },
 	},
@@ -17,6 +18,7 @@ const DESIGN_META = {
 		"label": "Text",
 		"placeholder": "Recipe description",
 		"verb": "TEXT",
+		"json_loc": "text",
 		"type": "textarea",
 	    },
 	},
@@ -32,6 +34,7 @@ const DESIGN_META = {
 			    "label": "Sources",
 			    "placeholder": "Source link",
 			    "verb": "CITE",
+			    "json_loc": "sources",
 			    "type": "url",
 			},
 		    },
@@ -42,6 +45,7 @@ const DESIGN_META = {
 			    "label": "Galleries",
 			    "placeholder": "Galleries link",
 			    "verb": "POST",
+			    "json_loc": "gallery",
 			    "type": "url",
 			},
 		    },
@@ -54,6 +58,7 @@ const DESIGN_META = {
 		"id": "closure-list",
 		"label": "Closures",
 		"verb": "CLOSURE",
+		"json_loc": "closures",
 		"type": [
 		    {
 			"summary": {

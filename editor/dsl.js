@@ -1,8 +1,10 @@
-//////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 // global data structures
 
-const CALLBACK_QUEUE = [];
 const ELEM_META = {};
+const ELEM_DATA = {};
+
+const CALLBACK_QUEUE = [];
 const SPACES_PER_TAB = 2;
 
 var BWYD_DEBUG = [];
@@ -61,7 +63,7 @@ function* gen_inputs (item, node_names) {
 // driven by context from: input files, user edits
 //
 
-function build_input (meta, item_id) {
+function build_input (meta, item_id, data = null) {
     var input = null;
 
     if (["text", "symbol", "url"].includes(meta["type"])) {
@@ -84,11 +86,19 @@ function build_input (meta, item_id) {
 	input.setAttribute("value", meta["label"]);
     };
 
+    // fuck
+    // populate data
+    if ((data !== null) && ("json_loc" in meta)) {
+	var json_loc = meta["json_loc"];
+	console.log(input, json_loc, data[json_loc]);
+	input.value = data[json_loc];
+    };
+
     return input;
 };
 
 
-function build_field (frag, meta, depth) {
+function build_field (frag, meta, depth, data = null) {
     const item_id = get_rel_id(meta["id"]);
     ELEM_META[item_id] = meta;
 
@@ -98,17 +108,17 @@ function build_field (frag, meta, depth) {
     label.appendChild(document.createTextNode(meta["label"]));
     frag.appendChild(label);
 
-    const input = build_input(meta, item_id);
+    const input = build_input(meta, item_id, data);
     input.setAttribute("placeholder", meta["placeholder"]);
     frag.appendChild(input);
 };
 
 
-function build_checkbox (frag, meta, depth) {
+function build_checkbox (frag, meta, depth, data = null) {
     const item_id = get_rel_id(meta["id"]);
     ELEM_META[item_id] = meta;
 
-    const input = build_input(meta, item_id);
+    const input = build_input(meta, item_id, data);
     input.setAttribute("style", "margin-top: 1rem;");
     frag.appendChild(input);
 
@@ -121,7 +131,7 @@ function build_checkbox (frag, meta, depth) {
 };
 
 
-function build_list (frag, meta, depth) {
+function build_list (frag, meta, depth, data = null) {
     const group_id = get_rel_id(meta["id"]);
     const color = Math.round((1.0 - (depth * .03)) * 100.0);
 
@@ -183,10 +193,13 @@ function build_list (frag, meta, depth) {
 
     caboose.appendChild(para);
     list_group.appendChild(caboose);
+
+    // fuck
+    // TODO: apply data here
 };
 
 
-function build_select (frag, meta, depth) {
+function build_select (frag, meta, depth, data = null) {
     const item_id = get_rel_id(meta["id"]);
     ELEM_META[item_id] = meta;
 
@@ -225,7 +238,7 @@ function build_select (frag, meta, depth) {
 };
 
 
-function build_summary (frag, meta, depth) {
+function build_summary (frag, meta, depth, data = null) {
     const details = document.createElement("details");
 
     if (("open" in meta) && meta["open"]) {
@@ -243,7 +256,7 @@ function build_summary (frag, meta, depth) {
     details.appendChild(summary);
 
     meta["type"].forEach(function(struct_meta) {
-	const item = design_build(struct_meta, depth);
+	const item = design_build(struct_meta, depth, data);
 	details.appendChild(item);
     });
 
@@ -251,40 +264,40 @@ function build_summary (frag, meta, depth) {
 };
 
 
-function design_build (design_meta, depth) {
+function design_build (design_meta, depth, data = null) {
     const frag = document.createDocumentFragment();
 
     for (const [kind, meta] of Object.entries(design_meta)) {
 	switch (kind) {
 	case "field":
-	    build_field(frag, meta, depth);
+	    build_field(frag, meta, depth, data);
 	    break;
 
 	case "checkbox":
-	    build_checkbox(frag, meta, depth);
+	    build_checkbox(frag, meta, depth, data);
 	    break;
 
 	case "list":
-	    build_list(frag, meta, depth);
+	    build_list(frag, meta, depth, data);
 	    break;
 
 	case "select":
-	    build_select(frag, meta, depth);
+	    build_select(frag, meta, depth, data);
 	    break;
 
 	case "summary":
-	    build_summary(frag, meta, depth);
+	    build_summary(frag, meta, depth, data);
 	    break;
 
 	case "lookup":
 	    DESIGN_META[meta].forEach(function(struct_meta) {
-		var item = design_build(struct_meta, depth);
+		var item = design_build(struct_meta, depth, data);
 		frag.appendChild(item);
 	    });
 	    break;
 
 	default:
-	    console.log("UNKNOWN DESIGN:", kind, meta, depth);
+	    console.log("UNKNOWN DESIGN:", kind, meta, depth, data);
 	    break
 	};
     };
@@ -297,7 +310,9 @@ function design_build (design_meta, depth) {
 // list handling
 //
 
-function list_add (group_id, depth) {
+function list_add (group_id, depth, data = null) {
+    console.log("list_add:", group_id, depth, data);
+
     const list_group = document.getElementById(group_id);
     var is_structured = false;
 
@@ -311,7 +326,7 @@ function list_add (group_id, depth) {
     elem.setAttribute("class", "row list-group-item");
 
     if (["text", "textarea", "symbol", "url", "checkbox"].includes(meta["type"])) {
-	const input = build_input(meta, item_id);
+	const input = build_input(meta, item_id, data);
 	input.setAttribute("placeholder", meta["placeholder"]);
 	input.setAttribute("class", "url-field");
 	input.setAttribute("required", true);
@@ -330,7 +345,7 @@ function list_add (group_id, depth) {
 	is_structured = true;
 
 	meta["type"].forEach(function(struct_meta) {
-	    const item = design_build(struct_meta, depth + 1);
+	    const item = design_build(struct_meta, depth + 1, data);
 	    elem.appendChild(item);
 	});
     };
@@ -399,7 +414,7 @@ function list_del (group_id, item_id) {
 // menu handling
 //
 
-function menu_select (menu_id, depth) {
+function menu_select (menu_id, depth, data = null) {
     const menu = document.getElementById(menu_id);
     const meta = ELEM_META[menu_id].type[menu.value];
     const item = menu.parentElement;
@@ -418,7 +433,7 @@ function menu_select (menu_id, depth) {
 
 	// add the new structured elements
 	meta.forEach(function(struct_meta) {
-	    const elem = design_build(struct_meta, depth + 1);
+	    const elem = design_build(struct_meta, depth + 1, data);
 	    item.appendChild(elem);
 	});
     };
@@ -987,24 +1002,35 @@ function encode_recipe () {
 
 
 //////////////////////////////////////////////////////////////////////
-// read a JSON file asynchronously, then execute a callback on completion
+// load JSON data into the editor
 //
 
-function read_json_file (path, callback) {
-    const req = new XMLHttpRequest();
+function decode_module (data) {
+    document.getElementById("recipe-title").value = data["title"];
+    document.getElementById("recipe-text").value = data["text"];
 
-    // set MIME type to interpret response as JSON
-    req.overrideMimeType("application/json");
-    req.open("GET", path, true); // true for asynchronous
-    
-    req.onreadystatechange = function() {
-        if ((req.readyState === 4) && (req.status == "200")) {
-            callback(req.responseText);
-        };
+    var depth = 0;
+    var group_id = "cite-list";
+
+    for (var url of data["sources"]) {
+	list_add(group_id, depth, url);
     };
 
-    req.send(null);
-}
+    group_id = "post-list";
+
+    for (var url of data["gallery"]) {
+	list_add(group_id, depth, url);
+    };
+
+    // fuck
+    group_id = "closure-list";
+    console.log(ELEM_META[group_id]);
+
+    for (var closure of data["closures"]) {
+	console.log(closure);
+	//list_add(group_id, depth, url);
+    };
+};
 
 
 //////////////////////////////////////////////////////////////////////
@@ -1012,11 +1038,14 @@ function read_json_file (path, callback) {
 //
 
 window.addEventListener("load", function() {
+    // load data, if any
+    const data = JSON.parse(document.getElementById("bwyd_data").textContent);
+
     // build a default editor page from the design metadata
     const item = document.getElementById("editor-inputs");
 
     DESIGN_META["editor"].forEach(function(struct_meta) {
-	const elem = design_build(struct_meta, 0);
+	const elem = design_build(struct_meta, 0, data);
 	item.appendChild(elem);
     });
 
@@ -1025,7 +1054,4 @@ window.addEventListener("load", function() {
 	const callback = CALLBACK_QUEUE.pop();
 	eval(callback);
     };
-
-    const BWYD_DATA = JSON.parse(document.getElementById("BWYD_DATA").textContent);
-    console.log(BWYD_DATA);
 });

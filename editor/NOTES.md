@@ -2,6 +2,8 @@
 ## TODO:
 
  - load from JSON document
+   + get recursive on `design.js` driving the `group_id` lookups?
+   + or use some translation from `design.js` key/val to the `bwyd_data[]` path locators?
 
  - simplify CSS from Bootstrap examples in use
    + refactor dynamic style into `dsl.css`
