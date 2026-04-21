@@ -72,6 +72,7 @@ const DESIGN_META = {
 					"label": "Name",
 					"placeholder": "Closure name",
 					"verb": "NAME",
+					"json_loc": "title",
 					"type": "text",
 				    },
 				},
@@ -82,6 +83,7 @@ const DESIGN_META = {
 					"label": "Text",
 					"placeholder": "Closure description",
 					"verb": "TEXT",
+					"json_loc": "text",
 					"type": "textarea",
 				    },
 				},
@@ -97,6 +99,7 @@ const DESIGN_META = {
 						    "label": "Supers",
 						    "placeholder": "Supers",
 						    "verb": "SUPER",
+						    "json_loc": "supers",
 						    "type": "symbol",
 						},
 					    },
@@ -107,6 +110,7 @@ const DESIGN_META = {
 						    "label": "Keywords",
 						    "placeholder": "Keywords",
 						    "verb": "KEYWORD",
+						    "json_loc": "keywords",
 						    "type": "symbol",
 						},
 					    },
@@ -124,6 +128,7 @@ const DESIGN_META = {
 						    "id": "container-list-%",
 						    "label": "Containers",
 						    "verb": "CONTAINER",
+						    "json_loc": "containers",
 						    "type": [
 							{
 							    "field": {
@@ -132,6 +137,7 @@ const DESIGN_META = {
 								"label": "Name",
 								"placeholder": "Container name",
 								"verb": "NAME",
+								"json_loc": "name",
 								"type": "symbol",
 							    },
 							},
@@ -142,6 +148,7 @@ const DESIGN_META = {
 								"label": "Text",
 								"placeholder": "Container description",
 								"verb": "TEXT",
+								"json_loc": "text",
 								"type": "textarea",
 							    },
 							},
@@ -157,6 +164,7 @@ const DESIGN_META = {
 						    "id": "tool-list-%",
 						    "label": "Tools",
 						    "verb": "TOOL",
+						    "json_loc": "tools",
 						    "type": [
 							{
 							    "field": {
@@ -165,6 +173,7 @@ const DESIGN_META = {
 								"label": "Name",
 								"placeholder": "Tool name",
 								"verb": "NAME",
+								"json_loc": "name",
 								"type": "symbol",
 							    },
 							},
@@ -175,6 +184,7 @@ const DESIGN_META = {
 								"label": "Text",
 								"placeholder": "Tool description",
 								"verb": "TEXT",
+								"json_loc": "text",
 								"type": "textarea",
 							    },
 							},

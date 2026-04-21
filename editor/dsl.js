@@ -88,17 +88,27 @@ function build_input (meta, item_id, is_callback, data = null) {
 
     // fuck
     // populate data
-    if (data !== null) {
-	if ("json_loc" in meta) {
-	    var json_loc = meta["json_loc"];
-	    console.log(input, json_loc, data[json_loc], is_callback);
-	    input.value = data[json_loc];
-	}
-	else {
-	    // from a list, use data directly
-	    console.log(input, data);
+    var success = false;
+
+    if (!is_callback && (data !== null)) {
+	switch (typeof data) {
+	case "string":
 	    input.value = data;
-	}
+	    success = true;
+	    break;
+
+	case "object":
+	    if ("json_loc" in meta) {
+		var json_loc = meta["json_loc"];
+		input.value = data[json_loc];
+		success = true;
+	    };
+	    break;
+	};
+    };
+
+    if (!success) {
+	console.log("build_input:", input, meta["json_loc"], data, (typeof data));
     };
 
     return input;
@@ -209,8 +219,9 @@ function build_list (frag, meta, depth, is_callback, data = null) {
 	if ("json_loc" in meta) {
 	    var json_loc = meta["json_loc"];
 
+	    console.log("HELP", group_id, json_loc, data);
 	    for (var item_data of data[json_loc]) {
-		console.log("list:", group_id, list_group, json_loc, item_data);
+		//console.log("build_list:", group_id, list_group, json_loc, item_data);
 		list_add(group_id, depth, false, item_data);
 	    };
 	};
@@ -342,7 +353,7 @@ function list_add (group_id, depth, is_callback = true, data = null) {
     var item_id = self.crypto.randomUUID();
     ELEM_META[item_id] = meta;
 
-    console.log("list_add:", group_id, depth, meta, is_callback, data, list_group);
+    //console.log("list_add:", group_id, depth, meta, is_callback, data, list_group);
 
     const elem = document.createElement("div");
     elem.setAttribute("class", "row list-group-item");
@@ -385,8 +396,6 @@ function list_add (group_id, depth, is_callback = true, data = null) {
     elem.appendChild(button);
 
     // insert item just before the "caboose" at the end
-    // fuck
-    console.log(elem, group_id, list_group);
     list_group.insertBefore(elem, list_group.lastElementChild);
 
     // reset the focus to the newly built element
