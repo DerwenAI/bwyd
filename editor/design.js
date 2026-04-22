@@ -200,6 +200,7 @@ const DESIGN_META = {
 						    "id": "ingredient-list-%",
 						    "label": "Ingredients",
 						    "verb": "INGREDIENT",
+						    "json_loc": "ingredients",
 						    "type": [
 							{
 							    "field": {
@@ -208,6 +209,7 @@ const DESIGN_META = {
 								"label": "Name",
 								"placeholder": "Ingredient name",
 								"verb": "NAME",
+								"json_loc": "name",
 								"type": "symbol",
 							    },
 							},
@@ -218,6 +220,7 @@ const DESIGN_META = {
 								"label": "Text",
 								"placeholder": "Ingredient description",
 								"verb": "TEXT",
+								"json_loc": "text",
 								"type": "textarea",
 							    },
 							},
