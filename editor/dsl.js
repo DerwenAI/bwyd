@@ -213,15 +213,12 @@ function build_list (frag, meta, depth, is_callback, data = null) {
 
     FRAG_ELEM[group_id] = list_group;
 
-    // fuck
     // populate data
     if (!is_callback && (data !== null)) {
 	if ("json_loc" in meta) {
 	    var json_loc = meta["json_loc"];
 
-	    console.log("HELP", group_id, json_loc, data);
 	    for (var item_data of data[json_loc]) {
-		//console.log("build_list:", group_id, list_group, json_loc, item_data);
 		list_add(group_id, depth, false, item_data);
 	    };
 	};
@@ -230,8 +227,8 @@ function build_list (frag, meta, depth, is_callback, data = null) {
 
 
 function build_select (frag, meta, depth, is_callback, data = null) {
-    const item_id = get_rel_id(meta["id"]);
-    ELEM_META[item_id] = meta;
+    const menu_id = get_rel_id(meta["id"]);
+    ELEM_META[menu_id] = meta;
 
     if ("label" in meta) {
 	const label = document.createElement("span");
@@ -241,7 +238,7 @@ function build_select (frag, meta, depth, is_callback, data = null) {
 
     const select = document.createElement("select");
     select.setAttribute("class", "form-control");
-    select.setAttribute("id", item_id);
+    select.setAttribute("id", menu_id);
     select.setAttribute("style", "display: inline-block; width: 93%;");
 
     var option = document.createElement("option");
@@ -262,9 +259,13 @@ function build_select (frag, meta, depth, is_callback, data = null) {
 	select.appendChild(option);
     };
 
-    const callback = `menu_select('${item_id}', ${depth})`;
+    const callback = `menu_select('${menu_id}', ${depth})`;
     select.setAttribute("onchange", callback);
     frag.appendChild(select);
+
+    if (!is_callback) {
+	menu_select(menu_id, depth, false, data, select, frag);
+    };
 };
 
 
@@ -353,8 +354,6 @@ function list_add (group_id, depth, is_callback = true, data = null) {
     var item_id = self.crypto.randomUUID();
     ELEM_META[item_id] = meta;
 
-    //console.log("list_add:", group_id, depth, meta, is_callback, data, list_group);
-
     const elem = document.createElement("div");
     elem.setAttribute("class", "row list-group-item");
 
@@ -435,7 +434,7 @@ function list_add (group_id, depth, is_callback = true, data = null) {
 
 
 function list_del (group_id, item_id) {
-    const list_group = document.getElementById(group_id);
+     const list_group = document.getElementById(group_id);
 
     if (item_id !== null) {
 	const item = document.getElementById(item_id);
@@ -448,13 +447,24 @@ function list_del (group_id, item_id) {
 // menu handling
 //
 
-function menu_select (menu_id, depth, is_callback = true, data = null) {
-    const menu = document.getElementById(menu_id);
-    const meta = ELEM_META[menu_id].type[menu.value];
-    const item = menu.parentElement;
+function menu_select (menu_id, depth, is_callback = true, data = null, select = null, frag = null) {
+    var menu = document.getElementById(menu_id);
     const prev_elems = [];
 
-    if (meta.length > 0) {
+    if (!is_callback) {
+	var item = frag;
+
+	menu = select;
+	menu.value = data["kind"];
+    }
+    else {
+	item = menu.parentElement;
+    }
+
+    const meta = ELEM_META[menu_id].type[menu.value];
+    //console.log("menu_select:", item, menu_id, meta, ELEM_META[menu_id], menu.value, data);
+
+    if (is_callback && (meta.length > 0)) {
 	// collect and remove all pre-existing structured elements:
 	// everthing which follows the <select/> and delete <button/>
 	for (var i = 2; i < item.childNodes.length; i++) {
@@ -464,7 +474,9 @@ function menu_select (menu_id, depth, is_callback = true, data = null) {
 	for (var i = 0; i < prev_elems.length; i++) {
 	    item.removeChild(prev_elems[i]);
 	}
+    };
 
+    if (meta.length > 0) {
 	// add the new structured elements
 	meta.forEach(function(struct_meta) {
 	    const elem = design_build(struct_meta, depth + 1, is_callback, data);

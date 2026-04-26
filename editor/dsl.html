@@ -185,103 +185,98 @@
           "text": "sea salt"
         }
       ],
+      "uses": [],
       "activities": [
         {
           "container": "pan",
           "title": "bloom the gelatin",
-          "steps": [
+          "inputs": [
             {
-              "ingredients": [
-                {
-                  "name": "cream",
-                  "amount": "180 ml",
-                  "text": ""
-                },
-                {
-                  "name": "gelatin",
-                  "amount": "5 g (0.18 ounce)",
-                  "text": "sprinkle evenly over the top"
-                }
-              ]
-            },
-            {
+              "kind": "add",
+              "name": "cream",
+              "amount": "180 ml",
+              "text": "",
               "note": {
                 "text": "substitute cream with almond milk for vegan; fresh pressed is better than commercial since additives tend to cause reflux"
               }
             },
             {
+              "kind": "add",
+              "name": "gelatin",
+              "amount": "5 g (0.18 ounce)",
+              "text": "sprinkle evenly over the top",
               "note": {
                 "text": "substitute gelatin with agar-agar for vegetarian"
               }
+            }
+          ],
+          "ops": [
+            {
+              "kind": "wait",
+              "text": "",
+              "until": "surface of the cream is wrinkled",
+              "time": "5 minutes"
             },
             {
-              "wait": {
-                "text": "surface of the cream is wrinkled",
-                "time": "5 minutes"
-              }
-            },
-            {
-              "stove": {
-                "text": "warm gently over low heat, stirring frequently; do not boil",
-                "until": "gelatin is dissolved",
-                "time": "3 minutes"
-              }
+              "kind": "heat",
+              "name": "pan",
+              "text": "warm gently over low heat, stirring frequently; do not boil",
+              "until": "gelatin is dissolved",
+              "time": "3 minutes"
             }
           ]
         },
         {
           "container": "pan",
           "title": "dissolve the sugar",
-          "steps": [
+          "inputs": [
             {
-              "ingredients": [
-                {
-                  "name": "sugar",
-                  "amount": "25 g (2 tbsps)",
-                  "text": ""
-                }
-              ]
-            },
+              "kind": "add",
+              "name": "sugar",
+              "amount": "25 g (2 tbsps)",
+              "text": ""
+            }
+          ],
+          "ops": [
             {
-              "action": {
-                "tool": "spatula",
-                "verb": "stir sugar into the cream",
-                "text": "sugar dissolves",
-                "time": "30 seconds"
-              }
+              "kind": "action",
+              "name": "spatula",
+              "text": "stir sugar into the cream",
+              "until": "sugar dissolves",
+              "time": "30 seconds"
             }
           ]
         },
         {
           "container": "pan",
           "title": "remove from heat, mix remaining ingredients",
-          "steps": [
+          "inputs": [
             {
-              "ingredients": [
-                {
-                  "name": "cream",
-                  "amount": "180 ml",
-                  "text": ""
-                },
-                {
-                  "name": "vanilla_extract",
-                  "amount": "5 ml",
-                  "text": ""
-                },
-                {
-                  "name": "salt",
-                  "amount": "1 g (1/6 tsp)",
-                  "text": ""
-                }
-              ]
+              "kind": "add",
+              "name": "cream",
+              "amount": "180 ml",
+              "text": ""
             },
             {
-              "action": {
-                "tool": "spatula",
-                "verb": "whisk in remaining cream",
-                "text": "well mixed",
-                "time": "30 seconds"
-}
+              "kind": "add",
+              "name": "vanilla_extract",
+              "amount": "5 ml",
+              "text": ""
+            },
+            {
+              "kind": "add",
+              "name": "salt",
+              "amount": "1 g (1/6 tsp)",
+              "text": ""
+            }
+          ],
+          "ops": [
+            {
+              "kind": "action",
+              "name": "spatula",
+              "text": "whisk in remaining cream",
+              "until": "well mixed",
+              "time": "30 seconds"
             }
           ]
         }
@@ -293,10 +288,11 @@
         "4 panna cotta"
       ],
       "text": "Fill the ramekins and chill",
-      "supers": [],
-      "keywords": [
-        "Italian",
+      "supers": [
         "dessert"
+      ],
+      "keywords": [
+        "Italian"
       ],
       "containers": [
         {
@@ -320,63 +316,54 @@
           "text": "butter, cream- or plant-based"
         }
       ],
+      "uses": [],
       "activities": [
         {
           "container": "ramekin",
           "title": "grease the ramekins",
-          "steps": [
+          "inputs": [
             {
-              "ingredients": [
-                {
-                  "name": "butter",
-                  "amount": "14 g (1 tbsp)",
-                  "text": ""
-                }
-              ]
-            },
+              "kind": "add",
+              "name": "butter",
+              "amount": "14 g (1 tbsp)",
+              "text": ""
+            }
+          ],
+          "ops": [
             {
-              "action": {
-                "tool": "hand",
-                "verb": "coat the interior of ramekins with butter",
-                "text": "walls are lightly coated",
-                "time": "30 seconds"
-              }
+              "kind": "action",
+              "name": "hand",
+              "text": "coat the interior of ramekins with butter",
+              "until": "walls are lightly coated",
+              "time": "30 seconds"
             }
           ]
         },
         {
           "container": "ramekin",
           "title": "mold and chill",
-          "steps": [
+          "inputs": [
             {
-              "ingredients": [
-                {
-                  "name": "filling",
-                  "amount": "1",
-                  "text": ""
-                }
-              ]
+              "kind": "add",
+              "name": "filling",
+              "amount": "1",
+              "text": ""
+            }
+          ],
+          "ops": [
+            {
+              "kind": "action",
+              "name": "spatula",
+              "text": "pour into the ramekins",
+              "until": "filling is evenly divided",
+              "time": "30 seconds"
             },
             {
-              "action": {
-                "tool": "spatula",
-                "verb": "pour into the ramekins",
-                "text": "filling is evenly divided",
-                "time": "30 seconds"
-              }
-            },
-            {
-              "cooler": {
-                "text": "in refrigerator",
-                "until": "filling is firm",
-                "time": "3 hours"
-              }
-            },
-            {
-              "store": {
-                "text": "in refrigerator",
-                "upto": "7 days"
-              }
+              "kind": "chill",
+              "name": "ramekin",
+              "text": "in refrigerator",
+              "until": "filling is firm",
+              "time": "3 hours"
             }
           ]
         }
