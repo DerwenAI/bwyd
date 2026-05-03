@@ -100,8 +100,15 @@ function build_input (meta, item_id, is_callback, data = null) {
 	case "object":
 	    if ("json_loc" in meta) {
 		var json_loc = meta["json_loc"];
-		input.value = data[json_loc];
-		success = true;
+
+		if (item_id.startsWith("ratio-") && data["ratio"]) {
+		    input.value = data["ratio"][0][json_loc]
+		    success = true;
+		}
+		else {
+		    input.value = data[json_loc];
+		    success = true;
+		};
 	    };
 	    break;
 	};
