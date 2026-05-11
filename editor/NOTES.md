@@ -2,9 +2,11 @@
 ## TODO:
 
  - load from JSON document
-   - NOTE / comnents
+   - RATIO (why is one built for each CLOSURE ?)
+
+   - NOTE / comments
    - YIELD, STORE
-   - RATIO
+
 
  - simplify CSS from Bootstrap examples in use
    + refactor dynamic style into `dsl.css`

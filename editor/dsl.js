@@ -9,6 +9,8 @@ const SPACES_PER_TAB = 2;
 
 var BWYD_DEBUG = [];
 
+var IN_RATIO = false;
+
 
 //////////////////////////////////////////////////////////////////////
 // utility methods for navigating dynamic HTML
@@ -86,7 +88,6 @@ function build_input (meta, item_id, is_callback, data = null) {
 	input.setAttribute("value", meta["label"]);
     };
 
-    // fuck
     // populate data
     var success = false;
 
@@ -104,6 +105,7 @@ function build_input (meta, item_id, is_callback, data = null) {
 		if (item_id.startsWith("ratio-") && data["ratio"]) {
 		    input.value = data["ratio"][0][json_loc]
 		    success = true;
+		    IN_RATIO = true;
 		}
 		else {
 		    input.value = data[json_loc];
@@ -329,8 +331,18 @@ function design_build (design_meta, depth, is_callback, data = null) {
 
 	case "lookup":
 	    DESIGN_META[meta].forEach(function(struct_meta) {
+		if (IN_RATIO) {
+		    console.log("RATIO:", meta, struct_meta, depth, is_callback, data);
+		    // fuck
+		};
+
 		var item = design_build(struct_meta, depth, is_callback, data);
 		frag.appendChild(item);
+
+		if (IN_RATIO) {
+		    console.log(item, frag);
+		    IN_RATIO = false;
+		};
 	    });
 	    break;
 
@@ -365,7 +377,6 @@ function list_add (group_id, depth, is_callback = true, data = null) {
     elem.setAttribute("class", "row list-group-item");
 
     if (["text", "textarea", "symbol", "url", "checkbox"].includes(meta["type"])) {
-	// fuck
 	const input = build_input(meta, item_id, is_callback, data);
 	input.setAttribute("placeholder", meta["placeholder"]);
 	input.setAttribute("class", "url-field");

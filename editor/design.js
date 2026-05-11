@@ -693,8 +693,16 @@ const DESIGN_META = {
 						},
 					    },
 					    {
-						"lookup": "note",
-					    },
+						"field": {
+						    "count": "zero-one",
+						    "id": "ratio-formula-%",
+						    "label": "Formula",
+						    "placeholder": "Ratio formula",
+						    "verb": "FORMULA",
+						    "json_loc": "formula",
+						    "type": "textarea",
+						},
+					    }
 					],
 				    },
 				},
