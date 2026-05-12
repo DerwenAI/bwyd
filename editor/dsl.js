@@ -9,8 +9,6 @@ const SPACES_PER_TAB = 2;
 
 var BWYD_DEBUG = [];
 
-var IN_RATIO = false;
-
 
 //////////////////////////////////////////////////////////////////////
 // utility methods for navigating dynamic HTML
@@ -102,10 +100,12 @@ function build_input (meta, item_id, is_callback, data = null) {
 	    if ("json_loc" in meta) {
 		var json_loc = meta["json_loc"];
 
-		if (item_id.startsWith("ratio-") && data["ratio"]) {
-		    input.value = data["ratio"][0][json_loc]
+		if (item_id.startsWith("ratio-")) {
+		    if ("ratio" in data) {
+			input.value = data["ratio"][0][json_loc]
+		    };
+
 		    success = true;
-		    IN_RATIO = true;
 		}
 		else {
 		    input.value = data[json_loc];
@@ -113,6 +113,10 @@ function build_input (meta, item_id, is_callback, data = null) {
 		};
 	    };
 	    break;
+
+	default:
+            console.log(data, typeof data);
+    	    break;
 	};
     };
 
@@ -331,18 +335,8 @@ function design_build (design_meta, depth, is_callback, data = null) {
 
 	case "lookup":
 	    DESIGN_META[meta].forEach(function(struct_meta) {
-		if (IN_RATIO) {
-		    console.log("RATIO:", meta, struct_meta, depth, is_callback, data);
-		    // fuck
-		};
-
 		var item = design_build(struct_meta, depth, is_callback, data);
 		frag.appendChild(item);
-
-		if (IN_RATIO) {
-		    console.log(item, frag);
-		    IN_RATIO = false;
-		};
 	    });
 	    break;
 

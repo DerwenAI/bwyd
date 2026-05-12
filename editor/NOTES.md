@@ -2,8 +2,6 @@
 ## TODO:
 
  - load from JSON document
-   - RATIO (why is one built for each CLOSURE ?)
-
    - NOTE / comments
    - YIELD, STORE
 
