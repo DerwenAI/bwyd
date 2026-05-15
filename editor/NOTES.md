@@ -2,8 +2,9 @@
 ## TODO:
 
  - load from JSON document
+   - YIELD
+   - STORE
    - NOTE / comments
-   - YIELD, STORE
 
 
  - simplify CSS from Bootstrap examples in use

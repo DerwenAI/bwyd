@@ -114,11 +114,13 @@
       "text": "half-and-half or cream"
     },
     {
-      "amount": "5 g (0.18 ounce)",
+      "amount": "5 g",
+      "convert": "0.18 ounce",
       "text": "powdered gelatin"
     },
     {
-      "amount": "25 g (2 tbsps)",
+      "amount": "25 g",
+      "convert": "2 tbsps",
       "text": "granulated sugar"
     },
     {
@@ -126,11 +128,13 @@
       "text": "vanilla extract"
     },
     {
-      "amount": "1 g (1/6 tsp)",
+      "amount": "1 g",
+      "convert": "1/6 tsp",
       "text": "sea salt"
     },
     {
-      "amount": "14 g (1 tbsp)",
+      "amount": "14 g",
+      "convert": "1 tbsp",
       "text": "butter, cream- or plant-based"
     }
   ],
@@ -145,12 +149,12 @@
   "closures": [
     {
       "title": "mix the cream",
-      "yields": [
-        "1 filling"
-      ],
       "text": "Prepare the cream filling",
       "supers": [],
       "keywords": [],
+      "yields": [
+        "1 filling"
+      ],
       "ratio": [
         {
           "name": "gel",
@@ -210,7 +214,8 @@
             {
               "kind": "add",
               "name": "gelatin",
-              "amount": "5 g (0.18 ounce)",
+              "amount": "5 g",
+              "convert": "0.18 ounce",
               "text": "sprinkle evenly over the top",
               "note": {
                 "text": "substitute gelatin with agar-agar for vegetarian"
@@ -240,7 +245,8 @@
             {
               "kind": "add",
               "name": "sugar",
-              "amount": "25 g (2 tbsps)",
+              "amount": "25 g",
+              "convert": "2 tbsps",
               "text": ""
             }
           ],
@@ -273,7 +279,8 @@
             {
               "kind": "add",
               "name": "salt",
-              "amount": "1 g (1/6 tsp)",
+              "amount": "1 g",
+              "convert": "1/6 tsp",
               "text": ""
             }
           ],
@@ -283,7 +290,12 @@
               "name": "spatula",
               "text": "whisk in remaining cream",
               "until": "well mixed",
-              "time": "30 seconds"
+              "time": "30 seconds",
+              "yields": {
+                "name": "filling",
+                "amount": "1",
+                "intermediate": true
+              }
             }
           ]
         }
@@ -291,15 +303,15 @@
     },
     {
       "title": "chill in containers",
-      "yields": [
-        "4 panna cotta"
-      ],
       "text": "Fill the ramekins and chill",
       "supers": [
         "dessert"
       ],
       "keywords": [
         "Italian"
+      ],
+      "yields": [
+        "4 panna cotta"
       ],
       "containers": [
         {
@@ -332,7 +344,8 @@
             {
               "kind": "add",
               "name": "butter",
-              "amount": "14 g (1 tbsp)",
+              "amount": "14 g",
+              "convert": "1 tbsp",
               "text": ""
             }
           ],
@@ -370,7 +383,12 @@
               "name": "ramekin",
               "text": "in refrigerator",
               "until": "filling is firm",
-              "time": "3 hours"
+              "time": "3 hours",
+              "yields": {
+                "name": "panna cotta",
+                "amount": "4",
+                "intermediate": false
+              }
             }
           ]
         }

@@ -108,20 +108,11 @@ Wait:
     (note=Note)?
 ;
 
-Yields:
-  "YIELDS" symbol=ID measure=Measure (intermediate="INTERMEDIATE")?
-  (store=Store)?
-;
-
-Store:
-  "STORE" (":" modifier=STRING)?
-     "UPTO" duration=Duration
-;
-
 Heat:
   "HEAT" symbol=ID (":" modifier=STRING)?
     "UNTIL:" until=STRING
     "TIME" duration=Duration
+    (yields=Yields)?
     (note=Note)?
 ;
 
@@ -129,6 +120,7 @@ Chill:
   "CHILL" symbol=ID (":" modifier=STRING)?
     "UNTIL:" until=STRING
     "TIME" duration=Duration
+    (yields=Yields)?
     (note=Note)?
 ;
 
@@ -137,6 +129,7 @@ Bake:
     "AT:" temperature=Temperature
     "UNTIL:" until=STRING
     "TIME" duration=Duration
+    (yields=Yields)?
     (note=Note)?
 ;
 
@@ -168,6 +161,20 @@ TemperatureUnits:
   "C"
 ;
 
+Yields:
+  "YIELDS" symbol=ID measure=Measure (intermediate="INTERMEDIATE")?
+  (store=Store)?
+;
+
+Store:
+  "STORE" (":" modifier=STRING)?
+     "UPTO" duration=Duration
+;
+
+Note:
+  "NOTE:" text=STRING
+;
+
 Ratio:
   "RATIO:" name=STRING "=" (parts+=RatioPart[','])
   (note=Note)?
@@ -175,10 +182,6 @@ Ratio:
 
 RatioPart:
     symbol=ID ('[' components+=ID[','] ']')?
-;
-
-Note:
-  "NOTE:" text=STRING
 ;
 
 Comment:

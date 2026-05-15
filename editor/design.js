@@ -529,6 +529,9 @@ const DESIGN_META = {
 											},
 										    },
 										    {
+											"lookup": "yields",
+										    },
+										    {
 											"lookup": "note",
 										    },
 										],
@@ -576,6 +579,9 @@ const DESIGN_META = {
 											    "json_loc": "time",
 											    "type": "text",
 											},
+										    },
+										    {
+											"lookup": "yields",
 										    },
 										    {
 											"lookup": "note",
@@ -649,6 +655,9 @@ const DESIGN_META = {
 											    "verb": "DURATION",
 											    "type": "time",
 											},
+										    },
+										    {
+											"lookup": "yields",
 										    },
 										    {
 											"lookup": "note",
