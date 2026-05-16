@@ -8,6 +8,7 @@ const CALLBACK_QUEUE = [];
 const SPACES_PER_TAB = 2;
 
 var BWYD_DEBUG = [];
+var TRACE = false;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -282,7 +283,7 @@ function build_select (frag, meta, depth, is_callback, data = null) {
 };
 
 
-function build_summary (frag, meta, depth, is_callback, data = null) {
+function build_summary (frag, meta, depth, is_callback, parent, data = null) {
     const details = document.createElement("details");
 
     if (("open" in meta) && meta["open"]) {
@@ -291,7 +292,16 @@ function build_summary (frag, meta, depth, is_callback, data = null) {
 
     const summary = document.createElement("summary");
     const para = document.createElement("span");
+
+    // access the "context" of this summary, e.g., "note", "yields", etc.,
+    // and use this to constrain any data to be loaded
     const text = meta["label"].toLowerCase();
+    // fuck
+    if ((parent == text) && (text in data)) {
+	data = data[text];
+	console.log("design_summary:", parent, text, meta, data);
+	TRACE = true;
+    };
 
     para.appendChild(document.createTextNode(text));
     para.setAttribute("style", "font-size: .75em; font-style: oblique; color: #aaa; margin-left: 1em;");
@@ -300,7 +310,11 @@ function build_summary (frag, meta, depth, is_callback, data = null) {
     details.appendChild(summary);
 
     meta["type"].forEach(function(struct_meta) {
-	const item = design_build(struct_meta, depth, is_callback, data);
+	if (TRACE === true) {
+	    console.log("summary_meta:", parent, meta, struct_meta, data);
+	};
+
+	const item = design_build(struct_meta, depth, is_callback, parent, data);
 	details.appendChild(item);
     });
 
@@ -308,10 +322,14 @@ function build_summary (frag, meta, depth, is_callback, data = null) {
 };
 
 
-function design_build (design_meta, depth, is_callback, data = null) {
+function design_build (design_meta, depth, is_callback, parent = null, data = null) {
     const frag = document.createDocumentFragment();
 
     for (const [kind, meta] of Object.entries(design_meta)) {
+	if (TRACE === true) {
+	    console.log("design_build:", kind, meta, data);
+	};
+
 	switch (kind) {
 	case "field":
 	    build_field(frag, meta, depth, is_callback, data);
@@ -330,13 +348,16 @@ function design_build (design_meta, depth, is_callback, data = null) {
 	    break;
 
 	case "summary":
-	    build_summary(frag, meta, depth, is_callback, data);
+	    build_summary(frag, meta, depth, is_callback, parent, data);
 	    break;
 
 	case "lookup":
 	    DESIGN_META[meta].forEach(function(struct_meta) {
-		var item = design_build(struct_meta, depth, is_callback, data);
+		// note: `meta` (e.g., "yields") goes in as the `parent` context in
+		// recuursion here, which propagates to the `build_summary()` call
+		var item = design_build(struct_meta, depth, is_callback, meta, data);
 		frag.appendChild(item);
+		TRACE = false;
 	    });
 	    break;
 
@@ -390,7 +411,7 @@ function list_add (group_id, depth, is_callback = true, data = null) {
 	is_structured = true;
 
 	meta["type"].forEach(function(struct_meta) {
-	    const item = design_build(struct_meta, depth + 1, is_callback, data);
+	    const item = design_build(struct_meta, depth + 1, is_callback, null, data);
 	    elem.appendChild(item);
 	});
     };
@@ -491,7 +512,7 @@ function menu_select (menu_id, depth, is_callback = true, data = null, select = 
     if (meta.length > 0) {
 	// add the new structured elements
 	meta.forEach(function(struct_meta) {
-	    const elem = design_build(struct_meta, depth + 1, is_callback, data);
+	    const elem = design_build(struct_meta, depth + 1, is_callback, null, data);
 	    item.appendChild(elem);
 	});
     };
@@ -1071,7 +1092,7 @@ window.addEventListener("load", function() {
     const item = document.getElementById("editor-inputs");
 
     DESIGN_META["editor"].forEach(function(struct_meta) {
-	const elem = design_build(struct_meta, 0, false, data);
+	const elem = design_build(struct_meta, 0, false, null, data);
 	item.appendChild(elem);
     });
 

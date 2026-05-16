@@ -6,6 +6,8 @@
    - STORE
    - NOTE / comments
 
+ - encodings for: RATIO, YIELD, STORE, NOTE
+
 
  - simplify CSS from Bootstrap examples in use
    + refactor dynamic style into `dsl.css`
