@@ -28,4 +28,5 @@
    + load Bwyd module examples to confirm roundtrip
 
  - autocomplete symbols for ADD, TRANSFER, ACTION, etc.
- 
+
+ - color analysis
