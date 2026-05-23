@@ -4,7 +4,6 @@
  - load from JSON document
    - YIELD
    - STORE
-   - NOTE / comments
 
  - encodings for: RATIO, YIELD, STORE, NOTE
 

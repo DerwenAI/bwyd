@@ -29,6 +29,14 @@
     + https://github.com/textX/textX-LS  
 
 
+## Like-Minded
+
+  * Wyatt Brege <https://brege.org/post/the-flavor-network/>
+  * Michael Ruhlman <https://apps.apple.com/us/app/ratio/id345119718>
+  * Niki Segnit <https://www.nikisegnit.com/the-flavour-thesaurus>
+  * Chaos Theory Studios <https://foodcolorpalette.com/>
+
+
 ## Modeling
 
 Recipe (a named module)

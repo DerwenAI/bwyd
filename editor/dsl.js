@@ -122,7 +122,9 @@ function build_input (meta, item_id, is_callback, data = null) {
     };
 
     if (!success) {
-	console.log("build_input:", input, meta["json_loc"], data, (typeof data));
+	if (TRACE) {
+	    console.log("build_input:", input, meta["json_loc"], data, (typeof data));
+	};
     };
 
     return input;
@@ -232,6 +234,10 @@ function build_list (frag, meta, depth, is_callback, data = null) {
 	if ("json_loc" in meta) {
 	    var json_loc = meta["json_loc"];
 
+	    if (TRACE) {
+		console.log("build_list:", json_loc, meta, data);
+	    };
+
 	    for (var item_data of data[json_loc]) {
 		list_add(group_id, depth, false, item_data);
 	    };
@@ -296,11 +302,13 @@ function build_summary (frag, meta, depth, is_callback, parent, data = null) {
     // access the "context" of this summary, e.g., "note", "yields", etc.,
     // and use this to constrain any data to be loaded
     const text = meta["label"].toLowerCase();
-    // fuck
-    if ((parent == text) && (text in data)) {
+
+    if ((parent == text) && (data !== null) && (text in data)) {
 	data = data[text];
-	console.log("design_summary:", parent, text, meta, data);
-	TRACE = true;
+
+	if (TRACE) {
+	    console.log("design_summary:", parent, text, meta, data);
+	};
     };
 
     para.appendChild(document.createTextNode(text));
@@ -310,7 +318,7 @@ function build_summary (frag, meta, depth, is_callback, parent, data = null) {
     details.appendChild(summary);
 
     meta["type"].forEach(function(struct_meta) {
-	if (TRACE === true) {
+	if (TRACE) {
 	    console.log("summary_meta:", parent, meta, struct_meta, data);
 	};
 
@@ -326,7 +334,7 @@ function design_build (design_meta, depth, is_callback, parent = null, data = nu
     const frag = document.createDocumentFragment();
 
     for (const [kind, meta] of Object.entries(design_meta)) {
-	if (TRACE === true) {
+	if (TRACE) {
 	    console.log("design_build:", kind, meta, data);
 	};
 
@@ -352,10 +360,16 @@ function design_build (design_meta, depth, is_callback, parent = null, data = nu
 	    break;
 
 	case "lookup":
+	    var sub_data = null;
+
+	    if ((data !== null) && (meta in data)) {
+		sub_data = data[meta];
+	    }
+
 	    DESIGN_META[meta].forEach(function(struct_meta) {
 		// note: `meta` (e.g., "yields") goes in as the `parent` context in
 		// recuursion here, which propagates to the `build_summary()` call
-		var item = design_build(struct_meta, depth, is_callback, meta, data);
+		var item = design_build(struct_meta, depth, is_callback, meta, sub_data);
 		frag.appendChild(item);
 		TRACE = false;
 	    });
