@@ -761,35 +761,40 @@ const DESIGN_META = {
 			},
 		    },
 		    {
-			"summary": {
-			    "label": "store",
-			    "type": [
-				{
-				    "field": {
-					"count": "zero-one",
-					"id": "store-text-%",
-					"label": "Storage",
-					"placeholder": "Store description",
-					"verb": "STORE",
-					"json_loc": "text",
-					"type": "text",
-				    },
-				},
-				{
-				    "field": {
-					"count": "one",
-					"id": "store-duration-%",
-					"label": "Duration",
-					"placeholder": "Store duration",
-					"verb": "DURATION",
-					"json_loc": "time",
-					"type": "text",
-				    },
-				},
-			    ],
-			},
+			"lookup": "store",
 		    },
 		],  
+	    },
+	},
+    ],
+    "store": [
+	{
+	    "summary": {
+		"label": "store",
+		"type": [
+		    {
+			"field": {
+			    "count": "zero-one",
+			    "id": "store-text-%",
+			    "label": "Storage",
+			    "placeholder": "Store description",
+			    "verb": "STORE",
+			    "json_loc": "text",
+			    "type": "text",
+			},
+		    },
+		    {
+			"field": {
+			    "count": "one",
+			    "id": "store-duration-%",
+			    "label": "Duration",
+			    "placeholder": "Store duration",
+			    "verb": "DURATION",
+			    "json_loc": "time",
+			    "type": "text",
+			},
+		    },
+		],
 	    },
 	},
     ],

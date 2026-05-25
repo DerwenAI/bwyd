@@ -1,10 +1,6 @@
 
 ## TODO:
 
- - load from JSON document
-   - YIELD
-   - STORE
-
  - encodings for: RATIO, YIELD, STORE, NOTE
 
 

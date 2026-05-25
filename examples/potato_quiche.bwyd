@@ -69,6 +69,7 @@ CLOSURE: "make the pie crust"
     CONTAINER bowl: "small bowl"
 
     TOOL mug: "coffee mug"
+    TOOL spoon: "slotted metal spoon"
     TOOL fork: "small fork"
     TOOL brush: "culinary brush"
 
@@ -89,8 +90,11 @@ CLOSURE: "make the pie crust"
     ADD boiled_potatoes (850 g)
 
     ACTION mug: "smash potato chunks with the bottom of a coffee mug, forming an even layer"
-        UNTIL: "crust is evenly distributed, no more than 1 cm thick"
+        UNTIL: "crust is evenly distributed"
         TIME (3 minute)
+
+    ACTION spoon: "carve the potato layer so that it's even, moving extra to rim"
+        UNTIL: "crust is no more than 1 cm thick"
 
     ACTION brush: "brush the beaten egg lightly onto the rim of the crust"
         UNTIL: "evenly coated"
