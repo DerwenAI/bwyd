@@ -1,9 +1,6 @@
 
 ## TODO:
 
- - encodings for: RATIO, YIELD, STORE, NOTE
-
-
  - simplify CSS from Bootstrap examples in use
    + refactor dynamic style into `dsl.css`
    + make the UI/UX more compact, especially for lists

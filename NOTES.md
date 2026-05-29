@@ -32,8 +32,12 @@
 ## Like-Minded
 
   * Wyatt Brege <https://brege.org/post/the-flavor-network/>
+  * Mel Richey <https://oneandahalfslices.com/about/>
   * Michael Ruhlman <https://apps.apple.com/us/app/ratio/id345119718>
+  * Arielle Johnson <https://www.retronasal.com/wtf-retronasal>
   * Niki Segnit <https://www.nikisegnit.com/the-flavour-thesaurus>
+  * Samin Nosrat <https://www.saltfatacidheat.com/>
+  * Dan Barber <https://www.row7seeds.com/>
   * Chaos Theory Studios <https://foodcolorpalette.com/>
 
 

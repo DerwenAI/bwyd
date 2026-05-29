@@ -954,16 +954,20 @@ function encode_ratio (details, indent, line, script) {
     };
 
     if (first_input !== null) {
-	var code = `RATIO "${first_input.value.trim()}" = ${ratio_parts}`;
+	var symbol = first_input.value.trim();
 
-	// add a leading separator
-	line = encode_statement(null, "", 0, line, script);
+	if (symbol !== "") {
+	    var code = `RATIO "${first_input.value.trim()}" = ${ratio_parts}`;
 
-	if (note_text !== "") {
-	    code = `${code}\n${spaces}NOTE: "${note_text}"`;
+	    // add a leading separator
+	    line = encode_statement(null, "", 0, line, script);
+
+	    if (note_text !== "") {
+		code = `${code}\n${spaces}NOTE: "${note_text}"`;
+	    };
+
+	    line = encode_statement(first_input, code, indent, line, script);
 	};
-
-	line = encode_statement(first_input, code, indent, line, script);
     };
 
     return line;
