@@ -2,8 +2,10 @@
 ## TODO:
 
  - simplify CSS from Bootstrap examples in use
+   + no Boostrap deeper than "container" except for icons
    + refactor dynamic style into `dsl.css`
    + make the UI/UX more compact, especially for lists
+
 
  - rework TextX grammar to sync with editor UI changes
    + migrate existing Bwyd module examples
@@ -14,10 +16,10 @@
 
  - private GH repo for `bwyd-app`
 
- - descriptions for each type, e.g., to distinguish among <select/> options
-
  - impl FastAPI webapp
    + load Bwyd module examples to confirm roundtrip
+
+ - HTML "i" descriptions for each type, e.g., to distinguish among <select/> options
 
  - autocomplete symbols for ADD, TRANSFER, ACTION, etc.
 
