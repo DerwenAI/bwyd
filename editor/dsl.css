@@ -82,10 +82,15 @@ label.form-label {
     padding-top: 0;
 }
 
+label.form-check-label {
+    margin-left: 1rem;
+    margin-top: .7rem;
+}
+
 input[type="text"],
 input[type="url"],
 textarea {
-    padding: .5rem .8125rem;
+    padding: .5rem .8rem;
     border: .0938rem solid #d0d5dd;
     border-radius: .5rem;
     outline: none;
@@ -141,11 +146,11 @@ input::placeholder, textarea::placeholder {
 
     padding-block-end: .5rem;
     padding-block-start: .5rem;
-    padding-inline-end: .8125rem;
-    padding-inline-start: .8125rem;
+    padding-inline-end: .8rem;
+    padding-inline-start: .8rem;
     padding-bottom: .5rem;
-    padding-left: .8125rem;
-    padding-right: .8125rem;
+    padding-left: .8rem;
+    padding-right: .8rem;
     padding-top: .5rem;
 
     outline-color: rgb(33, 37, 41);
@@ -170,4 +175,11 @@ input.form-check-input {
 
 details {
     padding-top: .5rem;
+}
+
+div.row {
+    margin-top: .1rem;
+    margin-left: -1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
 }

@@ -157,7 +157,6 @@ function build_checkbox (frag, meta, depth, is_callback, data = null) {
     const label = document.createElement("label");
     label.setAttribute("class", "form-check-label");
     label.setAttribute("for", item_id);
-    label.setAttribute("style", "margin-left: 1rem; margin-top: .7rem;");
     label.appendChild(document.createTextNode(meta["label"]));
     frag.appendChild(label);
 };
@@ -170,7 +169,7 @@ function build_list (frag, meta, depth, is_callback, data = null) {
     const row = document.createElement("div");
     row.setAttribute("class", "row");
     row.setAttribute("id", get_rel_id("%"));
-    row.setAttribute("style", `min-height: 8rem; width: 100%; margin-top: 2rem; margin-left: -2rem; background: hsl(0 0 ${color});`);
+    row.setAttribute("style", `background: hsl(0 0 ${color});`);
     frag.appendChild(row);
 
     var col = document.createElement("div");
