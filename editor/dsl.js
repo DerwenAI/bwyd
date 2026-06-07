@@ -152,7 +152,6 @@ function build_checkbox (frag, meta, depth, is_callback, data = null) {
     ELEM_META[item_id] = meta;
 
     const input = build_input(meta, item_id, is_callback, data);
-    input.setAttribute("style", "margin-top: 1rem;");
     frag.appendChild(input);
 
     const label = document.createElement("label");

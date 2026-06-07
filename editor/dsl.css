@@ -85,7 +85,7 @@ label.form-label {
 input[type="text"],
 input[type="url"],
 textarea {
-    padding: .5625rem .8125rem;
+    padding: .5rem .8125rem;
     border: .0938rem solid #d0d5dd;
     border-radius: .5rem;
     outline: none;
@@ -139,14 +139,14 @@ input::placeholder, textarea::placeholder {
     margin-left: 0;
     margin-right: 0;
 
-    padding-block-end: .5625rem;
-    padding-block-start: .5625rem;
+    padding-block-end: .5rem;
+    padding-block-start: .5rem;
     padding-inline-end: .8125rem;
     padding-inline-start: .8125rem;
-    padding-bottom: .5625rem;
+    padding-bottom: .5rem;
     padding-left: .8125rem;
     padding-right: .8125rem;
-    padding-top: .5625rem;
+    padding-top: .5rem;
 
     outline-color: rgb(33, 37, 41);
     outline-style: none;
@@ -164,7 +164,10 @@ input::placeholder, textarea::placeholder {
     transition-timing-function: ease, ease;
 }
 
+input.form-check-input {
+    margin-top: 1rem;
+}
+
 details {
     padding-top: .5rem;
 }
-
