@@ -54,6 +54,7 @@ summary {
     padding: 0;
 }
 
+/* use case */
 .editor {
     background: #fff;
     border-radius: .75rem;
@@ -177,7 +178,7 @@ input:focus, textarea:focus {
 }
 
 select.form-control {
-    display: inline-block;
+    display: inline;
     font-weight: bold;
     width: 93%;
     max-width: 10rem;
@@ -209,18 +210,18 @@ div.col-8 {
     width: 90%;
 }
 
-.bwyd-input {
-    font-family: 'Consolas','Menlo','SF Mono', monospace;
-    display: inline;
-    float: left;
-}
-
 button {
     display: inline;
 }
 
 .but {
     display: inline;
+}
+
+.bwyd-input {
+    font-family: 'Consolas','Menlo','SF Mono', monospace;
+    display: inline !important;
+    float: left;
 }
 
 div.caboose {
@@ -262,15 +263,4 @@ button.delete-structure {
     padding: .01rem;
     width: 1rem;
     line-height: .5rem;
-}
-
-
-/* these do not appear to work correctly */
-::placeholder {
-    color: red;
-    opacity: 1; /* Firefox */
-}
-
-::-ms-input-placeholder { /* Edge 12 -18 */
-    color: red;
 }
