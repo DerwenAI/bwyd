@@ -38,7 +38,13 @@
   * Niki Segnit <https://www.nikisegnit.com/the-flavour-thesaurus>
   * Samin Nosrat <https://www.saltfatacidheat.com/>
   * Dan Barber <https://www.row7seeds.com/>
+  * Alexander Reeves <https://rpubs.com/areeves87/389547>
   * Chaos Theory Studios <https://foodcolorpalette.com/>
+  * Andrew Dornenburg, Karen Page <https://flavorbible.com/>
+  * Theo Jolliffe <https://flavonomics.com/>
+  * Petar Tokonovic <https://github.com/Pepton21/flavor-network>
+  * Ahn Yong-Yeol, Sebastian Ahnert, Albert-László Barabási <https://www.nature.com/articles/srep00196>
+  * <https://cookpad.com/>
 
 
 ## Modeling

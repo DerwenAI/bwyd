@@ -2,8 +2,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 /* structural */
-html, h1, h2, h3, h4, h5, p, span, cite, figcaption, button, input, select, textarea {
+html, h1, h2, h3, h4, h5, p, span, cite, figcaption, button, label, input, select, textarea {
     font-family: "Atkinson Hyperlegible", sans-serif;
+}
+
+html {
+    font-size: 16px;
 }
 
 body {
@@ -12,25 +16,24 @@ body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    padding: 40px 20px;
 }
 
 h1 {
     font-size: 1.35rem;
     font-weight: 700;
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
 }
 
 h2 {
     font-weight: bold;
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
 }
 
 p {
     font-weight: normal;
-    font-size: 1.1em;
-    line-height: 1.3em;
-    margin: 1.2em 0 1.2em 0;
+    font-size: 1.1rem;
+    line-height: 1.3rem;
+    margin: 1.2rem 0 1.2rem 0;
 }
 
 button,
@@ -50,37 +53,48 @@ summary {
     padding: 0;
 }
 
-
 .editor {
     background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+    border-radius: .75rem;
+    box-shadow: 0 .0625rem .1875rem rgba(0, 0, 0, 0.08), 0 .5rem 1.5rem rgba(0, 0, 0, 0.06);
     width: 100%;
-    max-width: 620px;
-    padding: 32px;
+    max-width: 80rem;
+    padding: 2rem;
     height: fit-content;
 }
 
-.form-label {
+label.form-label {
+    box-sizing: border-box;
+    color: rgb(102, 102, 102);
+    display: block;
+    flex-shrink: 0;
+    font-size: .9em;
+    line-height: 1.5rem;
+    height: 1.5rem;
+    max-width: 100%;
+    margin-bottom: .1875rem;
+    margin-left: 0;
+    margin-right: 0;
     margin-top: .5em;
+    padding-bottom: 0;
+    padding-left: .75rem;
+    padding-right: .75rem;
+    padding-top: 0;
 }
 
 input[type="text"],
 input[type="url"],
 textarea {
-    width: 100%;
-    padding: 9px 13px;
-    font-size: 0.93rem;
-    border: 1.5px solid #d0d5dd;
-    border-radius: 8px;
+    padding: .5625rem .8125rem;
+    border: .0938rem solid #d0d5dd;
+    border-radius: .5rem;
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s;
-    font-family: inherit;
 }
 
 input:focus, textarea:focus {
     border-color: #4f6ef7;
-    box-shadow: 0 0 0 3px rgba(79,110,247,0.15);
+    box-shadow: 0 0 0 .1875rem rgba(79, 110, 247, 0.15);
 }
 
 input::placeholder, textarea::placeholder {
@@ -88,5 +102,69 @@ input::placeholder, textarea::placeholder {
 }
 
 .url-field input {
-    font-family: 'Consolas','Menlo','SF Mono', monospace; font-size: 0.86rem;
+    font-family: 'Consolas','Menlo','SF Mono', monospace;
 }
+
+.form-control {
+    appearance: none;
+    background-clip: padding-box;
+    background-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(200, 210, 225);
+    border-bottom-left-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+    border-bottom-style: solid;
+    border-bottom-width: .0938rem;
+    border-image-outset: 0;
+    border-image-repeat: stretch;
+    border-image-slice: 100%;
+    border-image-source: none;
+    border-image-width: 1;
+    border-left-color: rgb(200, 210, 225);
+    border-left-style: solid;
+    border-left-width: .0938rem;
+    border-right-color: rgb(200, 210, 225);
+    border-right-style: solid;
+    border-right-width: .0938rem;
+    border-top-color: rgb(200, 210, 225);
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+    border-top-style: solid;
+    border-top-width: .0938rem;
+    box-shadow: rgba(13, 110, 253, 0.027) 0 0 0 .0282rem;
+    box-sizing: border-box;
+    display: block;
+    flex-shrink: 0;
+    line-height: 1.4rem;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+
+    padding-block-end: .5625rem;
+    padding-block-start: .5625rem;
+    padding-inline-end: .8125rem;
+    padding-inline-start: .8125rem;
+    padding-bottom: .5625rem;
+    padding-left: .8125rem;
+    padding-right: .8125rem;
+    padding-top: .5625rem;
+
+    outline-color: rgb(33, 37, 41);
+    outline-style: none;
+    outline-width: .1875rem;
+    overflow-clip-margin: 0;
+    overflow-x: clip;
+    overflow-y: clip;
+    text-rendering: auto;
+    text-shadow: none;
+    text-transform: none;
+    transition-behavior: normal, normal;
+    transition-delay: 0s, 0s;
+    transition-duration: 0.15s, 0.15s;
+    transition-property: border-color, box-shadow;
+    transition-timing-function: ease, ease;
+}
+
+details {
+    padding-top: .5rem;
+}
+

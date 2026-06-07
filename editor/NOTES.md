@@ -6,7 +6,6 @@
    + refactor dynamic style into `dsl.css`
    + make the UI/UX more compact, especially for lists
 
-
  - rework TextX grammar to sync with editor UI changes
    + migrate existing Bwyd module examples
    + update Pydantic classes to read parse trees
@@ -23,4 +22,7 @@
 
  - autocomplete symbols for ADD, TRANSFER, ACTION, etc.
 
- - color analysis
+ - capture recipe HTML:
+   + <https://github.com/alston001/full-capture-extension>
+
+ - color analysis and suggestions
