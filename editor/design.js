@@ -31,7 +31,7 @@ const DESIGN_META = {
 			"list": {
 			    "count": "zero-many",
 			    "id": "cite-list",
-			    "label": "Sources",
+			    "label": "sources",
 			    "placeholder": "Source link",
 			    "verb": "CITE",
 			    "json_loc": "sources",
@@ -42,7 +42,7 @@ const DESIGN_META = {
 			"list": {
 			    "count": "zero-many",
 			    "id": "post-list",
-			    "label": "Galleries",
+			    "label": "galleries",
 			    "placeholder": "Galleries link",
 			    "verb": "POST",
 			    "json_loc": "gallery",
@@ -56,7 +56,7 @@ const DESIGN_META = {
             "list": {
 		"count": "one-many",
 		"id": "closure-list",
-		"label": "Closures",
+		"label": "closures",
 		"verb": "CLOSURE",
 		"json_loc": "closures",
 		"type": [
@@ -96,7 +96,7 @@ const DESIGN_META = {
 						"list": {
 						    "count": "zero-many",
 						    "id": "super-list-%",
-						    "label": "Supers",
+						    "label": "supers",
 						    "placeholder": "Supers",
 						    "verb": "SUPER",
 						    "json_loc": "supers",
@@ -107,7 +107,7 @@ const DESIGN_META = {
 						"list": {
 						    "count": "zero-many",
 						    "id": "keyword-list-%",
-						    "label": "Keywords",
+						    "label": "keywords",
 						    "placeholder": "Keywords",
 						    "verb": "KEYWORD",
 						    "json_loc": "keywords",
@@ -126,7 +126,7 @@ const DESIGN_META = {
 						"list": {
 						    "count": "one-many",
 						    "id": "container-list-%",
-						    "label": "Containers",
+						    "label": "containers",
 						    "verb": "CONTAINER",
 						    "json_loc": "containers",
 						    "type": [
@@ -162,7 +162,7 @@ const DESIGN_META = {
 						"list": {
 						    "count": "one-many",
 						    "id": "tool-list-%",
-						    "label": "Tools",
+						    "label": "tools",
 						    "verb": "TOOL",
 						    "json_loc": "tools",
 						    "type": [
@@ -198,7 +198,7 @@ const DESIGN_META = {
 						"list": {
 						    "count": "one-many",
 						    "id": "ingredient-list-%",
-						    "label": "Ingredients",
+						    "label": "ingredients",
 						    "verb": "INGREDIENT",
 						    "json_loc": "ingredients",
 						    "type": [
@@ -234,7 +234,7 @@ const DESIGN_META = {
 						"list": {
 						    "count": "one-many",
 						    "id": "use-list-%",
-						    "label": "Uses",
+						    "label": "uses",
 						    "verb": "USE",
 						    "json_loc": "uses",
 						    "type": [
@@ -273,7 +273,7 @@ const DESIGN_META = {
 				    "list": {
 					"count": "one-many",
 					"id": "activity-list-%",
-					"label": "Activities",
+					"label": "activities",
 					"verb": "ACTIVITY",
 					"json_loc": "activities",
 					"type": [
@@ -308,7 +308,7 @@ const DESIGN_META = {
 							    "list": {
 								"count": "one-many",
 								"id": "input-list-%",
-								"label": "Inputs",
+								"label": "inputs",
 								"verb": "INPUT",
 								"json_loc": "inputs",
 								"type": [
@@ -381,7 +381,7 @@ const DESIGN_META = {
 							    "list": {
 								"count": "one-many",
 								"id": "operation-list-%",
-								"label": "Ops",
+								"label": "ops",
 								"verb": "OP",
 								"json_loc": "ops",
 								"type": [

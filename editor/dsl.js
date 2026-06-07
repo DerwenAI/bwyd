@@ -174,13 +174,12 @@ function build_list (frag, meta, depth, is_callback, data = null) {
 
     var col = document.createElement("div");
     col.setAttribute("class", "col-1");
-    col.setAttribute("style", "padding: 0;");
     row.appendChild(col);
 
     const label = document.createElement("label");
-    label.setAttribute("class", "form-label");
+    label.setAttribute("class", "group");
     label.setAttribute("for", group_id);
-    label.setAttribute("style", "margin-top: 1rem; rotate: 270deg; color: hsl(0, 0%, 75%); font-weight: bold; padding-left: 0;");
+
     label.appendChild(document.createTextNode(meta["label"]));
     col.appendChild(label);
 
@@ -203,11 +202,10 @@ function build_list (frag, meta, depth, is_callback, data = null) {
     // add a "caboose" button
     const caboose = document.createElement("div");
     caboose.setAttribute("id", get_rel_id("caboose-%"));
-    caboose.setAttribute("class", "list-group-item");
+    caboose.setAttribute("class", "caboose");
 
     const button = document.createElement("button");
-    button.setAttribute("class", "btn btn-outline-primary btn-sm");
-    button.setAttribute("style", "width: 2.1em; display: inline;");
+    button.setAttribute("class", "btn btn-outline-primary btn-sm caboose");
 
     const callback = `list_add('${group_id}', ${depth})`;
     button.setAttribute("onclick", callback);
@@ -220,7 +218,6 @@ function build_list (frag, meta, depth, is_callback, data = null) {
     const para = document.createElement("span");
     const text = `add new ${meta["label"].toLowerCase()}`;
     para.appendChild(document.createTextNode(text));
-    para.setAttribute("style", "font-size: .75em; font-style: oblique; color: #aaa; margin-left: 1em;");
 
     caboose.appendChild(para);
     list_group.appendChild(caboose);
@@ -257,7 +254,6 @@ function build_select (frag, meta, depth, is_callback, data = null) {
     const select = document.createElement("select");
     select.setAttribute("class", "form-control");
     select.setAttribute("id", menu_id);
-    select.setAttribute("style", "display: inline-block; width: 93%;");
 
     var option = document.createElement("option");
     option.setAttribute("disabled", true);
@@ -265,7 +261,6 @@ function build_select (frag, meta, depth, is_callback, data = null) {
     option.setAttribute("value", null);
 
     const para = document.createElement("span");
-    para.setAttribute("style", "font-style: oblique; color: #aaa;");
     para.appendChild(document.createTextNode("(select an option)"));
     option.appendChild(para);
     select.appendChild(option);
@@ -310,8 +305,6 @@ function build_summary (frag, meta, depth, is_callback, parent, data = null) {
     };
 
     para.appendChild(document.createTextNode(text));
-    para.setAttribute("style", "font-size: .75em; font-style: oblique; color: #aaa; margin-left: 1em;");
-
     summary.appendChild(para);
     details.appendChild(summary);
 
@@ -406,9 +399,8 @@ function list_add (group_id, depth, is_callback = true, data = null) {
     if (["text", "textarea", "symbol", "url", "checkbox"].includes(meta["type"])) {
 	const input = build_input(meta, item_id, is_callback, data);
 	input.setAttribute("placeholder", meta["placeholder"]);
-	input.setAttribute("class", "url-field");
+	input.setAttribute("class", "bywd-input");
 	input.setAttribute("required", true);
-	input.setAttribute("style", "display: inline-block; width: 87%;");
 
 	// can we use URL pattern validation?
 	if (meta["type"] === "url") {
@@ -429,8 +421,7 @@ function list_add (group_id, depth, is_callback = true, data = null) {
     };
 
     const button = document.createElement("button");
-    button.setAttribute("class", "btn btn-sm float-end");
-    button.setAttribute("style", "width: 2.1em;");
+    button.setAttribute("class", "btn btn-sm float-end delete-row");
 
     const icon = document.createElement("i");
     icon.setAttribute("class", "bi bi-x");
@@ -452,9 +443,9 @@ function list_add (group_id, depth, is_callback = true, data = null) {
 
     built_elem.scrollIntoView();
 
-    // for structured types, be sure to use the generated ID from
-    // the first child which has class "form-control"
-    // NB: must follow `insertBefore` above, or IDs won't be in the DOM
+    // for structured types, be sure to use the generated ID
+    // from the first child which has class "form-control"
+    // NB: follow `insertBefore` above, or IDs won't be in DOM
     if (is_structured) {
 	for (const item of built_elem.children) {
 	    if ((item.classList !== null) && item.classList.contains("form-control")) {
@@ -463,6 +454,7 @@ function list_add (group_id, depth, is_callback = true, data = null) {
 	    };
 	};
 
+	button.classList.add("delete-structure");
 	button.classList.add("btn-outline-danger");
 
 	built_elem.removeChild(button);

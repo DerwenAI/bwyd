@@ -16,6 +16,7 @@ body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
+    line-height: 1em;
 }
 
 h1 {
@@ -82,6 +83,20 @@ label.form-label {
     padding-top: 0;
 }
 
+label.group {
+    color: hsl(0, 0%, 75%);
+    font-weight: bold;
+    font-size: .7rem;
+    line-height: 1.5rem;
+    rotate: 270deg;
+    margin-top: 1rem;
+    padding-left: 0;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: initial;
+}
+
 label.form-check-label {
     margin-left: 1rem;
     margin-top: .7rem;
@@ -104,10 +119,6 @@ input:focus, textarea:focus {
 
 input::placeholder, textarea::placeholder {
     color: #aaa;
-}
-
-.url-field input {
-    font-family: 'Consolas','Menlo','SF Mono', monospace;
 }
 
 .form-control {
@@ -169,12 +180,19 @@ input::placeholder, textarea::placeholder {
     transition-timing-function: ease, ease;
 }
 
+select.form-control {
+    display: inline-block;
+    font-weight: bold;
+    width: 93%;
+}
+
 input.form-check-input {
     margin-top: 1rem;
 }
 
-details {
-    padding-top: .5rem;
+.bwyd-input {
+    font-family: 'Consolas','Menlo','SF Mono', monospace;
+    display: inline-block;
 }
 
 div.row {
@@ -183,3 +201,50 @@ div.row {
     padding-top: .5rem;
     padding-bottom: .5rem;
 }
+
+div.list-group-item {
+}
+
+div.col-1 {
+    padding: 0;
+}
+
+div.caboose {
+    margin-top: .2rem;
+}
+
+button.caboose {
+    display: inline;
+    width: 2rem;
+    font-size: .9rem;
+}
+
+div.caboose span {
+    font-size: .75rem;
+    font-style: oblique;
+    color: #aaa;
+    margin-left: 1rem;
+}
+
+summary span {
+    font-size: .75em;
+    font-style: oblique;
+    color: #aaa;
+    margin-left: 1em;    
+}
+
+details {
+    padding-top: .5rem;
+}
+
+button.delete-row {
+    padding: .01rem;
+    width: 1.5rem;
+}
+
+button.delete-structure {
+    padding: .01rem;
+    width: 1rem;
+    line-height: .5rem;
+}
+
