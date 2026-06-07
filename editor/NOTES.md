@@ -2,8 +2,6 @@
 ## TODO:
 
  - simplify CSS from Bootstrap examples in use
-   + no Boostrap deeper than "container" except for icons
-   + refactor dynamic style into `dsl.css`
    + make the UI/UX more compact, especially for lists
 
  - rework TextX grammar to sync with editor UI changes

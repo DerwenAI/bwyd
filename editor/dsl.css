@@ -117,10 +117,6 @@ input:focus, textarea:focus {
     box-shadow: 0 0 0 .1875rem rgba(79, 110, 247, 0.15);
 }
 
-input::placeholder, textarea::placeholder {
-    color: #aaa;
-}
-
 .form-control {
     appearance: none;
     background-clip: padding-box;
@@ -184,18 +180,15 @@ select.form-control {
     display: inline-block;
     font-weight: bold;
     width: 93%;
+    max-width: 10rem;
 }
 
 input.form-check-input {
     margin-top: 1rem;
 }
 
-.bwyd-input {
-    font-family: 'Consolas','Menlo','SF Mono', monospace;
-    display: inline-block;
-}
-
 div.row {
+    border-color: #ccc;
     margin-top: .1rem;
     margin-left: -1rem;
     padding-top: .5rem;
@@ -203,10 +196,31 @@ div.row {
 }
 
 div.list-group-item {
+    width: 95%;
 }
 
 div.col-1 {
     padding: 0;
+    width: 7%;
+}
+
+div.col-8 {
+    flex: 0 0 auto;
+    width: 90%;
+}
+
+.bwyd-input {
+    font-family: 'Consolas','Menlo','SF Mono', monospace;
+    display: inline;
+    float: left;
+}
+
+button {
+    display: inline;
+}
+
+.but {
+    display: inline;
 }
 
 div.caboose {
@@ -238,8 +252,10 @@ details {
 }
 
 button.delete-row {
+    display: inline;
     padding: .01rem;
     width: 1.5rem;
+    float: right;
 }
 
 button.delete-structure {
@@ -248,3 +264,13 @@ button.delete-structure {
     line-height: .5rem;
 }
 
+
+/* these do not appear to work correctly */
+::placeholder {
+    color: red;
+    opacity: 1; /* Firefox */
+}
+
+::-ms-input-placeholder { /* Edge 12 -18 */
+    color: red;
+}
