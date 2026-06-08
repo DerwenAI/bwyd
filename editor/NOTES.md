@@ -2,7 +2,29 @@
 ## TODO:
 
  - simplify CSS from Bootstrap examples in use
-   + make the UI/UX more compact, especially for lists
+   + fix the `placeholder`
+   + back-out all of the Bootstrap CSS:
+
+container-fluid
+row
+col-1
+col-8
+list-group
+list-group-item
+
+form-check-input
+form-check-label
+form-control
+form-label
+
+bywd-input
+add-item
+delete-item
+delete-structure
+group
+caboose
+blue-background-class
+
 
  - rework TextX grammar to sync with editor UI changes
    + migrate existing Bwyd module examples

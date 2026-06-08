@@ -199,21 +199,18 @@ function build_list (frag, meta, depth, is_callback, data = null) {
 	ghostClass: "blue-background-class",
     });
 
-    // add a "caboose" button
+    // add a "caboose" element
     const caboose = document.createElement("div");
     caboose.setAttribute("id", get_rel_id("caboose-%"));
     caboose.setAttribute("class", "caboose");
 
-    const button = document.createElement("button");
-    button.setAttribute("class", "btn btn-outline-primary btn-sm caboose");
+    const icon = document.createElement("span");
+    icon.setAttribute("class", "material-symbols-outlined add-item");
+    icon.appendChild(document.createTextNode("add_box"));
 
     const callback = `list_add('${group_id}', ${depth})`;
-    button.setAttribute("onclick", callback);
-
-    const icon = document.createElement("i");
-    icon.setAttribute("class", "bi bi-plus");
-    button.appendChild(icon);
-    caboose.appendChild(button);
+    icon.setAttribute("onclick", callback);
+    caboose.appendChild(icon);
 
     const para = document.createElement("span");
     const text = `add new ${meta["label"].toLowerCase()}`;
@@ -420,15 +417,7 @@ function list_add (group_id, depth, is_callback = true, data = null) {
 	});
     };
 
-    const button = document.createElement("button");
-    button.setAttribute("class", "btn btn-sm float-end delete-row");
-
-    const icon = document.createElement("i");
-    icon.setAttribute("class", "bi bi-x");
-    button.appendChild(icon);
-
     elem.setAttribute("draggable", true);
-    elem.appendChild(button);
 
     // insert item just before the "caboose" at the end
     list_group.insertBefore(elem, list_group.lastElementChild);
@@ -441,6 +430,8 @@ function list_add (group_id, depth, is_callback = true, data = null) {
 	preventScroll: false,
     });
 
+    const icon = document.createElement("span");
+    built_elem.prepend(icon);
     built_elem.scrollIntoView();
 
     // for structured types, be sure to use the generated ID
@@ -454,19 +445,19 @@ function list_add (group_id, depth, is_callback = true, data = null) {
 	    };
 	};
 
-	button.classList.add("delete-structure");
-	button.classList.add("btn-outline-danger");
-
-	built_elem.removeChild(button);
-	built_elem.prepend(button);
+	icon.setAttribute("class", "material-symbols-outlined delete-structure");
+	icon.appendChild(document.createTextNode("delete"));
     }
     else {
-	button.classList.add("btn-light");
+	icon.setAttribute("class", "material-symbols-outlined delete-item");
+	icon.appendChild(document.createTextNode("close"));
     };
 
-    // set up the delete button
-    const callback = `list_del('${group_id}', '${item_id}')`;
-    button.setAttribute("onclick", callback);
+    const icon_id = get_rel_id(item_id);
+    icon.setAttribute("id", icon_id);
+
+    const callback = `list_del('${group_id}', '${icon_id}')`;
+    icon.setAttribute("onclick", callback);
 };
 
 
@@ -503,7 +494,7 @@ function menu_select (menu_id, depth, is_callback = true, data = null, select = 
 
     if (is_callback && (meta.length > 0)) {
 	// collect and remove all pre-existing structured elements:
-	// everthing which follows the <select/> and delete <button/>
+	// everthing which follows the <select/> and delete <span/>
 	for (var i = 2; i < item.childNodes.length; i++) {
 	    prev_elems.push(item.childNodes[i]);
 	};

@@ -1,6 +1,14 @@
 /* fonts, icons */
 @import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
+.material-symbols-outlined {
+    font-variation-settings:
+	'FILL' 0,
+	'wght' 400,
+	'GRAD' 0,
+	'opsz' 24
+}
+
 /* structural */
 html, h1, h2, h3, h4, h5, p, span, cite, figcaption, button, label, input, select, textarea {
     font-family: "Atkinson Hyperlegible", sans-serif;
@@ -220,7 +228,6 @@ button {
 
 .bwyd-input {
     font-family: 'Consolas','Menlo','SF Mono', monospace;
-    display: inline !important;
     float: left;
 }
 
@@ -228,17 +235,45 @@ div.caboose {
     margin-top: .2rem;
 }
 
-button.caboose {
-    display: inline;
-    width: 2rem;
-    font-size: .9rem;
-}
-
 div.caboose span {
     font-size: .75rem;
     font-style: oblique;
     color: #aaa;
-    margin-left: 1rem;
+    margin-left: .1rem;
+}
+
+div.caboose span.add-item {
+    color: blue;
+    z-index: 10;  
+    position: relative;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1.2rem;
+    font-style: normal;
+    width: 1.5rem;
+    top: .4rem;
+}
+
+span.delete-item {
+    color: #aaa;
+    z-index: 10;  
+    position: absolute;
+    top: 0;
+    padding-top: .8rem;
+    padding-right: 1.1rem;
+    text-align: right;
+    font-size: .9rem;
+}
+
+span.delete-structure {
+    color: red;
+    z-index: 10;  
+    position: absolute;
+    top: 0;
+    padding-top: .5rem;
+    padding-right: 1.5rem;
+    text-align: right;
+    font-size: 1.2rem;
 }
 
 summary span {
@@ -246,21 +281,41 @@ summary span {
     font-style: oblique;
     color: #aaa;
     margin-left: 1em;    
+    vertical-align: top;
+}
+
+summary {
+    vertical-align: middle;
+}
+
+details>summary {
+    list-style-type: none;
+    outline: none;
+    cursor: pointer;
+    border: .0625rem solid #eee;
+    border-radius: .3125rem;
+    padding: 1rem;
+}
+
+details>summary::-webkit-details-marker {
+    display: none;
+}
+
+details>summary::before {
+    font-family: "Material Symbols Outlined";
+    content: "\e944";
+}
+
+details[open]>summary::before {
+    font-family: "Material Symbols Outlined";
+    content: "\e94f";
+}
+
+details[open]>summary {
+    margin-bottom: .1rem;
 }
 
 details {
     padding-top: .5rem;
 }
 
-button.delete-row {
-    display: inline;
-    padding: .01rem;
-    width: 1.5rem;
-    float: right;
-}
-
-button.delete-structure {
-    padding: .01rem;
-    width: 1rem;
-    line-height: .5rem;
-}
