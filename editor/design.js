@@ -32,6 +32,7 @@ const DESIGN_META = {
 			    "count": "zero-many",
 			    "id": "cite-list",
 			    "label": "sources",
+			    "symbol": "code_blocks",
 			    "placeholder": "Source link",
 			    "verb": "CITE",
 			    "json_loc": "sources",
@@ -43,6 +44,7 @@ const DESIGN_META = {
 			    "count": "zero-many",
 			    "id": "post-list",
 			    "label": "galleries",
+			    "symbol": "gallery_thumbnail",
 			    "placeholder": "Galleries link",
 			    "verb": "POST",
 			    "json_loc": "gallery",
@@ -57,6 +59,7 @@ const DESIGN_META = {
 		"count": "one-many",
 		"id": "closure-list",
 		"label": "closures",
+		"symbol": "code_blocks",
 		"verb": "CLOSURE",
 		"json_loc": "closures",
 		"type": [
@@ -97,6 +100,7 @@ const DESIGN_META = {
 						    "count": "zero-many",
 						    "id": "super-list-%",
 						    "label": "supers",
+						    "symbol": "category",
 						    "placeholder": "Supers",
 						    "verb": "SUPER",
 						    "json_loc": "supers",
@@ -108,6 +112,7 @@ const DESIGN_META = {
 						    "count": "zero-many",
 						    "id": "keyword-list-%",
 						    "label": "keywords",
+						    "symbol": "new_label",
 						    "placeholder": "Keywords",
 						    "verb": "KEYWORD",
 						    "json_loc": "keywords",
@@ -127,6 +132,7 @@ const DESIGN_META = {
 						    "count": "one-many",
 						    "id": "container-list-%",
 						    "label": "containers",
+						    "symbol": "stockpot",
 						    "verb": "CONTAINER",
 						    "json_loc": "containers",
 						    "type": [
@@ -163,6 +169,7 @@ const DESIGN_META = {
 						    "count": "one-many",
 						    "id": "tool-list-%",
 						    "label": "tools",
+						    "symbol": "flatware",
 						    "verb": "TOOL",
 						    "json_loc": "tools",
 						    "type": [
@@ -199,6 +206,7 @@ const DESIGN_META = {
 						    "count": "one-many",
 						    "id": "ingredient-list-%",
 						    "label": "ingredients",
+						    "symbol": "grocery",
 						    "verb": "INGREDIENT",
 						    "json_loc": "ingredients",
 						    "type": [
@@ -235,6 +243,7 @@ const DESIGN_META = {
 						    "count": "one-many",
 						    "id": "use-list-%",
 						    "label": "uses",
+						    "symbol": "cooking",
 						    "verb": "USE",
 						    "json_loc": "uses",
 						    "type": [
@@ -274,6 +283,7 @@ const DESIGN_META = {
 					"count": "one-many",
 					"id": "activity-list-%",
 					"label": "activities",
+					"symbol": "chef_hat",
 					"verb": "ACTIVITY",
 					"json_loc": "activities",
 					"type": [
@@ -309,6 +319,7 @@ const DESIGN_META = {
 								"count": "one-many",
 								"id": "input-list-%",
 								"label": "inputs",
+								"symbol": "input",
 								"verb": "INPUT",
 								"json_loc": "inputs",
 								"type": [
@@ -382,6 +393,7 @@ const DESIGN_META = {
 								"count": "one-many",
 								"id": "operation-list-%",
 								"label": "ops",
+								"symbol": "skillet_cooktop",
 								"verb": "OP",
 								"json_loc": "ops",
 								"type": [

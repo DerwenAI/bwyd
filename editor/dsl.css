@@ -95,15 +95,14 @@ label.form-label {
 label.group {
     color: hsl(0, 0%, 75%);
     font-weight: bold;
-    font-size: .7rem;
+    font-size: .8rem;
     line-height: 1.5rem;
-    rotate: 270deg;
-    margin-top: 1rem;
-    padding-left: 0;
+    margin-top: .5rem;
+}
 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: initial;
+label.group span {
+    color: #777;
+    padding-left: .2rem;
 }
 
 label.form-check-label {
@@ -210,12 +209,12 @@ div.list-group-item {
 
 div.col-1 {
     padding: 0;
-    width: 7%;
+    width: 6%;
 }
 
 div.col-8 {
     flex: 0 0 auto;
-    width: 90%;
+    width: 93%;
 }
 
 button {

@@ -180,7 +180,12 @@ function build_list (frag, meta, depth, is_callback, data = null) {
     label.setAttribute("class", "group");
     label.setAttribute("for", group_id);
 
-    label.appendChild(document.createTextNode(meta["label"]));
+    const symbol = document.createElement("span");
+    symbol.setAttribute("class", "material-symbols-outlined");
+    symbol.setAttribute("title", meta["label"]);
+    symbol.appendChild(document.createTextNode(meta["symbol"]));
+
+    label.appendChild(symbol);
     col.appendChild(label);
 
     col = document.createElement("div");
