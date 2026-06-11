@@ -32,7 +32,7 @@ const DESIGN_META = {
 			    "count": "zero-many",
 			    "id": "cite-list",
 			    "label": "sources",
-			    "symbol": "code_blocks",
+			    "symbol": "link",
 			    "placeholder": "Source link",
 			    "verb": "CITE",
 			    "json_loc": "sources",
@@ -204,6 +204,43 @@ const DESIGN_META = {
 					    {
 						"list": {
 						    "count": "one-many",
+						    "id": "prep-list-%",
+						    "label": "prep",
+						    "symbol": "cooking",
+						    "verb": "PREP",
+						    "json_loc": "prep",
+						    "type": [
+							{
+							    "field": {
+								"count": "one",
+								"id": "prep-name-%",
+								"label": "Name",
+								"placeholder": "Prep name",
+								"verb": "NAME",
+								"json_loc": "name",
+								"type": "symbol",
+							    },
+							},
+							{
+							    "field": {
+								"count": "one",
+								"id": "prep-text-%",
+								"label": "Text",
+								"placeholder": "Prep description",
+								"verb": "TEXT",
+								"json_loc": "text",
+								"type": "textarea",
+							    },
+							},
+							{
+							    "lookup": "note",
+							},
+						    ],
+						},
+					    },
+					    {
+						"list": {
+						    "count": "one-many",
 						    "id": "ingredient-list-%",
 						    "label": "ingredients",
 						    "symbol": "grocery",
@@ -227,43 +264,6 @@ const DESIGN_META = {
 								"id": "ingredient-text-%",
 								"label": "Text",
 								"placeholder": "Ingredient description",
-								"verb": "TEXT",
-								"json_loc": "text",
-								"type": "textarea",
-							    },
-							},
-							{
-							    "lookup": "note",
-							},
-						    ],
-						},
-					    },
-					    {
-						"list": {
-						    "count": "one-many",
-						    "id": "use-list-%",
-						    "label": "uses",
-						    "symbol": "cooking",
-						    "verb": "USE",
-						    "json_loc": "uses",
-						    "type": [
-							{
-							    "field": {
-								"count": "one",
-								"id": "use-name-%",
-								"label": "Name",
-								"placeholder": "Use name",
-								"verb": "NAME",
-								"json_loc": "name",
-								"type": "symbol",
-							    },
-							},
-							{
-							    "field": {
-								"count": "one",
-								"id": "use-text-%",
-								"label": "Text",
-								"placeholder": "Use description",
 								"verb": "TEXT",
 								"json_loc": "text",
 								"type": "textarea",
@@ -317,16 +317,16 @@ const DESIGN_META = {
 							{
 							    "list": {
 								"count": "one-many",
-								"id": "input-list-%",
-								"label": "inputs",
+								"id": "use-list-%",
+								"label": "uses",
 								"symbol": "input",
-								"verb": "INPUT",
-								"json_loc": "inputs",
+								"verb": "USE",
+								"json_loc": "uses",
 								"type": [
 								    {
 									"select": {
 									    "count": "one",
-									    "id": "input-%",
+									    "id": "use-%",
 									    "type": {
 										"add": [
 										    {

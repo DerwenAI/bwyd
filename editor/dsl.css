@@ -1,5 +1,6 @@
 /* fonts, icons */
 @import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined");
 
 .material-symbols-outlined {
     font-variation-settings:
@@ -266,7 +267,7 @@ span.delete-item {
 
 span.delete-structure {
     color: red;
-    z-index: 10;  
+    z-index: 5;
     position: absolute;
     top: 0;
     padding-top: .5rem;
@@ -276,6 +277,7 @@ span.delete-structure {
 }
 
 summary span {
+    z-index: 20;
     font-size: .75em;
     font-style: oblique;
     color: #aaa;
@@ -285,6 +287,9 @@ summary span {
 
 summary {
     vertical-align: middle;
+    margin-top: 1rem;
+    padding-top: .1rem;
+    padding-bottom: .1rem;
 }
 
 details>summary {
@@ -293,7 +298,8 @@ details>summary {
     cursor: pointer;
     border: .0625rem solid #eee;
     border-radius: .3125rem;
-    padding: 1rem;
+    padding-top: .1rem;
+    padding-bottom: .1rem;
 }
 
 details>summary::-webkit-details-marker {
@@ -310,11 +316,6 @@ details[open]>summary::before {
     content: "\e94f";
 }
 
-details[open]>summary {
-    margin-bottom: .1rem;
-}
-
 details {
-    padding-top: .5rem;
+    margin-top: .1rem;
 }
-

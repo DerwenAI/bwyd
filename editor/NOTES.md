@@ -1,6 +1,9 @@
 
 ## TODO:
 
+ - renaming in grammar
+   + `USE` => `PREP`
+
  - simplify CSS from Bootstrap examples in use
    + fix the `placeholder`
    + back-out all of the Bootstrap CSS:

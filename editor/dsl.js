@@ -568,7 +568,7 @@ function encode_note (item) {
 };
 
 
-function encode_inputs (list_group, indent, line, script) {
+function encode_uses (list_group, indent, line, script) {
     const spaces = gen_spaces(indent + 1);
 
     for (const item of gen_items(list_group)) {
@@ -872,8 +872,8 @@ function encode_activities (group_id, indent, line, script) {
 	for (const elem of gen_inputs(item, ["DIV"])) {
 	    const group = elem.children[1].children[0];
 
-	    if (group.id.startsWith("input-list")) {
-		line = encode_inputs(group, indent + 1, line, script);
+	    if (group.id.startsWith("use-list")) {
+		line = encode_uses(group, indent + 1, line, script);
 	    }
 	    else if (group.id.startsWith("operation-list")) {
 		line = encode_operations(group, indent + 1, line, script);
@@ -965,7 +965,7 @@ function encode_list (group_id, indent, line, script) {
 	function(item, index) {
 	    item.childNodes.forEach(
 		function(input, index) {
-		    if ((input.id in ELEM_META) && !input.id.startsWith("caboose-")) {
+		    if ((input.id in ELEM_META) && !input.id.startsWith("caboose-") && (input.tagName !== "SPAN")) {
 			const verb = ELEM_META[input.id].verb;
 			const code = `${verb}: "${input.value.trim()}"`;
 			line = encode_statement(input, code, indent, line, script);
@@ -1048,11 +1048,11 @@ function encode_recipe () {
 		else if (group.id.startsWith("tool-list")) {
 		    line = encode_dependency(group.id, "tool", 1, line, script);
 		}
+		else if (group.id.startsWith("prep-list")) {
+		    line = encode_dependency(group.id, "prep", 1, line, script);
+		}
 		else if (group.id.startsWith("ingredient-list")) {
 		    line = encode_dependency(group.id, "ingredient", 1, line, script);
-		}
-		else if (group.id.startsWith("use-list")) {
-		    line = encode_dependency(group.id, "use", 1, line, script);
 		};
 	    };
 	};
