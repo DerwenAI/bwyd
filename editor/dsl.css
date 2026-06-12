@@ -21,10 +21,10 @@
     --col-2-bkg-4: hsla(72, 19%, 90%, 20%);
     --col-2-bkg-5: hsla(72, 19%, 90%, 20%);
     --col-2-bkg-6: hsla(72, 19%, 90%, 20%);
+    --col-2-bkg-7: hsla(72, 19%, 90%, 20%);
 
     --col-3-bkg-1: hsla(308, 16%, 82%, 20%);
     --col-3-bkg-2: hsla(55, 17%, 49%, 20%);
-    --col-3-bkg-3: hsla(65, 46%, 58%, 20%);
 
     --list-symbol: #777;
 
@@ -228,8 +228,61 @@ div.row {
     padding-bottom: .5rem;
 }
 
+div.list-group {
+    border-bottom-left-radius: .37rem;
+    border-bottom-right-radius: .37rem;
+    border-top-left-radius: .37rem;
+    border-top-right-radius: .37rem;
+    box-sizing: border-box;
+    color: rgb(102, 102, 102);
+    margin 0;
+    padding 0;
+    text-align: start;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
 div.list-group-item {
     width: 95%;
+
+    background-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(204, 204, 204);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0;
+    border-image-repeat: stretch;
+    border-image-slice: 100%;
+    border-image-source: none;
+    border-image-width: 1;
+    border-left-color: rgb(204, 204, 204);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgb(204, 204, 204);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: rgb(204, 204, 204);
+    border-top-left-radius: 5.92px;
+    border-top-right-radius: 5.92px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-sizing: border-box;
+    color: rgb(33, 37, 41);
+    display: block;
+    margin-bottom: 0px;
+    margin-left: -16px;
+    margin-right: -12px;
+    margin-top: 1.6px;
+    padding-bottom: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    position: relative;
+    text-align: start;
+    text-decoration-color: rgb(33, 37, 41);
+    text-decoration-line: none;
+    text-decoration-style: solid;
+    text-decoration-thickness: auto;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-user-drag: none;
 }
 
 div.col-1 {

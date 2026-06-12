@@ -302,7 +302,7 @@ const DESIGN_META = {
 					"label": "activities",
 					"symbol": "chef_hat",
 					"description": "activities: a sequence of steps to follow for preparing this closure",
-					"color": "--col-3-bkg-1",
+					"color": "--col-2-bkg-7",
 					"verb": "ACTIVITY",
 					"json_loc": "activities",
 					"type": [
@@ -340,7 +340,7 @@ const DESIGN_META = {
 								"label": "uses",
 								"symbol": "input",
 								"description": "uses: measured use of ingredients or prepped items",
-								"color": "--col-3-bkg-2",
+								"color": "--col-3-bkg-1",
 								"verb": "USE",
 								"json_loc": "uses",
 								"type": [
@@ -416,7 +416,7 @@ const DESIGN_META = {
 								"label": "ops",
 								"symbol": "skillet_cooktop",
 								"description": "ops: specific operations to perform within a step",
-								"color": "--col-3-bkg-3",
+								"color": "--col-3-bkg-2",
 								"verb": "OP",
 								"json_loc": "ops",
 								"type": [

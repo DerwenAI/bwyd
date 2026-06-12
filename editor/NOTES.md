@@ -12,22 +12,23 @@ container-fluid
 row
 col-1
 col-8
-list-group
-list-group-item
+
+*list-group
+*list-group-item
 
 form-check-input
 form-check-label
 form-control
 form-label
 
-bywd-input
-add-item
-delete-item
-delete-structure
-group
-caboose
+*bywd-input
+*add-item
+*delete-item
+*delete-structure
+*group
+*caboose
 
-blue-background-class
+*blue-background-class
 
 
  - rework TextX grammar to sync with editor UI changes
