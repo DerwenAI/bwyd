@@ -34,6 +34,7 @@ const DESIGN_META = {
 			    "label": "sources",
 			    "symbol": "link",
 			    "description": "sources: links to sources online",
+			    "color": "--col-1-bkg-1",
 			    "placeholder": "Source link",
 			    "verb": "CITE",
 			    "json_loc": "sources",
@@ -47,6 +48,7 @@ const DESIGN_META = {
 			    "label": "galleries",
 			    "symbol": "gallery_thumbnail",
 			    "description": "galleries: links to posted images",
+			    "color": "--col-1-bkg-2",
 			    "placeholder": "Galleries link",
 			    "verb": "POST",
 			    "json_loc": "gallery",
@@ -63,6 +65,7 @@ const DESIGN_META = {
 		"label": "closures",
 		"symbol": "code_blocks",
 		"description": "closures: prepared items for serving or use as components",
+		"color": "--col-2-bkg-1",
 		"verb": "CLOSURE",
 		"json_loc": "closures",
 		"type": [
@@ -118,6 +121,7 @@ const DESIGN_META = {
 						    "label": "keywords",
 						    "symbol": "new_label",
 						    "description": "keywords: labels describing this closure",
+						    "color": "--col-2-bkg-2",
 						    "placeholder": "Keywords",
 						    "verb": "KEYWORD",
 						    "json_loc": "keywords",
@@ -139,6 +143,7 @@ const DESIGN_META = {
 						    "label": "containers",
 						    "symbol": "stockpot",
 						    "description": "containers: pots, pans, or other containers needed",
+						    "color": "--col-2-bkg-3",
 						    "verb": "CONTAINER",
 						    "json_loc": "containers",
 						    "type": [
@@ -177,6 +182,7 @@ const DESIGN_META = {
 						    "label": "tools",
 						    "symbol": "flatware",
 						    "description": "tools: utensils or other tools needed",
+						    "color": "--col-2-bkg-4",
 						    "verb": "TOOL",
 						    "json_loc": "tools",
 						    "type": [
@@ -215,6 +221,7 @@ const DESIGN_META = {
 						    "label": "prep",
 						    "symbol": "cooking",
 						    "description": "prep: items which must be prepped in advance",
+						    "color": "--col-2-bkg-5",
 						    "verb": "PREP",
 						    "json_loc": "prep",
 						    "type": [
@@ -253,6 +260,7 @@ const DESIGN_META = {
 						    "label": "ingredients",
 						    "symbol": "grocery",
 						    "description": "ingredients: items needed",
+						    "color": "--col-2-bkg-6",
 						    "verb": "INGREDIENT",
 						    "json_loc": "ingredients",
 						    "type": [
@@ -294,6 +302,7 @@ const DESIGN_META = {
 					"label": "activities",
 					"symbol": "chef_hat",
 					"description": "activities: a sequence of steps to follow for preparing this closure",
+					"color": "--col-3-bkg-1",
 					"verb": "ACTIVITY",
 					"json_loc": "activities",
 					"type": [
@@ -331,6 +340,7 @@ const DESIGN_META = {
 								"label": "uses",
 								"symbol": "input",
 								"description": "uses: measured use of ingredients or prepped items",
+								"color": "--col-3-bkg-2",
 								"verb": "USE",
 								"json_loc": "uses",
 								"type": [
@@ -406,6 +416,7 @@ const DESIGN_META = {
 								"label": "ops",
 								"symbol": "skillet_cooktop",
 								"description": "ops: specific operations to perform within a step",
+								"color": "--col-3-bkg-3",
 								"verb": "OP",
 								"json_loc": "ops",
 								"type": [

@@ -173,7 +173,9 @@ function build_list (frag, meta, depth, is_callback, data = null) {
     frag.appendChild(row);
 
     var col = document.createElement("div");
+    var bkg_color = meta["color"];
     col.setAttribute("class", "col-1");
+    col.setAttribute("style", `background: var(${bkg_color});`);
     row.appendChild(col);
 
     const label = document.createElement("label");
