@@ -182,7 +182,7 @@ function build_list (frag, meta, depth, is_callback, data = null) {
 
     const symbol = document.createElement("span");
     symbol.setAttribute("class", "material-symbols-outlined");
-    symbol.setAttribute("title", meta["label"]);
+    symbol.setAttribute("title", meta["description"]);
     symbol.appendChild(document.createTextNode(meta["symbol"]));
 
     label.appendChild(symbol);

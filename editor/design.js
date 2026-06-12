@@ -33,6 +33,7 @@ const DESIGN_META = {
 			    "id": "cite-list",
 			    "label": "sources",
 			    "symbol": "link",
+			    "description": "sources: links to sources online",
 			    "placeholder": "Source link",
 			    "verb": "CITE",
 			    "json_loc": "sources",
@@ -45,6 +46,7 @@ const DESIGN_META = {
 			    "id": "post-list",
 			    "label": "galleries",
 			    "symbol": "gallery_thumbnail",
+			    "description": "galleries: links to posted images",
 			    "placeholder": "Galleries link",
 			    "verb": "POST",
 			    "json_loc": "gallery",
@@ -60,6 +62,7 @@ const DESIGN_META = {
 		"id": "closure-list",
 		"label": "closures",
 		"symbol": "code_blocks",
+		"description": "closures: prepared items for serving or use as components",
 		"verb": "CLOSURE",
 		"json_loc": "closures",
 		"type": [
@@ -101,6 +104,7 @@ const DESIGN_META = {
 						    "id": "super-list-%",
 						    "label": "supers",
 						    "symbol": "category",
+						    "description": "supers: parent categories for this closure",
 						    "placeholder": "Supers",
 						    "verb": "SUPER",
 						    "json_loc": "supers",
@@ -113,6 +117,7 @@ const DESIGN_META = {
 						    "id": "keyword-list-%",
 						    "label": "keywords",
 						    "symbol": "new_label",
+						    "description": "keywords: labels describing this closure",
 						    "placeholder": "Keywords",
 						    "verb": "KEYWORD",
 						    "json_loc": "keywords",
@@ -133,6 +138,7 @@ const DESIGN_META = {
 						    "id": "container-list-%",
 						    "label": "containers",
 						    "symbol": "stockpot",
+						    "description": "containers: pots, pans, or other containers needed",
 						    "verb": "CONTAINER",
 						    "json_loc": "containers",
 						    "type": [
@@ -170,6 +176,7 @@ const DESIGN_META = {
 						    "id": "tool-list-%",
 						    "label": "tools",
 						    "symbol": "flatware",
+						    "description": "tools: utensils or other tools needed",
 						    "verb": "TOOL",
 						    "json_loc": "tools",
 						    "type": [
@@ -207,6 +214,7 @@ const DESIGN_META = {
 						    "id": "prep-list-%",
 						    "label": "prep",
 						    "symbol": "cooking",
+						    "description": "prep: items which must be prepped in advance",
 						    "verb": "PREP",
 						    "json_loc": "prep",
 						    "type": [
@@ -244,6 +252,7 @@ const DESIGN_META = {
 						    "id": "ingredient-list-%",
 						    "label": "ingredients",
 						    "symbol": "grocery",
+						    "description": "ingredients: items needed",
 						    "verb": "INGREDIENT",
 						    "json_loc": "ingredients",
 						    "type": [
@@ -284,6 +293,7 @@ const DESIGN_META = {
 					"id": "activity-list-%",
 					"label": "activities",
 					"symbol": "chef_hat",
+					"description": "activities: a sequence of steps to follow for preparing this closure",
 					"verb": "ACTIVITY",
 					"json_loc": "activities",
 					"type": [
@@ -320,6 +330,7 @@ const DESIGN_META = {
 								"id": "use-list-%",
 								"label": "uses",
 								"symbol": "input",
+								"description": "uses: measured use of ingredients or prepped items",
 								"verb": "USE",
 								"json_loc": "uses",
 								"type": [
@@ -394,6 +405,7 @@ const DESIGN_META = {
 								"id": "operation-list-%",
 								"label": "ops",
 								"symbol": "skillet_cooktop",
+								"description": "ops: specific operations to perform within a step",
 								"verb": "OP",
 								"json_loc": "ops",
 								"type": [

@@ -60,7 +60,7 @@ Recipe (a named module)
      - 0+ Appliances
      - 0+ Containers
      - 0+ Tools
-     - 1+ Inputs (e.g., Ingredients, or Yields from other Closures)
+     - 1+ Prep (e.g., Ingredients, or Yields from other Closures)
      - 1+ Operations
        - 1+ Yields
          - 0+ Storage
