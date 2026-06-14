@@ -226,6 +226,14 @@ input.form-check-input {
     width: 90%;
 }
 
+textarea {
+    resize: vertical;
+}
+
+.note-spacer {
+    margin-bottom: .3rem;
+}
+
 
 /* form labels */
 label.form-label {
@@ -318,6 +326,7 @@ div.detailed {
     grid-template-areas: "col-info" "col-edit";
     grid-template-columns: 2.5rem auto;
     grid-gap: .3rem;
+    margin-top: .3rem;
 }
 
 div.col-info {
@@ -380,4 +389,5 @@ span.struct-del {
     font-size: 1.2rem;
     padding-top: .1rem;
     padding-right: 1.5rem;
+
 }

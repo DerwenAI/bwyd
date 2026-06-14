@@ -1,34 +1,15 @@
 
 ## TODO:
 
+ - simplify CSS from Bootstrap examples in use
+   + "trash" shows on add, not at top
+   + structured items need a border
+   + "url" isn't monospace
+   + "add" should not be draggable
+   + "textarea" doesn't have vertical resize
+
  - renaming in grammar
    + `USE` => `PREP`
-
- - simplify CSS from Bootstrap examples in use
-   + fix the `placeholder`
-   + back-out all of the Bootstrap CSS:
-
-row
-col-1
-col-8
-
-*list-group
-*list-group-item
-
-form-check-input
-form-check-label
-form-control
-form-label
-
-*bwyd-input
-*add-item
-*delete-item
-*delete-structure
-*group
-*caboose
-
-*blue-background-class
-
 
  - rework TextX grammar to sync with editor UI changes
    + migrate existing Bwyd module examples

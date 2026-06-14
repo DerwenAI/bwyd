@@ -143,6 +143,11 @@ function build_field (frag, meta, depth, is_callback, data = null) {
 
     const input = build_input(meta, item_id, is_callback, data);
     input.setAttribute("placeholder", meta["placeholder"]);
+
+    if (item_id.startsWith("note-")) {
+	input.classList.add("note-spacer");
+    };
+
     frag.appendChild(input);
 };
 
@@ -164,42 +169,39 @@ function build_checkbox (frag, meta, depth, is_callback, data = null) {
 
 function build_list (frag, meta, depth, is_callback, data = null) {
     const group_id = get_rel_id(meta["id"]);
-    const color = Math.round((1.0 - (depth * .03)) * 100.0);
+    //const color = Math.round((1.0 - (depth * .03)) * 100.0);
+    //var bkg_color = meta["color"];
 
-    const row = document.createElement("div");
-    row.setAttribute("class", "row");
-    row.setAttribute("id", get_rel_id("%"));
-    row.setAttribute("style", `background: hsl(0 0 ${color});`);
-    frag.appendChild(row);
+    const detailed = document.createElement("div");
+    detailed.setAttribute("class", "detailed");
+    detailed.setAttribute("id", get_rel_id("%"));
+    frag.appendChild(detailed);
 
-    var col = document.createElement("div");
-    var bkg_color = meta["color"];
-    col.setAttribute("class", "col-1");
-    col.setAttribute("style", `background: var(${bkg_color});`);
-    row.appendChild(col);
+    const col_info = document.createElement("div");
+    col_info.setAttribute("class", "col-info");
+    detailed.appendChild(col_info);
 
     const label = document.createElement("label");
-    label.setAttribute("class", "group");
     label.setAttribute("for", group_id);
 
-    const symbol = document.createElement("span");
-    symbol.setAttribute("class", "material-symbols-outlined");
-    symbol.setAttribute("title", meta["description"]);
-    symbol.appendChild(document.createTextNode(meta["symbol"]));
+    const glyph = document.createElement("span");
+    glyph.setAttribute("class", "material-symbols-outlined");
+    glyph.setAttribute("title", meta["description"]);
+    glyph.appendChild(document.createTextNode(meta["glyph"]));
 
-    label.appendChild(symbol);
-    col.appendChild(label);
+    label.appendChild(glyph);
+    col_info.appendChild(label);
 
-    col = document.createElement("div");
-    col.setAttribute("class", "col-8");
-    row.appendChild(col);
+    const col_edit = document.createElement("div");
+    col_edit.setAttribute("class", "col-edit");
+    detailed.appendChild(col_edit);
 
     const list_group = document.createElement("div");
     ELEM_META[group_id] = meta;
 
     list_group.setAttribute("class", "list-group");
     list_group.setAttribute("id", group_id);
-    col.appendChild(list_group);
+    col_edit.appendChild(list_group);
 
     new Sortable(list_group, {
 	animation: 150,
@@ -210,22 +212,20 @@ function build_list (frag, meta, depth, is_callback, data = null) {
     const caboose = document.createElement("div");
     caboose.setAttribute("id", get_rel_id("caboose-%"));
     caboose.setAttribute("class", "caboose");
+    caboose.setAttribute("draggable", false);
+
+    const text = `add new ${meta["label"].toLowerCase()}`;
+    caboose.setAttribute("title", text);
 
     const icon = document.createElement("span");
-    icon.setAttribute("class", "material-symbols-outlined add-item");
+    icon.setAttribute("class", "material-symbols-outlined item-add");
     icon.appendChild(document.createTextNode("add_box"));
 
     const callback = `list_add('${group_id}', ${depth})`;
     icon.setAttribute("onclick", callback);
     caboose.appendChild(icon);
 
-    const para = document.createElement("span");
-    const text = `add new ${meta["label"].toLowerCase()}`;
-    para.appendChild(document.createTextNode(text));
-
-    caboose.appendChild(para);
     list_group.appendChild(caboose);
-
     FRAG_ELEM[group_id] = list_group;
 
     // populate data
@@ -362,7 +362,7 @@ function design_build (design_meta, depth, is_callback, parent = null, data = nu
 	    }
 
 	    DESIGN_META[meta].forEach(function(struct_meta) {
-		// note: `meta` (e.g., "yields") goes in as the `parent` context in
+		// NB: `meta` (e.g., "yields") goes in as the `parent` context in
 		// recuursion here, which propagates to the `build_summary()` call
 		var item = design_build(struct_meta, depth, is_callback, meta, sub_data);
 		frag.appendChild(item);
@@ -398,7 +398,7 @@ function list_add (group_id, depth, is_callback = true, data = null) {
     ELEM_META[item_id] = meta;
 
     const elem = document.createElement("div");
-    elem.setAttribute("class", "row list-group-item");
+    elem.setAttribute("draggable", true);
 
     if (["text", "textarea", "symbol", "url", "checkbox"].includes(meta["type"])) {
 	const input = build_input(meta, item_id, is_callback, data);
@@ -424,8 +424,6 @@ function list_add (group_id, depth, is_callback = true, data = null) {
 	});
     };
 
-    elem.setAttribute("draggable", true);
-
     // insert item just before the "caboose" at the end
     list_group.insertBefore(elem, list_group.lastElementChild);
 
@@ -438,7 +436,7 @@ function list_add (group_id, depth, is_callback = true, data = null) {
     });
 
     const icon = document.createElement("span");
-    built_elem.prepend(icon);
+    built_elem.appendChild(icon);
     built_elem.scrollIntoView();
 
     // for structured types, be sure to use the generated ID
@@ -452,11 +450,11 @@ function list_add (group_id, depth, is_callback = true, data = null) {
 	    };
 	};
 
-	icon.setAttribute("class", "material-symbols-outlined delete-structure");
+	icon.setAttribute("class", "material-symbols-outlined struct-del");
 	icon.appendChild(document.createTextNode("delete"));
     }
     else {
-	icon.setAttribute("class", "material-symbols-outlined delete-item");
+	icon.setAttribute("class", "material-symbols-outlined item-del");
 	icon.appendChild(document.createTextNode("close"));
     };
 
@@ -1004,7 +1002,7 @@ function encode_recipe () {
     BWYD_DEBUG = [];
 
     // encode top-level inputs for the recipe
-    var group_id = "editor-inputs";
+    var group_id = "dynamic";
     line = encode_head(group_id, 0, line, script);
 
     group_id = "cite-list";
@@ -1095,7 +1093,7 @@ window.addEventListener("load", function() {
     const data = JSON.parse(document.getElementById("bwyd_data").textContent);
 
     // build a default editor page from the design metadata
-    const item = document.getElementById("editor-inputs");
+    const item = document.getElementById("dynamic");
 
     DESIGN_META["editor"].forEach(function(struct_meta) {
 	const elem = design_build(struct_meta, 0, false, null, data);

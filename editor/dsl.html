@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!--
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css"
@@ -11,52 +12,50 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
       >
+    -->
 
     <link
       rel="stylesheet"
-      href="dsl.css"
+      href="mock.css"
       >
     <title>Bwyd Editor</title>
   </head>
 
   <body>
-    <div id="main" class="container-fluid">
-      <main>
-	<div class="container">
-	  <!-- no further Bootstrap within this <div/> except for icons -->
-
-	  <div class="editor">
+    <main>
+      <div class="container">
+	<div class="header">
 	    <h1>Bwyd Editor</h1>
-
-	    <form>
-	      <div class="row" id="editor-inputs">
-	      </div>
-	    </form>
-
-	    <!-- Bwyd script output -->
-	    <hr/>
-	    <button class="btn btn-secondary btn-sm float-end" id="script-btn" onclick="encode_recipe()">Script</button>
-	    <textarea id="bwyd-script"></textarea>
-	  </div>
 	</div>
 
-	<footer>
-	  <div id="footer">
-	    <div id="footer-content">
-	      <br>
-	      <p>
-		guided by
-		<a
-		  href="https://github.com/DerwenAI/bwyd"
-		  target="_blank"
-		  >Bwyd</a>
-	      </p>
+	<div class="editor">
+	  <form>
+	    <div id="dynamic">
 	    </div>
-          </div>
-	</footer>
-      </main>
-    </div>
+	  </form>
 
+	  <!-- Bwyd script output -->
+	  <hr style="margin-top: 2rem;"/>
+	  <button style="float: right;" id="script-btn" onclick="encode_recipe()">Script</button>
+	  <textarea id="bwyd-script"></textarea>
+	</div>
+
+	<div class="footer">
+	  <footer>
+	    <p>
+	      guided by
+	      <a
+		href="https://github.com/DerwenAI/bwyd"
+		target="_blank"
+		>Bwyd</a>
+	    </p>
+	  </footer>
+	</div>
+
+      </div>
+    </main>
+
+    <!--
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.min.js"
       integrity="sha512-nKXmKvJyiGQy343jatQlzDprflyB5c+tKCzGP3Uq67v+lmzfnZUi/ZT+fc6ITZfSC5HhaBKUIvr/nTLCV+7F+Q=="
@@ -69,13 +68,14 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
       ></script>
+    -->
+
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"
       integrity="sha512-zYXldzJsDrNKV+odAwFYiDXV2Cy37cwizT+NkuiPGsa9X1dOz04eHvUWVuxaJ299GvcJT31ug2zO4itXBjFx4w=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
       ></script>
-
 
     <script
       id="bwyd_data"
