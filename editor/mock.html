@@ -27,6 +27,7 @@
 	    <label class="form-label" for="recipe-text">Text</label>
 	    <textarea class="form-control" id="recipe-text" placeholder="Recipe description"></textarea>
 
+	    <!-- header details -->
 	    <details>
 	      <summary>
 		<span>header</span>
@@ -58,6 +59,7 @@
 	      </div>
 	    </details>
 
+	    <!-- closure list -->
 	    <div class="detailed">
 	      <div class="col-info">
 		<label for="closure-list">
@@ -72,11 +74,30 @@
 		      <summary>
 			<span>closure</span>
 		      </summary>
-
 		      <label class="form-label" for="closure-name-73582c0d-013a-42a8-a335-aa4a970e684c">Name</label>
 		      <input type="text" class="form-control" id="closure-name-73582c0d-013a-42a8-a335-aa4a970e684c" placeholder="Closure name">
 		      <label class="form-label" for="closure-text-86b793cf-6f01-4068-8b77-2dc1df4f85fa">Text</label>
 		      <textarea class="form-control" id="closure-text-86b793cf-6f01-4068-8b77-2dc1df4f85fa" placeholder="Closure description"></textarea>
+
+		      <details>
+			<summary>
+			  <span>header</span>
+			</summary>
+			<div class="detailed">
+			  <div class="col-info hatch1">
+			    <label for="super-list-efa361bd-151e-4822-a03e-57feb1c529a9">
+			      <span class="material-symbols-outlined" title="supers: parent categories for this closure">category</span>
+			    </label>
+			  </div>
+			  <div class="col-edit">
+			    <div class="list-group" id="super-list-efa361bd-151e-4822-a03e-57feb1c529a9">
+			      <div id="caboose-32ff1d0a-c40c-4d78-9168-72516395b5aa" class="caboose">
+				<span class="material-symbols-outlined item-add" onclick="list_add('super-list', 0)" title="add new supers">add_box</span>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		      </details>
 
 		    </details>
 		  </div>
