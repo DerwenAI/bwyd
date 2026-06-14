@@ -1,0 +1,111 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+      rel="stylesheet"
+      href="mock.css"
+      >
+    <title>Bwyd Editor</title>
+  </head>
+
+  <body>
+    <main>
+      <div class="container">
+	<div class="header">
+	  <h1>Bwyd Editor</h1>
+	</div>
+
+	<div class="editor">
+	  <form>
+	    <label class="form-label" for="recipe-title">Title</label>
+	    <input type="text" class="form-control" id="recipe-title" placeholder="Recipe name">
+
+	    <label class="form-label" for="recipe-text">Text</label>
+	    <textarea class="form-control" id="recipe-text" placeholder="Recipe description"></textarea>
+
+	    <details>
+	      <summary>
+		<span>header</span>
+	      </summary>
+	      <div class="detailed">
+		<div class="col-info">
+		  <label for="cite-list">
+		    <span class="material-symbols-outlined" title="sources: links to sources online">link</span>
+		  </label>
+		</div>
+		<div class="col-edit">
+		  <div class="list-group" id="cite-list">
+		    <div draggable="true">
+		      <input type="url" class="bwyd-input" id="e96aab38-912f-44c9-9cd0-3683b0b1fe29" placeholder="Source link" required="true">
+		      <span class="material-symbols-outlined item-del" id="e96aab38-912f-44c9-9cd0-3683b0b1fe29" onclick="list_del('cite-list', 'e96aab38-912f-44c9-9cd0-3683b0b1fe29')" title="delete item">close</span>
+		    </div>
+
+		    <div draggable="true">
+		      <input type="url" class="bwyd-input" id="fd43ad62-485f-47a3-9812-e04a571db14b" placeholder="Source link" required="true">
+		      <span class="material-symbols-outlined item-del" id="fd43ad62-485f-47a3-9812-e04a571db14b" onclick="list_del('cite-list', 'fd43ad62-485f-47a3-9812-e04a571db14b')" title="delete item">close</span>
+		    </div>
+
+		    <div id="caboose-4efdf9b0-1741-40e9-bf6b-e9e7c60d9519" class="caboose" title="add new sources">
+		      <span class="material-symbols-outlined item-add" onclick="list_add('cite-list', 0)">add_box</span>
+		    </div>
+		  </div>
+
+		</div>
+	      </div>
+	    </details>
+
+	    <div class="detailed">
+	      <div class="col-info">
+		<label for="closure-list">
+		  <span class="material-symbols-outlined" title="closures: prepared items for serving or use as components">code_blocks</span>
+		</label>
+	      </div>
+	      <div class="col-edit">
+		<div class="list-group" id="closure-list">
+		  <div draggable="true">
+		    <span class="material-symbols-outlined struct-del" id="7e6a9468-9e71-42ae-9df8-d82a8cc312fe" onclick="list_del('closure-list', '7e6a9468-9e71-42ae-9df8-d82a8cc312fe')">delete</span>
+		    <details>
+		      <summary>
+			<span>closure</span>
+		      </summary>
+
+		      <label class="form-label" for="closure-name-73582c0d-013a-42a8-a335-aa4a970e684c">Name</label>
+		      <input type="text" class="form-control" id="closure-name-73582c0d-013a-42a8-a335-aa4a970e684c" placeholder="Closure name">
+		      <label class="form-label" for="closure-text-86b793cf-6f01-4068-8b77-2dc1df4f85fa">Text</label>
+		      <textarea class="form-control" id="closure-text-86b793cf-6f01-4068-8b77-2dc1df4f85fa" placeholder="Closure description"></textarea>
+
+		    </details>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+
+	  </form>
+	</div>
+
+	<div class="footer">
+	  <br>
+	  <p>
+	    guided by
+	    <a
+	      href="https://github.com/DerwenAI/bwyd"
+	      target="_blank"
+	      >Bwyd</a>
+	  </p>
+	</div>
+      </div>
+    </main>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"
+      integrity="sha512-zYXldzJsDrNKV+odAwFYiDXV2Cy37cwizT+NkuiPGsa9X1dOz04eHvUWVuxaJ299GvcJT31ug2zO4itXBjFx4w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      ></script>
+
+  </body>
+</html>

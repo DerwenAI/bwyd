@@ -8,7 +8,6 @@
    + fix the `placeholder`
    + back-out all of the Bootstrap CSS:
 
-container-fluid
 row
 col-1
 col-8
@@ -21,7 +20,7 @@ form-check-label
 form-control
 form-label
 
-*bywd-input
+*bwyd-input
 *add-item
 *delete-item
 *delete-structure

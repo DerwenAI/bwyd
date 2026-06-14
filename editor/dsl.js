@@ -403,7 +403,7 @@ function list_add (group_id, depth, is_callback = true, data = null) {
     if (["text", "textarea", "symbol", "url", "checkbox"].includes(meta["type"])) {
 	const input = build_input(meta, item_id, is_callback, data);
 	input.setAttribute("placeholder", meta["placeholder"]);
-	input.setAttribute("class", "bywd-input");
+	input.setAttribute("class", "bwyd-input");
 	input.setAttribute("required", true);
 
 	// can we use URL pattern validation?
