@@ -360,7 +360,7 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
                 text = depend_parse.text,
             )
 
-        elif depend_class_name == "Use":
+        elif depend_class_name == "Prep":
             # external forward reference, to be resolved on a subsequent pass
             closure.ingredients[depend_parse.symbol] = Dependency(
                 loc = textx.get_location(depend_parse),

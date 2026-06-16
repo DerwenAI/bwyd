@@ -14,9 +14,12 @@ import bwyd
 
 
 if __name__ == "__main__":
-    examples_path: pathlib.Path = pathlib.Path("examples")
-    examples_path = pathlib.Path("test")
+    examples_path: pathlib.Path = pathlib.Path("test")
     slug: str = "min_eval"
+
+    ## OVERRIDE
+    examples_path = pathlib.Path("examples")
+    slug = "panna_cotta"
 
     # parse an example Bwyd module
     dsl: bwyd.Bwyd = bwyd.Bwyd(

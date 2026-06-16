@@ -41,7 +41,7 @@ Closure:
 ;
 
 Dependency:
-  Container | Tool | Ingredient | Use
+  Container | Tool | Ingredient | Prep
 ;
 
 Container:
@@ -59,8 +59,8 @@ Ingredient:
   (note=Note)?
 ;
 
-Use:
-  "USE" symbol=ID ":" text=STRING
+Prep:
+  "PREP" symbol=ID ":" text=STRING
   (note=Note)?
 ;
 
@@ -171,17 +171,17 @@ Store:
      "UPTO" duration=Duration
 ;
 
-Note:
-  "NOTE:" text=STRING
-;
-
 Ratio:
-  "RATIO:" name=STRING "=" (parts+=RatioPart[','])
-  (note=Note)?
+  "RATIO" formula=STRING ":"
+    name=STRING "=" (parts+=RatioPart[','])
 ;
 
 RatioPart:
     symbol=ID ('[' components+=ID[','] ']')?
+;
+
+Note:
+  "NOTE:" text=STRING
 ;
 
 Comment:

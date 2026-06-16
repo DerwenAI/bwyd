@@ -1,6 +1,10 @@
 
 ## TODO:
 
+ - UI gen misses:
+   + `INTERMEDIATE` on YIELDS
+   + `PREP filling`
+
  - simplify CSS from Bootstrap examples in use
    + "trash" shows on add, not at top
    + structured items need a border
