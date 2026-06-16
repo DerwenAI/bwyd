@@ -17,10 +17,15 @@ if __name__ == "__main__":
     examples_path: pathlib.Path = pathlib.Path("test")
     slug: str = "min_eval"
 
-    ## OVERRIDE
+    ## OVERRIDES
     examples_path = pathlib.Path("examples")
     slug = "panna_cotta"
 
+    examples_path = pathlib.Path(".")
+    slug = "target"
+
+
+    ######################################################################
     # parse an example Bwyd module
     dsl: bwyd.Bwyd = bwyd.Bwyd(
         config_path = pathlib.Path("config.toml"),
