@@ -286,6 +286,8 @@ Validate the forward references for one Bwyd module.
             for product in closure.products
         }
 
+        ic(local_names)
+
         for closure in self.closures.values():
             # check for zero reference counts
             for name, entity in closure.containers.items():
@@ -526,6 +528,19 @@ Interpret the steps within an activity.
 
             duration: Duration = Duration.build(op_parse.duration)
 
+            ## fuck: handle YIELDS, STORE
+            product: Product | None = None
+
+            if op_parse.yields is not None:
+                product = Product(
+                    loc = textx.get_location(op_parse.yields),
+                    symbol = op_parse.yields.symbol,
+                    amount = Measure.build(op_parse.yields.measure),
+                    intermediate = (op_parse.yields.intermediate == "INTERMEDIATE"),
+                )
+
+                closure.products.append(product)
+
             if debug:
                 ic(
                     op_class_name,
@@ -533,6 +548,7 @@ Interpret the steps within an activity.
                     op_parse.modifier,
                     op_parse.until,
                     duration,
+                    product,
                     entity,
                 )
 
@@ -645,6 +661,19 @@ Interpret the steps within an activity.
 
             duration = Duration.build(op_parse.duration)
 
+            ## fuck: handle YIELDS, STORE
+            product: Product | None = None
+
+            if op_parse.yields is not None:
+                product = Product(
+                    loc = textx.get_location(op_parse.yields),
+                    symbol = op_parse.yields.symbol,
+                    amount = Measure.build(op_parse.yields.measure),
+                    intermediate = (op_parse.yields.intermediate == "INTERMEDIATE"),
+                )
+
+                closure.products.append(product)
+
             if debug:
                 ic(
                     op_class_name,
@@ -652,6 +681,7 @@ Interpret the steps within an activity.
                     op_parse.modifier,
                     op_parse.until,
                     duration,
+                    product,
                 )
 
             return OpChill(
@@ -752,37 +782,20 @@ Helper method to interpret one Closure.
 
         # handle taxonomy and keywords
         if closure_parse.supers is not None:
-            for symbol in closure_parse.supers.ids:
+            for symbol in closure_parse.supers:
                 closure.supers.append(symbol)
 
             if debug:
                 ic(closure.supers)
 
         if closure_parse.keywords is not None:
-            for symbol in closure_parse.keywords.ids:
+            for symbol in closure_parse.keywords:
                 closure.keywords.append(symbol)
 
             if debug:
                 ic(closure.keywords)
 
-        # interpret each product
-        for prod_parse in closure_parse.prods:
-            if debug:
-                ic(
-                    prod_parse.symbol,
-                    prod_parse.measure.amount,
-                    prod_parse.measure.units,
-                    prod_parse.intermediate,
-                )
-
-            closure.products.append(
-                Product(
-                    loc = textx.get_location(prod_parse),
-                    symbol = prod_parse.symbol,
-                    amount = Measure.build(prod_parse.measure),
-                    intermediate = (prod_parse.intermediate == "INTERMEDIATE"),
-                )
-            )
+        # formerly `closure_parse.prods` -- aka. `yields`
 
         # resolve each dependency
         for depend_parse in closure_parse.depend:

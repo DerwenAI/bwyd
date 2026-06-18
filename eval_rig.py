@@ -37,13 +37,15 @@ if __name__ == "__main__":
         debug = False, # True
     )
 
-    # only go this far
-    sys.exit(0)
-
     # interpret the parsed module
     module.interpret(
         debug = True, # False
     )
+
+
+    ######################################################################
+    # only go this far
+    sys.exit(0)
 
     # output a JSON model, for use in unit tests
     with open(examples_path / f"{slug}.json", "w", encoding = "utf-8") as fp:
