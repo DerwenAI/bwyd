@@ -15,7 +15,8 @@ from .kernel import BwydKernel
 from .measure import Conversion, Converter, Humanized, \
     MeasureUnits, Measure, \
     DurationUnits, Duration, \
-    Temperature
+    Temperature, \
+    Product
 
 from .module import Module
 
@@ -27,4 +28,4 @@ from .resources import BWYD_NAMESPACE, BWYD_SVG, \
     JINJA_PAGE_TEMPLATE, JINJA_INDEX_TEMPLATE, \
     URL_PATTERN
 
-from .structure import Activity, Closure, Post, Product
+from .structure import Activity, Closure, Post

@@ -19,7 +19,7 @@ from upath import UPath
 import requests
 import requests_cache
 
-from .measure import Converter, Measure, PLURAL
+from .measure import Converter, Measure, PLURAL, Product
 
 from .ops import Dependency, DependencyDict, \
     OpsTypes, OpAdd
@@ -99,20 +99,6 @@ Accessor for a thumbnail URL.
             return self.thumbify(embed.as_posix(), session)
 
         return self.url
-
-
-######################################################################
-## yields classes
-
-class Product (BaseModel):  # pylint: disable=R0902
-    """
-A data class representing one Product object.
-    """
-    loc: dict
-    symbol: str
-    amount: Measure
-    intermediate: bool
-    ref_count: NonNegativeInt = 0
 
 
 ######################################################################

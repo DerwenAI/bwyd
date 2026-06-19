@@ -13,7 +13,7 @@ import logging
 import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=W0611
-from pydantic import BaseModel, NonNegativeFloat, PositiveFloat
+from pydantic import BaseModel, NonNegativeFloat, NonNegativeInt, PositiveFloat
 import inflect
 
 
@@ -488,3 +488,17 @@ HTML representation.
             html += f" ({f_deg} °{TemperatureUnits.FAHRENHEIT.value})"
 
         return html
+
+
+######################################################################
+## yields classes
+
+class Product (BaseModel):  # pylint: disable=R0902
+    """
+A data class representing one Product object.
+    """
+    loc: dict
+    symbol: str
+    amount: Measure
+    intermediate: bool
+    ref_count: NonNegativeInt = 0

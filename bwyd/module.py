@@ -28,14 +28,15 @@ import textx  # type: ignore  # pylint: disable=E0401
 from .error import BwydParserError
 
 from .measure import Converter, \
-    Measure, DurationUnits, Duration, Temperature
+    Measure, DurationUnits, Duration, Temperature, \
+    Product
 
 from .ops import Dependency, \
     OpsTypes, OpNote, OpAdd, OpTransfer, OpAction, OpWait, OpStore, OpHeat, OpChill, OpBake
 
 from .resources import BWYD_SVG, JINJA_PAGE_TEMPLATE, URL_PATTERN
 
-from .structure import Activity, Closure, Post, Product
+from .structure import Activity, Closure, Post
 
 
 ######################################################################
@@ -420,6 +421,27 @@ Interpret the activities within a closure.
             act.ops.append(op_obj)
 
 
+    def _interpret_yields (
+        self,
+        closure: Closure,
+        op: OpsTypes,
+        op_parse: typing.Any,
+        ) -> None:
+        """
+Interpret the parse of YIELDS and STORE.
+        """
+        if op_parse.yields is not None:
+            product: Product = Product(
+                loc = textx.get_location(op_parse.yields),
+                symbol = op_parse.yields.symbol,
+                amount = Measure.build(op_parse.yields.measure),
+                intermediate = (op_parse.yields.intermediate == "INTERMEDIATE"),
+            )
+
+            op.product = product
+            closure.products.append(product)
+
+
     def _interpret_op (  # pylint: disable=R0911,R0912,R0915
         self,
         closure: Closure,
@@ -528,19 +550,6 @@ Interpret the steps within an activity.
 
             duration: Duration = Duration.build(op_parse.duration)
 
-            ## fuck: handle YIELDS, STORE
-            product: Product | None = None
-
-            if op_parse.yields is not None:
-                product = Product(
-                    loc = textx.get_location(op_parse.yields),
-                    symbol = op_parse.yields.symbol,
-                    amount = Measure.build(op_parse.yields.measure),
-                    intermediate = (op_parse.yields.intermediate == "INTERMEDIATE"),
-                )
-
-                closure.products.append(product)
-
             if debug:
                 ic(
                     op_class_name,
@@ -548,17 +557,19 @@ Interpret the steps within an activity.
                     op_parse.modifier,
                     op_parse.until,
                     duration,
-                    product,
                     entity,
                 )
 
-            return OpAction(
+            op = OpAction(
                 loc = textx.get_location(op_parse),
                 tool = entity,
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,
             )
+
+            self._interpret_yields(closure, op, op_parse)
+            return op
 
         if op_class_name == "Wait":
             duration = Duration.build(op_parse.duration)
@@ -571,12 +582,15 @@ Interpret the steps within an activity.
                     duration,
                 )
 
-            return OpWait(
+            op = OpWait(
                 loc = textx.get_location(op_parse),
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,
             )
+
+            self._interpret_yields(closure, op, op_parse)
+            return op
 
         if op_class_name == "Bake":
             # resolve local reference
@@ -604,7 +618,7 @@ Interpret the steps within an activity.
                     temperature,
                 )
 
-            return OpBake(
+            op = OpBake(
                 loc = textx.get_location(op_parse),
                 mode = op_class_name,
                 container = entity,
@@ -613,6 +627,9 @@ Interpret the steps within an activity.
                 duration = duration,
                 temperature = temperature,
             )
+
+            self._interpret_yields(closure, op, op_parse)
+            return op
 
         if op_class_name == "Heat":
             # resolve local reference
@@ -638,13 +655,16 @@ Interpret the steps within an activity.
                     duration,
                 )
 
-            return OpHeat(
+            op = OpHeat(
                 loc = textx.get_location(op_parse),
                 container = entity,
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,
             )
+
+            self._interpret_yields(closure, op, op_parse)
+            return op
 
         if op_class_name == "Chill":
             # resolve local reference
@@ -661,19 +681,6 @@ Interpret the steps within an activity.
 
             duration = Duration.build(op_parse.duration)
 
-            ## fuck: handle YIELDS, STORE
-            product: Product | None = None
-
-            if op_parse.yields is not None:
-                product = Product(
-                    loc = textx.get_location(op_parse.yields),
-                    symbol = op_parse.yields.symbol,
-                    amount = Measure.build(op_parse.yields.measure),
-                    intermediate = (op_parse.yields.intermediate == "INTERMEDIATE"),
-                )
-
-                closure.products.append(product)
-
             if debug:
                 ic(
                     op_class_name,
@@ -681,16 +688,18 @@ Interpret the steps within an activity.
                     op_parse.modifier,
                     op_parse.until,
                     duration,
-                    product,
                 )
 
-            return OpChill(
+            op = OpChill(
                 loc = textx.get_location(op_parse),
                 container = entity,
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,
             )
+
+            self._interpret_yields(closure, op, op_parse)
+            return op
 
         if op_class_name == "Store":
             # resolve local reference
@@ -794,8 +803,6 @@ Helper method to interpret one Closure.
 
             if debug:
                 ic(closure.keywords)
-
-        # formerly `closure_parse.prods` -- aka. `yields`
 
         # resolve each dependency
         for depend_parse in closure_parse.depend:

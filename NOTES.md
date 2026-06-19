@@ -1,16 +1,16 @@
 ## TODOs
 
+  * refactor ACTIVITY
+    + bookend with EMPTY and CLEAN events for each Container/Tool
+    + ADD/TRANSFER as initial operation
+    + move YIELD(+STORE) to end of ACTION
+
   * convert existing recipes
     + cooked_beans => bean_sauce
 
   * generate layers:
     - RDF semantics
     - network diagram for Activities
-
-  * refactor ACTIVITY
-    + bookend with EMPTY and CLEAN events for each Container/Tool
-    + ADD/TRANSFER as initial operation
-    + move YIELD(+STORE) to end of ACTION
 
   * integrate _material procurement_ schedules, material lead times, and inventory as task constraints in planning
 
@@ -21,6 +21,9 @@
   * PARALLEL/SERIAL for scaling durations
 
   * better support for search/discovery across a directory of recipes
+
+
+## Probably Not's
 
   * support NLWeb too?
     + https://github.com/microsoft/NLWeb

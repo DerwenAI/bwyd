@@ -12,7 +12,9 @@ import typing
 
 from pydantic import BaseModel, NonNegativeInt
 
-from .measure import Converter, Measure, DurationUnits, Duration, Temperature
+from .measure import Converter, \
+    Duration, DurationUnits, Measure, Temperature, \
+    Product
 
 
 ######################################################################
@@ -174,6 +176,7 @@ Activity on the food within a specific Container.
     modifier: str
     until: str
     duration: Duration
+    product: Product = None
 
 
     def get_duration (
@@ -210,6 +213,7 @@ Container.
     modifier: str
     until: str
     duration: Duration
+    product: Product = None
 
 
     def get_duration (
@@ -268,6 +272,7 @@ a specific Container as part of an Activity.
     modifier: str
     until: str
     duration: Duration
+    product: Product = None
     appliance: str = Appliance.GENERIC
 
 
