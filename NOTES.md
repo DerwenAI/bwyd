@@ -3,7 +3,6 @@
   * refactor ACTIVITY
     + bookend with EMPTY and CLEAN events for each Container/Tool
     + ADD/TRANSFER as initial operation
-    + move YIELD(+STORE) to end of ACTION
 
   * convert existing recipes
     + cooked_beans => bean_sauce

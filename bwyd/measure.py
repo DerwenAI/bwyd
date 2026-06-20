@@ -493,6 +493,29 @@ HTML representation.
 ######################################################################
 ## yields classes
 
+class Storage (BaseModel):
+    """
+Represents the process of a Cook on a Container to store the yield of
+an Activity for a specified time period.
+    """
+    modifier: str
+    duration: Duration
+
+
+    def get_model (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "store": {
+                "text": self.modifier,
+                "upto": self.duration.humanize(),
+            }
+        }
+
+
 class Product (BaseModel):  # pylint: disable=R0902
     """
 A data class representing one Product object.
@@ -501,4 +524,5 @@ A data class representing one Product object.
     symbol: str
     amount: Measure
     intermediate: bool
+    storage: Storage = None
     ref_count: NonNegativeInt = 0

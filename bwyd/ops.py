@@ -239,30 +239,6 @@ Serializable representation for JSON.
         }
 
 
-class OpStore (OpGeneric):  # pylint: disable=R0902
-    """
-Represents the process of a Cook on a Container to store the yield of
-a Closure for a specified time period.
-    """
-    container: Dependency
-    modifier: str
-    duration: Duration
-
-
-    def get_model (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "store": {
-                "text": self.modifier,
-                "upto": self.duration.humanize(),
-            }
-        }
-
-
 class OpAppliance (OpGeneric):  # pylint: disable=R0902
     """
 Represents the process of an Appliance operating on the food within
@@ -349,7 +325,6 @@ OpsTypes = typing.Union[
     OpTransfer,
     OpAction,
     OpWait,
-    OpStore,
     OpHeat,
     OpChill,
     OpBake,

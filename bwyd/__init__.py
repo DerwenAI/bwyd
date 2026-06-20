@@ -16,12 +16,13 @@ from .measure import Conversion, Converter, Humanized, \
     MeasureUnits, Measure, \
     DurationUnits, Duration, \
     Temperature, \
-    Product
+    Product, Storage
 
 from .module import Module
 
 from .ops import Dependency, DependencyDict, Appliance, \
-    OpsTypes, OpNote, OpAdd, OpTransfer, OpAction, OpWait, OpStore, OpHeat, OpChill, OpBake
+    OpsTypes, OpNote, OpAdd, OpTransfer, \
+    OpAction, OpWait, OpHeat, OpChill, OpBake
 
 from .resources import BWYD_NAMESPACE, BWYD_SVG, \
     CONVERT_PATH, GRAMMAR_PATH, ICON_PATH, \

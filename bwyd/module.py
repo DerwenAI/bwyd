@@ -29,10 +29,10 @@ from .error import BwydParserError
 
 from .measure import Converter, \
     Measure, DurationUnits, Duration, Temperature, \
-    Product
+    Product, Storage
 
 from .ops import Dependency, \
-    OpsTypes, OpNote, OpAdd, OpTransfer, OpAction, OpWait, OpStore, OpHeat, OpChill, OpBake
+    OpsTypes, OpNote, OpAdd, OpTransfer, OpAction, OpWait, OpHeat, OpChill, OpBake
 
 from .resources import BWYD_SVG, JINJA_PAGE_TEMPLATE, URL_PATTERN
 
@@ -438,7 +438,16 @@ Interpret the parse of YIELDS and STORE.
                 intermediate = (op_parse.yields.intermediate == "INTERMEDIATE"),
             )
 
+            if op_parse.yields.store is not None:
+                product.storage = Storage(
+                    loc = textx.get_location(op_parse),
+                    modifier = op_parse.yields.store.modifier,
+                    duration = Duration.build(op_parse.yields.store.duration),
+                )
+
             op.product = product
+            ic(op, product)
+
             closure.products.append(product)
 
 
@@ -701,36 +710,6 @@ Interpret the steps within an activity.
             self._interpret_yields(closure, op, op_parse)
             return op
 
-        if op_class_name == "Store":
-            # resolve local reference
-            if op_parse.symbol in closure.containers:
-                entity = closure.containers[op_parse.symbol]
-                entity.ref_count += 1
-            else:
-                loc = textx.get_location(op_parse)
-
-                raise BwydParserError(
-                    f"STORE CONTAINER `{op_parse.symbol}` used but not defined {loc}",
-                    symbol = op_parse.symbol,
-                )
-
-            duration = Duration.build(op_parse.duration)
-
-            if debug:
-                ic(
-                    op_class_name,
-                    op_parse.symbol,
-                    op_parse.modifier,
-                    duration,
-                )
-
-            return OpStore(
-                loc = textx.get_location(op_parse),
-                container = entity,
-                modifier = op_parse.modifier,
-                duration = duration,
-            )
-
         ## OTHERWISE, parse fails ...
         return None
 
@@ -765,7 +744,7 @@ Interpret the components within a ratio.
                         symbol = part.symbol,
                     )
 
-            ## OHFUCK: store representation of this ratio
+            ## fuck: store representation of this ratio
 
 
     def _interpret_closure (  # pylint: disable=R0912,R0915
