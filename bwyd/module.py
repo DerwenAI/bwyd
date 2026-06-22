@@ -769,16 +769,14 @@ Helper method to interpret one Closure.
         )
 
         # handle taxonomy and keywords
-        if closure_parse.supers is not None:
-            for symbol in closure_parse.supers:
-                closure.supers.append(symbol)
+        if closure_parse.supers is not None and len(closure_parse.supers) > 0:
+            closure.supers.append(closure_parse.supers)
 
             if debug:
                 ic(closure.supers)
 
-        if closure_parse.keywords is not None:
-            for symbol in closure_parse.keywords:
-                closure.keywords.append(symbol)
+        if closure_parse.keywords is not None and len(closure_parse.keywords) > 0:
+            closure.keywords.append(closure_parse.keywords)
 
             if debug:
                 ic(closure.keywords)

@@ -42,11 +42,6 @@ if __name__ == "__main__":
         debug = True, # False
     )
 
-
-    ######################################################################
-    # only go this far
-    sys.exit(0)
-
     # output a JSON model, for use in unit tests
     with open(examples_path / f"{slug}.json", "w", encoding = "utf-8") as fp:
         fp.write(json.dumps(
@@ -54,6 +49,10 @@ if __name__ == "__main__":
             indent = 2,
             sort_keys = False,
         ))
+
+    ######################################################################
+    # only go this far
+    sys.exit(0)
 
     # render the Jinja2 HTML template
     with open(examples_path / f"{slug}.html", "w", encoding = "utf-8") as fp:
