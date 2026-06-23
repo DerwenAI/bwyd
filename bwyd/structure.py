@@ -110,6 +110,7 @@ A data class representing one Activity object.
     """
     container: Dependency
     text: str
+    inputs: typing.List[ OpsTypes ] = []
     ops: typing.List[ OpsTypes ] = []
 
 
@@ -127,8 +128,7 @@ Serializable representation for JSON.
                 {
                     "ingredients": [
                         op.get_model(converter)
-                        for op in self.ops
-                        if isinstance(op, OpAdd)
+                        for op in self.inputs
                     ]
                 }
             ]

@@ -9,6 +9,7 @@ import json
 import pathlib
 import sys
 
+from deepdiff import DeepDiff
 from icecream import ic
 import bwyd
 
@@ -42,13 +43,22 @@ if __name__ == "__main__":
         debug = True, # False
     )
 
+    observed: dict = module.get_model()
+
     # output a JSON model, for use in unit tests
     with open(examples_path / f"{slug}.json", "w", encoding = "utf-8") as fp:
         fp.write(json.dumps(
-            module.get_model(),
+            observed,
             indent = 2,
             sort_keys = False,
         ))
+
+    # compare with expected results
+    with open("expect.json", "r", encoding = "utf-8") as fp:
+        expected: dict = json.load(fp)
+
+    ic(DeepDiff(expected, observed))
+
 
     ######################################################################
     # only go this far

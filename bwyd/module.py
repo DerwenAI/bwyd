@@ -207,7 +207,8 @@ one for each parsed Closure.
             },
             "ingredients": [
                 {
-                    "amount": measure.humanize_convert(
+                    "amount": measure.humanize(),
+                    "convert": measure.convert(
                         entity.symbol,
                         entity.external,
                         self.converter,
@@ -357,20 +358,24 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
 
         elif depend_class_name == "Ingredient":
             # forward reference, to be resolved during this parsing pass
-            closure.ingredients[depend_parse.symbol] = Dependency(
+            dep = Dependency(
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,
                 text = depend_parse.text,
             )
 
+            closure.ingredients[depend_parse.symbol] = dep
+
         elif depend_class_name == "Prep":
             # external forward reference, to be resolved on a subsequent pass
-            closure.ingredients[depend_parse.symbol] = Dependency(
+            dep = Dependency(
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,
                 text = depend_parse.text,
                 external = True,
             )
+
+            closure.ingredients[depend_parse.symbol] = dep
 
 
     def _interpret_activity (
@@ -410,6 +415,15 @@ Interpret the activities within a closure.
             ic(act)
 
         closure.activities.append(act)
+
+        for op_parse in activity_parse.inputs:
+            op_obj: OpsTypes = self._interpret_input(  # type: ignore
+                closure,
+                op_parse,
+                debug = debug,
+            )
+
+            act.inputs.append(op_obj)
 
         for op_parse in activity_parse.ops:
             op_obj: OpsTypes = self._interpret_op(  # type: ignore
@@ -451,7 +465,7 @@ Interpret the parse of YIELDS and STORE.
             closure.products.append(product)
 
 
-    def _interpret_op (  # pylint: disable=R0911,R0912,R0915
+    def _interpret_input (  # pylint: disable=R0911,R0912,R0915
         self,
         closure: Closure,
         op_parse: typing.Any,
@@ -462,21 +476,6 @@ Interpret the parse of YIELDS and STORE.
 Interpret the steps within an activity.
         """
         op_class_name: str = op_parse.__class__.__name__
-
-        if debug:
-            ic(op_parse)
-
-        if op_class_name == "Note":
-            if debug:
-                ic(
-                    op_class_name,
-                    op_parse.text,
-                )
-
-            return OpNote(
-                loc = textx.get_location(op_parse),
-                text = op_parse.text,
-            )
 
         if op_class_name == "Transfer":
             if debug:
@@ -537,6 +536,34 @@ Interpret the steps within an activity.
                 measure = measure,
                 text = op_parse.text,
                 entity = entity,
+            )
+
+        ## OTHERWISE, parse fails ...
+        return None
+
+
+    def _interpret_op (  # pylint: disable=R0911,R0912,R0915
+        self,
+        closure: Closure,
+        op_parse: typing.Any,
+        *,
+        debug: bool = False,
+        ) -> typing.Optional[ OpsTypes ]:
+        """
+Interpret the steps within an activity.
+        """
+        op_class_name: str = op_parse.__class__.__name__
+
+        if op_class_name == "Note":
+            if debug:
+                ic(
+                    op_class_name,
+                    op_parse.text,
+                )
+
+            return OpNote(
+                loc = textx.get_location(op_parse),
+                text = op_parse.text,
             )
 
         if op_class_name == "Action":
@@ -913,7 +940,7 @@ Iterator for the aggregate ingredients in one Bwyd module.
 
         for closure in self.closures.values():  # pylint: disable=R1702
             for activity in closure.activities:
-                for op in activity.ops:
+                for op in activity.inputs:
                     if isinstance(op, OpAdd) and not op.entity.external:
                         measure: Measure = op.measure
                         name: str = op.entity.symbol
@@ -931,6 +958,8 @@ Iterator for the aggregate ingredients in one Bwyd module.
                         else:
                             error_msg: str = f"wrong units for ingredient list: {measure.units}"
                             logging.error(error_msg)
+
+                        print("MEA", name, measure)
 
         for entity, measure in ing.values():
             yield entity, measure

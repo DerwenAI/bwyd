@@ -92,20 +92,28 @@ A data class representing one humanized Measure object.
 
 
     def denormalize (
-        self
+        self,
+        *,
+        is_compound: bool = False,
         ) -> str:
         """
 Denormalize a meaure which is already in human-readable form.
         """
         if self.units is None:
-            return f" ({self.human})"
+            if is_compound:
+                return self.human
+            else:
+                return f" ({self.human})"
 
         units: str = self.units.value
 
         if self.amount > 1.0 and self.human != "1" and self.units != MeasureUnits.TEASPOON:
             units = PLURAL.plural(units)
 
-        return f" ({self.human} {units})"
+        if is_compound:
+            return f"{self.human} {units}"
+        else:
+            return f" ({self.human} {units})"
 
 
 class Measure (BaseModel):  # pylint: disable=R0902
@@ -201,6 +209,61 @@ imperial conversion if available.
                         imper_amount = self.amount * CUP_PER_LITER
                         human = self._humanize_generic(imper_amount, MeasureUnits.CUP)
                         amount += human.denormalize()
+
+                    case _:
+                        logging.warning(f"no default conversion for unit `{self.units}`")  # pylint: disable=W1203
+
+        return amount
+
+
+    def convert (
+        self,
+        symbol: str,
+        external: bool,
+        converter: typing.Optional[ Converter ],
+        ) -> str:
+        """
+Denormalize this measure into human-readable imperial conversion.
+        """
+        amount: str = ""
+
+        if converter is not None:
+            if symbol in converter:
+                conv: Conversion = converter[symbol]
+
+                if self.units == conv.metric:
+                    imper_amount: float = self.amount / conv.density
+                    human: Humanized = self._humanize_cup(imper_amount)
+                    amount += human.denormalize(is_compound = True)
+
+            elif self.units is not None:
+                if not external:
+                    logging.warning(f"no conversion ratio for {symbol}")  # pylint: disable=W1203
+
+                match self.units:
+                    case MeasureUnits.GRAM.value:
+                        imper_amount = self.amount * POUND_PER_GRAM
+
+                        if imper_amount < 0.25:
+                            imper_amount *= OUNCE_PER_POUND
+
+                            if imper_amount > 0.95:
+                                human = self._humanize_generic(imper_amount, MeasureUnits.OUNCE)
+                            else:
+                                human = Humanized(
+                                    amount = imper_amount,
+                                    human = str(round(imper_amount, 2)),
+                                    units = MeasureUnits.OUNCE,
+                                )
+                        else:
+                            human = self._humanize_generic(imper_amount, MeasureUnits.POUND)
+
+                        amount += human.denormalize(is_compound = True)
+
+                    case MeasureUnits.LITER.value:
+                        imper_amount = self.amount * CUP_PER_LITER
+                        human = self._humanize_generic(imper_amount, MeasureUnits.CUP)
+                        amount += human.denormalize(is_compound = True)
 
                     case _:
                         logging.warning(f"no default conversion for unit `{self.units}`")  # pylint: disable=W1203
