@@ -1,5 +1,9 @@
 ## TODOs
 
+  * JSON
+    + steps vs. uses/ops
+
+
   * refactor ACTIVITY
     + bookend with EMPTY and CLEAN events for each Container/Tool
     + ADD/TRANSFER as initial operation

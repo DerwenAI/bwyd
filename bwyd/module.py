@@ -36,7 +36,7 @@ from .ops import Dependency, \
 
 from .resources import BWYD_SVG, JINJA_PAGE_TEMPLATE, URL_PATTERN
 
-from .structure import Activity, Closure, Post
+from .structure import Activity, Closure, Post, Ratio
 
 
 ######################################################################
@@ -167,8 +167,10 @@ Accessor for composing Schema.org metadata in JSON-LD
 Return a list of JSON-friendly dictionary representations,
 one for each parsed Closure.
         """
-        closure_list: typing.List[ dict ] = [
-            {
+        closure_list: typing.List[ dict ] = []
+
+        for name, closure in self.closures.items():
+            closure_list.append({
                 "title": name,
                 "yields": closure.total_yields(intermediaries = True),
                 "text": closure.text,
@@ -176,9 +178,11 @@ one for each parsed Closure.
                 "keywords": closure.keywords,
                 "requires": closure.get_dependencies(),
                 "activities": [ activity.get_model(self.converter) for activity in closure.activities ],
-            }
-            for name, closure in self.closures.items()
-        ]
+                "ratio": []
+            })
+
+            if closure.ratio is not None:
+                closure_list[-1]["ratio"].append(closure.ratio.get_model())
 
         spdx_license: typing.Optional[ dict ] = None
         updated: typing.Optional[ str ] = None
@@ -754,8 +758,14 @@ Interpret the components within a ratio.
         if debug:
             ic(
                 ratio_parse.name,
+                ratio_parse.formula,
                 [ (part.symbol, part.components) for part in ratio_parse.parts ],
             )
+
+        closure.ratio = Ratio(
+            name = ratio_parse.name,
+            formula = ratio_parse.formula,
+        )
 
         for part in ratio_parse.parts:
             if len(part.components) < 1:
@@ -763,6 +773,12 @@ Interpret the components within a ratio.
                 if part.symbol in closure.ingredients:
                     entity: typing.Any = closure.ingredients[part.symbol]
                     entity.ref_count += 1
+
+                    if part.symbol not in closure.ratio.parts:
+                        closure.ratio.parts[part.symbol] = []
+
+                    closure.ratio.parts[part.symbol].extend(part.components)
+
                 else:
                     loc: dict = textx.get_location(part)
 
@@ -771,7 +787,8 @@ Interpret the components within a ratio.
                         symbol = part.symbol,
                     )
 
-            ## fuck: store representation of this ratio
+        if debug:
+            ic(closure.ratio)
 
 
     def _interpret_closure (  # pylint: disable=R0912,R0915

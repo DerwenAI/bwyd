@@ -1,5 +1,8 @@
 RECIPE: "Panna Cotta"
 TEXT: "A light, creamy dessert which pairs with so many fruits"
+  AUTHOR: "Paco Nathan https://derwen.ai/paco"
+  LICENSE: "CC-BY-NC-SA-4.0"
+  UPDATED: "2022-07-16"
   CITE: "https://www.thekitchn.com/how-to-make-panna-cotta-cooking-lessons-from-the-kitchn-200070"
   CITE: "https://mytastefulrecipes.com/almond-milk-panna-cotta-recipe/"
   POST: "https://www.instagram.com/p/CgGYEZFL7Dx/"

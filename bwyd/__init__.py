@@ -29,4 +29,4 @@ from .resources import BWYD_NAMESPACE, BWYD_SVG, \
     JINJA_PAGE_TEMPLATE, JINJA_INDEX_TEMPLATE, \
     URL_PATTERN
 
-from .structure import Activity, Closure, Post
+from .structure import Activity, Closure, Post, Ratio

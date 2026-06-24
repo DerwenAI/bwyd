@@ -104,6 +104,30 @@ Accessor for a thumbnail URL.
 ######################################################################
 ## structural classes
 
+class Ratio (BaseModel):  # pylint: disable=R0902
+    """
+A data class representing one Ratio object.
+    """
+    name: str
+    formula: str
+    parts: typing.Dict[ str, typing.List[ str ] ] = {}
+
+
+    def get_model (
+        self,
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        dat: dict = {
+            "name": self.name,
+            "formula": self.formula,
+            "parts": self.parts,
+        }
+
+        return dat
+
+
 class Activity (BaseModel):  # pylint: disable=R0902
     """
 A data class representing one Activity object.
@@ -155,6 +179,7 @@ A data class representing one parsed Closure object.
     ingredients: DependencyDict = DependencyDict()
     activities: typing.List[ Activity ] = []
     products: typing.List[ Product ] = []
+    ratio: Ratio | None = None
 
 
     def get_dependencies (
