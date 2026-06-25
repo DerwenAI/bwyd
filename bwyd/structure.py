@@ -141,6 +141,9 @@ A data class representing one Activity object.
     def get_model (
         self,
         converter: Converter,
+        *,
+        humanize: bool = True,
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
@@ -148,19 +151,15 @@ Serializable representation for JSON.
         dat: dict = {
             "container": self.container.symbol,
             "title": self.text,
-            "steps": [
-                {
-                    "ingredients": [
-                        op.get_model(converter)
-                        for op in self.inputs
-                    ]
-                }
-            ]
+            "uses": [
+                op.get_model(converter, pluralize = pluralize)
+                for op in self.inputs
+            ],
+            "ops": [
+                op.get_model(humanize = humanize, pluralize = pluralize)
+                for op in self.ops
+            ],
         }
-
-        for op in self.ops:
-            if not isinstance(op, OpAdd):
-                dat["steps"].append(op.get_model())
 
         return dat
 

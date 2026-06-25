@@ -95,6 +95,7 @@ A data class representing one humanized Measure object.
         self,
         *,
         is_compound: bool = False,
+        pluralize: bool = True,
         ) -> str:
         """
 Denormalize a meaure which is already in human-readable form.
@@ -107,7 +108,7 @@ Denormalize a meaure which is already in human-readable form.
 
         units: str = self.units.value
 
-        if self.amount > 1.0 and self.human != "1" and self.units != MeasureUnits.TEASPOON:
+        if pluralize and self.amount > 1.0 and self.human != "1" and self.units != MeasureUnits.TEASPOON:
             units = PLURAL.plural(units)
 
         if is_compound:
@@ -165,11 +166,20 @@ Denormalize this measure into human-readable form.
         symbol: str,
         external: bool,
         converter: typing.Optional[ Converter ],
+        *,
+        humanize: bool = True,
         ) -> str:
         """
 Denormalize this measure into human-readable form, with an
 imperial conversion if available.
         """
+        if not humanize:
+            return self.convert(
+                symbol,
+                external,
+                converter,
+            )
+
         amount: str = self.humanize().strip()
 
         if converter is not None:
@@ -447,6 +457,8 @@ Return this duration normalized into seconds.
 
     def humanize (
         self,
+        *,
+        pluralize: bool = True,
         ) -> str:
         """
 Adapted from:
@@ -467,7 +479,7 @@ Adapted from:
 
         for label, amount in cascade:
             if amount > 0:
-                if amount > 1:
+                if pluralize and amount > 1:
                     label = PLURAL.plural(label)
 
                 units.append(f"{int(amount)} {label}")

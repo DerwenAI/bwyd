@@ -177,7 +177,7 @@ one for each parsed Closure.
                 "supers": closure.supers,
                 "keywords": closure.keywords,
                 "requires": closure.get_dependencies(),
-                "activities": [ activity.get_model(self.converter) for activity in closure.activities ],
+                "activities": [ activity.get_model(None, pluralize = False) for activity in closure.activities ],
                 "ratio": []
             })
 

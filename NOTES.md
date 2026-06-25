@@ -2,6 +2,7 @@
 
   * JSON
     + steps vs. uses/ops
+    + NOTE
 
 
   * refactor ACTIVITY

@@ -33,7 +33,9 @@ Ingredient, Tool, Container, etc.
 
 
     def get_model (
-        self
+        self,
+        *,
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
@@ -50,7 +52,9 @@ A dictionary of a specific class of dependencies, which also provides
 a local namespace.
     """
     def get_model (
-        self
+        self,
+        *,
+        pluralize: bool = True,
         ) -> list:
         """
 Serializable representation for JSON.
@@ -81,6 +85,8 @@ A data class representing a generic operation.
 
     def get_duration (
         self,
+        *,
+        pluralize: bool = True,
         ) -> Duration:
         """
 Stub: Total duration.
@@ -100,7 +106,9 @@ Author/Cook for other Cooks.
 
 
     def get_model (
-        self
+        self,
+        *,
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
@@ -126,6 +134,9 @@ ingredient into a Container within an Activity.
     def get_model (
         self,
         converter: Converter,
+        *,
+        humanize: bool = True,
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
@@ -134,9 +145,11 @@ Serializable representation for JSON.
             self.symbol,
             self.entity.external,
             converter,
-        )
+            humanize = humanize,
+       )
 
         return {
+            "kind": "add",
             "name": self.symbol,
             "amount": amount,
             "text": self.text,
@@ -156,14 +169,16 @@ Container into the Container used in a subsequent Activity, both
 
     def get_model (
         self,
+        *,
+        humanize: bool = True,
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
         """
         return {
-            "transfer": {
-                "name": self.symbol,
-            },
+            "kind": "transfer",
+            "name": self.symbol,
         }
 
 
@@ -189,18 +204,20 @@ Duration of this operation.
 
 
     def get_model (
-        self
+        self,
+        *,
+        humanize: bool = True,
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
         """
         return {
-            "action": {
-                "tool": self.tool.symbol,
-                "verb": self.modifier,
-                "text": self.until,
-                "time": self.duration.humanize(),
-            }
+            "kind": "action",
+            "tool": self.tool.symbol,
+            "text": self.modifier,
+            "until": self.until,
+            "time": self.duration.humanize(pluralize = pluralize),
         }
 
 
@@ -226,16 +243,18 @@ Duration of this operation.
 
 
     def get_model (
-        self
+        self,
+        *,
+        humanize: bool = True,
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
         """
         return {
-            "wait": {
-                "text": self.until,
-                "time": self.duration.humanize(),
-            }
+            "kind": "wait",
+            "text": self.until,
+            "time": self.duration.humanize(pluralize = pluralize),
         }
 
 
@@ -250,6 +269,7 @@ a specific Container as part of an Activity.
     duration: Duration
     product: Product = None
     appliance: str = Appliance.GENERIC
+    verb: str = "generic"
 
 
     def get_duration (
@@ -267,20 +287,23 @@ Represents an Appliance: stove, range, hotplate, camp fire --
 used to *heat* in different modes.
     """
     appliance: str = Appliance.STOVE
+    verb: str = "heat"
 
 
     def get_model (
-        self
+        self,
+        *,
+        humanize: bool = True,
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
         """
         return {
-            self.appliance: {
-                "text": self.modifier,
-                "until": self.until,
-                "time": self.duration.humanize(),
-            }
+            "kind": self.verb,
+            "text": self.modifier,
+            "until": self.until,
+            "time": self.duration.humanize(pluralize = pluralize),
         }
 
 
@@ -290,6 +313,7 @@ Represents an Appliance: cooler --
 used to *chill* in different modes.
     """
     appliance: str = Appliance.COOLER
+    verb: str = "chill"
 
 
 class OpBake (OpAppliance):  # pylint: disable=R0902
@@ -300,22 +324,25 @@ used to *bake* in different modes.
     mode: str
     temperature: Temperature
     appliance: str = Appliance.OVEN
+    verb: str = "bake"
 
 
     def get_model (
-        self
+        self,
+        *,
+        humanize: bool = True,
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
         """
         return {
-            self.appliance: {
-                "text": self.modifier,
-                "until": self.until,
-                "time": self.duration.humanize(),
-                "mode": self.mode.lower(),
-                "temperature": self.temperature.humanize(),
-            }
+            "kind": self.verb,
+            "text": self.modifier,
+            "until": self.until,
+            "time": self.duration.humanize(pluralize = pluralize),
+            "mode": self.mode.lower(),
+            "temperature": self.temperature.humanize(pluralize = pluralize),
         }
 
 
