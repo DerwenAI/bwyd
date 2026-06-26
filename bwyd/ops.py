@@ -148,13 +148,18 @@ Serializable representation for JSON.
             humanize = humanize,
        )
 
-        return {
+        dat: dict = {
             "kind": "add",
             "name": self.symbol,
             "amount": amount,
             "text": self.text,
-            "external": self.entity.external,
         }
+
+        if converter is not None:
+            dat["external"] = self.entity.external
+
+        return dat
+
 
 
 class OpTransfer (OpGeneric):  # pylint: disable=R0902
@@ -212,13 +217,18 @@ Duration of this operation.
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "kind": "action",
             "tool": self.tool.symbol,
             "text": self.modifier,
             "until": self.until,
             "time": self.duration.humanize(pluralize = pluralize),
         }
+
+        if self.product is not None:
+            dat.update(self.product.get_model())
+
+        return dat
 
 
 class OpWait (OpGeneric):  # pylint: disable=R0902
@@ -253,7 +263,8 @@ Serializable representation for JSON.
         """
         return {
             "kind": "wait",
-            "text": self.until,
+            "text": self.modifier,
+            "until": self.until,
             "time": self.duration.humanize(pluralize = pluralize),
         }
 
@@ -301,6 +312,7 @@ Serializable representation for JSON.
         """
         return {
             "kind": self.verb,
+            "name": self.container.symbol,
             "text": self.modifier,
             "until": self.until,
             "time": self.duration.humanize(pluralize = pluralize),
@@ -338,6 +350,7 @@ Serializable representation for JSON.
         """
         return {
             "kind": self.verb,
+            "name": self.container.symbol,
             "text": self.modifier,
             "until": self.until,
             "time": self.duration.humanize(pluralize = pluralize),

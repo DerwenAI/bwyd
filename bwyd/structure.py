@@ -181,18 +181,6 @@ A data class representing one parsed Closure object.
     ratio: Ratio | None = None
 
 
-    def get_dependencies (
-        self
-        ) -> list:
-        """
-Serialized representation in JSON for the containers and tools.
-        """
-        return [
-            dep.get_model()
-            for dep in itertools.chain(self.containers.values(), self.tools.values())
-        ]
-
-
     def total_yields (
         self,
         *,

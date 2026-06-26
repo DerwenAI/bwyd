@@ -170,19 +170,23 @@ one for each parsed Closure.
         closure_list: typing.List[ dict ] = []
 
         for name, closure in self.closures.items():
-            closure_list.append({
+            dat: dict = {
                 "title": name,
                 "yields": closure.total_yields(intermediaries = True),
                 "text": closure.text,
                 "supers": closure.supers,
                 "keywords": closure.keywords,
-                "requires": closure.get_dependencies(),
+                "containers": [ dep.get_model() for dep in closure.containers.values() ],
+                "tools": [ dep.get_model() for dep in closure.tools.values() ],
+                "prep": [ dep.get_model() for dep in closure.ingredients.values() if dep.external ],
+                "ingredients": [ dep.get_model() for dep in closure.ingredients.values() if not dep.external ],
                 "activities": [ activity.get_model(None, pluralize = False) for activity in closure.activities ],
-                "ratio": []
-            })
+            }
 
             if closure.ratio is not None:
-                closure_list[-1]["ratio"].append(closure.ratio.get_model())
+                dat["ratio"] = [ closure.ratio.get_model() ]
+
+            closure_list.append(dat)
 
         spdx_license: typing.Optional[ dict ] = None
         updated: typing.Optional[ str ] = None
@@ -209,18 +213,7 @@ one for each parsed Closure.
                 "author": self.author,
                 "updated": updated,
             },
-            "ingredients": [
-                {
-                    "amount": measure.humanize(),
-                    "convert": measure.convert(
-                        entity.symbol,
-                        entity.external,
-                        self.converter,
-                    ),
-                    "text": entity.text,
-                }
-                for entity, measure in self.iter_ingredients()
-            ],
+            "ingredients": [ mod for mod in self.tally_ingredients(self.converter) ],
             "sources": self.cites,
             "gallery": [ post.url for post in self.posts],
             "image": self.get_image(),
@@ -947,6 +940,31 @@ Accessor for the total, non-intermediate yields of one Bwyd module.
         ]
 
 
+    def tally_ingredients (
+        self,
+        converter: Converter,
+        ) -> typing.Iterator[dict[ str ]]:
+        """
+Iterator for the serialization of aggregate ingredients in one Bwyd module.
+        """
+        for entity, measure in self.iter_ingredients():
+            dat: dict = {
+                "amount": measure.humanize(),
+                "text": entity.text,
+            }
+
+            conv: dict = measure.convert(
+                entity.symbol,
+                entity.external,
+                converter,
+            )
+
+            if len(conv) > 0:
+                dat["convert"] = conv
+
+            yield dat
+
+
     def iter_ingredients (
         self,
         ) -> typing.Iterator[typing.Tuple[ Dependency, Measure ]]:
@@ -975,8 +993,6 @@ Iterator for the aggregate ingredients in one Bwyd module.
                         else:
                             error_msg: str = f"wrong units for ingredient list: {measure.units}"
                             logging.error(error_msg)
-
-                        print("MEA", name, measure)
 
         for entity, measure in ing.values():
             yield entity, measure

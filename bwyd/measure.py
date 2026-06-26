@@ -593,7 +593,7 @@ Serializable representation for JSON.
 
 class Product (BaseModel):  # pylint: disable=R0902
     """
-A data class representing one Product object.
+A data class representing one Product object for a YIELDS directive.
     """
     loc: dict
     symbol: str
@@ -601,3 +601,18 @@ A data class representing one Product object.
     intermediate: bool
     storage: Storage = None
     ref_count: NonNegativeInt = 0
+
+
+    def get_model (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        return {
+            "yields": {
+                "name": self.symbol,
+                "amount": self.amount.humanize(),
+                "intermediate": self.intermediate,
+            }
+        }
