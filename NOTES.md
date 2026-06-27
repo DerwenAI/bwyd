@@ -1,8 +1,9 @@
 ## TODOs
 
   * JSON
-    + steps vs. uses/ops
-    + NOTE
+    + activity / ADD+TRANSFER / "name" => "subject"
+    + "note"
+    + "yields"
 
 
   * refactor ACTIVITY

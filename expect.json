@@ -146,7 +146,7 @@
             },
             {
               "kind": "heat",
-              "name": "pan",
+              "subject": "pan",
               "text": "warm gently over low heat, stirring frequently; do not boil",
               "until": "gelatin is dissolved",
               "time": "3 minute"
@@ -168,7 +168,7 @@
           "ops": [
             {
               "kind": "action",
-              "name": "spatula",
+              "subject": "spatula",
               "text": "stir sugar into the cream",
               "until": "sugar dissolves",
               "time": "30 second"
@@ -202,7 +202,7 @@
           "ops": [
             {
               "kind": "action",
-              "name": "spatula",
+              "subject": "spatula",
               "text": "whisk in remaining cream",
               "until": "well mixed",
               "time": "30 second",
@@ -272,7 +272,7 @@
           "ops": [
             {
               "kind": "action",
-              "name": "hand",
+              "subject": "hand",
               "text": "coat the interior of ramekins with butter",
               "until": "walls are lightly coated",
               "time": "30 second"
@@ -293,14 +293,14 @@
           "ops": [
             {
               "kind": "action",
-              "name": "spatula",
+              "subject": "spatula",
               "text": "pour into the ramekins",
               "until": "filling is evenly divided",
               "time": "30 second"
             },
             {
               "kind": "chill",
-              "name": "ramekin",
+              "subject": "ramekin",
               "text": "in refrigerator",
               "until": "filling is firm",
               "time": "3 hour",

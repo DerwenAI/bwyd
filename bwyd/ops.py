@@ -219,7 +219,7 @@ Serializable representation for JSON.
         """
         dat: dict = {
             "kind": "action",
-            "tool": self.tool.symbol,
+            "subject": self.tool.symbol,
             "text": self.modifier,
             "until": self.until,
             "time": self.duration.humanize(pluralize = pluralize),
@@ -312,7 +312,7 @@ Serializable representation for JSON.
         """
         return {
             "kind": self.verb,
-            "name": self.container.symbol,
+            "subject": self.container.symbol,
             "text": self.modifier,
             "until": self.until,
             "time": self.duration.humanize(pluralize = pluralize),
@@ -350,7 +350,7 @@ Serializable representation for JSON.
         """
         return {
             "kind": self.verb,
-            "name": self.container.symbol,
+            "subject": self.container.symbol,
             "text": self.modifier,
             "until": self.until,
             "time": self.duration.humanize(pluralize = pluralize),
