@@ -1,7 +1,6 @@
 ## TODOs
 
   * JSON
-    + activity / ADD+TRANSFER / "name" => "subject"
     + "note"
     + "yields"
 

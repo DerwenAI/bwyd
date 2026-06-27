@@ -119,7 +119,7 @@
           "uses": [
             {
               "kind": "add",
-              "name": "cream",
+              "subject": "cream",
               "amount": "180 ml",
               "text": "",
               "note": {
@@ -128,7 +128,7 @@
             },
             {
               "kind": "add",
-              "name": "gelatin",
+              "subject": "gelatin",
               "amount": "5 g",
               "convert": "0.18 ounce",
               "text": "sprinkle evenly over the top",
@@ -159,7 +159,7 @@
           "uses": [
             {
               "kind": "add",
-              "name": "sugar",
+              "subject": "sugar",
               "amount": "25 g",
               "convert": "2 tbsps",
               "text": ""
@@ -181,19 +181,19 @@
           "uses": [
             {
               "kind": "add",
-              "name": "cream",
+              "subject": "cream",
               "amount": "180 ml",
               "text": ""
             },
             {
               "kind": "add",
-              "name": "vanilla_extract",
+              "subject": "vanilla_extract",
               "amount": "5 ml",
               "text": ""
             },
             {
               "kind": "add",
-              "name": "salt",
+              "subject": "salt",
               "amount": "1 g",
               "convert": "1/6 tsp",
               "text": ""
@@ -263,7 +263,7 @@
           "uses": [
             {
               "kind": "add",
-              "name": "butter",
+              "subject": "butter",
               "amount": "14 g",
               "convert": "1 tbsp",
               "text": ""
@@ -285,7 +285,7 @@
           "uses": [
             {
               "kind": "add",
-              "name": "filling",
+              "subject": "filling",
               "amount": "1",
               "text": ""
             }

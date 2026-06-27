@@ -150,7 +150,7 @@ Serializable representation for JSON.
 
         dat: dict = {
             "kind": "add",
-            "name": self.symbol,
+            "subject": self.symbol,
             "amount": amount,
             "text": self.text,
         }
@@ -183,7 +183,7 @@ Serializable representation for JSON.
         """
         return {
             "kind": "transfer",
-            "name": self.symbol,
+            "subject": self.symbol,
         }
 
 
