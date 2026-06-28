@@ -214,7 +214,7 @@ Activity on the food within a specific Container.
     modifier: str
     until: str
     duration: Duration
-    product: Product = None
+    product: Product | None = None
 
 
     def get_duration (
@@ -261,7 +261,7 @@ Container.
     modifier: str
     until: str
     duration: Duration
-    product: Product = None
+    product: Product | None = None
 
 
     def get_duration (
@@ -289,6 +289,9 @@ Serializable representation for JSON.
             "time": self.duration.humanize(pluralize = pluralize),
         }
 
+        if self.product is not None:
+            dat.update(self.product.get_model())
+
         if self.note is not None:
             dat.update(self.note.get_model())
 
@@ -304,7 +307,7 @@ a specific Container as part of an Activity.
     modifier: str
     until: str
     duration: Duration
-    product: Product = None
+    product: Product | None = None
     appliance: str = Appliance.GENERIC
     verb: str = "generic"
 
@@ -343,6 +346,9 @@ Serializable representation for JSON.
             "until": self.until,
             "time": self.duration.humanize(pluralize = pluralize),
         }
+
+        if self.product is not None:
+            dat.update(self.product.get_model())
 
         if self.note is not None:
             dat.update(self.note.get_model())
@@ -388,6 +394,9 @@ Serializable representation for JSON.
             "mode": self.mode.lower(),
             "temperature": self.temperature.humanize(pluralize = pluralize),
         }
+
+        if self.product is not None:
+            dat.update(self.product.get_model())
 
         if self.note is not None:
             dat.update(self.note.get_model())

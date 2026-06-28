@@ -310,7 +310,7 @@
                 "intermediate": false,
                 "store": {
                   "text": "in refrigerator",
-                  "time": "7 day"
+                  "upto": "7 day"
                 }
               }
             }

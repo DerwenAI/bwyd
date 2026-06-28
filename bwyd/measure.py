@@ -133,7 +133,7 @@ A data class representing one parsed Measure object.
         """
 Constructor from a `textx` parse object.
         """
-        measure_units: typing.Optional[ str ] = None
+        measure_units: typing.Optional[ str ] | None = None
 
         if parse.units is not None:
             measure_units = MeasureUnits(parse.units).value
@@ -415,10 +415,12 @@ Humanize fractions representing imperial measurement ratios >= 1.0
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "amount": self.amount,
             "units": self.units,
         }
+
+        return dat
 
 
 class Duration (Measure):  # pylint: disable=R0902
@@ -435,7 +437,7 @@ A data class representing one parsed Duration object.
         """
 Constructor from a `textx` parse object.
         """
-        duration_units: typing.Optional[ str ] = None
+        duration_units: typing.Optional[ str ] | None = None
 
         if parse.units is not None:
             duration_units = DurationUnits(parse.units).value
@@ -494,10 +496,12 @@ Adapted from:
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "amount": self.amount,
             "units": self.units,
         }
+
+        return dat
 
 
 class Temperature (Measure):  # pylint: disable=R0902
@@ -513,7 +517,7 @@ A data class representing one parsed Temperature object.
         """
 Constructor from a `textx` parse object.
         """
-        temperature_units: typing.Optional[ str ] = None
+        temperature_units: typing.Optional[ str ] | None = None
 
         if parse.units is not None:
             temperature_units = TemperatureUnits(parse.units).value
@@ -583,12 +587,14 @@ an Activity for a specified time period.
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "store": {
                 "text": self.modifier,
-                "upto": self.duration.humanize(),
+                "upto": self.duration.humanize(pluralize = False),
             }
         }
+
+        return dat
 
 
 class Product (BaseModel):  # pylint: disable=R0902
@@ -599,7 +605,7 @@ A data class representing one Product object for a YIELDS directive.
     symbol: str
     amount: Measure
     intermediate: bool
-    storage: Storage = None
+    storage: Storage | None = None
     ref_count: NonNegativeInt = 0
 
 
@@ -609,10 +615,15 @@ A data class representing one Product object for a YIELDS directive.
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "yields": {
                 "name": self.symbol,
                 "amount": self.amount.humanize(),
                 "intermediate": self.intermediate,
             }
         }
+
+        if self.storage is not None:
+            dat["yields"].update(self.storage.get_model())
+
+        return dat
