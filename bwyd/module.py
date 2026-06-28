@@ -31,8 +31,8 @@ from .measure import Converter, \
     Measure, DurationUnits, Duration, Temperature, \
     Product, Storage
 
-from .ops import Dependency, \
-    OpsTypes, OpNote, OpAdd, OpTransfer, OpAction, OpWait, OpHeat, OpChill, OpBake
+from .ops import Note, Dependency, \
+    OpsTypes, OpAdd, OpTransfer, OpAction, OpWait, OpHeat, OpChill, OpBake
 
 from .resources import BWYD_SVG, JINJA_PAGE_TEMPLATE, URL_PATTERN
 
@@ -473,6 +473,21 @@ Interpret the parse of YIELDS and STORE.
 Interpret the steps within an activity.
         """
         op_class_name: str = op_parse.__class__.__name__
+        note: Note | None = None
+
+        # fuck: parse NOTE
+        if op_parse.note is not None:
+            if debug:
+                ic(
+                    "NOTE",
+                    op_class_name,
+                    op_parse.note.text,
+                )
+
+            note = Note(
+                loc = textx.get_location(op_parse),
+                text = op_parse.note.text,
+            )
 
         if op_class_name == "Transfer":
             if debug:
@@ -499,6 +514,7 @@ Interpret the steps within an activity.
                 loc = textx.get_location(op_parse),
                 symbol = op_parse.symbol,
                 entity = entity,
+                note = note,
             )
 
         if op_class_name == "Add":
@@ -533,6 +549,7 @@ Interpret the steps within an activity.
                 measure = measure,
                 text = op_parse.text,
                 entity = entity,
+                note = note,
             )
 
         ## OTHERWISE, parse fails ...
@@ -550,17 +567,20 @@ Interpret the steps within an activity.
 Interpret the steps within an activity.
         """
         op_class_name: str = op_parse.__class__.__name__
+        note: Note | None = None
 
-        if op_class_name == "Note":
+        # fuck: parse NOTE
+        if op_parse.note is not None:
             if debug:
                 ic(
+                    "NOTE",
                     op_class_name,
-                    op_parse.text,
+                    op_parse.note.text,
                 )
 
-            return OpNote(
+            note = Note(
                 loc = textx.get_location(op_parse),
-                text = op_parse.text,
+                text = op_parse.note.text,
             )
 
         if op_class_name == "Action":
@@ -599,6 +619,7 @@ Interpret the steps within an activity.
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,
+                note = note,
             )
 
             self._interpret_yields(closure, op, op_parse)
@@ -620,6 +641,7 @@ Interpret the steps within an activity.
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,
+                note = note,
             )
 
             self._interpret_yields(closure, op, op_parse)
@@ -659,6 +681,7 @@ Interpret the steps within an activity.
                 until = op_parse.until,
                 duration = duration,
                 temperature = temperature,
+                note = note,
             )
 
             self._interpret_yields(closure, op, op_parse)
@@ -694,6 +717,7 @@ Interpret the steps within an activity.
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,
+                note = note,
             )
 
             self._interpret_yields(closure, op, op_parse)
@@ -729,6 +753,7 @@ Interpret the steps within an activity.
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,
+                note = note,
             )
 
             self._interpret_yields(closure, op, op_parse)

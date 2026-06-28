@@ -18,6 +18,32 @@ from .measure import Converter, \
 
 
 ######################################################################
+## notes
+
+class Note (BaseModel):
+    """
+Represents a collapsable Note, inline *within* Activity, etc.
+    """
+    loc: dict
+    text: str
+
+
+    def get_model (
+        self,
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        dat: dict = {
+            "note": {
+                "text": self.text,
+            }
+        }
+
+        return dat
+
+
+######################################################################
 ## dependencies
 
 class Dependency (BaseModel):  # pylint: disable=R0902
@@ -40,10 +66,12 @@ Ingredient, Tool, Container, etc.
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "name": self.symbol,
             "text": self.text,
         }
+
+        return dat
 
 
 class DependencyDict (OrderedDict):
@@ -80,6 +108,7 @@ class OpGeneric (BaseModel):  # pylint: disable=R0902
 A data class representing a generic operation.
     """
     loc: dict
+    note: Note | None = None
     ref_count: NonNegativeInt = 0
 
 
@@ -95,29 +124,6 @@ Stub: Total duration.
             amount = 0.0,
             units = DurationUnits.SECOND.value,
         )
-
-
-class OpNote (OpGeneric):  # pylint: disable=R0902
-    """
-Represents a collapsable Note, inline *within* an Activity, from the
-Author/Cook for other Cooks.
-    """
-    text: str
-
-
-    def get_model (
-        self,
-        *,
-        pluralize: bool = True,
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "note": {
-                "text": self.text,
-            }
-        }
 
 
 class OpAdd (OpGeneric):  # pylint: disable=R0902
@@ -158,6 +164,9 @@ Serializable representation for JSON.
         if converter is not None:
             dat["external"] = self.entity.external
 
+        if self.note is not None:
+            dat.update(self.note.get_model())
+
         return dat
 
 
@@ -181,10 +190,15 @@ Container into the Container used in a subsequent Activity, both
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "kind": "transfer",
             "subject": self.symbol,
         }
+
+        if self.note is not None:
+            dat.update(self.note.get_model())
+
+        return dat
 
 
 class OpAction (OpGeneric):  # pylint: disable=R0902
@@ -228,6 +242,9 @@ Serializable representation for JSON.
         if self.product is not None:
             dat.update(self.product.get_model())
 
+        if self.note is not None:
+            dat.update(self.note.get_model())
+
         return dat
 
 
@@ -261,12 +278,17 @@ Duration of this operation.
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "kind": "wait",
             "text": self.modifier,
             "until": self.until,
             "time": self.duration.humanize(pluralize = pluralize),
         }
+
+        if self.note is not None:
+            dat.update(self.note.get_model())
+
+        return dat
 
 
 class OpAppliance (OpGeneric):  # pylint: disable=R0902
@@ -310,13 +332,18 @@ used to *heat* in different modes.
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "kind": self.verb,
             "subject": self.container.symbol,
             "text": self.modifier,
             "until": self.until,
             "time": self.duration.humanize(pluralize = pluralize),
         }
+
+        if self.note is not None:
+            dat.update(self.note.get_model())
+
+        return dat
 
 
 class OpChill (OpHeat):  # pylint: disable=R0902
@@ -348,7 +375,7 @@ used to *bake* in different modes.
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "kind": self.verb,
             "subject": self.container.symbol,
             "text": self.modifier,
@@ -358,9 +385,13 @@ Serializable representation for JSON.
             "temperature": self.temperature.humanize(pluralize = pluralize),
         }
 
+        if self.note is not None:
+            dat.update(self.note.get_model())
+
+        return dat
+
 
 OpsTypes = typing.Union[
-    OpNote,
     OpAdd,
     OpTransfer,
     OpAction,

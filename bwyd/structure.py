@@ -21,7 +21,7 @@ import requests_cache
 
 from .measure import Converter, Measure, PLURAL, Product
 
-from .ops import Dependency, DependencyDict, \
+from .ops import Note, Dependency, DependencyDict, \
     OpsTypes, OpAdd
 
 

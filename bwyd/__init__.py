@@ -20,8 +20,8 @@ from .measure import Conversion, Converter, Humanized, \
 
 from .module import Module
 
-from .ops import Dependency, DependencyDict, Appliance, \
-    OpsTypes, OpNote, OpAdd, OpTransfer, \
+from .ops import Note, Dependency, DependencyDict, Appliance, \
+    OpsTypes, OpAdd, OpTransfer, \
     OpAction, OpWait, OpHeat, OpChill, OpBake
 
 from .resources import BWYD_NAMESPACE, BWYD_SVG, \
