@@ -56,6 +56,7 @@ Ingredient, Tool, Container, etc.
     text: str
     ref_count: NonNegativeInt = 0
     external: bool = False
+    note: Note | None = None
 
 
     def get_model (
@@ -70,6 +71,9 @@ Serializable representation for JSON.
             "name": self.symbol,
             "text": self.text,
         }
+
+        if self.note is not None:
+            dat.update(self.note.get_model())
 
         return dat
 

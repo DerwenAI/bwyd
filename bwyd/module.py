@@ -327,6 +327,21 @@ Validate the forward references for one Bwyd module.
 Interpret and resolve each dependency: container, tool, ingredient, use.
         """
         depend_class_name: str = depend_parse.__class__.__name__
+        note: Note | None = None
+
+        # fuck: parse NOTE
+        if depend_parse.note is not None:
+            if debug:
+                ic(
+                    "NOTE",
+                    depend_class_name,
+                    depend_parse.note.text,
+                )
+
+            note = Note(
+                loc = textx.get_location(depend_parse),
+                text = depend_parse.note.text,
+            )
 
         if debug:
             #ic(dir(depend_parse))
@@ -343,6 +358,7 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,
                 text = depend_parse.text,
+                note = note,
             )
 
         elif depend_class_name == "Tool":
@@ -351,6 +367,7 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,
                 text = depend_parse.text,
+                note = note,
             )
 
         elif depend_class_name == "Ingredient":
@@ -359,6 +376,7 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,
                 text = depend_parse.text,
+                note = note,
             )
 
             closure.ingredients[depend_parse.symbol] = dep
@@ -370,6 +388,7 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
                 symbol = depend_parse.symbol,
                 text = depend_parse.text,
                 external = True,
+                note = note,
             )
 
             closure.ingredients[depend_parse.symbol] = dep
