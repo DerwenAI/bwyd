@@ -287,7 +287,8 @@
               "kind": "add",
               "subject": "filling",
               "amount": "1",
-              "text": ""
+	      "text": "",
+              "external": true
             }
           ],
           "ops": [

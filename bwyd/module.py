@@ -180,7 +180,7 @@ one for each parsed Closure.
                 "tools": [ dep.get_model() for dep in closure.tools.values() ],
                 "prep": [ dep.get_model() for dep in closure.ingredients.values() if dep.external ],
                 "ingredients": [ dep.get_model() for dep in closure.ingredients.values() if not dep.external ],
-                "activities": [ activity.get_model(None, pluralize = False) for activity in closure.activities ],
+                "activities": [ activity.get_model(self.converter, pluralize = False) for activity in closure.activities ],
             }
 
             if closure.ratio is not None:
@@ -329,15 +329,7 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
         depend_class_name: str = depend_parse.__class__.__name__
         note: Note | None = None
 
-        # fuck: parse NOTE
         if depend_parse.note is not None:
-            if debug:
-                ic(
-                    "NOTE",
-                    depend_class_name,
-                    depend_parse.note.text,
-                )
-
             note = Note(
                 loc = textx.get_location(depend_parse),
                 text = depend_parse.note.text,
@@ -494,15 +486,7 @@ Interpret the steps within an activity.
         op_class_name: str = op_parse.__class__.__name__
         note: Note | None = None
 
-        # fuck: parse NOTE
         if op_parse.note is not None:
-            if debug:
-                ic(
-                    "NOTE",
-                    op_class_name,
-                    op_parse.note.text,
-                )
-
             note = Note(
                 loc = textx.get_location(op_parse),
                 text = op_parse.note.text,
@@ -588,15 +572,7 @@ Interpret the steps within an activity.
         op_class_name: str = op_parse.__class__.__name__
         note: Note | None = None
 
-        # fuck: parse NOTE
         if op_parse.note is not None:
-            if debug:
-                ic(
-                    "NOTE",
-                    op_class_name,
-                    op_parse.note.text,
-                )
-
             note = Note(
                 loc = textx.get_location(op_parse),
                 text = op_parse.note.text,

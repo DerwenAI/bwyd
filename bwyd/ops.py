@@ -10,6 +10,7 @@ from collections import OrderedDict
 import enum
 import typing
 
+from icecream import ic
 from pydantic import BaseModel, NonNegativeInt
 
 from .measure import Converter, \
@@ -151,12 +152,7 @@ ingredient into a Container within an Activity.
         """
 Serializable representation for JSON.
         """
-        amount: str = self.measure.humanize_convert(
-            self.symbol,
-            self.entity.external,
-            converter,
-            humanize = humanize,
-       )
+        amount: str = self.measure.humanize()
 
         dat: dict = {
             "kind": "add",
@@ -166,6 +162,16 @@ Serializable representation for JSON.
         }
 
         if converter is not None:
+            conv: dict =  self.measure.convert(
+                self.symbol,
+                self.entity.external,
+                converter,
+            )
+
+            if conv is not None and len(conv) > 0:
+                dat["convert"] = conv
+
+        if self.entity.external:
             dat["external"] = self.entity.external
 
         if self.note is not None:
