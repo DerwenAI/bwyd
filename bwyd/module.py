@@ -1027,7 +1027,7 @@ Accessor for the collected keywords in one Bwyd module.
         return sorted(
             list(
                 itertools.chain.from_iterable([
-                    [ *closure.supers, *closure.keywords ]
+                    [ *closure.keywords, *closure.supers ]
                     for closure in self.closures.values()
                 ])
             )
