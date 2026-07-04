@@ -177,7 +177,7 @@ Ratio:
 ;
 
 RatioPart:
-    symbol=ID ('[' components+=ID[','] ']')?
+    symbol=ID ('[' (components+=ID[','])? ']')?
 ;
 
 Note:
