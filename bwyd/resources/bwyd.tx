@@ -54,13 +54,13 @@ Tool:
   (note=Note)?
 ;
 
-Ingredient:
-  "INGREDIENT" symbol=ID ":" text=STRING
+Prep:
+  "PREP" symbol=ID ":" text=STRING
   (note=Note)?
 ;
 
-Prep:
-  "PREP" symbol=ID ":" text=STRING
+Ingredient:
+  "INGREDIENT" symbol=ID ":" text=STRING
   (note=Note)?
 ;
 
