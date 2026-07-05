@@ -1024,14 +1024,14 @@ Iterator for the aggregate ingredients in one Bwyd module.
         """
 Accessor for the collected keywords in one Bwyd module.
         """
-        return sorted(
-            list(
-                itertools.chain.from_iterable([
-                    [ *closure.keywords, *closure.supers ]
-                    for closure in self.closures.values()
-                ])
-            )
-        )
+        sup_list: list[ str ] = []
+        key_list: list[ str ] = []
+
+        for closure in self.closures.values():
+            sup_list.extend(closure.supers)
+            key_list.extend(closure.keywords)
+
+        return sorted(sup_list) + sorted(key_list)
 
 
 ######################################################################
