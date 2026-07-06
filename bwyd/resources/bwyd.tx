@@ -32,8 +32,8 @@ Post:
 Closure:
   "CLOSURE:" name=STRING
     ("TEXT:" text=STRING)?
-    ("SUPER:" supers=ID)?
-    ("KEYWORD:" keywords=ID)?
+    ("SUPER:" supers+=ID[','])?
+    ("KEYWORD:" keywords+=ID[','])?
     depend+=Dependency
     activities+=Activity
     ratio=Ratio?

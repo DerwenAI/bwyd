@@ -23,7 +23,7 @@ if __name__ == "__main__":
     slug = "panna_cotta"
 
     examples_path = pathlib.Path(".")
-    slug = "target"
+    slug = "tangerine_gastrique"
 
 
     ######################################################################
@@ -53,16 +53,16 @@ if __name__ == "__main__":
             sort_keys = False,
         ))
 
+
+    ######################################################################
+    # only go this far
+    sys.exit(0)
+
     # compare with expected results
     with open("expect.json", "r", encoding = "utf-8") as fp:
         expected: dict = json.load(fp)
 
     ic(DeepDiff(expected, observed))
-
-
-    ######################################################################
-    # only go this far
-    sys.exit(0)
 
     # render the Jinja2 HTML template
     with open(examples_path / f"{slug}.html", "w", encoding = "utf-8") as fp:
