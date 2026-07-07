@@ -7,7 +7,7 @@ dynamic = [
     "version",
 ]
 
-description = "The seed crazy idea here is to consider how human cooks behave partly like robots, following recipes as instructions."
+description = "A domain specific language (DSL) to assist in taking notes about culinary work which is intended to be repeated."
 
 readme = "README.md"
 version = "0.4.0"
