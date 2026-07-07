@@ -19,11 +19,8 @@ if __name__ == "__main__":
     slug: str = "min_eval"
 
     ## OVERRIDES
-    examples_path = pathlib.Path("examples")
-    slug = "panna_cotta"
-
     examples_path = pathlib.Path(".")
-    slug = "tangerine_gastrique"
+    slug = sys.argv[1]
 
 
     ######################################################################

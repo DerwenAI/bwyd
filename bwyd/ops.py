@@ -193,6 +193,7 @@ Container into the Container used in a subsequent Activity, both
 
     def get_model (
         self,
+        converter: Converter,
         *,
         humanize: bool = True,
         pluralize: bool = True,
