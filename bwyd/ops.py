@@ -399,7 +399,7 @@ Serializable representation for JSON.
             "until": self.until,
             "time": self.duration.humanize(pluralize = pluralize),
             "mode": self.mode.lower(),
-            "temperature": self.temperature.humanize(pluralize = pluralize),
+            "temperature": self.temperature.humanize(),
         }
 
         if self.product is not None:
