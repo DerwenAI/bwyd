@@ -24,7 +24,14 @@ poetry install --extras=demo
 The source code is currently based on Python 3.11 or later.
 
 
-## run the demo script to eval a Bwyd file
+## run the demo script to generate HTML
+
+```bash
+poetry run python3 cli.py
+```
+
+
+## eval a specific Bwyd file
 
 ```bash
 poetry run python3 eval_rig.py <slug>
