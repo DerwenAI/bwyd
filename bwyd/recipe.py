@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python  # pylint: disable=C0302
 # -*- coding: utf-8 -*-
 
 """
@@ -9,7 +9,6 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 from collections import OrderedDict
 from urllib.parse import ParseResult, urlparse
 import datetime
-import itertools
 import json
 import logging
 import pathlib
@@ -40,11 +39,11 @@ from .structure import Activity, Closure, Post, Ratio
 
 
 ######################################################################
-## module definitions
+## recipe definitions
 
-class Module:  # pylint: disable=R0902
+class Recipe:  # pylint: disable=R0902
     """
-One parsed module.
+One parsed Bwyd file, AKA "module" or "recipe"
     """
     def __init__ (
         self,
@@ -179,8 +178,8 @@ one for each parsed Closure.
                 "containers": [ dep.get_model() for dep in closure.containers.values() ],
                 "tools": [ dep.get_model() for dep in closure.tools.values() ],
                 "prep": [ dep.get_model() for dep in closure.ingredients.values() if dep.external ],
-                "ingredients": [ dep.get_model() for dep in closure.ingredients.values() if not dep.external ],
-                "activities": [ activity.get_model(self.converter, pluralize = False) for activity in closure.activities ],
+                "ingredients": [ dep.get_model() for dep in closure.ingredients.values() if not dep.external ],  # pylint: disable=C0301
+                "activities": [ activity.get_model(self.converter, pluralize = False) for activity in closure.activities ],  # pylint: disable=C0301
             }
 
             if closure.ratio is not None:
@@ -213,7 +212,7 @@ one for each parsed Closure.
                 "author": self.author,
                 "updated": updated,
             },
-            "ingredients": [ mod for mod in self.tally_ingredients(self.converter) ],
+            "ingredients": list(self.tally_ingredients(self.converter)),
             "sources": self.cites,
             "gallery": [ post.url for post in self.posts],
             "image": self.get_image(),
@@ -467,7 +466,7 @@ Interpret the parse of YIELDS and STORE.
                     duration = Duration.build(op_parse.yields.store.duration),
                 )
 
-            op.product = product
+            op.product = product  # type: ignore
             ic(op, product)
 
             closure.products.append(product)
@@ -631,7 +630,7 @@ Interpret the steps within an activity.
                     duration,
                 )
 
-            op = OpWait(
+            op = OpWait(  # type: ignore
                 loc = textx.get_location(op_parse),
                 modifier = op_parse.modifier,
                 until = op_parse.until,
@@ -668,7 +667,7 @@ Interpret the steps within an activity.
                     temperature,
                 )
 
-            op = OpBake(
+            op = OpBake(  # type: ignore
                 loc = textx.get_location(op_parse),
                 mode = op_class_name,
                 container = entity,
@@ -706,7 +705,7 @@ Interpret the steps within an activity.
                     duration,
                 )
 
-            op = OpHeat(
+            op = OpHeat(  # type: ignore
                 loc = textx.get_location(op_parse),
                 container = entity,
                 modifier = op_parse.modifier,
@@ -742,7 +741,7 @@ Interpret the steps within an activity.
                     duration,
                 )
 
-            op = OpChill(
+            op = OpChill(  # type: ignore
                 loc = textx.get_location(op_parse),
                 container = entity,
                 modifier = op_parse.modifier,
@@ -963,7 +962,7 @@ Accessor for the total, non-intermediate yields of one Bwyd module.
     def tally_ingredients (
         self,
         converter: Converter,
-        ) -> typing.Iterator[dict[ str ]]:
+        ) -> typing.Iterator[dict[ str, str ]]:
         """
 Iterator for the serialization of aggregate ingredients in one Bwyd module.
         """
@@ -973,7 +972,7 @@ Iterator for the serialization of aggregate ingredients in one Bwyd module.
                 "text": entity.text,
             }
 
-            conv: dict = measure.convert(
+            conv: str = measure.convert(
                 entity.symbol,
                 entity.external,
                 converter,

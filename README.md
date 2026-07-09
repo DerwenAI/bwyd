@@ -30,6 +30,8 @@ The source code is currently based on Python 3.11 or later.
 poetry run python3 cli.py
 ```
 
+Then load the `examples/index.html` in a browser.
+
 
 ## eval a specific Bwyd file
 

@@ -18,7 +18,7 @@ from .measure import Conversion, Converter, Humanized, \
     Temperature, \
     Product, Storage
 
-from .module import Module
+from .recipe import Recipe
 
 from .ops import Note, Dependency, DependencyDict, Appliance, \
     OpsTypes, OpAdd, OpTransfer, \

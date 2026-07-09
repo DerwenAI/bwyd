@@ -10,19 +10,16 @@ from urllib.parse import urlparse
 import base64
 import io
 import logging
-import itertools
 import typing
 
 from PIL import Image
-from pydantic import BaseModel, NonNegativeInt
+from pydantic import BaseModel
 from upath import UPath
 import requests
 import requests_cache
 
-from .measure import Converter, Measure, PLURAL, Product
-
-from .ops import Note, Dependency, DependencyDict, \
-    OpsTypes, OpAdd
+from .measure import Converter, PLURAL, Product
+from .ops import Dependency, DependencyDict, OpsTypes
 
 
 ######################################################################
@@ -152,11 +149,11 @@ Serializable representation for JSON.
             "container": self.container.symbol,
             "title": self.text,
             "uses": [
-                op.get_model(converter, pluralize = pluralize)
+                op.get_model(converter, pluralize = pluralize)  # type: ignore
                 for op in self.inputs
             ],
             "ops": [
-                op.get_model(humanize = humanize, pluralize = pluralize)
+                op.get_model(humanize = humanize, pluralize = pluralize)  # type: ignore
                 for op in self.ops
             ],
         }

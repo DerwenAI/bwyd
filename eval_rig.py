@@ -29,7 +29,7 @@ if __name__ == "__main__":
         config_path = pathlib.Path("config.toml"),
     )
 
-    module: bwyd.Module = dsl.parse(
+    module: bwyd.Recipe = dsl.parse(
         examples_path / f"{slug}.bwyd",
         slug = slug,
         debug = False, # True

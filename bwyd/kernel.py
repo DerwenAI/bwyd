@@ -29,7 +29,7 @@ Jupyter wrapper kernel
     }
 
 
-    def do_execute (  # type: ignore  # pylint: disable=R0913,R0917
+    async def do_execute (  # type: ignore  # pylint: disable=R0913,R0917
         self,
         code,
         silent,

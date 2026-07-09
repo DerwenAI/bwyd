@@ -10,7 +10,7 @@ from collections import OrderedDict
 import enum
 import typing
 
-from icecream import ic
+from icecream import ic  # pylint: disable=W0611
 from pydantic import BaseModel, NonNegativeInt
 
 from .measure import Converter, \
@@ -63,7 +63,7 @@ Ingredient, Tool, Container, etc.
     def get_model (
         self,
         *,
-        pluralize: bool = True,
+        pluralize: bool = True,  # pylint: disable=W0613
         ) -> dict:
         """
 Serializable representation for JSON.
@@ -87,7 +87,7 @@ a local namespace.
     def get_model (
         self,
         *,
-        pluralize: bool = True,
+        pluralize: bool = True,  # pylint: disable=W0613
         ) -> list:
         """
 Serializable representation for JSON.
@@ -120,7 +120,7 @@ A data class representing a generic operation.
     def get_duration (
         self,
         *,
-        pluralize: bool = True,
+        pluralize: bool = True,  # pylint: disable=W0613
         ) -> Duration:
         """
 Stub: Total duration.
@@ -146,8 +146,8 @@ ingredient into a Container within an Activity.
         self,
         converter: Converter,
         *,
-        humanize: bool = True,
-        pluralize: bool = True,
+        humanize: bool = True,  # pylint: disable=W0613
+        pluralize: bool = True,  # pylint: disable=W0613
         ) -> dict:
         """
 Serializable representation for JSON.
@@ -162,7 +162,7 @@ Serializable representation for JSON.
         }
 
         if converter is not None:
-            conv: dict =  self.measure.convert(
+            conv: str =  self.measure.convert(
                 self.symbol,
                 self.entity.external,
                 converter,
@@ -193,10 +193,10 @@ Container into the Container used in a subsequent Activity, both
 
     def get_model (
         self,
-        converter: Converter,
+        converter: Converter,  # pylint: disable=W0613
         *,
-        humanize: bool = True,
-        pluralize: bool = True,
+        humanize: bool = True,  # pylint: disable=W0613
+        pluralize: bool = True,  # pylint: disable=W0613
         ) -> dict:
         """
 Serializable representation for JSON.
@@ -224,7 +224,7 @@ Activity on the food within a specific Container.
     product: Product | None = None
 
 
-    def get_duration (
+    def get_duration (  # type: ignore  # pylint: disable=W0221
         self,
         ) -> Duration:
         """
@@ -236,7 +236,7 @@ Duration of this operation.
     def get_model (
         self,
         *,
-        humanize: bool = True,
+        humanize: bool = True,  # pylint: disable=W0613
         pluralize: bool = True,
         ) -> dict:
         """
@@ -271,7 +271,7 @@ Container.
     product: Product | None = None
 
 
-    def get_duration (
+    def get_duration (  # type: ignore  # pylint: disable=W0221
         self,
         ) -> Duration:
         """
@@ -283,7 +283,7 @@ Duration of this operation.
     def get_model (
         self,
         *,
-        humanize: bool = True,
+        humanize: bool = True,  # pylint: disable=W0613
         pluralize: bool = True,
         ) -> dict:
         """
@@ -319,7 +319,7 @@ a specific Container as part of an Activity.
     verb: str = "generic"
 
 
-    def get_duration (
+    def get_duration (  # type: ignore  # pylint: disable=W0221
         self,
         ) -> Duration:
         """
@@ -340,7 +340,7 @@ used to *heat* in different modes.
     def get_model (
         self,
         *,
-        humanize: bool = True,
+        humanize: bool = True,  # pylint: disable=W0613
         pluralize: bool = True,
         ) -> dict:
         """
@@ -386,7 +386,7 @@ used to *bake* in different modes.
     def get_model (
         self,
         *,
-        humanize: bool = True,
+        humanize: bool = True,  # pylint: disable=W0613
         pluralize: bool = True,
         ) -> dict:
         """

@@ -103,18 +103,18 @@ Denormalize a meaure which is already in human-readable form.
         if self.units is None:
             if is_compound:
                 return self.human
-            else:
-                return f" ({self.human})"
+
+            return f" ({self.human})"
 
         units: str = self.units.value
 
-        if pluralize and self.amount > 1.0 and self.human != "1" and self.units != MeasureUnits.TEASPOON:
+        if pluralize and self.amount > 1.0 and self.human != "1" and self.units != MeasureUnits.TEASPOON:  # pylint: disable=C0301
             units = PLURAL.plural(units)
 
         if is_compound:
             return f"{self.human} {units}"
-        else:
-            return f" ({self.human} {units})"
+
+        return f" ({self.human} {units})"
 
 
 class Measure (BaseModel):  # pylint: disable=R0902
@@ -161,7 +161,7 @@ Denormalize this measure into human-readable form.
         return html
 
 
-    def humanize_convert (
+    def humanize_convert (  # pylint: disable=R0912
         self,
         symbol: str,
         external: bool,
@@ -577,6 +577,7 @@ class Storage (BaseModel):
 Represents the process of a Cook on a Container to store the yield of
 an Activity for a specified time period.
     """
+    loc: dict
     modifier: str
     duration: Duration
 

@@ -29,12 +29,12 @@ if __name__ == "__main__":
     corpus: bwyd.Corpus = dsl.build_corpus()
     dir_path: pathlib.Path = pathlib.Path("examples")
 
-    module_iter: typing.Iterator[ bwyd.Module ] = corpus.parse_modules(
+    module_iter: typing.Iterator[ bwyd.Recipe ] = corpus.parse_modules(
         dir_path,
         debug = True, # False
     )
 
-    modules: list[ bwyd.Module ] = []
+    modules: list[ bwyd.Recipe ] = []
 
     for module in module_iter:
         modules.append(module)
