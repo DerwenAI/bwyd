@@ -31,7 +31,6 @@ if __name__ == "__main__":
 
     module_iter: typing.Iterator[ bwyd.Module ] = corpus.parse_modules(
         dir_path,
-        #glob = "potato*.bwyd",
         debug = True, # False
     )
 

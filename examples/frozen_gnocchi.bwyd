@@ -1,131 +1,121 @@
-TITLE: "Frozen Gnocchi Dumplings"
+RECIPE: "Frozen Gnocchi Dumplings"
 TEXT: "Make some yummy gnocchi from root veggies."
-AUTHOR: "Paco Nathan https://derwen.ai/paco"
-LICENSE: "CC-BY-NC-SA-4.0"
-UPDATED: "2023-04-10"
-CITE: "https://www.prouditaliancook.com/2020/11/butternut-squash-gnocchi-with-sage-and-brown-butter.html"
-POST: "https://www.instagram.com/p/Csu0b4yLOyZ/"
-POST: "https://www.instagram.com/p/CqwO9KIPuCR/"
+  AUTHOR: "Paco Nathan https://derwen.ai/paco"
+  LICENSE: "CC-BY-NC-SA-4.0"
+  UPDATED: "2023-04-10"
+  CITE: "https://www.prouditaliancook.com/2020/11/butternut-squash-gnocchi-with-sage-and-brown-butter.html"
+  POST: "https://www.instagram.com/p/Csu0b4yLOyZ/"
+  POST: "https://www.instagram.com/p/CqwO9KIPuCR/"
 
 CLOSURE: "gnocchi dough"
-    TEXT: "best to work with cold ingredients and chilled utensils"
+TEXT: "best to work with cold ingredients and chilled utensils"
+  CONTAINER bowl: "chilled mixing bowl"
+  TOOL fork: "small fork or whisk"
+  TOOL spatula: "silicone spatula"
 
-    CONTAINER bowl: "chilled mixing bowl"
-    TOOL fork: "small fork or whisk"
-    TOOL spatula: "silicone spatula"
+  INGREDIENT puree: "reduced veggie purée"
+  INGREDIENT flour: "flour: rice, oat, etc."
+  INGREDIENT egg: "large chicken egg"
+  INGREDIENT ricotta: "whole milk ricotta"
+  INGREDIENT grated_parmesan: "grated parmesan"
+  INGREDIENT nutmeg: "freshly grated nutmeg"
 
-    INGREDIENT puree: "reduced veggie purée"
-    INGREDIENT flour: "flour: rice, oat, etc."
-    INGREDIENT egg: "large chicken egg"
-    INGREDIENT ricotta: "whole milk ricotta"
-    INGREDIENT grated_parmesan: "grated parmesan"
-    INGREDIENT nutmeg: "freshly grated nutmeg"
-
-    ACTIVITY bowl: "prep wet mix"
-
+  ACTIVITY bowl: "beat egg"
     ADD egg (1)
 
     ACTION fork: "gently"
-        UNTIL: "lightly beaten"
-	TIME (30 second)
+      UNTIL: "lightly beaten"
+        TIME (30 second)
 
+  ACTIVITY bowl: "prep wet mix"
     ADD ricotta (250 g)
     ADD grated_parmesan (50 g)
     ADD nutmeg (1 g)
 
     ACTION spatula
-        UNTIL: "well mixed"
-	TIME (30 second)
+      UNTIL: "well mixed"
+        TIME (30 second)
 
+  ACTIVITY bowl: "blend wet mix"
     ADD puree (250 g)
 
     ACTION spatula: "fold"
-        UNTIL: "lightly blended"
-	TIME (30 second)
+      UNTIL: "lightly blended"
+        TIME (30 second)
 
-    ACTIVITY bowl: "complete the dough"
-
+  ACTIVITY bowl: "complete the dough"
     ADD flour (340 g) : "only until the dough becomes no longer sticky"
 
     ACTION spatula: "mix"
-	UNTIL: "dough just becomes smooth"
-	TIME (90 second)
+      UNTIL: "dough just becomes smooth"
+        TIME (90 second)
+      YIELDS dough (900 g) INTERMEDIATE
 
-    RATIO: "dough" =
-    	   starch [ puree, flour ],
-	   egg
-
-YIELDS dough (900 g) INTERMEDIATE
+    RATIO "flour: egg" : 
+      "dough" =
+      starch [ puree, flour ],
+      egg
 ;
 
-
 CLOSURE: "cut dumplings"
-    TEXT: "divide dough into 4 pieces, rolling out one at a time"
+TEXT: "divide dough into 4 pieces, rolling out one at a time"
+  CONTAINER mat: "floured rolling surface"
+  TOOL hand: "clean hands"
+  TOOL spoon: "large spoon"
+  TOOL fork: "fork"
 
-    CONTAINER mat: "floured rolling surface"
-    TOOL hand: "clean hands"
-    TOOL spoon: "large spoon"
-    TOOL fork: "fork"
+  PREP dough: "dough"
+  INGREDIENT flour: "rice, semolina, etc."
 
-    USE dough: "dough"
-    INGREDIENT flour: "rice, semolina, etc."
-
-    ACTIVITY mat: "make ropes"
-
+  ACTIVITY mat: "prep to cut dough"
     ADD flour (10 g)
 
     ACTION spoon: "spread"
-        UNTIL: "evenly floured"
-	TIME (30 second)
+      UNTIL: "evenly floured"
+        TIME (30 second)
 
+  ACTIVITY mat: "make ropes, then pillows"
     ADD dough (225 g)
 
     ACTION hand: "roll carefully into a rope"
-        UNTIL: "2 cm diameter"
-	TIME (60 second)
-
-    ACTIVITY mat: "make pillows"
+      UNTIL: "2 cm diameter"
+        TIME (60 second)
 
     ACTION fork: "cut into 1.5 cm dumplings pieces, resembling little pillows"
-        UNTIL: "entire rope is cut"
-	TIME (30 second)
-
-YIELDS dumplings (80) INTERMEDIATE
+      UNTIL: "entire rope is cut"
+        TIME (30 second)
+      YIELDS dumplings (80) INTERMEDIATE
 ;
 
+CLOSURE: "frozen gnocchi"
+TEXT: "add layers of dumplings to fill depth of baking dish"
+  SUPER: dumplings, pasta
+  KEYWORD: starch, quick, Italian
 
-CLOSURE: "frozen gnocchi" AS dumplings, pasta
-    TEXT: "add layers of dumplings to fill depth of baking dish"
-    KEYWORDS: starch, quick, Italian
+  CONTAINER dish: "baking dish"
+  TOOL hand: "clean hands"
+  TOOL board: "gnocchi board or a fork"
 
-    CONTAINER dish: "baking dish"
-    TOOL hand: "clean hands"
-    TOOL board: "gnocchi board or a fork"
+  PREP dumplings: "raw cut dumplings"
+  INGREDIENT parchment: "parchment paper, cut to line the baking dish"
 
-    INGREDIENT parchment: "parchment paper, cut to line the baking dish"
-    USE dumplings: "raw cut dumplings"
-
-    ACTIVITY dish: "prep container"
-
+  ACTIVITY dish: "prep container"
     ADD parchment (1)
 
     ACTION hand: "line dish with parchment paper"
-        UNTIL: "each layer is fully lined"
-	TIME (30 second)
+      UNTIL: "each layer is fully lined"
+        TIME (30 second)
 
-    ACTIVITY dish: "pack gnocchi"
-
+  ACTIVITY dish: "pack gnocchi"
     ADD dumplings (80)
 
     ACTION board: "roll the cut dumplings onto parchment paper; arrange without touching other dumplings"
-        UNTIL: "layer is filled"
-	TIME (10 second)
-
-    NOTE: "depending on the size of the dish, you may need to add multiple layers of gnocchi dumplings"
+      UNTIL: "layer is filled"
+        TIME (10 second)
+      NOTE: "depending on the size of the dish, you may need to add multiple layers of gnocchi dumplings"
 
     CHILL dish: "freeze"
-        UNTIL: "dumplings are frozen solid"
+      UNTIL: "dumplings are frozen solid"
         TIME (2 hour)
-
-YIELDS frozen_gnocchi_dumplings (80)
+      YIELDS frozen_gnocchi_dumplings (80)
 ;
