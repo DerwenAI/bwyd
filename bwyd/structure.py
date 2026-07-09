@@ -10,19 +10,16 @@ from urllib.parse import urlparse
 import base64
 import io
 import logging
-import itertools
 import typing
 
 from PIL import Image
-from pydantic import BaseModel, NonNegativeInt
+from pydantic import BaseModel
 from upath import UPath
 import requests
 import requests_cache
 
-from .measure import Measure, Converter
-
-from .ops import Dependency, DependencyDict, \
-    OpsTypes, OpAdd
+from .measure import Converter, PLURAL, Product
+from .ops import Dependency, DependencyDict, OpsTypes
 
 
 ######################################################################
@@ -102,76 +99,66 @@ Accessor for a thumbnail URL.
 
 
 ######################################################################
-## yields classes
-
-class Product (BaseModel):  # pylint: disable=R0902
-    """
-A data class representing one Product object.
-    """
-    loc: dict
-    symbol: str
-    amount: Measure
-    intermediate: bool
-    ref_count: NonNegativeInt = 0
-
-
-######################################################################
 ## structural classes
+
+class Ratio (BaseModel):  # pylint: disable=R0902
+    """
+A data class representing one Ratio object.
+    """
+    name: str
+    formula: str
+    parts: typing.Dict[ str, typing.List[ str ] ] = {}
+
+
+    def get_model (
+        self,
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        dat: dict = {
+            "name": self.name,
+            "formula": self.formula,
+            "parts": self.parts,
+        }
+
+        return dat
+
 
 class Activity (BaseModel):  # pylint: disable=R0902
     """
 A data class representing one Activity object.
     """
+    container: Dependency
     text: str
+    inputs: typing.List[ OpsTypes ] = []
     ops: typing.List[ OpsTypes ] = []
 
 
     def get_model (
         self,
         converter: Converter,
+        *,
+        humanize: bool = True,
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
         """
         dat: dict = {
+            "container": self.container.symbol,
             "title": self.text,
-            "steps": [
-                {
-                    "ingredients": [
-                        op.get_model(converter)
-                        for op in self.ops
-                        if isinstance(op, OpAdd)
-                    ]
-                }
-            ]
+            "uses": [
+                op.get_model(converter, pluralize = pluralize)  # type: ignore
+                for op in self.inputs
+            ],
+            "ops": [
+                op.get_model(humanize = humanize, pluralize = pluralize)  # type: ignore
+                for op in self.ops
+            ],
         }
-
-        for op in self.ops:
-            if not isinstance(op, OpAdd):
-                dat["steps"].append(op.get_model())
 
         return dat
-
-
-class Focus (BaseModel):  # pylint: disable=R0902
-    """
-A data class representing a parsed Focus object.
-    """
-    container: Dependency
-    activities: typing.List[ Activity ] = []
-
-
-    def get_model (
-        self,
-        converter: Converter,
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "container": self.container.symbol,
-            "activities": [ act.get_model(converter) for act in self.activities ],
-        }
 
 
 class Closure (BaseModel, arbitrary_types_allowed = True):  # pylint: disable=R0902
@@ -186,20 +173,9 @@ A data class representing one parsed Closure object.
     containers: DependencyDict = DependencyDict()
     tools: DependencyDict = DependencyDict()
     ingredients: DependencyDict = DependencyDict()
-    foci: typing.List[ Focus ] = []
+    activities: typing.List[ Activity ] = []
     products: typing.List[ Product ] = []
-
-
-    def get_dependencies (
-        self
-        ) -> list:
-        """
-Serialized representation in JSON for the containers and tools.
-        """
-        return [
-            dep.get_model()
-            for dep in itertools.chain(self.containers.values(), self.tools.values())
-        ]
+    ratio: Ratio | None = None
 
 
     def total_yields (
@@ -220,7 +196,12 @@ Accessor for the total, non-intermediate yields of one Closure object.
                     None,
                 )
 
-                html: str = f"{amount} {product.symbol}".replace("_", " ").strip()
+                portions: str = "portion"
+
+                if amount != "1":
+                    portions = PLURAL.plural(portions)
+
+                html: str = f"{amount} {portions} {product.symbol}".replace("_", " ").strip()
                 yields_list.append(html)
 
         return yields_list

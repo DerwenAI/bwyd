@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python  # pylint: disable=C0302
 # -*- coding: utf-8 -*-
 
 """
@@ -9,7 +9,6 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 from collections import OrderedDict
 from urllib.parse import ParseResult, urlparse
 import datetime
-import itertools
 import json
 import logging
 import pathlib
@@ -28,23 +27,23 @@ import textx  # type: ignore  # pylint: disable=E0401
 from .error import BwydParserError
 
 from .measure import Converter, \
-    Measure, DurationUnits, Duration, Temperature
+    Measure, DurationUnits, Duration, Temperature, \
+    Product, Storage
 
-from .ops import Dependency, \
-    OpsTypes, OpNote, OpTransfer, OpAdd, OpAction, OpWait, OpStore, OpHeat, OpChill, OpBake
+from .ops import Note, Dependency, \
+    OpsTypes, OpAdd, OpTransfer, OpAction, OpWait, OpHeat, OpChill, OpBake
 
 from .resources import BWYD_SVG, JINJA_PAGE_TEMPLATE, URL_PATTERN
 
-from .structure import Post, Product, \
-    Activity, Focus, Closure
+from .structure import Activity, Closure, Post, Ratio
 
 
 ######################################################################
-## module definitions
+## recipe definitions
 
-class Module:  # pylint: disable=R0902
+class Recipe:  # pylint: disable=R0902
     """
-One parsed module.
+One parsed Bwyd file, AKA "module" or "recipe"
     """
     def __init__ (
         self,
@@ -167,18 +166,26 @@ Accessor for composing Schema.org metadata in JSON-LD
 Return a list of JSON-friendly dictionary representations,
 one for each parsed Closure.
         """
-        closure_list: typing.List[ dict ] = [
-            {
+        closure_list: typing.List[ dict ] = []
+
+        for name, closure in self.closures.items():
+            dat: dict = {
                 "title": name,
                 "yields": closure.total_yields(intermediaries = True),
                 "text": closure.text,
                 "supers": closure.supers,
                 "keywords": closure.keywords,
-                "requires": closure.get_dependencies(),
-                "foci": [ focus.get_model(self.converter) for focus in closure.foci ],
+                "containers": [ dep.get_model() for dep in closure.containers.values() ],
+                "tools": [ dep.get_model() for dep in closure.tools.values() ],
+                "prep": [ dep.get_model() for dep in closure.ingredients.values() if dep.external ],
+                "ingredients": [ dep.get_model() for dep in closure.ingredients.values() if not dep.external ],  # pylint: disable=C0301
+                "activities": [ activity.get_model(self.converter, pluralize = False) for activity in closure.activities ],  # pylint: disable=C0301
             }
-            for name, closure in self.closures.items()
-        ]
+
+            if closure.ratio is not None:
+                dat["ratio"] = [ closure.ratio.get_model() ]
+
+            closure_list.append(dat)
 
         spdx_license: typing.Optional[ dict ] = None
         updated: typing.Optional[ str ] = None
@@ -205,17 +212,7 @@ one for each parsed Closure.
                 "author": self.author,
                 "updated": updated,
             },
-            "ingredients": [
-                {
-                    "amount": measure.humanize_convert(
-                        entity.symbol,
-                        entity.external,
-                        self.converter,
-                    ),
-                    "text": entity.text,
-                }
-                for entity, measure in self.iter_ingredients()
-            ],
+            "ingredients": list(self.tally_ingredients(self.converter)),
             "sources": self.cites,
             "gallery": [ post.url for post in self.posts],
             "image": self.get_image(),
@@ -287,6 +284,8 @@ Validate the forward references for one Bwyd module.
             for product in closure.products
         }
 
+        ic(local_names)
+
         for closure in self.closures.values():
             # check for zero reference counts
             for name, entity in closure.containers.items():
@@ -327,6 +326,13 @@ Validate the forward references for one Bwyd module.
 Interpret and resolve each dependency: container, tool, ingredient, use.
         """
         depend_class_name: str = depend_parse.__class__.__name__
+        note: Note | None = None
+
+        if depend_parse.note is not None:
+            note = Note(
+                loc = textx.get_location(depend_parse),
+                text = depend_parse.note.text,
+            )
 
         if debug:
             #ic(dir(depend_parse))
@@ -343,6 +349,7 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,
                 text = depend_parse.text,
+                note = note,
             )
 
         elif depend_class_name == "Tool":
@@ -351,27 +358,121 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,
                 text = depend_parse.text,
+                note = note,
             )
 
         elif depend_class_name == "Ingredient":
             # forward reference, to be resolved during this parsing pass
-            closure.ingredients[depend_parse.symbol] = Dependency(
+            dep = Dependency(
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,
                 text = depend_parse.text,
+                note = note,
             )
 
-        elif depend_class_name == "Use":
+            closure.ingredients[depend_parse.symbol] = dep
+
+        elif depend_class_name == "Prep":
             # external forward reference, to be resolved on a subsequent pass
-            closure.ingredients[depend_parse.symbol] = Dependency(
+            dep = Dependency(
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,
                 text = depend_parse.text,
                 external = True,
+                note = note,
             )
 
+            closure.ingredients[depend_parse.symbol] = dep
 
-    def _interpret_op (  # pylint: disable=R0911,R0912,R0915
+
+    def _interpret_activity (
+        self,
+        closure: Closure,
+        activity_parse: typing.Any,
+        *,
+        debug: bool = False,
+        ) -> None:
+        """
+Interpret the activities within a closure.
+        """
+        if debug:
+            ic(
+                activity_parse,
+                activity_parse.symbol,
+            )
+
+        # resolve local reference
+        if activity_parse.symbol in closure.containers:
+            entity: typing.Any = closure.containers[activity_parse.symbol]
+            entity.ref_count += 1
+        else:
+            loc: dict = textx.get_location(activity_parse)
+
+            raise BwydParserError(
+                f"CONTAINER `{activity_parse.symbol}` used but not defined {loc}",
+                symbol = activity_parse.symbol,
+            )
+
+        act: Activity = Activity(
+ 	    container = entity,
+            text = activity_parse.text,
+        )
+
+        if debug:
+            ic(act)
+
+        closure.activities.append(act)
+
+        for op_parse in activity_parse.inputs:
+            op_obj: OpsTypes = self._interpret_input(  # type: ignore
+                closure,
+                op_parse,
+                debug = debug,
+            )
+
+            act.inputs.append(op_obj)
+
+        for op_parse in activity_parse.ops:
+            op_obj: OpsTypes = self._interpret_op(  # type: ignore
+                closure,
+                op_parse,
+                debug = debug,
+            )
+
+            act.ops.append(op_obj)
+
+
+    def _interpret_yields (
+        self,
+        closure: Closure,
+        op: OpsTypes,
+        op_parse: typing.Any,
+        ) -> None:
+        """
+Interpret the parse of YIELDS and STORE.
+        """
+        if op_parse.yields is not None:
+            product: Product = Product(
+                loc = textx.get_location(op_parse.yields),
+                symbol = op_parse.yields.symbol,
+                amount = Measure.build(op_parse.yields.measure),
+                intermediate = (op_parse.yields.intermediate == "INTERMEDIATE"),
+            )
+
+            if op_parse.yields.store is not None:
+                product.storage = Storage(
+                    loc = textx.get_location(op_parse),
+                    modifier = op_parse.yields.store.modifier,
+                    duration = Duration.build(op_parse.yields.store.duration),
+                )
+
+            op.product = product  # type: ignore
+            ic(op, product)
+
+            closure.products.append(product)
+
+
+    def _interpret_input (  # pylint: disable=R0911,R0912,R0915
         self,
         closure: Closure,
         op_parse: typing.Any,
@@ -382,20 +483,12 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
 Interpret the steps within an activity.
         """
         op_class_name: str = op_parse.__class__.__name__
+        note: Note | None = None
 
-        if debug:
-            ic(op_parse)
-
-        if op_class_name == "Note":
-            if debug:
-                ic(
-                    op_class_name,
-                    op_parse.text,
-                )
-
-            return OpNote(
+        if op_parse.note is not None:
+            note = Note(
                 loc = textx.get_location(op_parse),
-                text = op_parse.text,
+                text = op_parse.note.text,
             )
 
         if op_class_name == "Transfer":
@@ -408,14 +501,14 @@ Interpret the steps within an activity.
             # resolve local reference
             entity: typing.Optional[ typing.Any ] = None
 
-            if op_parse.symbol in closure.ingredients:
-                entity = closure.ingredients[op_parse.symbol]
+            if op_parse.symbol in closure.containers:
+                entity = closure.containers[op_parse.symbol]
                 entity.ref_count += 1
             else:
                 loc: dict = textx.get_location(op_parse)
 
                 raise BwydParserError(
-                    f"INGREDIENT `{op_parse.symbol}` used but not defined {loc}",
+                    f"CONTAINER `{op_parse.symbol}` used but not defined {loc}",
                     symbol = op_parse.symbol,
                 )
 
@@ -423,6 +516,7 @@ Interpret the steps within an activity.
                 loc = textx.get_location(op_parse),
                 symbol = op_parse.symbol,
                 entity = entity,
+                note = note,
             )
 
         if op_class_name == "Add":
@@ -457,6 +551,30 @@ Interpret the steps within an activity.
                 measure = measure,
                 text = op_parse.text,
                 entity = entity,
+                note = note,
+            )
+
+        ## OTHERWISE, parse fails ...
+        return None
+
+
+    def _interpret_op (  # pylint: disable=R0911,R0912,R0915
+        self,
+        closure: Closure,
+        op_parse: typing.Any,
+        *,
+        debug: bool = False,
+        ) -> typing.Optional[ OpsTypes ]:
+        """
+Interpret the steps within an activity.
+        """
+        op_class_name: str = op_parse.__class__.__name__
+        note: Note | None = None
+
+        if op_parse.note is not None:
+            note = Note(
+                loc = textx.get_location(op_parse),
+                text = op_parse.note.text,
             )
 
         if op_class_name == "Action":
@@ -489,13 +607,17 @@ Interpret the steps within an activity.
                     entity,
                 )
 
-            return OpAction(
+            op = OpAction(
                 loc = textx.get_location(op_parse),
                 tool = entity,
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,
+                note = note,
             )
+
+            self._interpret_yields(closure, op, op_parse)
+            return op
 
         if op_class_name == "Wait":
             duration = Duration.build(op_parse.duration)
@@ -508,12 +630,16 @@ Interpret the steps within an activity.
                     duration,
                 )
 
-            return OpWait(
+            op = OpWait(  # type: ignore
                 loc = textx.get_location(op_parse),
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,
+                note = note,
             )
+
+            self._interpret_yields(closure, op, op_parse)
+            return op
 
         if op_class_name == "Bake":
             # resolve local reference
@@ -541,7 +667,7 @@ Interpret the steps within an activity.
                     temperature,
                 )
 
-            return OpBake(
+            op = OpBake(  # type: ignore
                 loc = textx.get_location(op_parse),
                 mode = op_class_name,
                 container = entity,
@@ -549,7 +675,11 @@ Interpret the steps within an activity.
                 until = op_parse.until,
                 duration = duration,
                 temperature = temperature,
+                note = note,
             )
+
+            self._interpret_yields(closure, op, op_parse)
+            return op
 
         if op_class_name == "Heat":
             # resolve local reference
@@ -575,13 +705,17 @@ Interpret the steps within an activity.
                     duration,
                 )
 
-            return OpHeat(
+            op = OpHeat(  # type: ignore
                 loc = textx.get_location(op_parse),
                 container = entity,
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,
+                note = note,
             )
+
+            self._interpret_yields(closure, op, op_parse)
+            return op
 
         if op_class_name == "Chill":
             # resolve local reference
@@ -607,103 +741,20 @@ Interpret the steps within an activity.
                     duration,
                 )
 
-            return OpChill(
+            op = OpChill(  # type: ignore
                 loc = textx.get_location(op_parse),
                 container = entity,
                 modifier = op_parse.modifier,
                 until = op_parse.until,
                 duration = duration,
+                note = note,
             )
 
-        if op_class_name == "Store":
-            # resolve local reference
-            if op_parse.symbol in closure.containers:
-                entity = closure.containers[op_parse.symbol]
-                entity.ref_count += 1
-            else:
-                loc = textx.get_location(op_parse)
-
-                raise BwydParserError(
-                    f"STORE CONTAINER `{op_parse.symbol}` used but not defined {loc}",
-                    symbol = op_parse.symbol,
-                )
-
-            duration = Duration.build(op_parse.duration)
-
-            if debug:
-                ic(
-                    op_class_name,
-                    op_parse.symbol,
-                    op_parse.modifier,
-                    duration,
-                )
-
-            return OpStore(
-                loc = textx.get_location(op_parse),
-                container = entity,
-                modifier = op_parse.modifier,
-                duration = duration,
-            )
+            self._interpret_yields(closure, op, op_parse)
+            return op
 
         ## OTHERWISE, parse fails ...
         return None
-
-
-    def _interpret_focus (
-        self,
-        closure: Closure,
-        focus_parse: typing.Any,
-        *,
-        debug: bool = False,
-        ) -> None:
-        """
-Interpret the activities within a focus.
-        """
-        if debug:
-            ic(
-                focus_parse,
-                focus_parse.symbol,
-            )
-
-        # resolve local reference
-        if focus_parse.symbol in closure.containers:
-            entity: typing.Any = closure.containers[focus_parse.symbol]
-            entity.ref_count += 1
-        else:
-            loc: dict = textx.get_location(focus_parse)
-
-            raise BwydParserError(
-                f"CONTAINER `{focus_parse.symbol}` used but not defined {loc}",
-                symbol = focus_parse.symbol,
-            )
-
-        focus = Focus(
-            container = entity,
-        )
-
-        closure.foci.append(focus)
-
-        for activity in focus_parse.activities:
-            if debug:
-                ic(
-                    activity,
-                    activity.text,
-                )
-
-            act: Activity = Activity(
-                text = activity.text,
-            )
-
-            focus.activities.append(act)
-
-            for op_parse in activity.ops:
-                op_obj: OpsTypes = self._interpret_op(  # type: ignore
-                    closure,
-                    op_parse,
-                    debug = debug,
-                )
-
-                act.ops.append(op_obj)
 
 
     def _interpret_ratio (
@@ -719,8 +770,14 @@ Interpret the components within a ratio.
         if debug:
             ic(
                 ratio_parse.name,
+                ratio_parse.formula,
                 [ (part.symbol, part.components) for part in ratio_parse.parts ],
             )
+
+        closure.ratio = Ratio(
+            name = ratio_parse.name,
+            formula = ratio_parse.formula,
+        )
 
         for part in ratio_parse.parts:
             if len(part.components) < 1:
@@ -728,6 +785,12 @@ Interpret the components within a ratio.
                 if part.symbol in closure.ingredients:
                     entity: typing.Any = closure.ingredients[part.symbol]
                     entity.ref_count += 1
+
+                    if part.symbol not in closure.ratio.parts:
+                        closure.ratio.parts[part.symbol] = []
+
+                    closure.ratio.parts[part.symbol].extend(part.components)
+
                 else:
                     loc: dict = textx.get_location(part)
 
@@ -736,7 +799,8 @@ Interpret the components within a ratio.
                         symbol = part.symbol,
                     )
 
-            ## OHFUCK: store representation of this ratio
+        if debug:
+            ic(closure.ratio)
 
 
     def _interpret_closure (  # pylint: disable=R0912,R0915
@@ -761,38 +825,17 @@ Helper method to interpret one Closure.
         )
 
         # handle taxonomy and keywords
-        if closure_parse.supers is not None:
-            for symbol in closure_parse.supers.ids:
-                closure.supers.append(symbol)
+        if closure_parse.supers is not None and len(closure_parse.supers) > 0:
+            closure.supers.extend(closure_parse.supers)
 
             if debug:
                 ic(closure.supers)
 
-        if closure_parse.keywords is not None:
-            for symbol in closure_parse.keywords.ids:
-                closure.keywords.append(symbol)
+        if closure_parse.keywords is not None and len(closure_parse.keywords) > 0:
+            closure.keywords.extend(closure_parse.keywords)
 
             if debug:
                 ic(closure.keywords)
-
-        # interpret each product
-        for prod_parse in closure_parse.prods:
-            if debug:
-                ic(
-                    prod_parse.symbol,
-                    prod_parse.measure.amount,
-                    prod_parse.measure.units,
-                    prod_parse.intermediate,
-                )
-
-            closure.products.append(
-                Product(
-                    loc = textx.get_location(prod_parse),
-                    symbol = prod_parse.symbol,
-                    amount = Measure.build(prod_parse.measure),
-                    intermediate = (prod_parse.intermediate == "INTERMEDIATE"),
-                )
-            )
 
         # resolve each dependency
         for depend_parse in closure_parse.depend:
@@ -802,11 +845,11 @@ Helper method to interpret one Closure.
                 debug = debug,
             )
 
-        # interpret each focus
-        for focus_parse in closure_parse.foci:
-            self._interpret_focus(
+        # interpret each activity
+        for activity_parse in closure_parse.activities:
+            self._interpret_activity(
                 closure,
-                focus_parse,
+                activity_parse,
                 debug = debug,
             )
 
@@ -893,8 +936,7 @@ Accessor for the total duration of one Bwyd module.
         total_sec: int = int(sum([  # type: ignore  # pylint: disable=R1728
             op.get_duration().normalize()
             for closure in self.closures.values()
-            for focus in closure.foci
-            for activity in focus.activities
+            for activity in closure.activities
             for op in activity.ops
         ]))
 
@@ -917,6 +959,31 @@ Accessor for the total, non-intermediate yields of one Bwyd module.
         ]
 
 
+    def tally_ingredients (
+        self,
+        converter: Converter,
+        ) -> typing.Iterator[dict[ str, str ]]:
+        """
+Iterator for the serialization of aggregate ingredients in one Bwyd module.
+        """
+        for entity, measure in self.iter_ingredients():
+            dat: dict = {
+                "amount": measure.humanize(),
+                "text": entity.text,
+            }
+
+            conv: str = measure.convert(
+                entity.symbol,
+                entity.external,
+                converter,
+            )
+
+            if len(conv) > 0:
+                dat["convert"] = conv
+
+            yield dat
+
+
     def iter_ingredients (
         self,
         ) -> typing.Iterator[typing.Tuple[ Dependency, Measure ]]:
@@ -926,26 +993,25 @@ Iterator for the aggregate ingredients in one Bwyd module.
         ing: OrderedDict = OrderedDict()
 
         for closure in self.closures.values():  # pylint: disable=R1702
-            for focus in closure.foci:
-                for activity in focus.activities:
-                    for op in activity.ops:
-                        if isinstance(op, OpAdd) and not op.entity.external:
-                            measure: Measure = op.measure
-                            name: str = op.entity.symbol
+            for activity in closure.activities:
+                for op in activity.inputs:
+                    if isinstance(op, OpAdd) and not op.entity.external:
+                        measure: Measure = op.measure
+                        name: str = op.entity.symbol
 
-                            if name not in ing:
-                                ing[name] = [
-                                    op.entity,
-                                    Measure(
-                                        amount = measure.amount,
-                                        units = measure.units,
-                                    ),
-                                ]
-                            elif measure.units == ing[name][1].units:
-                                ing[name][1].amount += measure.amount
-                            else:
-                                error_msg: str = f"wrong units for ingredient list: {measure.units}"
-                                logging.error(error_msg)
+                        if name not in ing:
+                            ing[name] = [
+                                op.entity,
+                                Measure(
+                                    amount = measure.amount,
+                                    units = measure.units,
+                                ),
+                            ]
+                        elif measure.units == ing[name][1].units:
+                            ing[name][1].amount += measure.amount
+                        else:
+                            error_msg: str = f"wrong units for ingredient list: {measure.units}"
+                            logging.error(error_msg)
 
         for entity, measure in ing.values():
             yield entity, measure
@@ -957,14 +1023,14 @@ Iterator for the aggregate ingredients in one Bwyd module.
         """
 Accessor for the collected keywords in one Bwyd module.
         """
-        return sorted(
-            list(
-                itertools.chain.from_iterable([
-                    [ *closure.supers, *closure.keywords ]
-                    for closure in self.closures.values()
-                ])
-            )
-        )
+        sup_list: list[ str ] = []
+        key_list: list[ str ] = []
+
+        for closure in self.closures.values():
+            sup_list.extend(closure.supers)
+            key_list.extend(closure.keywords)
+
+        return sorted(sup_list) + sorted(key_list)
 
 
 ######################################################################

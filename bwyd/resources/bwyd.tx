@@ -1,11 +1,11 @@
-Module:
-  "TITLE:" title=STRING
+Recipe:
+  "RECIPE:" title=STRING
   "TEXT:" text=STRING
-  meta+=Module_Metadata
+  meta+=Recipe_Metadata
   closures+=Closure
 ;
 
-Module_Metadata:
+Recipe_Metadata:
   Author | Updated | License | Post | Cite
 ;
 
@@ -30,94 +30,98 @@ Post:
 ;
 
 Closure:
-  "CLOSURE:" name=STRING ("AS" supers=IDList)?
+  "CLOSURE:" name=STRING
     ("TEXT:" text=STRING)?
-    ("KEYWORDS:" keywords=IDList)?
+    ("SUPER:" supers+=ID[','])?
+    ("KEYWORD:" keywords+=ID[','])?
     depend+=Dependency
-    foci+=Focus
+    activities+=Activity
     ratio=Ratio?
-  prods+=Yield
-;
-
-IDList: ids+=ID[","];
-
-Yield:
-"YIELDS" symbol=ID measure=Measure (intermediate="INTERMEDIATE")?
+  ";"
 ;
 
 Dependency:
-  Container | Tool | Ingredient | Use
+  Container | Tool | Ingredient | Prep
 ;
 
 Container:
   "CONTAINER" symbol=ID ":" text=STRING
+  (note=Note)?
 ;
 
 Tool:
   "TOOL" symbol=ID ":" text=STRING
+  (note=Note)?
+;
+
+Prep:
+  "PREP" symbol=ID ":" text=STRING
+  (note=Note)?
 ;
 
 Ingredient:
   "INGREDIENT" symbol=ID ":" text=STRING
-;
-
-Use:
-  "USE" symbol=ID ":" text=STRING
-;
-
-Focus:
-  "FOCUS" symbol=ID
-  activities+=Activity
+  (note=Note)?
 ;
 
 Activity:
-  "ACTIVITY:" text=STRING
+  "ACTIVITY" symbol=ID ":" text=STRING
+   inputs+=Input
    ops+=Op
 ;
 
-Op:
-  Note | Transfer | Add | Action | Wait | Store | Heat | Chill | Bake
-;
-
-Note:
-  "NOTE:" text=STRING
-;
-
-Transfer:
-  "TRANSFER" symbol=ID
+Input:
+  Add | Transfer
 ;
 
 Add:
   "ADD" symbol=ID measure=Measure (":" text=STRING)?
+  (note=Note)?
+;
+
+Transfer:
+  "TRANSFER" symbol=ID
+  (note=Note)?
+;
+
+Op:
+  Transform | Heat | Chill | Bake
+;
+
+Transform:
+  Action | Wait
 ;
 
 Action:
   "ACTION" symbol=ID (":" modifier=STRING)?
     "UNTIL:" until=STRING
     "TIME" duration=Duration
+    (yields=Yields)?
+    (note=Note)?
 ;
 
 Wait:
   "WAIT" (":" modifier=STRING)?
     "UNTIL:" until=STRING
     "TIME" duration=Duration
-;
-
-Store:
-  "STORE" symbol=ID (":" modifier=STRING)?
-     "UPTO" duration=Duration
+    (yields=Yields)?
+    (note=Note)?
 ;
 
 Heat:
   "HEAT" symbol=ID (":" modifier=STRING)?
     "UNTIL:" until=STRING
     "TIME" duration=Duration
+    (yields=Yields)?
+    (note=Note)?
 ;
 
 Chill:
   "CHILL" symbol=ID (":" modifier=STRING)?
     "UNTIL:" until=STRING
     "TIME" duration=Duration
+    (yields=Yields)?
+    (note=Note)?
 ;
 
 Bake:
@@ -125,10 +129,12 @@ Bake:
     "AT:" temperature=Temperature
     "UNTIL:" until=STRING
     "TIME" duration=Duration
+    (yields=Yields)?
+    (note=Note)?
 ;
 
 OvenMode:
-  "BAKE" | "BROIL" | "ROAST" | "TOAST"
+  "BAKE" | "ROAST" | "BROIL" | "TOAST" | "PRESSURE"
 ;
 
 Measure:
@@ -155,12 +161,27 @@ TemperatureUnits:
   "C"
 ;
 
+Yields:
+  "YIELDS" symbol=ID measure=Measure (intermediate="INTERMEDIATE")?
+  (store=Store)?
+;
+
+Store:
+  "STORE" (":" modifier=STRING)?
+     "UPTO" duration=Duration
+;
+
 Ratio:
-  "RATIO:" name=STRING "=" (parts+=RatioPart[','])
+  "RATIO" formula=STRING ":"
+    name=STRING "=" (parts+=RatioPart[','])
 ;
 
 RatioPart:
-    symbol=ID ('[' components+=ID[','] ']')?
+    symbol=ID ('[' (components+=ID[','])? ']')?
+;
+
+Note:
+  "NOTE:" text=STRING
 ;
 
 Comment:

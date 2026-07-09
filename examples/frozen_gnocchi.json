@@ -9,13 +9,13 @@
   },
   "details": {
     "serves": [
-      "80 frozen gnocchi dumplings"
+      "80 portions frozen gnocchi dumplings"
     ],
     "duration": "2 hours, 5 minutes, 40 seconds",
     "keywords": [
-      "Italian",
       "dumplings",
       "pasta",
+      "Italian",
       "quick",
       "starch"
     ],
@@ -28,24 +28,29 @@
       "text": "large chicken egg"
     },
     {
-      "amount": "250 g (1/2 pound)",
-      "text": "whole milk ricotta"
+      "amount": "250 g",
+      "text": "whole milk ricotta",
+      "convert": "1/2 pound"
     },
     {
-      "amount": "50 g (1/2 cup)",
-      "text": "grated parmesan"
+      "amount": "50 g",
+      "text": "grated parmesan",
+      "convert": "1/2 cup"
     },
     {
-      "amount": "1 g (1/4 tsp)",
-      "text": "freshly grated nutmeg"
+      "amount": "1 g",
+      "text": "freshly grated nutmeg",
+      "convert": "1/4 tsp"
     },
     {
-      "amount": "250 g (1/2 pound)",
-      "text": "reduced veggie pur\u00e9e"
+      "amount": "250 g",
+      "text": "reduced veggie pur\u00e9e",
+      "convert": "1/2 pound"
     },
     {
-      "amount": "350 g (2 cups)",
-      "text": "flour: rice, oat, etc."
+      "amount": "350 g",
+      "text": "flour: rice, oat, etc.",
+      "convert": "2 cups"
     },
     {
       "amount": "1",
@@ -64,16 +69,18 @@
     {
       "title": "gnocchi dough",
       "yields": [
-        "900 g dough"
+        "900 g portions dough"
       ],
       "text": "best to work with cold ingredients and chilled utensils",
       "supers": [],
       "keywords": [],
-      "requires": [
+      "containers": [
         {
           "name": "bowl",
           "text": "chilled mixing bowl"
-        },
+        }
+      ],
+      "tools": [
         {
           "name": "fork",
           "text": "small fork or whisk"
@@ -83,107 +90,166 @@
           "text": "silicone spatula"
         }
       ],
-      "foci": [
+      "prep": [],
+      "ingredients": [
+        {
+          "name": "puree",
+          "text": "reduced veggie pur\u00e9e"
+        },
+        {
+          "name": "flour",
+          "text": "flour: rice, oat, etc."
+        },
+        {
+          "name": "egg",
+          "text": "large chicken egg"
+        },
+        {
+          "name": "ricotta",
+          "text": "whole milk ricotta"
+        },
+        {
+          "name": "grated_parmesan",
+          "text": "grated parmesan"
+        },
+        {
+          "name": "nutmeg",
+          "text": "freshly grated nutmeg"
+        }
+      ],
+      "activities": [
         {
           "container": "bowl",
-          "activities": [
+          "title": "beat egg",
+          "uses": [
             {
-              "title": "prep wet mix",
-              "steps": [
-                {
-                  "ingredients": [
-                    {
-                      "name": "egg",
-                      "amount": "1",
-                      "text": ""
-                    },
-                    {
-                      "name": "ricotta",
-                      "amount": "250 g (1/2 pound)",
-                      "text": ""
-                    },
-                    {
-                      "name": "grated_parmesan",
-                      "amount": "50 g (1/2 cup)",
-                      "text": ""
-                    },
-                    {
-                      "name": "nutmeg",
-                      "amount": "1 g (1/4 tsp)",
-                      "text": ""
-                    },
-                    {
-                      "name": "puree",
-                      "amount": "250 g (1/2 pound)",
-                      "text": ""
-                    }
-                  ]
-                },
-                {
-                  "action": {
-                    "tool": "fork",
-                    "verb": "gently",
-                    "text": "lightly beaten",
-                    "time": "30 seconds"
-                  }
-                },
-                {
-                  "action": {
-                    "tool": "spatula",
-                    "verb": "",
-                    "text": "well mixed",
-                    "time": "30 seconds"
-                  }
-                },
-                {
-                  "action": {
-                    "tool": "spatula",
-                    "verb": "fold",
-                    "text": "lightly blended",
-                    "time": "30 seconds"
-                  }
-                }
-              ]
-            },
+              "kind": "add",
+              "subject": "egg",
+              "amount": "1",
+              "text": ""
+            }
+          ],
+          "ops": [
             {
-              "title": "complete the dough",
-              "steps": [
-                {
-                  "ingredients": [
-                    {
-                      "name": "flour",
-                      "amount": "340 g (2 cups)",
-                      "text": "only until the dough becomes no longer sticky"
-                    }
-                  ]
-                },
-                {
-                  "action": {
-                    "tool": "spatula",
-                    "verb": "mix",
-                    "text": "dough just becomes smooth",
-                    "time": "1 minute, 30 seconds"
-                  }
-                }
-              ]
+              "kind": "action",
+              "subject": "fork",
+              "text": "gently",
+              "until": "lightly beaten",
+              "time": "30 second"
             }
           ]
+        },
+        {
+          "container": "bowl",
+          "title": "prep wet mix",
+          "uses": [
+            {
+              "kind": "add",
+              "subject": "ricotta",
+              "amount": "250 g",
+              "text": "",
+              "convert": "1/2 pound"
+            },
+            {
+              "kind": "add",
+              "subject": "grated_parmesan",
+              "amount": "50 g",
+              "text": "",
+              "convert": "1/2 cup"
+            },
+            {
+              "kind": "add",
+              "subject": "nutmeg",
+              "amount": "1 g",
+              "text": "",
+              "convert": "1/4 tsp"
+            }
+          ],
+          "ops": [
+            {
+              "kind": "action",
+              "subject": "spatula",
+              "text": "",
+              "until": "well mixed",
+              "time": "30 second"
+            }
+          ]
+        },
+        {
+          "container": "bowl",
+          "title": "blend wet mix",
+          "uses": [
+            {
+              "kind": "add",
+              "subject": "puree",
+              "amount": "250 g",
+              "text": "",
+              "convert": "1/2 pound"
+            }
+          ],
+          "ops": [
+            {
+              "kind": "action",
+              "subject": "spatula",
+              "text": "fold",
+              "until": "lightly blended",
+              "time": "30 second"
+            }
+          ]
+        },
+        {
+          "container": "bowl",
+          "title": "complete the dough",
+          "uses": [
+            {
+              "kind": "add",
+              "subject": "flour",
+              "amount": "340 g",
+              "text": "only until the dough becomes no longer sticky",
+              "convert": "2 cups"
+            }
+          ],
+          "ops": [
+            {
+              "kind": "action",
+              "subject": "spatula",
+              "text": "mix",
+              "until": "dough just becomes smooth",
+              "time": "1 minute, 30 second",
+              "yields": {
+                "name": "dough",
+                "amount": "900 g",
+                "intermediate": true
+              }
+            }
+          ]
+        }
+      ],
+      "ratio": [
+        {
+          "name": "dough",
+          "formula": "flour: egg",
+          "parts": {
+            "egg": []
+          }
         }
       ]
     },
     {
       "title": "cut dumplings",
       "yields": [
-        "80 dumplings"
+        "80 portions dumplings"
       ],
       "text": "divide dough into 4 pieces, rolling out one at a time",
       "supers": [],
       "keywords": [],
-      "requires": [
+      "containers": [
         {
           "name": "mat",
           "text": "floured rolling surface"
-        },
+        }
+      ],
+      "tools": [
         {
           "name": "hand",
           "text": "clean hands"
@@ -197,60 +263,73 @@
           "text": "fork"
         }
       ],
-      "foci": [
+      "prep": [
+        {
+          "name": "dough",
+          "text": "dough"
+        }
+      ],
+      "ingredients": [
+        {
+          "name": "flour",
+          "text": "rice, semolina, etc."
+        }
+      ],
+      "activities": [
         {
           "container": "mat",
-          "activities": [
+          "title": "prep to cut dough",
+          "uses": [
             {
-              "title": "make ropes",
-              "steps": [
-                {
-                  "ingredients": [
-                    {
-                      "name": "flour",
-                      "amount": "10 g (2 3/4 tsp)",
-                      "text": ""
-                    },
-                    {
-                      "name": "dough",
-                      "amount": "225 g (1/2 pound)",
-                      "text": ""
-                    }
-                  ]
-                },
-                {
-                  "action": {
-                    "tool": "spoon",
-                    "verb": "spread",
-                    "text": "evenly floured",
-                    "time": "30 seconds"
-                  }
-                },
-                {
-                  "action": {
-                    "tool": "hand",
-                    "verb": "roll carefully into a rope",
-                    "text": "2 cm diameter",
-                    "time": "1 minute"
-                  }
-                }
-              ]
+              "kind": "add",
+              "subject": "flour",
+              "amount": "10 g",
+              "text": "",
+              "convert": "2 3/4 tsp"
+            }
+          ],
+          "ops": [
+            {
+              "kind": "action",
+              "subject": "spoon",
+              "text": "spread",
+              "until": "evenly floured",
+              "time": "30 second"
+            }
+          ]
+        },
+        {
+          "container": "mat",
+          "title": "make ropes, then pillows",
+          "uses": [
+            {
+              "kind": "add",
+              "subject": "dough",
+              "amount": "225 g",
+              "text": "",
+              "convert": "1/2 pound",
+              "external": true
+            }
+          ],
+          "ops": [
+            {
+              "kind": "action",
+              "subject": "hand",
+              "text": "roll carefully into a rope",
+              "until": "2 cm diameter",
+              "time": "1 minute"
             },
             {
-              "title": "make pillows",
-              "steps": [
-                {
-                  "ingredients": []
-                },
-                {
-                  "action": {
-                    "tool": "fork",
-                    "verb": "cut into 1.5 cm dumplings pieces, resembling little pillows",
-                    "text": "entire rope is cut",
-                    "time": "30 seconds"
-                  }
-                }
-              ]
+              "kind": "action",
+              "subject": "fork",
+              "text": "cut into 1.5 cm dumplings pieces, resembling little pillows",
+              "until": "entire rope is cut",
+              "time": "30 second",
+              "yields": {
+                "name": "dumplings",
+                "amount": "80",
+                "intermediate": true
+              }
             }
           ]
         }
@@ -259,7 +338,7 @@
     {
       "title": "frozen gnocchi",
       "yields": [
-        "80 frozen gnocchi dumplings"
+        "80 portions frozen gnocchi dumplings"
       ],
       "text": "add layers of dumplings to fill depth of baking dish",
       "supers": [
@@ -271,11 +350,13 @@
         "quick",
         "Italian"
       ],
-      "requires": [
+      "containers": [
         {
           "name": "dish",
           "text": "baking dish"
-        },
+        }
+      ],
+      "tools": [
         {
           "name": "hand",
           "text": "clean hands"
@@ -285,70 +366,79 @@
           "text": "gnocchi board or a fork"
         }
       ],
-      "foci": [
+      "prep": [
+        {
+          "name": "dumplings",
+          "text": "raw cut dumplings"
+        }
+      ],
+      "ingredients": [
+        {
+          "name": "parchment",
+          "text": "parchment paper, cut to line the baking dish"
+        }
+      ],
+      "activities": [
         {
           "container": "dish",
-          "activities": [
+          "title": "prep container",
+          "uses": [
             {
-              "title": "prep container",
-              "steps": [
-                {
-                  "ingredients": [
-                    {
-                      "name": "parchment",
-                      "amount": "1",
-                      "text": ""
-                    }
-                  ]
-                },
-                {
-                  "action": {
-                    "tool": "hand",
-                    "verb": "line dish with parchment paper",
-                    "text": "each layer is fully lined",
-                    "time": "30 seconds"
-                  }
-                }
-              ]
+              "kind": "add",
+              "subject": "parchment",
+              "amount": "1",
+              "text": ""
+            }
+          ],
+          "ops": [
+            {
+              "kind": "action",
+              "subject": "hand",
+              "text": "line dish with parchment paper",
+              "until": "each layer is fully lined",
+              "time": "30 second"
+            }
+          ]
+        },
+        {
+          "container": "dish",
+          "title": "pack gnocchi",
+          "uses": [
+            {
+              "kind": "add",
+              "subject": "dumplings",
+              "amount": "80",
+              "text": "",
+              "external": true
+            }
+          ],
+          "ops": [
+            {
+              "kind": "action",
+              "subject": "board",
+              "text": "roll the cut dumplings onto parchment paper; arrange without touching other dumplings",
+              "until": "layer is filled",
+              "time": "10 second",
+              "note": {
+                "text": "depending on the size of the dish, you may need to add multiple layers of gnocchi dumplings"
+              }
             },
             {
-              "title": "pack gnocchi",
-              "steps": [
-                {
-                  "ingredients": [
-                    {
-                      "name": "dumplings",
-                      "amount": "80",
-                      "text": ""
-                    }
-                  ]
-                },
-                {
-                  "action": {
-                    "tool": "board",
-                    "verb": "roll the cut dumplings onto parchment paper; arrange without touching other dumplings",
-                    "text": "layer is filled",
-                    "time": "10 seconds"
-                  }
-                },
-                {
-                  "note": {
-                    "text": "depending on the size of the dish, you may need to add multiple layers of gnocchi dumplings"
-                  }
-                },
-                {
-                  "cooler": {
-                    "text": "freeze",
-                    "until": "dumplings are frozen solid",
-                    "time": "2 hours"
-                  }
-                }
-              ]
+              "kind": "chill",
+              "subject": "dish",
+              "text": "freeze",
+              "until": "dumplings are frozen solid",
+              "time": "2 hour",
+              "yields": {
+                "name": "frozen_gnocchi_dumplings",
+                "amount": "80",
+                "intermediate": false
+              }
             }
           ]
         }
       ]
     }
   ],
-  "schema_org": "{\"@context\": \"https://schema.org\", \"@type\": \"Recipe\", \"name\": \"Frozen Gnocchi Dumplings\", \"description\": \"Make some yummy gnocchi from root veggies.\", \"keywords\": [\"Italian\", \"dumplings\", \"pasta\", \"quick\", \"starch\"], \"recipeYield\": \"80 frozen gnocchi dumplings\", \"recipeIngredient\": [\"1 large chicken egg\", \"250 g (1/2 pound) whole milk ricotta\", \"50 g (1/2 cup) grated parmesan\", \"1 g (1/4 tsp) freshly grated nutmeg\", \"250 g (1/2 pound) reduced veggie pur\\u00e9e\", \"350 g (2 cups) flour: rice, oat, etc.\", \"1 parchment paper, cut to line the baking dish\"], \"image\": \"https://www.instagram.com/p/Csu0b4yLOyZ/embed\", \"isBasedOn\": \"https://www.prouditaliancook.com/2020/11/butternut-squash-gnocchi-with-sage-and-brown-butter.html\", \"dateModified\": \"2023-04-10\", \"author\": \"Paco Nathan\", \"license\": \"https://spdx.org/licenses/CC-BY-NC-SA-4.0.html\"}"
+  "schema_org": "{\"@context\": \"https://schema.org\", \"@type\": \"Recipe\", \"name\": \"Frozen Gnocchi Dumplings\", \"description\": \"Make some yummy gnocchi from root veggies.\", \"keywords\": [\"dumplings\", \"pasta\", \"Italian\", \"quick\", \"starch\"], \"recipeYield\": \"80 portions frozen gnocchi dumplings\", \"recipeIngredient\": [\"1 large chicken egg\", \"250 g (1/2 pound) whole milk ricotta\", \"50 g (1/2 cup) grated parmesan\", \"1 g (1/4 tsp) freshly grated nutmeg\", \"250 g (1/2 pound) reduced veggie pur\\u00e9e\", \"350 g (2 cups) flour: rice, oat, etc.\", \"1 parchment paper, cut to line the baking dish\"], \"image\": \"https://www.instagram.com/p/Csu0b4yLOyZ/embed\", \"isBasedOn\": \"https://www.prouditaliancook.com/2020/11/butternut-squash-gnocchi-with-sage-and-brown-butter.html\", \"dateModified\": \"2023-04-10\", \"author\": \"Paco Nathan\", \"license\": \"https://spdx.org/licenses/CC-BY-NC-SA-4.0.html\"}"
 }

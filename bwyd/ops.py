@@ -10,9 +10,38 @@ from collections import OrderedDict
 import enum
 import typing
 
+from icecream import ic  # pylint: disable=W0611
 from pydantic import BaseModel, NonNegativeInt
 
-from .measure import Converter, Measure, DurationUnits, Duration, Temperature
+from .measure import Converter, \
+    Duration, DurationUnits, Measure, Temperature, \
+    Product
+
+
+######################################################################
+## notes
+
+class Note (BaseModel):
+    """
+Represents a collapsable Note, inline *within* Activity, etc.
+    """
+    loc: dict
+    text: str
+
+
+    def get_model (
+        self,
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        dat: dict = {
+            "note": {
+                "text": self.text,
+            }
+        }
+
+        return dat
 
 
 ######################################################################
@@ -28,18 +57,26 @@ Ingredient, Tool, Container, etc.
     text: str
     ref_count: NonNegativeInt = 0
     external: bool = False
+    note: Note | None = None
 
 
     def get_model (
-        self
+        self,
+        *,
+        pluralize: bool = True,  # pylint: disable=W0613
         ) -> dict:
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "name": self.symbol,
             "text": self.text,
         }
+
+        if self.note is not None:
+            dat.update(self.note.get_model())
+
+        return dat
 
 
 class DependencyDict (OrderedDict):
@@ -48,7 +85,9 @@ A dictionary of a specific class of dependencies, which also provides
 a local namespace.
     """
     def get_model (
-        self
+        self,
+        *,
+        pluralize: bool = True,  # pylint: disable=W0613
         ) -> list:
         """
 Serializable representation for JSON.
@@ -74,11 +113,14 @@ class OpGeneric (BaseModel):  # pylint: disable=R0902
 A data class representing a generic operation.
     """
     loc: dict
+    note: Note | None = None
     ref_count: NonNegativeInt = 0
 
 
     def get_duration (
         self,
+        *,
+        pluralize: bool = True,  # pylint: disable=W0613
         ) -> Duration:
         """
 Stub: Total duration.
@@ -87,49 +129,6 @@ Stub: Total duration.
             amount = 0.0,
             units = DurationUnits.SECOND.value,
         )
-
-
-class OpNote (OpGeneric):  # pylint: disable=R0902
-    """
-Represents a collapsable Note, inline *within* an Activity, from the
-Author/Cook for other Cooks.
-    """
-    text: str
-
-
-    def get_model (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "note": {
-                "text": self.text,
-            }
-        }
-
-
-class OpTransfer (OpGeneric):  # pylint: disable=R0902
-    """
-Represents the action of a Cook to Transfer an intermediate into
-a Container from another Focus, still *within* the same Closure.
-    """
-    symbol: str
-    entity: Dependency
-
-
-    def get_model (
-        self,
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "transfer": {
-                "name": self.symbol,
-            },
-        }
 
 
 class OpAdd (OpGeneric):  # pylint: disable=R0902
@@ -146,21 +145,71 @@ ingredient into a Container within an Activity.
     def get_model (
         self,
         converter: Converter,
+        *,
+        humanize: bool = True,  # pylint: disable=W0613
+        pluralize: bool = True,  # pylint: disable=W0613
         ) -> dict:
         """
 Serializable representation for JSON.
         """
-        amount: str = self.measure.humanize_convert(
-            self.symbol,
-            self.entity.external,
-            converter,
-        )
+        amount: str = self.measure.humanize()
 
-        return {
-            "name": self.symbol,
+        dat: dict = {
+            "kind": "add",
+            "subject": self.symbol,
             "amount": amount,
             "text": self.text,
         }
+
+        if converter is not None:
+            conv: str =  self.measure.convert(
+                self.symbol,
+                self.entity.external,
+                converter,
+            )
+
+            if conv is not None and len(conv) > 0:
+                dat["convert"] = conv
+
+        if self.entity.external:
+            dat["external"] = self.entity.external
+
+        if self.note is not None:
+            dat.update(self.note.get_model())
+
+        return dat
+
+
+
+class OpTransfer (OpGeneric):  # pylint: disable=R0902
+    """
+Represents the action to Transfer an intermediate product from one
+Container into the Container used in a subsequent Activity, both
+*within* the same Closure.
+    """
+    symbol: str
+    entity: Dependency
+
+
+    def get_model (
+        self,
+        converter: Converter,  # pylint: disable=W0613
+        *,
+        humanize: bool = True,  # pylint: disable=W0613
+        pluralize: bool = True,  # pylint: disable=W0613
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        dat: dict = {
+            "kind": "transfer",
+            "subject": self.symbol,
+        }
+
+        if self.note is not None:
+            dat.update(self.note.get_model())
+
+        return dat
 
 
 class OpAction (OpGeneric):  # pylint: disable=R0902
@@ -172,9 +221,10 @@ Activity on the food within a specific Container.
     modifier: str
     until: str
     duration: Duration
+    product: Product | None = None
 
 
-    def get_duration (
+    def get_duration (  # type: ignore  # pylint: disable=W0221
         self,
         ) -> Duration:
         """
@@ -184,19 +234,29 @@ Duration of this operation.
 
 
     def get_model (
-        self
+        self,
+        *,
+        humanize: bool = True,  # pylint: disable=W0613
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
         """
-        return {
-            "action": {
-                "tool": self.tool.symbol,
-                "verb": self.modifier,
-                "text": self.until,
-                "time": self.duration.humanize(),
-            }
+        dat: dict = {
+            "kind": "action",
+            "subject": self.tool.symbol,
+            "text": self.modifier,
+            "until": self.until,
+            "time": self.duration.humanize(pluralize = pluralize),
         }
+
+        if self.product is not None:
+            dat.update(self.product.get_model())
+
+        if self.note is not None:
+            dat.update(self.note.get_model())
+
+        return dat
 
 
 class OpWait (OpGeneric):  # pylint: disable=R0902
@@ -208,9 +268,10 @@ Container.
     modifier: str
     until: str
     duration: Duration
+    product: Product | None = None
 
 
-    def get_duration (
+    def get_duration (  # type: ignore  # pylint: disable=W0221
         self,
         ) -> Duration:
         """
@@ -220,41 +281,28 @@ Duration of this operation.
 
 
     def get_model (
-        self
+        self,
+        *,
+        humanize: bool = True,  # pylint: disable=W0613
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
         """
-        return {
-            "wait": {
-                "text": self.until,
-                "time": self.duration.humanize(),
-            }
+        dat: dict = {
+            "kind": "wait",
+            "text": self.modifier,
+            "until": self.until,
+            "time": self.duration.humanize(pluralize = pluralize),
         }
 
+        if self.product is not None:
+            dat.update(self.product.get_model())
 
-class OpStore (OpGeneric):  # pylint: disable=R0902
-    """
-Represents the process of a Cook on a Container to store the yield of
-a Closure for a specified time period.
-    """
-    container: Dependency
-    modifier: str
-    duration: Duration
+        if self.note is not None:
+            dat.update(self.note.get_model())
 
-
-    def get_model (
-        self
-        ) -> dict:
-        """
-Serializable representation for JSON.
-        """
-        return {
-            "store": {
-                "text": self.modifier,
-                "upto": self.duration.humanize(),
-            }
-        }
+        return dat
 
 
 class OpAppliance (OpGeneric):  # pylint: disable=R0902
@@ -266,10 +314,12 @@ a specific Container as part of an Activity.
     modifier: str
     until: str
     duration: Duration
+    product: Product | None = None
     appliance: str = Appliance.GENERIC
+    verb: str = "generic"
 
 
-    def get_duration (
+    def get_duration (  # type: ignore  # pylint: disable=W0221
         self,
         ) -> Duration:
         """
@@ -284,21 +334,33 @@ Represents an Appliance: stove, range, hotplate, camp fire --
 used to *heat* in different modes.
     """
     appliance: str = Appliance.STOVE
+    verb: str = "heat"
 
 
     def get_model (
-        self
+        self,
+        *,
+        humanize: bool = True,  # pylint: disable=W0613
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
         """
-        return {
-            self.appliance: {
-                "text": self.modifier,
-                "until": self.until,
-                "time": self.duration.humanize(),
-            }
+        dat: dict = {
+            "kind": self.verb,
+            "subject": self.container.symbol,
+            "text": self.modifier,
+            "until": self.until,
+            "time": self.duration.humanize(pluralize = pluralize),
         }
+
+        if self.product is not None:
+            dat.update(self.product.get_model())
+
+        if self.note is not None:
+            dat.update(self.note.get_model())
+
+        return dat
 
 
 class OpChill (OpHeat):  # pylint: disable=R0902
@@ -307,6 +369,7 @@ Represents an Appliance: cooler --
 used to *chill* in different modes.
     """
     appliance: str = Appliance.COOLER
+    verb: str = "chill"
 
 
 class OpBake (OpAppliance):  # pylint: disable=R0902
@@ -317,32 +380,42 @@ used to *bake* in different modes.
     mode: str
     temperature: Temperature
     appliance: str = Appliance.OVEN
+    verb: str = "bake"
 
 
     def get_model (
-        self
+        self,
+        *,
+        humanize: bool = True,  # pylint: disable=W0613
+        pluralize: bool = True,
         ) -> dict:
         """
 Serializable representation for JSON.
         """
-        return {
-            self.appliance: {
-                "text": self.modifier,
-                "until": self.until,
-                "time": self.duration.humanize(),
-                "mode": self.mode.lower(),
-                "temperature": self.temperature.humanize(),
-            }
+        dat: dict = {
+            "kind": self.verb,
+            "subject": self.container.symbol,
+            "text": self.modifier,
+            "until": self.until,
+            "time": self.duration.humanize(pluralize = pluralize),
+            "mode": self.mode.lower(),
+            "temperature": self.temperature.humanize(),
         }
+
+        if self.product is not None:
+            dat.update(self.product.get_model())
+
+        if self.note is not None:
+            dat.update(self.note.get_model())
+
+        return dat
 
 
 OpsTypes = typing.Union[
-    OpNote,
-    OpTransfer,
     OpAdd,
+    OpTransfer,
     OpAction,
     OpWait,
-    OpStore,
     OpHeat,
     OpChill,
     OpBake,

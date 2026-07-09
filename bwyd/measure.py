@@ -13,7 +13,7 @@ import logging
 import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=W0611
-from pydantic import BaseModel, NonNegativeFloat, PositiveFloat
+from pydantic import BaseModel, NonNegativeFloat, NonNegativeInt, PositiveFloat
 import inflect
 
 
@@ -92,18 +92,27 @@ A data class representing one humanized Measure object.
 
 
     def denormalize (
-        self
+        self,
+        *,
+        is_compound: bool = False,
+        pluralize: bool = True,
         ) -> str:
         """
 Denormalize a meaure which is already in human-readable form.
         """
         if self.units is None:
+            if is_compound:
+                return self.human
+
             return f" ({self.human})"
 
         units: str = self.units.value
 
-        if self.amount > 1.0 and self.human != "1" and self.units != MeasureUnits.TEASPOON:
+        if pluralize and self.amount > 1.0 and self.human != "1" and self.units != MeasureUnits.TEASPOON:  # pylint: disable=C0301
             units = PLURAL.plural(units)
+
+        if is_compound:
+            return f"{self.human} {units}"
 
         return f" ({self.human} {units})"
 
@@ -124,7 +133,7 @@ A data class representing one parsed Measure object.
         """
 Constructor from a `textx` parse object.
         """
-        measure_units: typing.Optional[ str ] = None
+        measure_units: typing.Optional[ str ] | None = None
 
         if parse.units is not None:
             measure_units = MeasureUnits(parse.units).value
@@ -152,16 +161,25 @@ Denormalize this measure into human-readable form.
         return html
 
 
-    def humanize_convert (
+    def humanize_convert (  # pylint: disable=R0912
         self,
         symbol: str,
         external: bool,
         converter: typing.Optional[ Converter ],
+        *,
+        humanize: bool = True,
         ) -> str:
         """
 Denormalize this measure into human-readable form, with an
 imperial conversion if available.
         """
+        if not humanize:
+            return self.convert(
+                symbol,
+                external,
+                converter,
+            )
+
         amount: str = self.humanize().strip()
 
         if converter is not None:
@@ -201,6 +219,61 @@ imperial conversion if available.
                         imper_amount = self.amount * CUP_PER_LITER
                         human = self._humanize_generic(imper_amount, MeasureUnits.CUP)
                         amount += human.denormalize()
+
+                    case _:
+                        logging.warning(f"no default conversion for unit `{self.units}`")  # pylint: disable=W1203
+
+        return amount
+
+
+    def convert (
+        self,
+        symbol: str,
+        external: bool,
+        converter: typing.Optional[ Converter ],
+        ) -> str:
+        """
+Denormalize this measure into human-readable imperial conversion.
+        """
+        amount: str = ""
+
+        if converter is not None:
+            if symbol in converter:
+                conv: Conversion = converter[symbol]
+
+                if self.units == conv.metric:
+                    imper_amount: float = self.amount / conv.density
+                    human: Humanized = self._humanize_cup(imper_amount)
+                    amount += human.denormalize(is_compound = True)
+
+            elif self.units is not None:
+                if not external:
+                    logging.warning(f"no conversion ratio for {symbol}")  # pylint: disable=W1203
+
+                match self.units:
+                    case MeasureUnits.GRAM.value:
+                        imper_amount = self.amount * POUND_PER_GRAM
+
+                        if imper_amount < 0.25:
+                            imper_amount *= OUNCE_PER_POUND
+
+                            if imper_amount > 0.95:
+                                human = self._humanize_generic(imper_amount, MeasureUnits.OUNCE)
+                            else:
+                                human = Humanized(
+                                    amount = imper_amount,
+                                    human = str(round(imper_amount, 2)),
+                                    units = MeasureUnits.OUNCE,
+                                )
+                        else:
+                            human = self._humanize_generic(imper_amount, MeasureUnits.POUND)
+
+                        amount += human.denormalize(is_compound = True)
+
+                    case MeasureUnits.LITER.value:
+                        imper_amount = self.amount * CUP_PER_LITER
+                        human = self._humanize_generic(imper_amount, MeasureUnits.CUP)
+                        amount += human.denormalize(is_compound = True)
 
                     case _:
                         logging.warning(f"no default conversion for unit `{self.units}`")  # pylint: disable=W1203
@@ -342,10 +415,12 @@ Humanize fractions representing imperial measurement ratios >= 1.0
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "amount": self.amount,
             "units": self.units,
         }
+
+        return dat
 
 
 class Duration (Measure):  # pylint: disable=R0902
@@ -362,7 +437,7 @@ A data class representing one parsed Duration object.
         """
 Constructor from a `textx` parse object.
         """
-        duration_units: typing.Optional[ str ] = None
+        duration_units: typing.Optional[ str ] | None = None
 
         if parse.units is not None:
             duration_units = DurationUnits(parse.units).value
@@ -384,6 +459,8 @@ Return this duration normalized into seconds.
 
     def humanize (
         self,
+        *,
+        pluralize: bool = True,
         ) -> str:
         """
 Adapted from:
@@ -404,7 +481,7 @@ Adapted from:
 
         for label, amount in cascade:
             if amount > 0:
-                if amount > 1:
+                if pluralize and amount > 1:
                     label = PLURAL.plural(label)
 
                 units.append(f"{int(amount)} {label}")
@@ -419,10 +496,12 @@ Adapted from:
         """
 Serializable representation for JSON.
         """
-        return {
+        dat: dict = {
             "amount": self.amount,
             "units": self.units,
         }
+
+        return dat
 
 
 class Temperature (Measure):  # pylint: disable=R0902
@@ -438,7 +517,7 @@ A data class representing one parsed Temperature object.
         """
 Constructor from a `textx` parse object.
         """
-        temperature_units: typing.Optional[ str ] = None
+        temperature_units: typing.Optional[ str ] | None = None
 
         if parse.units is not None:
             temperature_units = TemperatureUnits(parse.units).value
@@ -488,3 +567,64 @@ HTML representation.
             html += f" ({f_deg} °{TemperatureUnits.FAHRENHEIT.value})"
 
         return html
+
+
+######################################################################
+## yields classes
+
+class Storage (BaseModel):
+    """
+Represents the process of a Cook on a Container to store the yield of
+an Activity for a specified time period.
+    """
+    loc: dict
+    modifier: str
+    duration: Duration
+
+
+    def get_model (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        dat: dict = {
+            "store": {
+                "text": self.modifier,
+                "upto": self.duration.humanize(pluralize = False),
+            }
+        }
+
+        return dat
+
+
+class Product (BaseModel):  # pylint: disable=R0902
+    """
+A data class representing one Product object for a YIELDS directive.
+    """
+    loc: dict
+    symbol: str
+    amount: Measure
+    intermediate: bool
+    storage: Storage | None = None
+    ref_count: NonNegativeInt = 0
+
+
+    def get_model (
+        self
+        ) -> dict:
+        """
+Serializable representation for JSON.
+        """
+        dat: dict = {
+            "yields": {
+                "name": self.symbol,
+                "amount": self.amount.humanize(),
+                "intermediate": self.intermediate,
+            }
+        }
+
+        if self.storage is not None:
+            dat["yields"].update(self.storage.get_model())
+
+        return dat

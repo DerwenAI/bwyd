@@ -21,7 +21,7 @@ import requests_cache
 import textx  # type: ignore  # pylint: disable=E0401
 
 from .measure import Conversion, Converter
-from .module import Module
+from .recipe import Recipe
 from .resources import BWYD_NAMESPACE, BWYD_SVG, \
     CONVERT_PATH, GRAMMAR_PATH, JINJA_INDEX_TEMPLATE
 
@@ -187,7 +187,7 @@ Iterator for listing the Bwyd modules in a given directory.
         *,
         glob: str = "*.bwyd",
         debug: bool = False,
-        ) -> typing.Iterator[ Module ]:
+        ) -> typing.Iterator[ Recipe ]:
         """
 Traverse the given directory, parsing Bwyd modules.
         """
@@ -200,22 +200,22 @@ Traverse the given directory, parsing Bwyd modules.
                 ic(bwyd_path.name)
 
             # parse the Bwyd module
-            module: Module = dsl.parse(
+            recipe: Recipe = dsl.parse(
                 bwyd_path,
                 slug = slug,
             )
 
             # interpret the parsed module
-            module.interpret(
+            recipe.interpret(
                 debug = debug,
             )
 
-            yield module
+            yield recipe
 
 
     def render_discovery (
         self,
-        modules: list[ Module ],
+        recipes: list[ Recipe ],
         index_path: pathlib.Path,
         *,
         index_template: jinja2.Template = JINJA_INDEX_TEMPLATE,
@@ -237,7 +237,7 @@ Render an HTML index for search/discovery across a directory of recipes.
                         "updated": module.updated,
                         "keywords": module.collect_keywords(),
                     }
-                    for module in modules
+                    for module in recipes
                 ],
             },
         }
@@ -250,7 +250,7 @@ Render an HTML index for search/discovery across a directory of recipes.
 
     def build_graph (  # pylint: disable=R0914
         self,
-        modules: list[ Module ],
+        recipes: list[ Recipe ],
         *,
         debug: bool = False,  # pylint: disable=W0613
         ) -> Graph:
@@ -267,7 +267,7 @@ Build a knowledge graph from the modules in this corpus.
         pred_produced_by: rdflib.URIRef = graph.compose_iri_instance("ProducedBy")
         pred_uses_ingredient: rdflib.URIRef = graph.compose_iri_instance("UsesIngredient")
 
-        for module in modules:
+        for module in recipes:
             module_iri: rdflib.URIRef = graph.compose_iri([ module.slug ])  # type: ignore
 
             graph.add_tuple(
@@ -430,11 +430,11 @@ Extend the measurements unit converter by merging with provided conversions.
         *,
         slug: str | None = None,
         debug: bool = False,
-        ) -> Module:
+        ) -> Recipe:
         """
 Initialize a parser to load one Bywd module from a file.
         """
-        return Module(
+        return Recipe(
             path,
             self.META_MODEL.model_from_file(
                 path,
