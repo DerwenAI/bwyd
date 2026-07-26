@@ -1,4 +1,5 @@
 # local
+graph/corpus.ttl
 bwyd.cache
 examples/*.html
 db/

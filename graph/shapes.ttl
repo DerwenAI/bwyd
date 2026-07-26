@@ -1,0 +1,188 @@
+@prefix bwyd:     <https://github.com/DerwenAI/bwyd/wiki/ns#> .
+
+@prefix dc:       <http://purl.org/dc/elements/1.1/> .
+@prefix dcmitype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:       <http://www.w3.org/ns/shacl#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+
+
+bwyd:Recipe_Shape a sh:NodeShape ;
+  sh:targetClass bwyd:Recipe ;
+  sh:property [
+    sh:path dcterms:title ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    ] ; 
+  sh:property [
+    sh:path skos:definition ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    ] ; 
+  sh:property [
+    sh:path dcterms:license ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    ] ;
+  sh:property [
+    sh:path dcterms:creator ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    ] ;
+  sh:property [
+    sh:path dcterms:modified ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype xsd:dateTime ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    ] ;
+  sh:property [
+    sh:path dcmitype:Image ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 0 ;
+    ] ;
+  sh:property [
+    sh:path dc:source ;
+    sh:nodeKind sh:IRI ;
+    sh:minCount 0 ;
+    ] ;
+  sh:property [
+    sh:path bwyd:dependsOn ;
+    sh:nodeKind sh:IRI ;
+    sh:class bwyd:Closure ;
+    sh:minCount 1 ;
+    ] ;
+.
+
+
+bwyd:Closure_Shape a sh:NodeShape ;
+  sh:targetClass bwyd:Closure ;
+  sh:property [
+    sh:path dcterms:title ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    ] ; 
+  sh:property [
+    sh:path skos:definition ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    ] ; 
+  sh:property [
+    sh:path rdfs:subClassOf ;
+    sh:nodeKind sh:IRI ;
+    sh:class bwyd:Super ;
+    sh:minCount 0 ;
+    ] ; 
+  sh:property [
+    sh:path skos:related ;
+    sh:nodeKind sh:IRI ;
+    sh:class bwyd:Keyword ;
+    sh:minCount 0 ;
+    ] ; 
+  sh:property [
+    sh:path bwyd:consumes ;
+    sh:nodeKind sh:IRI ;
+    sh:class bwyd:Ingredient ;
+    sh:minCount 1 ;
+    ] ; 
+  sh:property [
+    sh:path bwyd:produces ;
+    sh:nodeKind sh:IRI ;
+    sh:class bwyd:Product ;
+    sh:minCount 1 ;
+    ] ; 
+.
+
+
+bwyd:Product_Shape a sh:NodeShape ;
+  sh:targetClass bwyd:Product ;
+  sh:property [
+    sh:path skos:prefLabel ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    ] ; 
+.
+
+
+bwyd:Ingredient_Shape a sh:NodeShape ;
+  sh:targetClass bwyd:Ingredient ;
+  sh:property [
+    sh:path skos:definition ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    ] ; 
+.
+
+
+bwyd:Super_Shape a sh:NodeShape ;
+  sh:targetClass bwyd:Super ;
+  sh:property [
+    sh:path skos:prefLabel ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    ] ; 
+  sh:property [
+    sh:path skos:definition ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 0 ;
+    sh:maxCount 1 ;
+    ] ; 
+.
+
+
+bwyd:Keyword_Shape a sh:NodeShape ;
+  sh:targetClass bwyd:Keyword ;
+  sh:property [
+    sh:path skos:prefLabel ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    ] ; 
+  sh:property [
+    sh:path skos:definition ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    ] ; 
+.
+
+

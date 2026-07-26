@@ -1,0 +1,114 @@
+@prefix bwyd:     <https://github.com/DerwenAI/bwyd/wiki/ns#> .
+@prefix dc:       <http://purl.org/dc/elements/1.1/> .
+@prefix dcmitype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+
+
+bwyd:Recipe[
+    ! ottr:IRI ?slug,
+    ?title,
+    ?definition,
+    ?license,
+    ?creator,
+    xsd:dateTime ?modified,
+] :: {
+    ottr:Triple( ?slug, rdf:type, bwyd:Recipe ),
+    ottr:Triple( ?slug, dcterms:title, ?title ),
+    ottr:Triple( ?slug, skos:definition ?definition ),
+    ottr:Triple( ?slug, dcterms:license ?license ),
+    ottr:Triple( ?slug, dcterms:creator ?creator ),
+    ottr:Triple( ?slug, dcterms:modified ?modified ),
+} .
+
+bwyd:RecipeImage[
+    ! ottr:IRI ?slug,
+    ?image,
+] :: {
+    ottr:Triple( ?slug, dcmitype:Image ?image ),
+} .
+
+bwyd:RecipeSource[
+    ! ottr:IRI ?slug,
+    ?source,
+] :: {
+    ottr:Triple( ?slug, dc:source, ?source ),
+} .
+
+bwyd:RecipeDepends[
+    ! ottr:IRI ?slug,
+    ?closure,
+] :: {
+    ottr:Triple( ?slug, bwyd:dependsOn, ?closure ),
+} .
+
+
+bwyd:Closure[
+    ! ottr:IRI ?closure,
+    ?title,
+    ?definition,
+] :: {
+    ottr:Triple( ?closure, rdf:type, bwyd:Closure ),
+    ottr:Triple( ?closure, dcterms:title, ?title ),
+    ottr:Triple( ?closure, skos:definition ?definition ),
+} .
+
+bwyd:ClosureSuper[
+    ! ottr:IRI ?closure,
+    ?super,
+] :: {
+    ottr:Triple( ?closure, rdf:type, bwyd:Closure ),
+    ottr:Triple( ?closure, rdfs:subClassOf, ?super ),
+} .
+
+bwyd:ClosureKeyword[
+    ! ottr:IRI ?closure,
+    ?keyword,
+] :: {
+    ottr:Triple( ?closure, rdf:type, bwyd:Closure ),
+    ottr:Triple( ?closure, skos:related, ?keyword ),
+} .
+
+bwyd:ClosureConsumes[
+    ! ottr:IRI ?closure,
+    ?ingredient,
+] :: {
+    ottr:Triple( ?closure, rdf:type, bwyd:Closure ),
+    ottr:Triple( ?closure, bwyd:consumes, ?ingredient ),
+} .
+
+bwyd:ClosureProduces[
+    ! ottr:IRI ?closure,
+    ?product,
+] :: {
+    ottr:Triple( ?closure, rdf:type, bwyd:Closure ),
+    ottr:Triple( ?closure, bwyd:produces, ?product ),
+} .
+
+
+bwyd:Super[
+    ! ottr:IRI ?super,
+    ?label,
+] :: {
+    ottr:Triple( ?super, rdf:type, bwyd:Super ),
+    ottr:Triple( ?super, skos:prefLabel, ?label ),
+} .
+
+
+bwyd:Keyword[
+    ! ottr:IRI ?keyword,
+    ?label,
+] :: {
+    ottr:Triple( ?keyword, rdf:type, bwyd:Keyword ),
+    ottr:Triple( ?keyword, skos:prefLabel, ?label ),
+} .
+
+
+bwyd:Product[
+    ! ottr:IRI ?product,
+    ?label,
+] :: {
+    ottr:Triple( ?product, rdf:type, bwyd:Product ),
+    ottr:Triple( ?product, skos:prefLabel, ?label ),
+} .

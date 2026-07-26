@@ -1,0 +1,402 @@
+@prefix bwyd:     <https://github.com/DerwenAI/bwyd/wiki/ns#> .
+
+@prefix foodon:   <http://purl.obolibrary.org/obo/FOODON_> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix wd:       <http://www.wikidata.org/entity/> .
+
+
+######################################################################
+## general ingredients
+
+<urn:bwyd:ingredient:water> a bwyd:Ingredient ;
+  skos:prefLabel "water"@en , "eau"@fr ;
+  skos:definition "drinking water"@en ;
+  skos:exactMatch foodon:00002340 , wd:Q7892 ;
+.
+
+<urn:bwyd:ingredient:parchment_paper> a bwyd:Ingredient ;
+  skos:prefLabel "parchment paper"@en , "papier-parchemin"@fr ;
+  skos:definition "paper treated with sulfuric acid to reduce its porosity and increase its impermeability"@en ;
+  skos:exactMatch wd:Q798500 ;
+.
+
+
+######################################################################
+## dairy
+
+<urn:bwyd:ingredient:milk> a bwyd:Ingredient ;
+  skos:prefLabel "milk"@en , "lait"@fr ;
+  skos:definition "cow milk"@en ;
+  skos:closeMatch foodon:03302116 , wd:Q115435012 ;
+.
+
+<urn:bwyd:ingredient:cream> a bwyd:Ingredient ;
+  skos:prefLabel "cream"@en , "crème"@fr ;
+  skos:definition "cream or half and half"@en ;
+  skos:exactMatch foodon:00001775 , wd:Q13228 ;
+.
+
+<urn:bwyd:ingredient:butter> a bwyd:Ingredient ;
+  skos:prefLabel "butter"@en , "beurre"@fr ;
+  skos:definition "unsalted butter, which may be substituted with plant-based butter"@en ;
+  skos:exactMatch foodon:03301777 , wd:Q34172 ;
+.
+
+<urn:bwyd:ingredient:sour_cream> a bwyd:Ingredient ;
+  skos:prefLabel "sour cream"@en , "crème fraîche"@fr ;
+  skos:definition "a dairy product produced by fermenting a cream with lactic acid bacteria"@en ;
+  skos:closeMatch foodon:03302515 , foodon:03302607 , wd:Q840171 , wd:Q1142459 ;
+.
+
+<urn:bwyd:ingredient:cheese> a bwyd:Ingredient ;
+  skos:prefLabel "cheese"@en , "fromage"@fr ;
+  skos:definition "a creamy or solid dairy product formed by pressing curds formed by coagulating the milk protein casein"@en ;
+  skos:exactMatch foodon:03000287 , wd:Q10943 ;
+.
+
+<urn:bwyd:ingredient:ricotta> a bwyd:Ingredient ;
+  skos:prefLabel "ricotta"@en , "ricotta"@fr ;
+  skos:definition "an Italian soft cheese made from whey"@en ;
+  skos:exactMatch foodon:03302908 , wd:Q216781 ;
+.
+
+<urn:bwyd:ingredient:parmesan> a bwyd:Ingredient ;
+  skos:prefLabel "parmesan"@en , "parmesan"@fr ;
+  skos:definition "Parmigiano-Reggiano is an Italian hard cheese made from cow milk"@en ;
+  skos:exactMatch wd:Q155922 ;
+  skos:closeMatch foodon:00003247 ;
+.
+
+<urn:bwyd:ingredient:pecorino> a bwyd:Ingredient ;
+  skos:prefLabel "pecorino"@en , "pecorino"@fr ;
+  skos:definition "an Italian hard cheese made from sheep milk"@en ;
+  skos:exactMatch foodon:00001295 , wd:Q677640 ;
+.
+
+
+######################################################################
+## poultry
+
+<urn:bwyd:ingredient:egg> a bwyd:Ingredient ;
+  skos:prefLabel "egg"@en , "oeuf"@fr ;
+  skos:definition "large chicken egg"@en ;
+  skos:exactMatch foodon:03316061 ;
+  skos:closeMatch wd:Q93189 ;
+  skos:broader <urn:bwyd:subject:eggs> ;
+.
+
+<urn:bwyd:ingredient:hard_boiled_egg> rdfs:subClassOf <urn:bwyd:ingredient:egg> ;
+  skos:prefLabel "hard boiled egg"@en , "oeuf dur"@fr ;
+  skos:definition "hard boiled egg"@en ;
+  skos:exactMatch foodon:03542977 , wd:Q93189 ;
+.
+
+
+######################################################################
+## grains
+
+<urn:bwyd:ingredient:flour> a bwyd:Ingredient ;
+  skos:prefLabel "flour"@en , "farine"@fr ;
+  skos:definition "a fine powder made from milled cereal grains or other starchy food sources"@en ;
+  skos:exactMatch foodon:00004510 , wd:Q36465 ;
+.
+
+<urn:bwyd:ingredient:rolled_oats> a bwyd:Ingredient ;
+  skos:prefLabel "rolled oats"@en , "flocons d'avoine"@fr ;
+  skos:definition "A lightly processed whole-grain food made from husked, steamed oat groats rolled into flat flakes, optionally toasted"@en ;
+  skos:exactMatch foodon:03307110 , wd:Q1208221 ;
+.
+
+<urn:bwyd:ingredient:chia_seeds> a bwyd:Ingredient ;
+  skos:prefLabel "chia seeds"@en , "graines de chia"@fr ;
+  skos:definition "edible seeds of the mint plants, Salvia hispanica and Salvia columbariae"@en ;
+  skos:exactMatch foodon:00002961 , wd:Q27688832 ;
+.
+
+
+######################################################################
+## bread
+
+<urn:bwyd:ingredient:bread> a bwyd:Ingredient ;
+  skos:prefLabel "bread"@en , "pain"@fr ;
+  skos:definition "baked goods prepared from a dough of flour, water, possibly yeast, and other ingredients"@en ;
+  skos:exactMatch foodon:03000288 , wd:Q7802 ;
+.
+
+
+######################################################################
+## sweeteners
+
+<urn:bwyd:ingredient:granulated_sugar> a bwyd:Ingredient ;
+  skos:prefLabel "granulated sugar"@en , "sucre semoule"@fr ;
+  skos:definition "crystalline sugar, mostly sucrose, which appears white in color and has been refined to remove molasses"@en ;
+  skos:exactMatch foodon:03420157 , wd:Q123425472 ;
+.
+
+<urn:bwyd:ingredient:honey> a bwyd:Ingredient ;
+  skos:prefLabel "honey"@en , "miel"@fr ;
+  skos:definition "a sweet food made by bees mostly using nectar from flowers, preferrably local/organic/raw"@en ;
+  skos:exactMatch foodon:03301024 , wd:Q10987 ;
+.
+
+<urn:bwyd:ingredient:molasses> a bwyd:Ingredient ;
+  skos:prefLabel "molasses"@en , "mélasse"@fr ;
+  skos:definition "a viscous by-product of the refining of sugarcane, grapes, or sugar beets into sugar"@en ;
+  skos:exactMatch foodon:03543001 , wd:Q154389 ;
+.
+
+<urn:bwyd:ingredient:vinegar> a bwyd:Ingredient ;
+  skos:prefLabel "vinegar"@en , "vinaigre"@fr ;
+  skos:definition "a liquid consisting mainly of acetic acid and water"@en ;
+  skos:exactMatch foodon:03301705 , wd:Q41354 ;
+.
+
+
+######################################################################
+## salts
+
+<urn:bwyd:ingredient:sea_salt> a bwyd:Ingredient ;
+  skos:prefLabel "sea salt"@en , "sel de mer"@fr ;
+  skos:definition "finely granulated salt produced from the evaporation of seawater"@en ;
+  skos:exactMatch foodon:03544059 , wd:Q282694 ;
+.
+
+<urn:bwyd:ingredient:flake_salt> a bwyd:Ingredient ;
+  skos:prefLabel "flake sea salt"@en , "fleur de sel"@fr ;
+  skos:definition "hand-harvested sea salt, dried into flakes"@en ;
+  skos:exactMatch foodon:03544059 , wd:Q2167413 ;
+.
+
+<urn:bwyd:ingredient:pickling_salt> a bwyd:Ingredient ;
+  skos:prefLabel "pickling salt"@en , "sel à marinade"@fr ;
+  skos:definition "fine-grain salt used for manufacturing pickles, with no anti-caking additives"@en ;
+  skos:exactMatch foodon:03544059 , wd:Q7190922 ;
+.
+
+<urn:bwyd:ingredient:baking_soda> a bwyd:Ingredient ;
+  skos:prefLabel "baking soda"@en , "bicarbonate de soude"@fr ;
+  skos:definition "baking soda is sodium bicarbonate, often used as a dough raising agent or to soften pectinase in starches"@en ;
+  skos:exactMatch foodon:00002385 , wd:Q179731 ;
+.
+
+
+######################################################################
+## fats
+
+<urn:bwyd:ingredient:gelatin> a bwyd:Ingredient ;
+  skos:prefLabel "gelatin"@en , "gélatine"@fr ;
+  skos:definition "powdered gelatin"@en ;
+  skos:exactMatch foodon:03315281 , wd:Q179254 ;
+.
+
+<urn:bwyd:ingredient:avocado_oil> a bwyd:Ingredient ;
+  skos:prefLabel "avocado oil"@en , "huile d'avocat"@fr ;
+  skos:definition "avocado oil is a neutral oil with a high smoke temperature, pressed from avocado pulp"@en ;
+  skos:exactMatch foodon:03311438 , wd:Q2918735 ;
+.
+
+
+######################################################################
+## spices
+
+<urn:bwyd:ingredient:vanilla_extract> a bwyd:Ingredient ;
+  skos:prefLabel "vanilla extract"@en , "extrait de vanille"@fr ;
+  skos:definition "a culinary flavoring liquid made from vanilla pods in ethanol solution"@en ;
+  skos:exactMatch foodon:03316763 , wd:Q10749869 ;
+.
+
+<urn:bwyd:ingredient:nutmeg> a bwyd:Ingredient ;
+  skos:prefLabel "nutmeg"@en , "noix de muscade"@fr ;
+  skos:definition "freshly grated seed of trees in the genus Myristica"@en ;
+  skos:exactMatch foodon:03316426 , wd:Q83165 ;
+.
+
+<urn:bwyd:ingredient:black_pepper> a bwyd:Ingredient ;
+  skos:prefLabel "black pepper"@en , "poivre noir"@fr ;
+  skos:definition "freshly ground peppercorns from the plant Piper nigrum"@en ;
+  skos:exactMatch foodon:00001650 , wd:Q43084 ;
+.
+
+<urn:bwyd:ingredient:turmeric> a bwyd:Ingredient ;
+  skos:prefLabel "turmeric"@en , "curcuma"@fr ;
+  skos:definition "a yellow-orange-colored spice rich in curcumin, made from the powdered rhizome of the Curcuma longa (ginger) plant"@en ;
+  skos:exactMatch foodon:03310841 , wd:Q20730193 ;
+.
+
+<urn:bwyd:ingredient:cumin> a bwyd:Ingredient ;
+  skos:prefLabel "cumin"@en , "curcuma"@fr ;
+  skos:definition "a spice made from ground seeds of a cumin plant, Cuminum cyminum"@en ;
+  skos:exactMatch foodon:00003396 , wd:Q57328174 ;
+.
+
+<urn:bwyd:ingredient:dried_sumac> a bwyd:Ingredient ;
+  skos:prefLabel "dried sumac"@en , "sumac séché"@fr ;
+  skos:definition "a spice made from the ground dried berries of Rhus coriaria"@en ;
+  skos:exactMatch foodon:00004379 , wd:Q16131953 ;
+.
+
+<urn:bwyd:ingredient:cinnamon> a bwyd:Ingredient ;
+  skos:prefLabel "cinnamon"@en , "cannelle"@fr ;
+  skos:definition "a spice made from the ground inner bark of trees in the genus Cinnamomum"@en ;
+  skos:exactMatch foodon:03301175 , wd:Q28165 ;
+.
+
+<urn:bwyd:ingredient:dill> a bwyd:Ingredient ;
+  skos:prefLabel "dill"@en , "aneth"@fr ;
+  skos:definition "a spice made from the leaves of the Anethum graveolens plant"@en ;
+  skos:exactMatch foodon:03411277 , wd:Q59659860 ;
+.
+
+<urn:bwyd:ingredient:thyme> a bwyd:Ingredient ;
+  skos:prefLabel "thyme"@en , "thym"@fr ;
+  skos:definition "a spice made from the leaves of plants in genus Thymus"@en ;
+  skos:exactMatch foodon:03301562 , wd:Q3215980 ;
+.
+
+<urn:bwyd:ingredient:chilhuacle_negro> a bwyd:Ingredient ;
+  skos:prefLabel "chilhuacle negro chili"@en , "piment chilhuacle negro"@fr ;
+  skos:definition "a spice made from the smoked dried fruit of a black culivar of the chili pepper plant, Capsicum annuum"@en ;
+  skos:exactMatch wd:Q16540939 ;
+  skos:broadMatch foodon:00003744 ;
+.
+
+<urn:bwyd:ingredient:celery_seeds> a bwyd:Ingredient ;
+  skos:prefLabel "celery seeds"@en , "graines de céleri"@fr ;
+  skos:definition "a spice made from the whole seeds of the celery plant, Apium graveolens"@en ;
+  skos:exactMatch foodon:03301862 , wd:Q102256772 ;
+.
+
+<urn:bwyd:ingredient:coriander_seeds> a bwyd:Ingredient ;
+  skos:prefLabel "coriander seeds"@en , "graines de coriandre"@fr ;
+  skos:definition "a spice made from the whole seeds of the coriander plant, Coriandrum sativum"@en ;
+  skos:exactMatch foodon:03000224 , wd:Q20856764 ;
+.
+
+<urn:bwyd:ingredient:mustard_powder> a bwyd:Ingredient ;
+  skos:prefLabel "mustard powder"@en , "moutarde en poudre"@fr ;
+  skos:definition "a spice made from ground seeds of mustard plants in the Brassica genus"@en ;
+  skos:exactMatch foodon:03306359 , wd:Q57655865 ;
+.
+
+<urn:bwyd:ingredient:garlic_powder> a bwyd:Ingredient ;
+  skos:prefLabel "garlic powder"@en , "ail en poudre"@fr ;
+  skos:definition "a spice made from ground dried cloves of the garlic plant, Allium sativum"@en ;
+  skos:exactMatch foodon:03301844 , wd:Q10716334 ;
+.
+
+
+######################################################################
+## fungi
+
+<urn:bwyd:ingredient:mushrooms> a bwyd:Ingredient ;
+  skos:prefLabel "mushrooms"@en , "champignons"@fr ;
+  skos:definition "edible fungi fruit bodies"@en ;
+  skos:exactMatch foodon:03540782 , wd:Q654236 ;
+.
+
+
+######################################################################
+## veggies
+
+<urn:bwyd:ingredient:cucumber> a bwyd:Ingredient ;
+  skos:prefLabel "cucumber"@en , "concombre"@fr ;
+  skos:definition "a pepo fruit of a cucumber plant, Cucumis sativus"@en ;
+  skos:exactMatch foodon:00003415 , wd:Q2735883 ;
+.
+
+<urn:bwyd:ingredient:onion> a bwyd:Ingredient ;
+  skos:prefLabel "onion"@en , "oignon"@fr ;
+  skos:definition "a bulb of an onion plant, Allium cepa"@en ;
+  skos:exactMatch foodon:03316347 , wd:Q3406628 ;
+.
+
+<urn:bwyd:ingredient:leek> a bwyd:Ingredient ;
+  skos:prefLabel "leek"@en , "poireau"@fr ;
+  skos:definition "a vegetable in the onion family, Allium ampeloprasum"@en ;
+  skos:exactMatch foodon:00003670 , wd:Q1807269 ;
+.
+
+<urn:bwyd:ingredient:potato> a bwyd:Ingredient ;
+  skos:prefLabel "potato"@en , "pomme de terre"@fr ;
+  skos:definition "a shoot axis tuber of a potato plant, Solanum tuberosum"@en ;
+  skos:exactMatch foodon:03315354 , wd:Q16587531 ;
+.
+
+
+######################################################################
+## fruits, nuts
+
+<urn:bwyd:ingredient:walnut> a bwyd:Ingredient ;
+  skos:prefLabel "walnut"@en , "noyer"@fr ;
+  skos:definition "a drupe fruit from a walnut tree, Juglans genus"@en ;
+  skos:exactMatch foodon:03301364 , wd:Q208021 ;
+.
+
+<urn:bwyd:ingredient:raisins> a bwyd:Ingredient ;
+  skos:prefLabel "raisins"@en , "raisins"@fr ;
+  skos:definition "dried grapes"@en ;
+  skos:exactMatch foodon:03301283 , wd:Q13186 ;
+.
+
+<urn:bwyd:ingredient:applesauce> a bwyd:Ingredient ;
+  skos:prefLabel "applesauce"@en , "compote de pommes"@fr ;
+  skos:definition "a sauce made from heated puréed apples, potentially sweetened"@en ;
+  skos:exactMatch foodon:03301126 , wd:Q618345 ;
+.
+
+<urn:bwyd:ingredient:coconut> a bwyd:Ingredient ;
+  skos:prefLabel "coconut"@en , "noix de coco"@fr ;
+  skos:definition "a drupe fruit of the coconut palm tree, Cocos nucifera"@en ;
+  skos:exactMatch foodon:00003449 , wd:Q3342808 ;
+.
+
+<urn:bwyd:ingredient:tangerine> a bwyd:Ingredient ;
+  skos:prefLabel "tangerine"@en , "tangerine"@fr ;
+  skos:definition "an orange-colored hesperidium fruit of a tangerine tree, Citrus tangerina"@en ;
+  skos:exactMatch foodon:00003488 , wd:Q516494 ;
+.
+
+
+######################################################################
+## meats
+
+<urn:bwyd:ingredient:sausage> a bwyd:Ingredient ;
+  skos:prefLabel "sausage"@en , "saucisse"@fr ;
+  skos:definition "a food product made from seasoned ground meat encased in a skin in the shape of a cylinder"@en ;
+  skos:exactMatch foodon:03315904 , wd:Q131419 ;
+.
+
+
+######################################################################
+## seafood
+
+<urn:bwyd:ingredient:salmon> a bwyd:Ingredient ;
+  skos:prefLabel "salmon"@en , "saumon"@fr ;
+  skos:definition "a common name for anadromous fish in the trout family"@en ;
+  skos:exactMatch foodon:00003473 , wd:Q2796766 ;
+.
+
+
+######################################################################
+## booze
+
+<urn:bwyd:ingredient:wine> a bwyd:Ingredient ;
+  skos:prefLabel "wine"@en , "vin"@fr ;
+  skos:definition "an alcoholic beverage typically made from fermented grapes or other fruit"@en ;
+  skos:exactMatch wd:Q282 ;
+  skos:closeMatch foodon:00001254 ;
+.
+
+<urn:bwyd:ingredient:vermouth> a bwyd:Ingredient ;
+  skos:prefLabel "vermouth"@en , "vermouth"@fr ;
+  skos:definition "an alcoholic beverage made from aromatized wine"@en ;
+  skos:exactMatch foodon:03307808 , wd:Q231088 ;
+.
+
+<urn:bwyd:ingredient:vodka> a bwyd:Ingredient ;
+  skos:prefLabel "vodka"@en , "vodka"@fr ;
+  skos:definition "an alcoholic beverage made from distilling grapes, grains, and other starches"@en ;
+  skos:exactMatch foodon:03305518 , wd:Q374 ;
+.
+

@@ -1,0 +1,227 @@
+@prefix bwyd:     <https://github.com/DerwenAI/bwyd/wiki/ns#> .
+
+@prefix bbo:      <https://www.irit.fr/recherches/MELODI/ontologies/BBO#> .
+@prefix dc:       <http://purl.org/dc/elements/1.1/> .
+@prefix dcmitype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+@prefix foodon:   <http://purl.obolibrary.org/obo/FOODON_> .
+@prefix lmri:     <http://purl.org/dcx/lrmi-vocabs/learningResourceType/> .
+@prefix ppcl:     <http://www.semantic-web.at/ppcl/> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:       <http://www.w3.org/ns/shacl#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix void:     <http://rdfs.org/ns/void#> .
+@prefix wd:       <http://www.wikidata.org/entity/> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+
+
+######################################################################
+## Bwyd concept scheme based on SKOS
+
+<https://github.com/DerwenAI/bwyd> a void:Dataset ;
+ppcl:numberOfConcepts "5"^^xsd:int ;
+ppcl:numberOfConceptSchemes "1"^^xsd:int ;
+ppcl:availablelanguages "en", "fr" ;
+dcterms:creator <https://orcid.org/0000-0003-3167-1539> ;
+dcterms:language "en" ;
+dcterms:date "2026-03-10T18:14:00.000Z"^^xsd:dateTime ;
+dcterms:title "bwyd"@en ;
+void:feature _:node2 ;
+void:vocabulary <http://www.w3.org/2004/02/skos/core#> ;
+.
+
+_:node2 a void:TechnicalFeature ;
+rdfs:label "RDF/XML" ;
+dcterms:format "application/rdf+xml" ;
+.
+
+bwyd:BwydScheme a skos:ConceptScheme ;
+dcterms:title "Resource"@en ;
+skos:definition "A mid-level SKOS taxonomy used for representing notes about culinary work in the Bwyd domain-specific language"@en ;
+skos:hasTopConcept bwyd:Recipe ;
+skos:prefLabel "Bwyd minimal SKOS taxonomy"@en ;
+dcterms:publisher <https://derwen.ai/> ;
+dcterms:creator <https://orcid.org/0000-0003-3167-1539> ;
+.
+
+
+######################################################################
+## competency questions, defining the needs for custom terms
+
+bwyd:CompetencyQuestion a rdfs:Class ;
+  rdfs:label "Competency Question"@en ;
+  rdfs:comment "A question the vocabulary must be able to answer; functions as an acceptance test for scope, coverage, and structure."@en ;
+  dcterms:created "2026-07-10"^^xsd:date ;
+  dcterms:creator <https://lccn.loc.gov/2026945272> ;
+.
+
+bwyd:CQ-001 a bwyd:CompetencyQuestion ;
+  dcterms:identifier "CQ-001" ;
+  rdfs:seeAlso <https://github.com/DerwenAI/bwyd/wiki/cq#qc-001> ;
+  dcterms:title "Enumerate the components for a recipe"@en ;
+  dcterms:description "Which components are required to prepare a given recipe, recursively including those prepared in advance?"@en ;
+  dcterms:isPartOf bwyd:BwydScheme ;
+  dcterms:created "2026-07-10"^^xsd:date ;
+  dcterms:creator <https://orcid.org/0000-0003-3167-1539> ;
+.
+
+bwyd:CQ-002 a bwyd:CompetencyQuestion ;
+  dcterms:identifier "CQ-002" ;
+  rdfs:seeAlso <https://github.com/DerwenAI/bwyd/wiki/cq#qc-002> ;
+  dcterms:title "Enumerate the recipes within a food category"@en ;
+  dcterms:description "Which recipes are available for a given category of prepared food?"@en ;
+  dcterms:isPartOf bwyd:BwydScheme ;
+  dcterms:created "2026-07-10"^^xsd:date ;
+  dcterms:creator <https://orcid.org/0000-0003-3167-1539> ;
+.
+
+bwyd:CQ-003 a bwyd:CompetencyQuestion ;
+  dcterms:identifier "CQ-003" ;
+  rdfs:seeAlso <https://github.com/DerwenAI/bwyd/wiki/cq#qc-003> ;
+  dcterms:title "Search for recipes tagged with a keyword"@en ;
+  dcterms:description "Which recipes have been tagged with a given keyword?"@en ;
+  dcterms:isPartOf bwyd:BwydScheme ;
+  dcterms:created "2026-07-10"^^xsd:date ;
+  dcterms:creator <https://orcid.org/0000-0003-3167-1539> ;
+.
+
+
+######################################################################
+## relations
+
+bwyd:CQ-001 dcterms:subject bwyd:dependsOn
+.
+
+bwyd:dependsOn dcterms:isReferencedBy bwyd:CQ-001
+.
+
+bwyd:dependsOn rdfs:subPropertyOf rdf:Property ;
+  rdfs:domain bwyd:Recipe ;
+  rdfs:range bwyd:Closure ;
+  rdfs:label "depends on"@en ;
+  skos:definition "Indicates the collection of Closures on which a Recipe depends"@en ;
+.
+
+
+bwyd:CQ-001 dcterms:subject bwyd:produces
+.
+
+bwyd:produces dcterms:isReferencedBy bwyd:CQ-001
+.
+
+bwyd:produces rdfs:subPropertyOf <http://purl.obolibrary.org/obo/RO_0002234> ;
+  rdfs:domain bwyd:Closure ;
+  rdfs:range bwyd:Product ;
+  rdfs:label "produces"@en ;
+  skos:definition "How an Activity within a Closure produces a culinary Ingredient of prepared foods"@en ;
+.
+
+
+bwyd:CQ-001 dcterms:subject bwyd:consumes
+.
+
+bwyd:consumes dcterms:isReferencedBy bwyd:CQ-001
+.
+
+bwyd:consumes rdfs:subPropertyOf <http://purl.obolibrary.org/obo/RO_0002233> ;
+  rdfs:domain bwyd:Closure ;
+  rdfs:range bwyd:Ingredient ;
+  rdfs:label "consumes"@en ;
+  skos:definition "How a Closure within a Recipe consumes a culinary Ingredient of prepared foods"@en ;
+.
+
+
+######################################################################
+## top concepts
+
+bwyd:CQ-001 dcterms:subject bwyd:Recipe
+.
+
+bwyd:Recipe dcterms:isReferencedBy bwyd:CQ-001
+.
+
+bwyd:Recipe a skos:Concept, bbo:DataObject ;
+  skos:definition "Recipe is a set of repeatable notes and instructions about preparing a processed food item, written in the Bwyd domain-specific language for content management and versioning, stored as a text file which can be viewed and edited by culinary professionals, parsed for validation to build a subgraph of Pydantic objects, which generates a JSON representation for HTML rendering, plus other use cases for analysis and planning."@en ;
+  skos:inScheme bwyd:BwydScheme ;
+  skos:topConceptOf bwyd:BwydScheme ;
+  dc:identifier wd:Q219239, foodon:00004081 ;
+  skos:prefLabel "recipe"@en, "recette"@fr ;
+  skos:altLabel "module"@en ;
+.
+
+
+bwyd:CQ-001 dcterms:subject bwyd:Closure
+.
+
+bwyd:Closure dcterms:isReferencedBy bwyd:CQ-001
+.
+
+bwyd:Closure a skos:Concept ;
+  skos:definition "Closure is a repeatable process used by one or more Recipes to produce one or more intermediate components"@en ;
+  skos:inScheme bwyd:BwydScheme ;
+  skos:topConceptOf bwyd:BwydScheme ;
+  dc:identifier wd:Q320346 , wd:Q1751609, foodon:00004457 ;
+  skos:prefLabel "closure"@en, "clôture"@fr ;
+.
+
+
+bwyd:CQ-001 dcterms:subject bwyd:Product
+.
+
+bwyd:Product dcterms:isReferencedBy bwyd:CQ-001
+.
+
+bwyd:Product a skos:Concept ;
+  skos:definition "Product is an Ingredient produced by a component of a Recipe, intended to be consumable as a whole or used to prepare to other food products"@en ;
+  skos:inScheme bwyd:BwydScheme ;
+  skos:topConceptOf bwyd:BwydScheme ;
+  skos:prefLabel "product"@en, "produit"@fr ;
+  skos:exactMatch  wd:Q951964 , foodon:00001002 ;
+.
+
+
+bwyd:CQ-001 dcterms:subject bwyd:Ingredient
+.
+
+bwyd:Ingredient dcterms:isReferencedBy bwyd:CQ-001
+.
+
+bwyd:Ingredient rdfs:subClassOf bwyd:Product ;
+  skos:definition "Ingredient is a food material used within a Recipe"@en ;
+  skos:inScheme bwyd:BwydScheme ;
+  skos:prefLabel "culinary ingredient"@en, "ingrédient de cuisine"@fr ;
+  skos:exactMatch wd:Q25403900 , foodon:00004274 ;
+.
+
+
+bwyd:CQ-002 dcterms:subject bwyd:Super
+.
+
+bwyd:Super dcterms:isReferencedBy bwyd:CQ-002
+.
+
+bwyd:Super a skos:Concept ;
+  dc:identifier wd:Q3504061 ;
+  skos:definition "Super is a category of prepared food, more general than its subject"@en ;
+  skos:inScheme bwyd:BwydScheme ;
+  skos:topConceptOf bwyd:BwydScheme ;
+  skos:prefLabel "super"@en, "super-classe"@fr ;
+.
+
+
+bwyd:CQ-003 dcterms:subject bwyd:Keyword
+.
+
+bwyd:Keyword dcterms:isReferencedBy bwyd:CQ-003
+.
+
+bwyd:Keyword a skos:Concept ;
+  dc:identifier wd:Q1072684 ;
+  skos:definition "Keyword is a phrase with a special meaning in a domain context, used for recall"@en ;
+  skos:inScheme bwyd:BwydScheme ;
+  skos:topConceptOf bwyd:BwydScheme ;
+  skos:prefLabel "keyword"@en, "mot clé"@fr ;
+.
+
+

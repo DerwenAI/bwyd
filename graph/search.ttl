@@ -1,0 +1,93 @@
+@prefix bwyd:     <https://github.com/DerwenAI/bwyd/wiki/ns#> .
+
+@prefix foodon:   <http://purl.obolibrary.org/obo/FOODON_> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix wd:       <http://www.wikidata.org/entity/> .
+
+
+######################################################################
+## superclass annotations
+
+<urn:bwyd:subject:condiment> a bwyd:Super ;
+  skos:prefLabel "condiment"@en , "condiment"@fr ;
+  skos:definition "A relish, sauce, or seasoning added to food to impart a particular flavour or to complement the dish"@en ;
+  skos:exactMatch foodon:00001133 , wd:Q2596997 ;
+.
+
+<urn:bwyd:subject:dessert> a bwyd:Super ;
+  skos:prefLabel "dessert"@en , "dessert"@fr ;
+  skos:definition "A food product served during the dessert course of a meal"@en ;
+  skos:exactMatch foodon:03303220 , wd:Q182940 ;
+.
+
+<urn:bwyd:subject:dumpling> a bwyd:Super ;
+  skos:prefLabel "dumpling"@en , "raviolis"@fr ;
+  skos:definition "Food that consists of small pieces of dough, optionally with a filling"@en ;
+  skos:exactMatch foodon:Q1854639 , wd:03306619 ;
+.
+
+<urn:bwyd:subject:eggs> a bwyd:Super ;
+  skos:prefLabel "eggs"@en , "oeufs"@fr ;
+  skos:definition "An organic vessel grown by an animal to carry a possibly fertilized egg cell"@en ;
+  skos:exactMatch foodon:03542948 , wd:Q93189 ;
+.
+
+<urn:bwyd:subject:muffin> a bwyd:Super ;
+  skos:prefLabel "muffin"@en , "muffin"@fr ;
+  skos:definition "A small, individual-sized, cup-shaped quick bread, often sweetened"@en ;
+  skos:exactMatch foodon:03309530 , wd:Q207220 ;
+.
+
+<urn:bwyd:subject:pasta> a bwyd:Super ;
+  skos:prefLabel "pasta"@en , "pâtes"@fr ;
+  skos:definition "Italian food made from flour, eggs and water and shaped in different forms, usually cooked and served with a sauce"@en ;
+  skos:exactMatch foodon:03306347 , wd:Q178 ;
+.
+
+<urn:bwyd:subject:pickles> a bwyd:Super ;
+  skos:prefLabel "pickles"@en , "cornichons"@fr ;
+  skos:definition "Food preserved via anaerobic fermentation in brine or immersion in vinegar"@en ;
+  skos:exactMatch foodon:03544139 , wd:Q1503784 ;
+.
+
+<urn:bwyd:subject:pudding> a bwyd:Super ;
+  skos:prefLabel "pudding"@en , "pudding"@fr ;
+  skos:definition "Sweetened or unsweetened custard or starch-based pudding; also non-fruit pie filling"@en ;
+  skos:exactMatch foodon:03400285 , wd:Q9053 ;
+.
+
+<urn:bwyd:subject:quiche> a bwyd:Super ;
+  skos:prefLabel "quiche"@en , "quiche"@fr ;
+  skos:definition "An oven-baked dish usually made with eggs, milk or cream and other ingredients (e.g. vegetables, meat products, etc.) in a pastry crust"@en ;
+  skos:exactMatch foodon:03543945 , wd:Q722595 ;
+.
+
+<urn:bwyd:subject:seafood> a bwyd:Super ;
+  skos:prefLabel "seafood"@en , "fruit de mer"@fr ;
+  skos:definition "Food from the sea, e.g. fish, shrimp, crab, mussel, seaweed"@en ;
+  skos:exactMatch foodon:03400267 , wd:Q192935 ;
+.
+
+<urn:bwyd:subject:sauce> a bwyd:Super ;
+  skos:prefLabel "sauce"@en , "sauce"@fr ;
+  skos:definition "Liquid, creaming or semi-solid food served on or used in preparing other foods"@en ;
+  skos:exactMatch foodon:03311146 , wd:Q178359 ;
+.
+
+
+######################################################################
+## keyword annotations
+
+<urn:bwyd:keyword:french> a bwyd:Keyword ;
+  skos:prefLabel "french"@en , "français"@fr ;
+  skos:definition "Foods from France"@en ;
+  skos:exactMatch wd:Q6661 ;
+.
+
+<urn:bwyd:keyword:italian> a bwyd:Keyword ;
+  skos:prefLabel "italian"@en , "italien"@fr ;
+  skos:definition "Foods from Italy"@en ;
+  skos:exactMatch wd:Q192786 ;
+.
+
+
