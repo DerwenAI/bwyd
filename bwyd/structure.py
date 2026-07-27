@@ -12,6 +12,7 @@ import io
 import logging
 import typing
 
+from icecream import ic
 from PIL import Image
 from pydantic import BaseModel
 from upath import UPath
@@ -205,3 +206,88 @@ Accessor for the total, non-intermediate yields of one Closure object.
                 yields_list.append(html)
 
         return yields_list
+
+
+    def gen_rdf (
+        self,
+        urn_prefix: str,
+        slug_urn: str,
+        closure_urn: str,
+        ) -> list[ str ]:
+        """
+Generate RDF modeling from OTTR templates.
+        """
+        rdf_data: list[ str ] = [f"""
+bwyd:Closure(
+  <{ closure_urn }> ,
+  "{ self.name }"@en ,
+  "{ self.text }"@en ,
+) .
+        """.strip()]
+
+        for tag in self.supers:
+            tag_urn: str = f"{ urn_prefix }:super:{ tag }"
+
+            rdf_data.append(f"""
+bwyd:ClosureSuper(
+  <{ closure_urn }> ,
+  <{ tag_urn }> ,
+) .
+
+bwyd:Super(
+  <{ tag_urn }> ,
+  "{ tag }"@en ,
+) .
+            """.strip())
+
+        for tag in self.keywords:
+            tag_urn: str = f"{ urn_prefix }:keyword:{ tag }"
+
+            rdf_data.append(f"""
+bwyd:ClosureKeyword(
+  <{ closure_urn }> ,
+  <{ tag_urn }> ,
+) .
+
+bwyd:Keyword(
+  <{ tag_urn }> ,
+  "{ tag }"@en ,
+) .
+            """.strip())
+
+        for ingr in self.ingredients:
+            consumes_urn: str = f"{ urn_prefix }:ingredient:{ ingr }"
+
+            rdf_data.append(f"""
+bwyd:ClosureConsumes(
+  <{ closure_urn }> ,
+  <{ consumes_urn }> ,
+) .
+            """.strip())
+
+        for prod in self.products:
+            if prod.intermediate:
+                produces_urn: str = f"{ closure_urn }/product/{ prod.symbol }"
+
+                rdf_data.append(f"""
+bwyd:ClosureProduces(
+  <{ closure_urn }> ,
+  <{ produces_urn }> ,
+) .
+                """.strip())
+
+            else:
+                produces_urn: str = f"{ urn_prefix }/product/{ prod.symbol }"
+
+                rdf_data.append(f"""
+bwyd:ClosureProduces(
+  <{ closure_urn }> ,
+  <{ produces_urn }> ,
+) .
+bwyd:Product(
+  <{ produces_urn }> ,
+  "{ prod.symbol }"@en ,
+) .
+                """.strip())
+
+        return rdf_data

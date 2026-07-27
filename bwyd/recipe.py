@@ -1060,3 +1060,71 @@ which is by default minified.
             )
 
         return html
+
+
+######################################################################
+## generate RDF
+
+    def gen_rdf (
+        self,
+        ) -> list[ str ]:
+        """
+Generate RDF modeling from OTTR templates.
+        """
+        urn_prefix: str = f"urn:bwyd:pacoid"
+        slug_urn: str = f"{ urn_prefix }:{ self.slug }"
+        author: str = self.author
+
+        match: re.Match | None = re.match(r"^.*(https\:[\w\.\/]+)\"", author)
+
+        if match is not None:
+            author = match.group(1).strip()
+
+        rdf_data: list[ str ] = [ f"""
+@prefix bwyd:     <https://github.com/DerwenAI/bwyd/wiki/ns#> .
+
+bwyd:Recipe(
+  <{ slug_urn }> ,
+  "{ self.title }"@en ,
+  "{ self.text }"@en ,
+  <https://spdx.org/licenses/{self.spdx_id}> ,
+  <{ author }> ,
+  "{ self.updated }"^^xsd:dateTime ,
+) .
+        """.strip() ]
+
+        for post in self.posts:
+            rdf_data.append(f"""
+bwyd:RecipeImage(
+  <{ slug_urn }> ,
+  <{ post.url }> ,
+) .
+            """.strip())
+
+        for cite_url in self.cites:
+            rdf_data.append(f"""
+bwyd:RecipeSource(
+  <{ slug_urn }> ,
+  <{ post.url }> ,
+) .
+            """.strip())
+
+        for num, closure in enumerate(self.closures.values()):
+            closure_urn: str = f"{ slug_urn }/closure_{ num + 1 }"
+
+            rdf_data.append(f"""
+bwyd:RecipeDepends(
+  <{ slug_urn }> ,
+  <{ closure_urn }> ,
+) .
+            """.strip())
+
+            rdf_data.extend(
+                closure.gen_rdf(
+                    urn_prefix,
+                    slug_urn,
+                    closure_urn,
+                )
+            )
+
+        return rdf_data
