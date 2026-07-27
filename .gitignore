@@ -1,4 +1,6 @@
 # local
+graph/kg.rdf
+graph/bbo.ttl
 graph/corpus.ttl
 graph/entire.ttl
 bwyd.cache
