@@ -1,3 +1,7 @@
 [bwyd]
 cache_path = "bwyd.cache"
 cache_expire = 360
+
+[graph]
+ns = "https://github.com/DerwenAI/bwyd/wiki/ns#"
+rdf_path = "graph"

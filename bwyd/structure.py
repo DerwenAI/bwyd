@@ -12,7 +12,7 @@ import io
 import logging
 import typing
 
-from icecream import ic
+from icecream import ic  # pylint: disable=W0611
 from PIL import Image
 from pydantic import BaseModel
 from upath import UPath
@@ -210,10 +210,9 @@ Accessor for the total, non-intermediate yields of one Closure object.
 
     def gen_rdf (
         self,
-        urn_prefix: str,
-        slug_urn: str,
+        global_ns: str,
+        product_names: dict[ str, str ],
         closure_urn: str,
-        local_names: dict[ str, str ],
         ) -> list[ str ]:
         """
 Generate RDF modeling from OTTR templates.
@@ -227,7 +226,7 @@ bwyd:Closure(
         """.strip()]
 
         for tag in self.supers:
-            tag_urn: str = f"{ urn_prefix }:super:{ tag }"
+            tag_urn: str = f"{ global_ns }:super:{ tag }"
 
             rdf_data.append(f"""
 bwyd:ClosureSuper(
@@ -242,7 +241,7 @@ bwyd:Super(
             """.strip())
 
         for tag in self.keywords:
-            tag_urn: str = f"{ urn_prefix }:keyword:{ tag }"
+            tag_urn = f"{ global_ns }:keyword:{ tag }"
 
             rdf_data.append(f"""
 bwyd:ClosureKeyword(
@@ -257,10 +256,10 @@ bwyd:Keyword(
             """.strip())
 
         for ingr_symbol in self.ingredients:
-            if ingr_symbol in local_names:
-                consumes_urn: str = local_names[ingr_symbol]
+            if ingr_symbol in product_names:
+                consumes_urn: str = product_names[ingr_symbol]
             else:
-                consumes_urn = f"{ urn_prefix }:ingredient:{ ingr_symbol }"
+                consumes_urn = f"{ global_ns }:ingredient:{ ingr_symbol }"
 
             rdf_data.append(f"""
 bwyd:ClosureConsumes(
@@ -284,7 +283,7 @@ bwyd:ClosureProduces(
                 """.strip())
 
             else:
-                produces_urn: str = f"{ urn_prefix }:product:{ prod.symbol }"
+                produces_urn = f"{ global_ns }:product:{ prod.symbol }"
 
                 rdf_data.append(f"""
 bwyd:ClosureProduces(

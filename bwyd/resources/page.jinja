@@ -243,7 +243,7 @@ div#footer-content p {
     padding: 0 0 1em .5em;
 }
     </style>
-    <title>{{ module.title }}</title>
+    <title>{{ recipe.title }}</title>
   </head>
   <body>
     <div id="main" class="container-fluid">
@@ -260,15 +260,15 @@ div#footer-content p {
 	      </a>
 	    </span>
 	    {% endif %}
-	    {{ module.title }}
+	    {{ recipe.title }}
 	  </h1>
 	  <div class="row">
 	    <div class="col">
-	      <!-- module description -->
+	      <!-- recipe description -->
 	      <div class="card"
 		   >
 		<div class="card-body">
-		  <p class="card-text">{{ module.text }}</p>
+		  <p class="card-text">{{ recipe.text }}</p>
 		  &nbsp;
 		  <a
 		    href="/dl/{{ slug }}"
@@ -279,7 +279,7 @@ div#footer-content p {
 	      </div>
 	    </div>
 	    <div class="col-6">
-	      <!-- module metadata -->
+	      <!-- recipe metadata -->
 	      <nav>
 		<div class="nav nav-tabs" id="nav-tab" role="tablist"
 		     >
@@ -298,7 +298,7 @@ div#footer-content p {
 			<th scope="row">serves:</th>
 			<td>
 			  <ul class="list-group list-group-flush">
-			  {% for product in module.details.serves %}
+			  {% for product in recipe.details.serves %}
 			  <li class="list-group-item details">
 			    {{ product }}
 			  </li>
@@ -309,14 +309,14 @@ div#footer-content p {
 
 		      <tr>
 			<th scope="row">duration:</th>
-			<td>{{ module.details.duration }}</td>
+			<td>{{ recipe.details.duration }}</td>
 		      </tr>
 
-		      {% if module.details.keywords|length > 0 -%}
+		      {% if recipe.details.keywords|length > 0 -%}
 		      <tr>
 			<th scope="row">keywords:</th>
 			<td>
-			  {% for keyword in module.details.keywords %}
+			  {% for keyword in recipe.details.keywords %}
   			  {{ keyword }}{{ ", " if not loop.last else "" }}
 			  {% endfor %}
 			</td>
@@ -325,12 +325,12 @@ div#footer-content p {
 
 		      <tr>
 			<th scope="row">author:</th>
-			<td>{{ module.details.author|safe }}</td>
+			<td>{{ recipe.details.author|safe }}</td>
 		      </tr>
 
 		      <tr>
 			<th scope="row">updated:</th>
-			<td>{{ module.details.updated }}</td>
+			<td>{{ recipe.details.updated }}</td>
 		      </tr>
 		    </tbody>
 		  </table>
@@ -340,7 +340,7 @@ div#footer-content p {
 		<div class="tab-pane fade overflow-scroll ingred" id="nav-ingred" role="tabpanel" aria-labelledby="nav-ingred-tab" tabindex="0">
 		  <table class="table">
 		    <tbody>
-		      {% for ingr in module.ingredients %}
+		      {% for ingr in recipe.ingredients %}
 		      <tr>
 			<td>
 			  {{ ingr.amount }}
@@ -361,7 +361,7 @@ div#footer-content p {
 		<!-- sources -->
 		<div class="tab-pane fade" id="nav-sources" role="tabpanel" aria-labelledby="nav-sources-tab" tabindex="0">
 		  <ul class="list-group list-group-flush">
-		    {% for cite_url in module.sources %}
+		    {% for cite_url in recipe.sources %}
 		    <li class="list-group-item">
 		      <a
 			href="{{ cite_url }}"
@@ -377,7 +377,7 @@ div#footer-content p {
 		<!-- gallery -->
 		<div class="tab-pane fade" id="nav-gallery" role="tabpanel" aria-labelledby="nav-gallery-tab" tabindex="0">
 		  <ul class="list-group list-group-flush">
-		    {% for post_url in module.gallery %}
+		    {% for post_url in recipe.gallery %}
 		    <li class="list-group-item">
 		      <a
 			href="{{ post_url }}"
@@ -394,9 +394,9 @@ div#footer-content p {
 
 	    <div class="col ratio ratio-1x1">
 	      <!-- thumbnail -->
-	      {% if module.image|length %}
+	      {% if recipe.image|length %}
 	      <iframe
-		src="{{ module.image }}"
+		src="{{ recipe.image }}"
 		></iframe>
 	      {% else %}
 	      <img
@@ -409,7 +409,7 @@ div#footer-content p {
 	  <!-- recipe directions -->
 	  <h4 class="bg-tertiary-subtle">directions:</h4>
 	  <div class="accordion" id="accordionExample">
-	    {% for closure in module.closures %}
+	    {% for closure in recipe.closures %}
 	    <div class="accordion-item">
 	      <h3 class="accordion-header">
 		<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="true" aria-controls="collapse{{ loop.index }}">
@@ -719,12 +719,12 @@ div#footer-content p {
 	  </div>
 
 	  <!-- license -->
-	  {% set lic = module.license %}
+	  {% set lic = recipe.license %}
 	  <footer>
 	    <div id="footer">
 	      <div id="footer-thumb">
 		<img
-		  src="{{ module.icon }}"
+		  src="{{ recipe.icon }}"
 		  alt="Bwyd logo"
 		  >
 	      </div>
@@ -771,7 +771,7 @@ div#footer-content p {
       ></script>
 
     <script type="application/ld+json">
-      {{ module.schema_org }}
+      {{ recipe.schema_org }}
     </script>
   </body>
 </html>

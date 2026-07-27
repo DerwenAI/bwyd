@@ -13,8 +13,8 @@ import json
 import pathlib
 import sys
 
-EXAMPLES_DIR: pathlib.Path = pathlib.Path(__file__).resolve().parent.parent / "examples"
-sys.path.insert(0, str(EXAMPLES_DIR))
+CONTENT_DIR: pathlib.Path = pathlib.Path(__file__).resolve().parent.parent / "examples"
+sys.path.insert(0, str(CONTENT_DIR))
 import bwyd  # pylint: disable=C0413,E0401
 
 
@@ -25,27 +25,30 @@ def test_parser (
     """
 Load a sample file to ensure the parser works correctly.
     """
+    account: str = "pacoid"
+
     slug: str = "frozen_gnocchi"
-    gnoc_path: pathlib.Path = EXAMPLES_DIR / f"{slug}.bwyd"
+    gnoc_path: pathlib.Path = CONTENT_DIR / f"{slug}.bwyd"
 
     dsl: bwyd.Bwyd = bwyd.Bwyd()
 
-    module: bwyd.Module = dsl.parse(
+    recipe: bwyd.Recipe = dsl.parse(
         gnoc_path,
         slug = slug,
         debug = False, # True
     )
 
-    module.interpret(
+    recipe.interpret(
+        account,
         debug = False, # True
     )
 
-    obs_data: list = module.get_model()
+    obs_data: list = recipe.get_model()
 
     if debug:
         print(json.dumps(obs_data, indent = 2, sort_keys = False,))
 
-    json_path: pathlib.Path = EXAMPLES_DIR / f"{slug}.json"
+    json_path: pathlib.Path = CONTENT_DIR / f"{slug}.json"
     exp_data: dict = json.load(open(json_path, "r", encoding = "utf-8"))  # pylint: disable=R1732
 
     # compare

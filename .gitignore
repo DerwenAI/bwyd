@@ -1,8 +1,8 @@
 # local
 graph/corpus.ttl
+graph/entire.ttl
 bwyd.cache
 examples/*.html
-db/
 *.dot
 *~
 

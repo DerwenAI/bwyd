@@ -7,7 +7,6 @@ Convert a corpus of Bywd modules into HTML.
 
 import pathlib
 import sys
-import typing
 
 from icecream import ic
 import requests_cache
@@ -26,36 +25,33 @@ if __name__ == "__main__":
 
 
     ## render each module as HTML
+    account: str = "pacoid"
+
     corpus: bwyd.Corpus = dsl.build_corpus()
     dir_path: pathlib.Path = pathlib.Path("examples")
 
-    module_iter: typing.Iterator[ bwyd.Recipe ] = corpus.parse_modules(
+    recipes: list[ bwyd.Recipe ] = list(corpus.parse_recipes(
+        account,
         dir_path,
         debug = True, # False
-    )
+    ))
 
-    modules: list[ bwyd.Recipe ] = []
-
-    for module in module_iter:
-        modules.append(module)
-
-        # render HTML using the Jinja2 template
-        html_path: pathlib.Path = module.path.with_suffix(".html")
+    for recipe in recipes:
+        html_path: pathlib.Path = recipe.path.with_suffix(".html")
 
         with open(html_path, "w", encoding = "utf-8") as fp:
-            fp.write(module.render_template())
+            fp.write(recipe.render_template())
 
     ## search/discovery support
     corpus.render_discovery(
-        modules,
+        recipes,
         dir_path / "index.html",
     )
-
 
     ## KG prototype support
     sys.exit(0)
 
-    graph: bwyd.Graph = corpus.build_graph(modules)
+    graph: bwyd.Graph = corpus.build_graph(recipes)
 
     with open("kg.rdf", "w", encoding = "utf-8") as fp:
         fp.write(graph.serialize())

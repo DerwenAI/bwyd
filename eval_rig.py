@@ -15,12 +15,10 @@ import bwyd
 
 
 if __name__ == "__main__":
-    examples_path: pathlib.Path = pathlib.Path("test")
-    slug: str = "min_eval"
+    account: str = "pacoid"
 
-    ## OVERRIDES
-    examples_path = pathlib.Path(".")
-    slug = sys.argv[1]
+    content_path: pathlib.Path = pathlib.Path("examples")
+    slug: str = sys.argv[1]
 
 
     ######################################################################
@@ -29,21 +27,22 @@ if __name__ == "__main__":
         config_path = pathlib.Path("config.toml"),
     )
 
-    module: bwyd.Recipe = dsl.parse(
-        examples_path / f"{slug}.bwyd",
+    recipe: bwyd.Recipe = dsl.parse(
+        content_path / f"{slug}.bwyd",
         slug = slug,
         debug = False, # True
     )
 
     # interpret the parsed module
-    module.interpret(
+    recipe.interpret(
+        account,
         debug = True, # False
     )
 
-    observed: dict = module.get_model()
+    observed: dict = recipe.get_model()
 
     # output a JSON model, for use in unit tests
-    with open(examples_path / f"{slug}.json", "w", encoding = "utf-8") as fp:
+    with open(content_path / f"{slug}.json", "w", encoding = "utf-8") as fp:
         fp.write(json.dumps(
             observed,
             indent = 2,
@@ -62,5 +61,5 @@ if __name__ == "__main__":
     ic(DeepDiff(expected, observed))
 
     # render the Jinja2 HTML template
-    with open(examples_path / f"{slug}.html", "w", encoding = "utf-8") as fp:
-        fp.write(module.render_template())
+    with open(content_path / f"{slug}.html", "w", encoding = "utf-8") as fp:
+        fp.write(recipe.render_template())

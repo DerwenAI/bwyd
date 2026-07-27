@@ -3,7 +3,12 @@
 A domain specific language (DSL) to assist in taking notes about
 culinary work which is intended to be repeated.
 
-This includes support for running in a Jupyter notebook, plus using
+If you're a home cook, working with recipes from relatives and web
+sites, this project is probably not for you.  However, if you are a
+culinary professional, especially working within a team setting, this
+may be helpful depending on your preferred approaches.
+
+The DSL includes support for running in a Jupyter notebook, plus using
 graph technologies for analytics and preparation planning.
 
 ---

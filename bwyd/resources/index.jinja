@@ -72,34 +72,34 @@ a {
 	</tr>
       </thead>
       <tbody>
-	{% for module in corpus.modules %}
+	{% for recipe in corpus.recipes %}
 	<tr>
 	  <td>
 	    <img
-	      src="{{ module.thumb }}"
-	      alt="{{ module.title }}"
+	      src="{{ recipe.thumb }}"
+	      alt="{{ recipe.title }}"
 	      class="recipe_table_img"
 	      >
 	  </td>
 	  <td>
 	    <a
-	      href="{{ module.slug }}.html"
-	      title="{{ module.text }}"
-              >{{ module.title }}</a>
+	      href="{{ recipe.slug }}.html"
+	      title="{{ recipe.text }}"
+              >{{ recipe.title }}</a>
 	  </td>
 	  <td>
-	    {% for yield in module.serves %}
+	    {% for yield in recipe.serves %}
   	    {{ yield }}<br>
 	    {% endfor %}
 	  </td>
 	  <td>
-	    {{ module.duration }}
+	    {{ recipe.duration }}
 	  </td>
 	  <td>
-	    {{ module.updated }}
+	    {{ recipe.updated }}
 	  </td>
 	  <td>
-	    {% for keyword in module.keywords %}
+	    {% for keyword in recipe.keywords %}
   	    {{ keyword }}{{ ", " if not loop.last else "" }}
 	    {% endfor %}
 	  </td>

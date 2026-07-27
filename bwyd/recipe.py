@@ -274,15 +274,12 @@ Helper method to parse one URL.
 
     def validate (
         self,
+        account: str,
         ) -> None:
         """
 Validate the forward references for one Bwyd module.
         """
-        local_names: set[ str ] = {
-            product.symbol
-            for closure in self.closures.values()
-            for product in closure.products
-        }
+        _, _, product_names = self.get_product_names(account)
 
         for closure in self.closures.values():
             # check for zero reference counts
@@ -303,7 +300,7 @@ Validate the forward references for one Bwyd module.
 
             # check for references outside this module
             for symbol, entity in closure.ingredients.items():
-                if entity.external and symbol not in local_names:
+                if entity.external and symbol not in product_names:
                     raise BwydParserError(
                         f"CLOSURE `{symbol}` used but not defined {entity.loc}",
                         symbol = symbol,
@@ -864,6 +861,7 @@ Helper method to interpret one Closure.
 
     def interpret (
         self,
+        account: str,
         *,
         debug: bool = False,
         ) -> None:
@@ -919,7 +917,7 @@ Interpret one Bwyd module.
             )
 
         # validate the resulting parsed module
-        self.validate()
+        self.validate(account)
 
 
 ######################################################################
@@ -1045,7 +1043,7 @@ Load a Jinja2 template and render the data model as HTML,
 which is by default minified.
         """
         html: str = page_template.render(
-            module = self.get_model()
+            recipe = self.get_model()
         )
 
         if minify:
@@ -1063,22 +1061,35 @@ which is by default minified.
 ######################################################################
 ## generate RDF
 
-    def gen_rdf (
+    def get_product_names (
         self,
-        ) -> list[ str ]:
+        account: str,
+        ) -> tuple[ str, str, dict[ str, str ]]:
         """
-Generate RDF modeling from OTTR templates.
+Construct the local namespace.
         """
-        urn_prefix: str = f"urn:bwyd:pacoid"
-        slug_urn: str = f"{ urn_prefix }:{ self.slug }"
+        global_ns: str = f"urn:bwyd:{ account }"
+        local_ns: str = f"{ global_ns }:{ self.slug }"
 
-        local_names: dict[ str ] = {
-            product.symbol: f"{ slug_urn }:closure_{ num + 1 }:product:{ product.symbol }"
+        product_names: dict[ str, str ] = {
+            product.symbol: f"{ local_ns }:closure_{ num + 1 }:product:{ product.symbol }"
             for num, closure in enumerate(self.closures.values())
             for product in closure.products
         }
 
-        author: str = self.author
+        return global_ns, local_ns, product_names
+
+
+    def gen_rdf (
+        self,
+        account: str,
+        ) -> list[ str ]:
+        """
+Generate RDF modeling from OTTR templates.
+        """
+        global_ns, local_ns, product_names = self.get_product_names(account)
+
+        author: str = self.author  # type: ignore
 
         match: re.Match | None = re.match(r"^.*(https\:[\w\.\/]+)\"", author)
 
@@ -1089,7 +1100,7 @@ Generate RDF modeling from OTTR templates.
 @prefix bwyd:     <https://github.com/DerwenAI/bwyd/wiki/ns#> .
 
 bwyd:Recipe(
-  <{ slug_urn }> ,
+  <{ local_ns }> ,
   "{ self.title }"@en ,
   "{ self.text }"@en ,
   <https://spdx.org/licenses/{self.spdx_id}> ,
@@ -1101,7 +1112,7 @@ bwyd:Recipe(
         for post in self.posts:
             rdf_data.append(f"""
 bwyd:RecipeImage(
-  <{ slug_urn }> ,
+  <{ local_ns }> ,
   <{ post.url }> ,
 ) .
             """.strip())
@@ -1109,27 +1120,26 @@ bwyd:RecipeImage(
         for cite_url in self.cites:
             rdf_data.append(f"""
 bwyd:RecipeSource(
-  <{ slug_urn }> ,
-  <{ post.url }> ,
+  <{ local_ns }> ,
+  <{ cite_url }> ,
 ) .
             """.strip())
 
         for num, closure in enumerate(self.closures.values()):
-            closure_urn: str = f"{ slug_urn }:closure_{ num + 1 }"
+            closure_urn: str = f"{ local_ns }:closure_{ num + 1 }"
 
             rdf_data.append(f"""
 bwyd:RecipeDepends(
-  <{ slug_urn }> ,
+  <{ local_ns }> ,
   <{ closure_urn }> ,
 ) .
             """.strip())
 
             rdf_data.extend(
                 closure.gen_rdf(
-                    urn_prefix,
-                    slug_urn,
+                    global_ns,
+                    product_names,
                     closure_urn,
-                    local_names,
                 )
             )
 

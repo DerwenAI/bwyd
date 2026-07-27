@@ -181,8 +181,9 @@ Iterator for listing the Bwyd modules in a given directory.
                 yield bwyd_path
 
 
-    def parse_modules (
+    def parse_recipes (
         self,
+        account: str,
         dir_path: pathlib.Path,
         *,
         glob: str = "*.bwyd",
@@ -207,6 +208,7 @@ Traverse the given directory, parsing Bwyd modules.
 
             # interpret the parsed module
             recipe.interpret(
+                account,
                 debug = debug,
             )
 
@@ -226,18 +228,18 @@ Render an HTML index for search/discovery across a directory of recipes.
         mod_data: dict = {
             "corpus": {
                 "icon": BWYD_SVG,
-                "modules": [
+                "recipes": [
                     {
-                        "slug": module.slug,
-                        "thumb": module.get_thumbnail(self.get_cache()),
-                        "title": module.title,
-                        "text": module.text,
-                        "serves": module.total_yields(),
-                        "duration": module.total_duration(),
-                        "updated": module.updated,
-                        "keywords": module.collect_keywords(),
+                        "slug": recipe.slug,
+                        "thumb": recipe.get_thumbnail(self.get_cache()),
+                        "title": recipe.title,
+                        "text": recipe.text,
+                        "serves": recipe.total_yields(),
+                        "duration": recipe.total_duration(),
+                        "updated": recipe.updated,
+                        "keywords": recipe.collect_keywords(),
                     }
-                    for module in recipes
+                    for recipe in recipes
                 ],
             },
         }
@@ -267,17 +269,17 @@ Build a knowledge graph from the modules in this corpus.
         pred_produced_by: rdflib.URIRef = graph.compose_iri_instance("ProducedBy")
         pred_uses_ingredient: rdflib.URIRef = graph.compose_iri_instance("UsesIngredient")
 
-        for module in recipes:
-            module_iri: rdflib.URIRef = graph.compose_iri([ module.slug ])  # type: ignore
+        for recipe in recipes:
+            recipe_iri: rdflib.URIRef = graph.compose_iri([ recipe.slug ])  # type: ignore
 
             graph.add_tuple(
-                module_iri,
+                recipe_iri,
                 RDF.type,
                 class_recipe,
             )
 
-            for closure_symbol, closure in module.closures.items():
-                closure_iri: rdflib.URIRef = graph.compose_iri([ module.slug, closure_symbol ])  # type: ignore  # pylint: disable=C0301
+            for closure_symbol, closure in recipe.closures.items():
+                closure_iri: rdflib.URIRef = graph.compose_iri([ recipe.slug, closure_symbol ])  # type: ignore  # pylint: disable=C0301
 
                 graph.add_tuple(
                     closure_iri,
@@ -288,7 +290,7 @@ Build a knowledge graph from the modules in this corpus.
                 graph.add_tuple(
                     closure_iri,
                     pred_component_of,
-                    module_iri,
+                    recipe_iri,
                 )
 
                 graph.add_tuple(
@@ -328,7 +330,7 @@ Build a knowledge graph from the modules in this corpus.
                     )
 
                 for product in closure.products:
-                    product_iri: rdflib.URIRef = graph.compose_iri([ module.slug, product.symbol ])  # type: ignore  # pylint: disable=C0301
+                    product_iri: rdflib.URIRef = graph.compose_iri([ recipe.slug, product.symbol ])  # type: ignore  # pylint: disable=C0301
 
                     graph.add_tuple(
                         product_iri,
@@ -364,7 +366,7 @@ Build a knowledge graph from the modules in this corpus.
                             graph.compose_iri_literal(dependency.text, lang = self.lang),
                         )
                     else:
-                        ingredient_iri = graph.compose_iri([ module.slug, dependency.symbol ])  # type: ignore  # pylint: disable=C0301
+                        ingredient_iri = graph.compose_iri([ recipe.slug, dependency.symbol ])  # type: ignore  # pylint: disable=C0301
 
                     graph.add_tuple(
                         closure_iri,
