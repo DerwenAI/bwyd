@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Test usage of pyOTTR
+An example module in the Bwyd language.
 """
 
 import fileinput
@@ -12,11 +12,33 @@ import sys
 import tempfile
 
 from icecream import ic
-import xandergraph as xg
 import rdflib
+import xandergraph as xg
+
+import bwyd
 
 
 if __name__ == "__main__":
+    content_path: pathlib.Path = pathlib.Path("../bwyd-editor/content")
+    slug: str = sys.argv[1]
+
+    # parse a Bwyd module
+    dsl: bwyd.Bwyd = bwyd.Bwyd(
+        config_path = pathlib.Path("config.toml"),
+    )
+
+    module: bwyd.Recipe = dsl.parse(
+        content_path / f"{slug}.bwyd",
+        slug = slug,
+        debug = False, # True
+    )
+
+    # interpret the parsed module
+    module.interpret(
+        debug = False, # True
+    )
+
+    # set up OTTR templates
     graph_dir: pathlib.Path = pathlib.Path("graph")
 
     kg: xg.KnowledgeGraph = xg.KnowledgeGraph(
@@ -27,133 +49,9 @@ if __name__ == "__main__":
 
     kg.load_stottr(graph_dir / "bwyd.stottr")
 
-    ## generate models from the data
-    rdf_data: str = """
-@prefix bwyd:     <https://github.com/DerwenAI/bwyd/wiki/ns#> .
+    # generate RDF for a module
+    rdf_data: str = "\n".join(module.gen_rdf())
 
-bwyd:Recipe(
-  <urn:bwyd:pacoid:panna_cotta> ,
-  "Panna Cotta"@en ,
-  "A light, creamy dessert which pairs with so many fruits"@en ,
-  <https://spdx.org/licenses/CC-BY-NC-SA-4.0> ,
-  <https://derwen.ai/paco> ,
-  "2022-07-16"^^xsd:dateTime ,
-) .
-
-bwyd:RecipeImage(
-  <urn:bwyd:pacoid:panna_cotta> ,
-  <https://www.instagram.com/p/CgGYEZFL7Dx/> ,
-) .
-
-bwyd:RecipeSource(
-  <urn:bwyd:pacoid:panna_cotta> ,
-  <https://www.thekitchn.com/how-to-make-panna-cotta-cooking-lessons-from-the-kitchn-200070> ,
-) .
-
-bwyd:RecipeSource(
-  <urn:bwyd:pacoid:panna_cotta> ,
-  <https://mytastefulrecipes.com/almond-milk-panna-cotta-recipe/> ,
-) .
-
-bwyd:RecipeDepends(
-  <urn:bwyd:pacoid:panna_cotta> ,
-  <urn:bwyd:pacoid:panna_cotta/closure_1> ,
-) .
-
-bwyd:RecipeDepends(
-  <urn:bwyd:pacoid:panna_cotta> ,
-  <urn:bwyd:pacoid:panna_cotta/closure_2> ,
-) .
-
-bwyd:Closure(
-  <urn:bwyd:pacoid:panna_cotta/closure_1> ,
-  "mix the cream"@en ,
-  "Prepare the cream filling"@en ,
-) .
-
-bwyd:ClosureConsumes(
-  <urn:bwyd:pacoid:panna_cotta/closure_1> ,
-  <urn:bwyd:ingredient:cream> ,
-) .
-
-bwyd:ClosureConsumes(
-  <urn:bwyd:pacoid:panna_cotta/closure_1> ,
-  <urn:bwyd:ingredient:granulated_sugar> ,
-) .
-
-bwyd:ClosureProduces(
-  <urn:bwyd:pacoid:panna_cotta/closure_1> ,
-  <urn:bwyd:pacoid:panna_cotta/closure_1/product/filling> ,
-) .
-
-
-bwyd:Closure(
-  <urn:bwyd:pacoid:panna_cotta/closure_2> ,
-  "chill in containers"@en ,
-  "Fill the ramekins and chill"@en ,
-) .
-
-bwyd:ClosureSuper(
-  <urn:bwyd:pacoid:panna_cotta/closure_2> ,
-  <urn:bwyd:super:dessert> ,
-) .
-
-bwyd:ClosureSuper(
-  <urn:bwyd:pacoid:panna_cotta/closure_2> ,
-  <urn:bwyd:super:pudding> ,
-) .
-
-bwyd:ClosureKeyword(
-  <urn:bwyd:pacoid:panna_cotta/closure_2> ,
-  <urn:bwyd:keyword:italian> ,
-) .
-
-bwyd:ClosureConsumes(
-  <urn:bwyd:pacoid:panna_cotta/closure_2> ,
-  <urn:bwyd:pacoid:panna_cotta/closure_1/product/filling> ,
-) .
-
-bwyd:ClosureProduces(
-  <urn:bwyd:pacoid:panna_cotta/closure_2> ,
-  <urn:bwyd:pacoid:product:panna_cotta> ,
-) .
-
-
-bwyd:Super(
-  <urn:bwyd:super:dessert> ,
-  "dessert"@en ,
-) .
-
-bwyd:Super(
-  <urn:bwyd:super:pudding> ,
-  "pudding"@en ,
-) .
-
-
-bwyd:Keyword(
-  <urn:bwyd:keyword:italian> ,
-  "italian"@en ,
-) .
-
-
-bwyd:Product(
-  <urn:bwyd:pacoid:panna_cotta/closure_1/product/filling> ,
-  "filling"@en ,
-) .
-
-bwyd:Product(
-  <urn:bwyd:pacoid:product:panna_cotta> ,
-  "panna_cotta"@en ,
-) .
-    """.strip()
-
-
-    domain_path: pathlib.Path = graph_dir / "domain.ttl"
-    search_path: pathlib.Path = graph_dir / "search.ttl"
-    pantry_path: pathlib.Path = graph_dir / "pantry.ttl"
-    shapes_path: pathlib.Path = graph_dir / "shapes.ttl"
-
-    ## save generated RDF to a file
     kg.gen_ottr_rdf(rdf_data)
     corpus_path: pathlib.Path = graph_dir / "corpus.ttl"
 
@@ -161,7 +59,12 @@ bwyd:Product(
         ttl: str = kg.graph.serialize(format = "turtle")
         fp.write(ttl)
 
-
+    # load RDF from outside the DSL
+    domain_path: pathlib.Path = graph_dir / "domain.ttl"
+    search_path: pathlib.Path = graph_dir / "search.ttl"
+    pantry_path: pathlib.Path = graph_dir / "pantry.ttl"
+    shapes_path: pathlib.Path = graph_dir / "shapes.ttl"
+        
     ## check for RDF syntax errors within the generated RDF
     graph: rdflib.Graph = rdflib.Graph()
 
@@ -186,7 +89,6 @@ bwyd:Product(
 
     graph = rdflib.Graph()
     graph.parse(tf.name)
-
 
     ## SHACL validation
     conforms, results_graph, results_text = kg.run_shacl(

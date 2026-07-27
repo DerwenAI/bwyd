@@ -213,6 +213,7 @@ Accessor for the total, non-intermediate yields of one Closure object.
         urn_prefix: str,
         slug_urn: str,
         closure_urn: str,
+        local_names: dict[ str, str ],
         ) -> list[ str ]:
         """
 Generate RDF modeling from OTTR templates.
@@ -255,8 +256,11 @@ bwyd:Keyword(
 ) .
             """.strip())
 
-        for ingr in self.ingredients:
-            consumes_urn: str = f"{ urn_prefix }:ingredient:{ ingr }"
+        for ingr_symbol in self.ingredients:
+            if ingr_symbol in local_names:
+                consumes_urn: str = local_names[ingr_symbol]
+            else:
+                consumes_urn = f"{ urn_prefix }:ingredient:{ ingr_symbol }"
 
             rdf_data.append(f"""
 bwyd:ClosureConsumes(
@@ -266,27 +270,31 @@ bwyd:ClosureConsumes(
             """.strip())
 
         for prod in self.products:
+            label: str = prod.symbol.replace("_", " ")
+
             if prod.intermediate:
-                produces_urn: str = f"{ closure_urn }/product/{ prod.symbol }"
+                produces_urn: str = f"{ closure_urn }:product:{ prod.symbol }"
 
                 rdf_data.append(f"""
 bwyd:ClosureProduces(
   <{ closure_urn }> ,
   <{ produces_urn }> ,
+  "{ label }"@en ,
 ) .
                 """.strip())
 
             else:
-                produces_urn: str = f"{ urn_prefix }/product/{ prod.symbol }"
+                produces_urn: str = f"{ urn_prefix }:product:{ prod.symbol }"
 
                 rdf_data.append(f"""
 bwyd:ClosureProduces(
   <{ closure_urn }> ,
   <{ produces_urn }> ,
+  "{ label }"@en ,
 ) .
 bwyd:Product(
   <{ produces_urn }> ,
-  "{ prod.symbol }"@en ,
+  "{ label }"@en ,
 ) .
                 """.strip())
 

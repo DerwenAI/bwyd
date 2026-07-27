@@ -81,9 +81,12 @@ bwyd:ClosureConsumes[
 bwyd:ClosureProduces[
     ! ottr:IRI ?closure,
     ?product,
+    ?label,
 ] :: {
     ottr:Triple( ?closure, rdf:type, bwyd:Closure ),
     ottr:Triple( ?closure, bwyd:produces, ?product ),
+
+    ottr:Triple( ?product, skos:prefLabel, ?label ),
 } .
 
 

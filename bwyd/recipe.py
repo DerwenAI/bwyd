@@ -278,13 +278,11 @@ Helper method to parse one URL.
         """
 Validate the forward references for one Bwyd module.
         """
-        local_names: typing.Set[ str ] = {
+        local_names: set[ str ] = {
             product.symbol
             for closure in self.closures.values()
             for product in closure.products
         }
-
-        ic(local_names)
 
         for closure in self.closures.values():
             # check for zero reference counts
@@ -1073,6 +1071,13 @@ Generate RDF modeling from OTTR templates.
         """
         urn_prefix: str = f"urn:bwyd:pacoid"
         slug_urn: str = f"{ urn_prefix }:{ self.slug }"
+
+        local_names: dict[ str ] = {
+            product.symbol: f"{ slug_urn }:closure_{ num + 1 }:product:{ product.symbol }"
+            for num, closure in enumerate(self.closures.values())
+            for product in closure.products
+        }
+
         author: str = self.author
 
         match: re.Match | None = re.match(r"^.*(https\:[\w\.\/]+)\"", author)
@@ -1110,7 +1115,7 @@ bwyd:RecipeSource(
             """.strip())
 
         for num, closure in enumerate(self.closures.values()):
-            closure_urn: str = f"{ slug_urn }/closure_{ num + 1 }"
+            closure_urn: str = f"{ slug_urn }:closure_{ num + 1 }"
 
             rdf_data.append(f"""
 bwyd:RecipeDepends(
@@ -1124,6 +1129,7 @@ bwyd:RecipeDepends(
                     urn_prefix,
                     slug_urn,
                     closure_urn,
+                    local_names,
                 )
             )
 
