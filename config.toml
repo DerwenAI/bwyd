@@ -1,6 +1,7 @@
 [bwyd]
-cache_path = "bwyd.cache"
 cache_expire = 360
+cache_path = "bwyd.cache"
+log_format = "%(asctime)s %(message)s"
 
 [graph]
 ns = "https://github.com/DerwenAI/bwyd/wiki/ns#"

@@ -13,14 +13,11 @@ import tomllib
 import typing
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401
-from rdflib.namespace import DCTERMS, RDF, SKOS, XSD  # pylint: disable=W0611
 import jinja2
-import rdflib
 import requests_cache
 import textx  # type: ignore  # pylint: disable=E0401
 
 from .measure import Conversion, Converter
-from .graph import Graph
 from .recipe import Recipe
 from .resources import BWYD_SVG, CONVERT_PATH, GRAMMAR_PATH, JINJA_INDEX_TEMPLATE
 
@@ -75,7 +72,7 @@ previous serialized cache from disk.
         return session
 
 
-    def iter_files (
+    def _iter_files (
         self,
         dir_path: pathlib.Path,
         *,
@@ -104,7 +101,7 @@ Traverse the given directory, parsing Bwyd modules.
         """
         dsl: Bwyd = Bwyd()
 
-        for bwyd_path in self.iter_files(dir_path, glob = glob):
+        for bwyd_path in self._iter_files(dir_path, glob = glob):
             slug: str = bwyd_path.stem
 
             if debug:
@@ -158,133 +155,6 @@ Render an HTML index for search/discovery across a directory of recipes.
 
         with open(index_path, "w", encoding = "utf-8") as fp:
             fp.write(html)
-
-
-    def build_graph (  # pylint: disable=R0914
-        self,
-        recipes: list[ Recipe ],
-        *,
-        debug: bool = False,  # pylint: disable=W0613
-        ) -> Graph:
-        """
-Build a knowledge graph from the modules in this corpus.
-        """
-        graph: Graph = Graph()
-
-        class_closure: rdflib.URIRef = graph.compose_iri_instance("Closure")
-        class_ingredient: rdflib.URIRef = graph.compose_iri_instance("Ingredient")
-        class_product: rdflib.URIRef = graph.compose_iri_instance("Product")
-        class_recipe: rdflib.URIRef = graph.compose_iri_instance("Recipe")
-        pred_component_of: rdflib.URIRef = graph.compose_iri_instance("ComponentOf")
-        pred_produced_by: rdflib.URIRef = graph.compose_iri_instance("ProducedBy")
-        pred_uses_ingredient: rdflib.URIRef = graph.compose_iri_instance("UsesIngredient")
-
-        for recipe in recipes:
-            recipe_iri: rdflib.URIRef = graph.compose_iri([ recipe.slug ])  # type: ignore
-
-            graph.add_tuple(
-                recipe_iri,
-                RDF.type,
-                class_recipe,
-            )
-
-            for closure_symbol, closure in recipe.closures.items():
-                closure_iri: rdflib.URIRef = graph.compose_iri([ recipe.slug, closure_symbol ])  # type: ignore  # pylint: disable=C0301
-
-                graph.add_tuple(
-                    closure_iri,
-                    RDF.type,
-                    class_closure,
-                )
-
-                graph.add_tuple(
-                    closure_iri,
-                    pred_component_of,
-                    recipe_iri,
-                )
-
-                graph.add_tuple(
-                    closure_iri,
-                    SKOS.prefLabel,
-                    graph.compose_iri_literal(closure.name, lang = self.lang),
-                )
-
-                graph.add_tuple(
-                    closure_iri,
-                    DCTERMS.description,
-                    graph.compose_iri_literal(closure.text, lang = self.lang),
-                )
-
-                for super_class in closure.supers:
-                    super_iri: rdflib.URIRef = graph.compose_iri([ super_class ])
-
-                    graph.add_tuple(
-                        closure_iri,
-                        RDF.type,
-                        super_iri,
-                    )
-
-                    graph.add_tuple(
-                        closure_iri,
-                        SKOS.broader,
-                        super_iri,
-                    )
-
-                for keyword in closure.keywords:
-                    keyword_iri: rdflib.URIRef = graph.compose_iri_instance("Keyword", sub_symbol = keyword)  # pylint: disable=C0301
-
-                    graph.add_tuple(
-                        closure_iri,
-                        SKOS.related,
-                        keyword_iri,
-                    )
-
-                for product in closure.products:
-                    product_iri: rdflib.URIRef = graph.compose_iri([ recipe.slug, product.symbol ])  # type: ignore  # pylint: disable=C0301
-
-                    graph.add_tuple(
-                        product_iri,
-                        RDF.type,
-                        class_product,
-                    )
-
-                    graph.add_tuple(
-                        product_iri,
-                        pred_produced_by,
-                        closure_iri,
-                    )
-
-                for dependency in closure.ingredients.values():
-                    if not dependency.external:
-                        ingredient_iri: rdflib.URIRef = graph.compose_iri_instance("Ingredient", sub_symbol = dependency.symbol)  # pylint: disable=C0301
-
-                        graph.add_tuple(
-                            ingredient_iri,
-                            RDF.type,
-                            class_ingredient,
-                        )
-
-                        graph.add_tuple(
-                            ingredient_iri,
-                            SKOS.prefLabel,
-                            graph.compose_iri_literal(dependency.symbol.replace("_", " "), lang = self.lang),  # pylint: disable=C0301
-                        )
-
-                        graph.add_tuple(
-                            ingredient_iri,
-                            DCTERMS.description,
-                            graph.compose_iri_literal(dependency.text, lang = self.lang),
-                        )
-                    else:
-                        ingredient_iri = graph.compose_iri([ recipe.slug, dependency.symbol ])  # type: ignore  # pylint: disable=C0301
-
-                    graph.add_tuple(
-                        closure_iri,
-                        pred_uses_ingredient,
-                        ingredient_iri,
-                    )
-
-        return graph
 
 
 ######################################################################

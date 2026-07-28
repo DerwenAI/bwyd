@@ -827,7 +827,7 @@ Helper method to interpret one Closure.
                 ic(closure.supers)
 
         if closure_parse.keywords is not None and len(closure_parse.keywords) > 0:
-            closure.keywords.extend(closure_parse.keywords)
+            closure.keywords.extend([ key.lower() for key in closure_parse.keywords ])
 
             if debug:
                 ic(closure.keywords)

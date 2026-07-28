@@ -13,7 +13,7 @@ TEXT: "best to work with cold ingredients and chilled utensils"
   TOOL fork: "small fork or whisk"
   TOOL spatula: "silicone spatula"
 
-  INGREDIENT puree: "reduced veggie purée"
+  INGREDIENT potato: "reduced potato purée, or other root veggies"
   INGREDIENT flour: "flour: rice, oat, etc."
   INGREDIENT egg: "large chicken egg"
   INGREDIENT ricotta: "whole milk ricotta"
@@ -37,7 +37,7 @@ TEXT: "best to work with cold ingredients and chilled utensils"
         TIME (30 second)
 
   ACTIVITY bowl: "blend wet mix"
-    ADD puree (250 g)
+    ADD potato (250 g)
 
     ACTION spatula: "fold"
       UNTIL: "lightly blended"
@@ -53,7 +53,7 @@ TEXT: "best to work with cold ingredients and chilled utensils"
 
     RATIO "flour: egg" : 
       "dough" =
-      starch [ puree, flour ],
+      starch [ potato, flour ],
       egg
 ;
 
@@ -89,8 +89,8 @@ TEXT: "divide dough into 4 pieces, rolling out one at a time"
 
 CLOSURE: "frozen gnocchi"
 TEXT: "add layers of dumplings to fill depth of baking dish"
-  SUPER: dumplings, pasta
-  KEYWORD: starch, quick, Italian
+  SUPER: dumpling
+  KEYWORD: starch, quick, italian
 
   CONTAINER dish: "baking dish"
   TOOL hand: "clean hands"

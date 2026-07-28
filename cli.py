@@ -28,11 +28,11 @@ if __name__ == "__main__":
     account: str = "pacoid"
 
     corpus: bwyd.Corpus = dsl.build_corpus()
-    dir_path: pathlib.Path = pathlib.Path("examples")
+    content_path: pathlib.Path = pathlib.Path("examples")
 
     recipes: list[ bwyd.Recipe ] = list(corpus.parse_recipes(
         account,
-        dir_path,
+        content_path,
         debug = True, # False
     ))
 
@@ -45,13 +45,5 @@ if __name__ == "__main__":
     ## search/discovery support
     corpus.render_discovery(
         recipes,
-        dir_path / "index.html",
+        content_path / "index.html",
     )
-
-    ## KG prototype support
-    sys.exit(0)
-
-    graph: bwyd.Graph = corpus.build_graph(recipes)
-
-    with open("kg.rdf", "w", encoding = "utf-8") as fp:
-        fp.write(graph.serialize())
