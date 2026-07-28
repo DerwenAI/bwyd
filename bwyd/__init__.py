@@ -6,11 +6,13 @@ Package definitions for the Bwyd DSL.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
-from .dsl import Bwyd, Corpus, Graph
+from .dsl import Bwyd, Corpus
 
 from .error import BwydParserError
 
 from .kernel import BwydKernel
+
+from .graph import Graph
 
 from .measure import Conversion, Converter, Humanized, \
     MeasureUnits, Measure, \
