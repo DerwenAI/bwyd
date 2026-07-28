@@ -2,7 +2,6 @@
 graph/kg.rdf
 graph/bbo.ttl
 graph/corpus.ttl
-graph/entire.ttl
 bwyd.cache
 examples/*.html
 *.dot
