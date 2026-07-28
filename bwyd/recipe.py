@@ -272,41 +272,6 @@ Helper method to parse one URL.
             print(ex)
 
 
-    def validate (
-        self,
-        account: str,
-        ) -> None:
-        """
-Validate the forward references for one Bwyd module.
-        """
-        _, _, product_names = self.get_product_names(account)
-
-        for closure in self.closures.values():
-            # check for zero reference counts
-            for name, entity in closure.containers.items():
-                if entity.ref_count < 1:
-                    print(f"Container defined but not used: {name}")
-                    print(entity.loc)
-
-            for name, entity in closure.tools.items():
-                if entity.ref_count < 1:
-                    print(f"Tool defined but not used: {name}")
-                    print(entity.loc)
-
-            for name, entity in closure.ingredients.items():
-                if entity.ref_count < 1:
-                    print(f"Ingredient defined but not used: {name}")
-                    print(entity.loc)
-
-            # check for references outside this module
-            for symbol, entity in closure.ingredients.items():
-                if entity.external and symbol not in product_names:
-                    raise BwydParserError(
-                        f"CLOSURE `{symbol}` used but not defined {entity.loc}",
-                        symbol = symbol,
-                    )
-
-
 ######################################################################
 ## parsing methods
 
@@ -916,9 +881,6 @@ Interpret one Bwyd module.
                 debug = debug,
             )
 
-        # validate the resulting parsed module
-        self.validate(account)
-
 
 ######################################################################
 ## aggregate measures
@@ -1064,20 +1026,24 @@ which is by default minified.
     def get_product_names (
         self,
         account: str,
-        ) -> tuple[ str, str, dict[ str, str ]]:
+        ) -> tuple[ str, str, dict[ str, Product ]]:
         """
 Construct the local namespace.
         """
         global_ns: str = f"urn:bwyd:{ account }"
         local_ns: str = f"{ global_ns }:{ self.slug }"
+        local_names: dict[ str, Product ] = {}
 
-        product_names: dict[ str, str ] = {
-            product.symbol: f"{ local_ns }:closure_{ num + 1 }:product:{ product.symbol }"
-            for num, closure in enumerate(self.closures.values())
-            for product in closure.products
-        }
+        for num, closure in enumerate(self.closures.values()):
+            for product in closure.products:
+                if product.intermediate:
+                    product.urn = f"{ local_ns }:closure_{ num + 1 }:product:{ product.symbol }"
+                else:
+                    product.urn = f"{ global_ns }:product:{ product.symbol }"
 
-        return global_ns, local_ns, product_names
+                local_names[product.symbol] = product
+
+        return global_ns, local_ns, local_names
 
 
     def gen_rdf (
@@ -1087,7 +1053,7 @@ Construct the local namespace.
         """
 Generate RDF modeling from OTTR templates.
         """
-        global_ns, local_ns, product_names = self.get_product_names(account)
+        global_ns, local_ns, local_names = self.get_product_names(account)
 
         author: str = self.author  # type: ignore
 
@@ -1138,7 +1104,7 @@ bwyd:RecipeDepends(
             rdf_data.extend(
                 closure.gen_rdf(
                     global_ns,
-                    product_names,
+                    local_names,
                     closure_urn,
                 )
             )

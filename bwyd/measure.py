@@ -607,6 +607,7 @@ A data class representing one Product object for a YIELDS directive.
     amount: Measure
     intermediate: bool
     storage: Storage | None = None
+    urn: str | None = None
     ref_count: NonNegativeInt = 0
 
 

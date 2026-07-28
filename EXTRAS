@@ -1,3 +1,38 @@
+    def validate (
+        self,
+        account: str,
+        ) -> None:
+        """
+Validate the forward references for one Bwyd module.
+        """
+        _, _, product_names = self.get_product_names(account)
+
+        for closure in self.closures.values():
+            # check for zero reference counts
+            for name, entity in closure.containers.items():
+                if entity.ref_count < 1:
+                    print(f"Container defined but not used: {name}")
+                    print(entity.loc)
+
+            for name, entity in closure.tools.items():
+                if entity.ref_count < 1:
+                    print(f"Tool defined but not used: {name}")
+                    print(entity.loc)
+
+            for name, entity in closure.ingredients.items():
+                if entity.ref_count < 1:
+                    print(f"Ingredient defined but not used: {name}")
+                    print(entity.loc)
+
+            # check for references outside this module
+            for symbol, entity in closure.ingredients.items():
+                if entity.external and symbol not in product_names:
+                    raise BwydParserError(
+                        f"CLOSURE `{symbol}` used but not defined {entity.loc}",
+                        symbol = symbol,
+                    )
+
+
 
 from rdflib.namespace import DCTERMS, RDF, SKOS, XSD  # pylint: disable=W0611
 import rdflib

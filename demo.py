@@ -37,6 +37,7 @@ Constructor.
         self.lang: str = lang
         self.account: str = account
         self.bwyd_dict: dict[ str, bwyd.Recipe ] = {}
+        self.product_names: dict[ str, bwyd.Product ] = {}
 
         self.dsl: bwyd.Bwyd = bwyd.Bwyd(
             config_path = config_path,
@@ -62,8 +63,131 @@ Constructor.
         self.pantry_path: pathlib.Path = graph_dir / "pantry.ttl"
         self.corpus_path: pathlib.Path = graph_dir / "corpus.ttl"
 
-        self.load_graph()
+        self.load_ontology()
         self.kg.load_stottr(graph_dir / "bwyd.stottr")
+
+
+    def load_ontology (
+        self,
+        ) -> None:
+        """
+Load the RDF semantic descriptions (TBox) into the knowledge graph,
+with exception handling to identify any errors.
+        """
+        path_list: list[ str ] = [
+            self.domain_path,
+            self.search_path,
+            self.pantry_path,
+        ]
+
+        for ttl_path in path_list:
+            try:
+                self.kg.graph.parse(ttl_path.as_posix())
+            except Exception as ex:
+                ic(ttl_path)
+                traceback.print_exc()
+
+
+    def parse_recipes (
+        self,
+        content_path: pathlib.Path,
+        *,
+        debug: bool = False,
+        glob: str = "*.bwyd",
+        ) -> None:
+        """
+Iterate through a directory of Bwyd content to parse the recipes.
+        """
+        self.bwyd_dict = {}
+
+        ## TEMP MOCK: enumerate via pathlib.glob
+        slug_list: list[ str ] = [
+            "frozen_gnocchi",
+            #"panna_cotta",
+            #"gravlax",
+        ]
+
+        for slug in slug_list:
+            recipe_path: pathlib.Path = content_path / f"{slug}.bwyd"
+
+            recipe: bwyd.Recipe = self.dsl.parse(
+                recipe_path,
+                slug = slug,
+                debug = debug,
+            )
+
+            self.bwyd_dict[slug] = recipe
+
+            # interpret the parsed module
+            recipe.interpret(
+                self.account,
+                debug = debug,
+            )
+
+
+    def build_namespace (
+        self,
+        ) -> None:
+        """
+Iterate through the parsed Bwyd modules to build a global namespace
+for products.
+        """
+        global_ns: str = f"urn:bwyd:{ self.account }"
+
+        for slug, recipe in self.bwyd_dict.items():
+            for num, closure in enumerate(recipe.closures.values()):
+                for product in closure.products:
+                    if not product.intermediate and product.urn is None:
+                        product.urn = f"{ global_ns }:product:{ product.symbol }"
+
+                        if product.symbol in self.product_names:
+                            print(
+                                f"CONFLICT: product { product_symbol } overlaps:",
+                                self.product_names[product_symbol].urn,
+                                product.urn,
+                            )
+                    else:
+                        self.product_names[product.symbol] = product
+
+        ic(self.product_names)
+
+
+    def gen_rdf (
+        self,
+        ) -> None:
+        """
+Iterate through the parsed Bwyd modules to generate RDF,
+then generate HTML.
+        """
+        rdf_data: list[ str ] = []
+
+        for slug, recipe in self.bwyd_dict.items():
+            # fuck: these need the consolidated product names
+            #recipe.validate(self.account)
+            rdf_data.extend(recipe.gen_rdf(self.account))
+
+        self.kg.gen_ottr_rdf("\n".join(rdf_data))
+
+        # serialize the full corpus as a graph in TTL format
+        with open(self.corpus_path, "w", encoding = "utf-8") as fp:
+            ttl: str = self.kg.graph.serialize(format = "turtle")
+            fp.write(ttl)
+
+        # SHACL validation
+        conforms, results_graph, results_text = self.kg.run_shacl(
+            self.corpus_path.as_posix(),
+            self.shapes_path.as_posix(),
+            self.domain_path.as_posix(),
+        )
+
+        if not conforms:
+            print(results_text)
+
+        # generate HTML
+        html_path: pathlib.Path = recipe.path.with_suffix(".html")
+
+        with open(html_path, "w", encoding = "utf-8") as fp:
+            fp.write(recipe.render_template())
 
 
     def get_cache (
@@ -89,113 +213,6 @@ previous serialized cache from disk.
         session.settings.expire_after = cache_expire
 
         return session
-
-
-    def load_graph (
-        self,
-        ) -> None:
-        """
-Load the graph to verify the RDF semantic descriptions.
-        """
-        path_list: list[ str ] = [
-            self.domain_path,
-            self.search_path,
-            self.pantry_path,
-        ]
-
-        for ttl_path in path_list:
-            try:
-                self.kg.graph.parse(ttl_path.as_posix())
-            except Exception as ex:
-                ic(ttl_path)
-                traceback.print_exc()
-
-
-    def iter_recipes (
-        self,
-        content_path: pathlib.Path,
-        *,
-        debug: bool = False,
-        glob: str = "*.bwyd",
-        ) -> typing.Iterator[ tuple[ str, bwyd.Recipe ]]:
-        """
-Iterate through a directory of Bwyd content.
-        """
-        ## TEMP MOCK: enumerate via pathlib.glob
-        slug_list: list[ str ] = [
-            "frozen_gnocchi",
-            #"panna_cotta",
-            #"gravlax",
-        ]
-
-        for slug in slug_list:
-            recipe_path: pathlib.Path = content_path / f"{slug}.bwyd"
-
-            recipe: bwyd.Recipe = self.dsl.parse(
-                recipe_path,
-                slug = slug,
-                debug = debug,
-            )
-
-            # interpret the parsed module
-            recipe.interpret(
-                self.account,
-                debug = debug,
-            )
-
-            yield slug, recipe
-
-
-    def gen_rdf (
-        self,
-        content_path: pathlib.Path,
-        *,
-        debug: bool = False,
-        glob: str = "*.bwyd",
-        ) -> None:
-        """
-Iterate through a directory of Bwyd content to parse the recipes,
-build the global namespace, generate RDF, then generate HTML.
-        """
-        bwyd_iter: typing.Iterator[ tuple[ str, bwyd.Recipe ]] = self.iter_recipes(
-            content_path,
-            debug = debug,
-            glob = glob,
-        )
-
-        self.bwyd_dict = {}
-
-        for slug, recipe in bwyd_iter:
-            self.bwyd_dict[slug] = recipe
-
-            rdf_data: str = "\n".join(
-                recipe.gen_rdf(
-                    self.account,
-                )
-            )
-
-            self.kg.gen_ottr_rdf(rdf_data)
-
-        # serialize the full corpus as a graph in TTL format
-        with open(self.corpus_path, "w", encoding = "utf-8") as fp:
-            ttl: str = self.kg.graph.serialize(format = "turtle")
-            fp.write(ttl)
-
-        # SHACL validation
-        conforms, results_graph, results_text = self.kg.run_shacl(
-            self.corpus_path.as_posix(),
-            self.shapes_path.as_posix(),
-            self.domain_path.as_posix(),
-        )
-
-        if not conforms:
-            print(results_text)
-
-        # generate HTML
-        html_path: pathlib.Path = recipe.path.with_suffix(".html")
-
-        with open(html_path, "w", encoding = "utf-8") as fp:
-            fp.write(recipe.render_template())
 
 
     def render_discovery (
@@ -238,14 +255,12 @@ if __name__ == "__main__":
     content_path: pathlib.Path = pathlib.Path("../bwyd-editor/content")
 
     corpus: Corpus = Corpus(account)
-    corpus.gen_rdf(content_path)
+    corpus.parse_recipes(content_path)
+    corpus.build_namespace()
+    corpus.gen_rdf()
 
-    ## build global namespace
-    for slug, recipe in corpus.bwyd_dict.items():
-        global_ns, local_ns, product_names = recipe.get_product_names(account)
-        ic(global_ns, local_ns, product_names)
 
-    ## search/discovery support
+    # search/discovery support
     sys.exit(0)
 
     corpus.render_discovery(

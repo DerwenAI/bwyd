@@ -17,7 +17,7 @@ TEXT: "best to work with cold ingredients and chilled utensils"
   INGREDIENT flour: "flour: rice, oat, etc."
   INGREDIENT egg: "large chicken egg"
   INGREDIENT ricotta: "whole milk ricotta"
-  INGREDIENT grated_parmesan: "grated parmesan"
+  INGREDIENT parmesan: "grated parmesan"
   INGREDIENT nutmeg: "freshly grated nutmeg"
 
   ACTIVITY bowl: "beat egg"
@@ -29,7 +29,7 @@ TEXT: "best to work with cold ingredients and chilled utensils"
 
   ACTIVITY bowl: "prep wet mix"
     ADD ricotta (250 g)
-    ADD grated_parmesan (50 g)
+    ADD parmesan (50 g)
     ADD nutmeg (1 g)
 
     ACTION spatula
@@ -90,7 +90,7 @@ TEXT: "divide dough into 4 pieces, rolling out one at a time"
 CLOSURE: "frozen gnocchi"
 TEXT: "add layers of dumplings to fill depth of baking dish"
   SUPER: dumpling
-  KEYWORD: starch, quick, italian
+  KEYWORD: italian, starch
 
   CONTAINER dish: "baking dish"
   TOOL hand: "clean hands"

@@ -211,7 +211,7 @@ Accessor for the total, non-intermediate yields of one Closure object.
     def gen_rdf (
         self,
         global_ns: str,
-        product_names: dict[ str, str ],
+        product_names: dict[ str, Product ],
         closure_urn: str,
         ) -> list[ str ]:
         """
@@ -257,7 +257,7 @@ bwyd:Keyword(
 
         for ingr_symbol in self.ingredients:
             if ingr_symbol in product_names:
-                consumes_urn: str = product_names[ingr_symbol]
+                consumes_urn: str = product_names[ingr_symbol].urn
             else:
                 consumes_urn = f"{ global_ns }:ingredient:{ ingr_symbol }"
 
