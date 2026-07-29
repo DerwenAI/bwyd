@@ -170,7 +170,6 @@ bwyd:Keyword_Shape a sh:NodeShape ;
     sh:path skos:prefLabel ;
     sh:nodeKind sh:Literal ;
     sh:datatype rdf:langString ;
-    sh:uniqueLang true ;
     sh:languageIn ( "en" "fr" ) ;
     sh:minCount 1 ;
     ] ; 

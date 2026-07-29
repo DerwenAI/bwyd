@@ -209,13 +209,15 @@ Run the SHACL shape constraint rules to validate the generated RDF.
         """
         self.errors = []
 
-        conforms, error_graph, _ = self.kg.run_shacl(
+        conforms, error_graph, report = self.kg.run_shacl(
             self.corpus_path.as_posix(),
             self.shapes_path.as_posix(),
             self.domain_path.as_posix(),
         )
 
         if not conforms:
+            print(report)
+
             query: str = """
 SELECT DISTINCT ?focus ?message
 WHERE {

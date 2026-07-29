@@ -79,15 +79,81 @@
 ## keyword annotations
 
 <urn:bwyd:pacoid:keyword:french> a bwyd:Keyword ;
-  skos:prefLabel "french"@en , "français"@fr ;
+  skos:prefLabel "french cuisine"@en , "cuisine français"@fr ;
   skos:definition "Foods from France"@en ;
   skos:exactMatch wd:Q6661 ;
 .
 
 <urn:bwyd:pacoid:keyword:italian> a bwyd:Keyword ;
-  skos:prefLabel "italian"@en , "italien"@fr ;
+  skos:prefLabel "italian cuisine"@en , "cuisine italien"@fr ;
   skos:definition "Foods from Italy"@en ;
   skos:exactMatch wd:Q192786 ;
 .
 
+<urn:bwyd:pacoid:keyword:american> a bwyd:Keyword ;
+  skos:prefLabel "american cuisine"@en , "cuisine américaine"@fr ;
+  skos:definition "Foods from the United States"@en ;
+  skos:exactMatch wd:Q40578 ;
+.
 
+<urn:bwyd:pacoid:keyword:california> a bwyd:Keyword ;
+  skos:prefLabel "california cuisine"@en , "cuisine californienne"@fr ;
+  skos:definition "Foods from California"@en ;
+  skos:exactMatch wd:Q1026802 ;
+.
+
+<urn:bwyd:pacoid:keyword:nordic> a bwyd:Keyword ;
+  skos:prefLabel "nordic cuisine"@en , "cuisine nordique"@fr ;
+  skos:definition "Foods from the Nordic countries"@en ;
+  skos:exactMatch wd:Q20892186 ;
+.
+
+<urn:bwyd:pacoid:keyword:breakfast> a bwyd:Keyword ;
+  skos:prefLabel "breakfast"@en , "petit-déjeuner"@fr ;
+  skos:definition "First meal of the day usually eaten in the morning"@en ;
+  skos:exactMatch wd:Q80973 ;
+.
+
+<urn:bwyd:pacoid:keyword:fermented> a bwyd:Keyword ;
+  skos:prefLabel "fermented food"@en , "aliment fermenté"@fr ;
+  skos:definition "Food produced by converting carbohydrates to alcohol or organic acids using microorganisms, e.g., yeasts or bacteria"@en ;
+  skos:exactMatch wd:Q6950796 ;
+.
+
+<urn:bwyd:pacoid:keyword:entree> a bwyd:Keyword ;
+  skos:prefLabel "entree"@en , "plat principal"@fr ;
+  skos:altLabel "main course"@en ;
+  skos:definition "The primary and most substantial dish in a meal"@en ;
+  skos:exactMatch wd:Q772630 ;
+.
+
+<urn:bwyd:pacoid:keyword:gluten_free> a bwyd:Keyword ;
+  skos:prefLabel "gluten-free"@en , "sans gluten"@fr ;
+  skos:definition "A nutritional plan that strictly excludes gluten, which may cause gastrointestinal or other systemic symptoms"@en ;
+  skos:exactMatch wd:Q20057042 ;
+.
+
+<urn:bwyd:pacoid:keyword:starch> a bwyd:Keyword ;
+  skos:prefLabel "starch dish"@en , "amidon"@fr ;
+  skos:definition "Food consisiting largely of a carbohydrate with a large number of glucose units joined by glycosidic bond"@en ;
+  skos:exactMatch wd:Q41534 ;
+.
+
+<urn:bwyd:pacoid:keyword:sweet_sour> a bwyd:Keyword ;
+  skos:prefLabel "sweet and sour"@en , "aigre-doux"@fr ;
+  skos:definition "Food combining sweet and sour flavors to provide a balanced and refreshing flavor profile"@en ;
+  skos:exactMatch wd:Q104383007 ;
+.
+
+<urn:bwyd:pacoid:keyword:savory> a bwyd:Keyword ;
+  skos:prefLabel "savory"@en , "mets salés"@fr ;
+  skos:altLabel "umami"@en ;
+  skos:definition "Food characterized by a savory flavor profile, also called umami"@en ;
+  skos:exactMatch wd:Q138502922 ;
+.
+
+<urn:bwyd:pacoid:keyword:salty> a bwyd:Keyword ;
+  skos:prefLabel "salty"@en , "salé"@fr ;
+  skos:definition "Food featuring a low-salt signal (a sensation of deliciousness) or a high-salt signal (too much salt)"@en ;
+  skos:closeMatch wd:Q11254 ;
+.
