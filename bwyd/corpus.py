@@ -47,6 +47,7 @@ Constructor.
         self.account: str = account
         self.bwyd_dict: dict[ str, Recipe ] = {}
         self.product_names: dict[ str, Product ] = {}
+        self.errors: list[ str ] = []
 
         self.dsl: Bwyd = Bwyd(
             config_path = config_path,
@@ -150,17 +151,12 @@ for products.
                         else:
                             self.product_names[product.symbol] = product
 
-        ic(self.product_names.keys())
-
 
     def gen_rdf (
         self,
-        *,
-        gen_html: bool = True,
         ) -> None:
         """
-Iterate through the parsed Bwyd modules to generate RDF,
-then generate HTML.
+Iterate through the parsed Bwyd modules to generate RDF.
         """
         tf: tempfile._TemporaryFileWrapper = tempfile.NamedTemporaryFile(  # pylint: disable=R1732
             suffix = ".ttl",
@@ -193,13 +189,6 @@ then generate HTML.
 
                 fp.write(tmp_graph.serialize(format = "turtle"))
 
-                # generate HTML
-                if gen_html:
-                    html_path: pathlib.Path = recipe.path.with_suffix(".html")
-
-                    with open(html_path, "w", encoding = "utf-8") as fp:
-                        fp.write(recipe.render_template())
-
         tf.close()
         self.kg.graph.parse(tf.name)
 
@@ -211,15 +200,33 @@ then generate HTML.
             ttl: str = self.kg.graph.serialize(format = "turtle")
             fp.write(ttl)
 
-        # SHACL validation
-        conforms, _, results_text = self.kg.run_shacl(
+
+    def shacl_rules (
+        self,
+        ) -> None:
+        """
+Run the SHACL shape constraint rules to validate the generated RDF.
+        """
+        self.errors = []
+
+        conforms, error_graph, _ = self.kg.run_shacl(
             self.corpus_path.as_posix(),
             self.shapes_path.as_posix(),
             self.domain_path.as_posix(),
         )
 
         if not conforms:
-            print(results_text)
+            query: str = """
+SELECT DISTINCT ?focus ?message
+WHERE {
+  ?anode sh:result ?bnode .
+  ?bnode sh:focusNode ?focus . 
+  ?bnode sh:resultMessage ?message .
+}"""
+            self.errors = sorted([
+                row.message
+                for row in error_graph.query(query)
+            ])
 
 
     def get_cache (
@@ -254,8 +261,16 @@ previous serialized cache from disk.
         index_template: jinja2.Template = JINJA_INDEX_TEMPLATE,
         ) -> None:
         """
-Render an HTML index for search/discovery across a directory of recipes.
+Generate HTML pages plus an index for search/discovery across a
+corpus of recipes.
         """
+        for recipe in self.bwyd_dict.values():
+            html_path: pathlib.Path = recipe.path.with_suffix(".html")
+
+            with open(html_path, "w", encoding = "utf-8") as fp:
+                fp.write(recipe.render_template())
+
+        # render the index
         mod_data: dict = {
             "corpus": {
                 "icon": BWYD_SVG,
