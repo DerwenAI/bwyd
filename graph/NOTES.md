@@ -1,3 +1,22 @@
+## keywords
+
+	Focus Node: <urn:bwyd:pacoid:keyword:american>
+	Focus Node: <urn:bwyd:pacoid:keyword:breakfast>
+	Focus Node: <urn:bwyd:pacoid:keyword:california>
+	Focus Node: <urn:bwyd:pacoid:keyword:entree>
+	Focus Node: <urn:bwyd:pacoid:keyword:fermented>
+	Focus Node: <urn:bwyd:pacoid:keyword:gluten_free>
+	Focus Node: <urn:bwyd:pacoid:keyword:nordic>
+	Focus Node: <urn:bwyd:pacoid:keyword:salty>
+	Focus Node: <urn:bwyd:pacoid:keyword:savory>
+	Focus Node: <urn:bwyd:pacoid:keyword:starch>
+	Focus Node: <urn:bwyd:pacoid:keyword:sweet_sour>
+
+	Focus Node: <urn:bwyd:pacoid:ingredient:parchment>
+	Focus Node: <urn:bwyd:pacoid:ingredient:turmeric_powder>
+
+---
+
 Recipe = "module"
 	wd:Q219239
 

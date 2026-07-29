@@ -6,7 +6,9 @@ Package definitions for the Bwyd DSL.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
-from .dsl import Bwyd, Corpus
+from .corpus  import Corpus
+
+from .dsl import Bwyd
 
 from .error import BwydParserError
 
@@ -20,11 +22,11 @@ from .measure import Conversion, Converter, Humanized, \
     Temperature, \
     Product, Storage
 
-from .recipe import Recipe
-
 from .ops import Note, Dependency, DependencyDict, Appliance, \
     OpsTypes, OpAdd, OpTransfer, \
     OpAction, OpWait, OpHeat, OpChill, OpBake
+
+from .recipe import Recipe
 
 from .resources import BWYD_NAMESPACE, BWYD_SVG, \
     CONVERT_PATH, GRAMMAR_PATH, ICON_PATH, \

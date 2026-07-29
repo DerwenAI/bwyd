@@ -427,8 +427,6 @@ Interpret the parse of YIELDS and STORE.
                 )
 
             op.product = product  # type: ignore
-            ic(op, product)
-
             closure.products.append(product)
 
 
