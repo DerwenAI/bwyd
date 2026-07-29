@@ -90,7 +90,6 @@ Iterator for listing the Bwyd modules in a given directory.
 
     def parse_recipes (
         self,
-        account: str,
         dir_path: pathlib.Path,
         *,
         glob: str = "*.bwyd",
@@ -115,7 +114,6 @@ Traverse the given directory, parsing Bwyd modules.
 
             # interpret the parsed module
             recipe.interpret(
-                account,
                 debug = debug,
             )
 

@@ -120,7 +120,6 @@ Iterate through a directory of Bwyd content to parse the recipes.
 
             # interpret the parsed module
             recipe.interpret(
-                self.account,
                 debug = debug,
             )
 
@@ -162,9 +161,17 @@ then generate HTML.
         rdf_data: list[ str ] = []
 
         for slug, recipe in self.bwyd_dict.items():
-            # fuck: these need the consolidated product names
-            #recipe.validate(self.account)
-            rdf_data.extend(recipe.gen_rdf(self.account))
+            recipe.validate(
+                self.account,
+                self.product_names,
+            )
+
+            rdf_data.extend(
+                recipe.gen_rdf(
+                    self.account,
+                    self.product_names,
+                )
+            )
 
         self.kg.gen_ottr_rdf("\n".join(rdf_data))
 

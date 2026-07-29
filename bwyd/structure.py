@@ -257,7 +257,7 @@ bwyd:Keyword(
 
         for ingr_symbol in self.ingredients:
             if ingr_symbol in product_names:
-                consumes_urn: str = product_names[ingr_symbol].urn
+                consumes_urn: str = product_names[ingr_symbol].urn  # type: ignore
             else:
                 consumes_urn = f"{ global_ns }:ingredient:{ ingr_symbol }"
 

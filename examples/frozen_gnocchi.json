@@ -13,10 +13,8 @@
     ],
     "duration": "2 hours, 5 minutes, 40 seconds",
     "keywords": [
-      "dumplings",
-      "pasta",
-      "Italian",
-      "quick",
+      "dumpling",
+      "italian",
       "starch"
     ],
     "author": "Paco Nathan <a target=\"_blank\" href=\"https://derwen.ai/paco\">https://derwen.ai/paco</a>",
@@ -35,7 +33,7 @@
     {
       "amount": "50 g",
       "text": "grated parmesan",
-      "convert": "1/2 cup"
+      "convert": "1 3/4 ounces"
     },
     {
       "amount": "1 g",
@@ -44,7 +42,7 @@
     },
     {
       "amount": "250 g",
-      "text": "reduced veggie pur\u00e9e",
+      "text": "reduced potato pur\u00e9e, or other root veggies",
       "convert": "1/2 pound"
     },
     {
@@ -93,8 +91,8 @@
       "prep": [],
       "ingredients": [
         {
-          "name": "puree",
-          "text": "reduced veggie pur\u00e9e"
+          "name": "potato",
+          "text": "reduced potato pur\u00e9e, or other root veggies"
         },
         {
           "name": "flour",
@@ -109,7 +107,7 @@
           "text": "whole milk ricotta"
         },
         {
-          "name": "grated_parmesan",
+          "name": "parmesan",
           "text": "grated parmesan"
         },
         {
@@ -152,10 +150,10 @@
             },
             {
               "kind": "add",
-              "subject": "grated_parmesan",
+              "subject": "parmesan",
               "amount": "50 g",
               "text": "",
-              "convert": "1/2 cup"
+              "convert": "1 3/4 ounces"
             },
             {
               "kind": "add",
@@ -181,7 +179,7 @@
           "uses": [
             {
               "kind": "add",
-              "subject": "puree",
+              "subject": "potato",
               "amount": "250 g",
               "text": "",
               "convert": "1/2 pound"
@@ -342,13 +340,11 @@
       ],
       "text": "add layers of dumplings to fill depth of baking dish",
       "supers": [
-        "dumplings",
-        "pasta"
+        "dumpling"
       ],
       "keywords": [
-        "starch",
-        "quick",
-        "Italian"
+        "italian",
+        "starch"
       ],
       "containers": [
         {
@@ -440,5 +436,5 @@
       ]
     }
   ],
-  "schema_org": "{\"@context\": \"https://schema.org\", \"@type\": \"Recipe\", \"name\": \"Frozen Gnocchi Dumplings\", \"description\": \"Make some yummy gnocchi from root veggies.\", \"keywords\": [\"dumplings\", \"pasta\", \"Italian\", \"quick\", \"starch\"], \"recipeYield\": \"80 portions frozen gnocchi dumplings\", \"recipeIngredient\": [\"1 large chicken egg\", \"250 g (1/2 pound) whole milk ricotta\", \"50 g (1/2 cup) grated parmesan\", \"1 g (1/4 tsp) freshly grated nutmeg\", \"250 g (1/2 pound) reduced veggie pur\\u00e9e\", \"350 g (2 cups) flour: rice, oat, etc.\", \"1 parchment paper, cut to line the baking dish\"], \"image\": \"https://www.instagram.com/p/Csu0b4yLOyZ/embed\", \"isBasedOn\": \"https://www.prouditaliancook.com/2020/11/butternut-squash-gnocchi-with-sage-and-brown-butter.html\", \"dateModified\": \"2023-04-10\", \"author\": \"Paco Nathan\", \"license\": \"https://spdx.org/licenses/CC-BY-NC-SA-4.0.html\"}"
+  "schema_org": "{\"@context\": \"https://schema.org\", \"@type\": \"Recipe\", \"name\": \"Frozen Gnocchi Dumplings\", \"description\": \"Make some yummy gnocchi from root veggies.\", \"keywords\": [\"dumpling\", \"italian\", \"starch\"], \"recipeYield\": \"80 portions frozen gnocchi dumplings\", \"recipeIngredient\": [\"1 large chicken egg\", \"250 g (1/2 pound) whole milk ricotta\", \"50 g (1 3/4 ounces) grated parmesan\", \"1 g (1/4 tsp) freshly grated nutmeg\", \"250 g (1/2 pound) reduced potato pur\\u00e9e, or other root veggies\", \"350 g (2 cups) flour: rice, oat, etc.\", \"1 parchment paper, cut to line the baking dish\"], \"image\": \"https://www.instagram.com/p/Csu0b4yLOyZ/embed\", \"isBasedOn\": \"https://www.prouditaliancook.com/2020/11/butternut-squash-gnocchi-with-sage-and-brown-butter.html\", \"dateModified\": \"2023-04-10\", \"author\": \"Paco Nathan\", \"license\": \"https://spdx.org/licenses/CC-BY-NC-SA-4.0.html\"}"
 }

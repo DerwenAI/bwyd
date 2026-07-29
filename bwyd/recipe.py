@@ -826,7 +826,6 @@ Helper method to interpret one Closure.
 
     def interpret (
         self,
-        account: str,
         *,
         debug: bool = False,
         ) -> None:
@@ -1046,14 +1045,61 @@ Construct the local namespace.
         return global_ns, local_ns, local_names
 
 
-    def gen_rdf (
+    def validate (
         self,
         account: str,
+        product_names: dict[ str, Product ],
+        ) -> None:
+        """
+Validate the forward references for one Bwyd module.
+        """
+        # overlay the global product names into the local product
+        # names (i.e., include local intermediates)
+
+        _, _, local_names = self.get_product_names(account)
+
+        for symbol, product in product_names.items():
+            local_names[symbol] = product
+
+        for closure in self.closures.values():
+            # check for zero reference counts
+            for name, entity in closure.containers.items():
+                if entity.ref_count < 1:
+                    print(f"Container defined but not used: {name}")
+                    print(entity.loc)
+
+            for name, entity in closure.tools.items():
+                if entity.ref_count < 1:
+                    print(f"Tool defined but not used: {name}")
+                    print(entity.loc)
+
+            for name, entity in closure.ingredients.items():
+                if entity.ref_count < 1:
+                    print(f"Ingredient defined but not used: {name}")
+                    print(entity.loc)
+
+            # check for references outside this module
+            for symbol, entity in closure.ingredients.items():
+                if entity.external and symbol not in local_names:
+                    raise BwydParserError(
+                        f"CLOSURE `{symbol}` used but not defined {entity.loc}",
+                        symbol = symbol,
+                    )
+
+
+    def gen_rdf (  # pylint: disable=R0914
+        self,
+        account: str,
+        product_names: dict[ str, Product ],
         ) -> list[ str ]:
         """
 Generate RDF modeling from OTTR templates.
         """
         global_ns, local_ns, local_names = self.get_product_names(account)
+
+        for symbol, product in product_names.items():
+            local_names[symbol] = product
+
 
         author: str = self.author  # type: ignore
 

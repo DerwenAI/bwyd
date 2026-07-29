@@ -25,21 +25,18 @@ def test_parser (
     """
 Load a sample file to ensure the parser works correctly.
     """
-    account: str = "pacoid"
-
     slug: str = "frozen_gnocchi"
-    gnoc_path: pathlib.Path = CONTENT_DIR / f"{slug}.bwyd"
+    bwyd_path: pathlib.Path = CONTENT_DIR / f"{slug}.bwyd"
 
     dsl: bwyd.Bwyd = bwyd.Bwyd()
 
     recipe: bwyd.Recipe = dsl.parse(
-        gnoc_path,
+        bwyd_path,
         slug = slug,
         debug = False, # True
     )
 
     recipe.interpret(
-        account,
         debug = False, # True
     )
 
@@ -50,9 +47,14 @@ Load a sample file to ensure the parser works correctly.
 
     json_path: pathlib.Path = CONTENT_DIR / f"{slug}.json"
     exp_data: dict = json.load(open(json_path, "r", encoding = "utf-8"))  # pylint: disable=R1732
+    identical: bool = sorted(obs_data.items()) == sorted(exp_data.items())
+
+    if not identical:
+        with open(json_path.with_suffix(".fail"), "w", encoding = "utf-8") as fp:
+            fp.write(json.dumps(obs_data, indent = 2, sort_keys = False,))
 
     # compare
-    assert sorted(obs_data.items()) == sorted(exp_data.items())
+    assert identical
 
 
 if __name__ == "__main__":
