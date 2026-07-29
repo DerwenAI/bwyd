@@ -22,11 +22,3 @@ if __name__ == "__main__":
     corpus.parse_recipes(content_path)
     corpus.build_namespace()
     corpus.gen_rdf(gen_html = False)
-
-
-    # search/discovery support
-    sys.exit(0)
-
-    corpus.render_discovery(
-        content_path / "index.html",
-    )
