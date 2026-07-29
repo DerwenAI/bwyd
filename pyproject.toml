@@ -37,7 +37,7 @@ dependencies = [
 
     # graph
     "rdflib (>=7.1.4,<8.0)",
-    "xandergraph (>=0.2,<1.0)",
+    "xandergraph (>=0.4,<1.0)",
 
     # HTML rendering
     "inflect (>=7.5.0,<8.0)",

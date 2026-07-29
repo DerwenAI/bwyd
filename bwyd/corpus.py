@@ -231,7 +231,7 @@ WHERE {
             ])
 
 
-    def get_cache (
+    def get_cache_session (
         self,
         *,
         cache_path: pathlib.Path | None = None,
