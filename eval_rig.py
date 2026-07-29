@@ -11,12 +11,11 @@ import sys
 
 from deepdiff import DeepDiff
 from icecream import ic
+
 import bwyd
 
 
 if __name__ == "__main__":
-    account: str = "pacoid"
-
     content_path: pathlib.Path = pathlib.Path("examples")
     slug: str = sys.argv[1]
 
@@ -35,7 +34,6 @@ if __name__ == "__main__":
 
     # interpret the parsed module
     recipe.interpret(
-        account,
         debug = True, # False
     )
 
