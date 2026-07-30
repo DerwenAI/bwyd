@@ -86,6 +86,16 @@ bwyd:CQ-003 a bwyd:CompetencyQuestion ;
   dcterms:creator <https://orcid.org/0000-0003-3167-1539> ;
 .
 
+bwyd:CQ-004 a bwyd:CompetencyQuestion ;
+  dcterms:identifier "CQ-004" ;
+  rdfs:seeAlso <https://github.com/DerwenAI/bwyd/wiki/cq#qc-004> ;
+  dcterms:title "Specify the mass density for ingredients"@en ;
+  dcterms:description "What is the density (g/ml) of each ingredient, for measurement conversions?"@en ;
+  dcterms:isPartOf bwyd:BwydScheme ;
+  dcterms:created "2026-07-29"^^xsd:date ;
+  dcterms:creator <https://orcid.org/0000-0003-3167-1539> ;
+.
+
 
 ######################################################################
 ## relations
@@ -129,6 +139,22 @@ bwyd:consumes rdfs:subPropertyOf <http://purl.obolibrary.org/obo/RO_0002233> ;
   rdfs:range bwyd:Ingredient ;
   rdfs:label "consumes"@en ;
   skos:definition "How a Closure within a Recipe consumes a culinary Ingredient of prepared foods"@en ;
+.
+
+
+bwyd:CQ-004 dcterms:subject bwyd:density
+.
+
+bwyd:density dcterms:isReferencedBy bwyd:CQ-004
+.
+
+bwyd:density rdfs:subPropertyOf rdf:Property ;
+  rdfs:domain bwyd:Product ;
+  rdfs:range xsd:float ;
+  rdfs:label "mass density"@en ;
+  skos:definition "Specifies the mass density of a Product in grams per milliliter"@en ;
+  skos:exactMatch: wd:Q29539 ;
+
 .
 
 
