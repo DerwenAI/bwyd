@@ -53,6 +53,15 @@ Constructor.
         self.lang: str = lang
         self.account: str = account
 
+        # init the parser and global namespaces
+        self.dsl: Bwyd = Bwyd(
+            self.config,
+        )
+
+        self.bwyd_dict: dict[ str, Recipe ] = {}
+        self.product_names: dict[ str, Product ] = {}
+        self.errors: list[ str ] = []
+
         # init the graph and load the OTTR templates
         self.kg: xg.KnowledgeGraph = xg.KnowledgeGraph(
             ns = {
@@ -71,16 +80,6 @@ Constructor.
         self.kg.load_stottr(graph_dir / "bwyd.stottr")
 
         self.converter: Converter = self._build_pantry_namespace()
-
-        # init the parser and global namespaces
-        self.dsl: Bwyd = Bwyd(
-            self.config,
-            self.converter,
-        )
-
-        self.bwyd_dict: dict[ str, Recipe ] = {}
-        self.product_names: dict[ str, Product ] = {}
-        self.errors: list[ str ] = []
 
 
     def _load_ontology (

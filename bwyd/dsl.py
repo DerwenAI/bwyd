@@ -6,15 +6,14 @@ DSL implementing the Bwyd language.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
-import json
 import pathlib
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401,W0611
 import textx  # type: ignore  # pylint: disable=E0401
 
-from .measure import Conversion, Converter
+from .measure import Converter
 from .recipe import Recipe
-from .resources import CONVERT_PATH, GRAMMAR_PATH
+from .resources import GRAMMAR_PATH
 
 
 ######################################################################
@@ -29,24 +28,15 @@ Bwyd DSL parser/interpreter.
         debug = False, # True
     )
 
-    with open(CONVERT_PATH, "r", encoding = "utf-8") as fp:
-        UNIT_CONVERTER: Converter = {
-            conv.symbol: conv
-            for row in json.load(fp)
-            for conv in [ Conversion.model_validate(row) ]
-        }
-
 
     def __init__ (
         self,
         config: dict,
-        converter: Converter,
         ) -> None:
         """
 Constructor.
         """
         self.config: dict = config
-        self.converter: Converter = converter
 
 
     def parse (

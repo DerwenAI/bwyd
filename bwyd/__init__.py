@@ -29,7 +29,7 @@ from .ops import Note, Dependency, DependencyDict, Appliance, \
 from .recipe import Recipe
 
 from .resources import BWYD_NAMESPACE, BWYD_SVG, \
-    CONVERT_PATH, GRAMMAR_PATH, ICON_PATH, \
+    GRAMMAR_PATH, ICON_PATH, \
     JINJA_PAGE_TEMPLATE, JINJA_INDEX_TEMPLATE, \
     URL_PATTERN
 
