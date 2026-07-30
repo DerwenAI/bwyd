@@ -13,6 +13,10 @@ import bwyd
 
 
 if __name__ == "__main__":
+    ic.configureOutput(
+        noColor = True,
+    )
+
     account: str = "pacoid"
     content_path: pathlib.Path = pathlib.Path("../bwyd-editor/content")
 

@@ -8,7 +8,6 @@ see copyright/license https://github.com/DerwenAI/bwyd/README.md
 
 import json
 import pathlib
-import tomllib
 
 from icecream import ic  # type: ignore  # pylint: disable=E0401,W0611
 import textx  # type: ignore  # pylint: disable=E0401
@@ -40,42 +39,26 @@ Bwyd DSL parser/interpreter.
 
     def __init__ (
         self,
-        *,
-        config_path: pathlib.Path | None = None,
-        converter: Converter = UNIT_CONVERTER,
+        config: dict,
+        converter: Converter,
         ) -> None:
         """
 Constructor.
         """
-        self.config: dict = {}
-
-        if config_path is not None:
-            with open(config_path, mode = "rb") as fp:
-                self.config = tomllib.load(fp)
-
+        self.config: dict = config
         self.converter: Converter = converter
-
-
-    def extend_converter (
-        self,
-        conversions: list[ Conversion ],
-        ) -> None:
-        """
-Extend the measurements unit converter by merging with provided conversions.
-        """
-        for conv in conversions:
-            self.converter[ conv.symbol ] = conv
 
 
     def parse (
         self,
         path: pathlib.Path,
+        converter: Converter,
         *,
         slug: str | None = None,
         debug: bool = False,
         ) -> Recipe:
         """
-Initialize a parser to load one Bywd module from a file.
+Parse one Bywd module from a file.
         """
         return Recipe(
             path,
@@ -83,6 +66,6 @@ Initialize a parser to load one Bywd module from a file.
                 path,
                 debug = debug,
             ),
-            self.converter,
+            converter,
             slug = slug,
         )

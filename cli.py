@@ -18,10 +18,6 @@ if __name__ == "__main__":
         account,
     )
 
-    corpus.dsl.extend_converter([
-        #bwyd.Conversion.model_validate({ "symbol": "vodka", "density": 222.4, })
-    ])
-
     corpus.parse_recipes(content_path)
     corpus.build_namespace()
     corpus.gen_rdf()

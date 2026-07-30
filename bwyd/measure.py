@@ -31,9 +31,10 @@ An enumeration class representing string literals for Measure units.
     GRAM = "g"
     KILOGRAM = "kg"
 
-OUNCE_PER_POUND: float = 16.0
-CUP_PER_LITER: float = 4.226753
-POUND_PER_GRAM: float = 0.002204623
+OUNCE_PER_POUND: NonNegativeFloat = 16.0
+CUP_PER_LITER: NonNegativeFloat = 4.226753
+POUND_PER_GRAM: NonNegativeFloat = 0.002204623
+MILLILITER_PER_CUP: NonNegativeFloat = 236.5882
 
 
 class DurationUnits (enum.StrEnum):
@@ -71,12 +72,26 @@ PLURAL = inflect.engine()
 
 class Conversion (BaseModel):  # pylint: disable=R0902
     """
-A data class representing one Conversion object.
+A data class representing one Conversion object, used to convert
+measures given in metric mass units to imperial volume units,
+and vice versa.
     """
     symbol: str
     density: PositiveFloat
     imperial: str = MeasureUnits.CUP.value
     metric: str = MeasureUnits.GRAM.value
+
+
+    def grams_to_cups (
+        self,
+        amount: NonNegativeFloat,
+        ) -> NonNegativeFloat:
+        """
+Convert grams to cups, based on the mass density of the material.
+        """
+        # FUCK: needs to use actual `desity` from graph, then convert
+        # units using `MILLILITER_PER_CUP`
+        return amount / self.density
 
 
 Converter = typing.Dict[ str, Conversion ]
@@ -187,7 +202,8 @@ imperial conversion if available.
                 conv: Conversion = converter[symbol]
 
                 if self.units == conv.metric:
-                    imper_amount: float = self.amount / conv.density
+                    # fuck
+                    imper_amount: NonNegativeFloat = conv.grams_to_cups(self.amount)
                     human: Humanized = self._humanize_cup(imper_amount)
                     amount += human.denormalize()
 
@@ -242,7 +258,8 @@ Denormalize this measure into human-readable imperial conversion.
                 conv: Conversion = converter[symbol]
 
                 if self.units == conv.metric:
-                    imper_amount: float = self.amount / conv.density
+                    # fuck
+                    imper_amount: NonNegativeFloat = conv.grams_to_cups(self.amount)
                     human: Humanized = self._humanize_cup(imper_amount)
                     amount += human.denormalize(is_compound = True)
 
@@ -284,7 +301,7 @@ Denormalize this measure into human-readable imperial conversion.
     @classmethod
     def _humanize_generic (
         cls,
-        amount: float,
+        amount: NonNegativeFloat,
         units: MeasureUnits,
         ) -> Humanized:
         """
@@ -307,7 +324,7 @@ Private method to humanize imperial measurement ratios, for generic case.
     @classmethod
     def _humanize_cup (
         cls,
-        amount: float,
+        amount: NonNegativeFloat,
         ) -> Humanized:
         """
 Private method to humanize imperial measurement ratios, for cup.
@@ -336,7 +353,7 @@ Private method to humanize imperial measurement ratios, for cup.
     @classmethod
     def _humanize_tbsp (
         cls,
-        amount: float,
+        amount: NonNegativeFloat,
         ) -> Humanized:
         """
 Private method to humanize imperial measurement ratios, for tablespoon.
@@ -363,7 +380,7 @@ Private method to humanize imperial measurement ratios, for tablespoon.
     @classmethod
     def _humanize_tsp (
         cls,
-        amount: float,
+        amount: NonNegativeFloat,
         ) -> Humanized:
         """
 Private method to humanize imperial measurement ratios, for teaspoon.
@@ -390,13 +407,13 @@ Private method to humanize imperial measurement ratios, for teaspoon.
     @classmethod
     def fix_fraction (
         cls,
-        amount: float,
+        amount: NonNegativeFloat,
         ) -> str:
         """
 Humanize fractions representing imperial measurement ratios >= 1.0
         """
         base: int = int(amount)
-        frac: float = amount - float(base)
+        frac: NonNegativeFloat = amount - float(base)
 
         if frac >= 0.9:
             return str(round(amount))
@@ -450,7 +467,7 @@ Constructor from a `textx` parse object.
 
     def normalize (
         self,
-        ) -> float:
+        ) -> NonNegativeFloat:
         """
 Return this duration normalized into seconds.
         """
@@ -531,8 +548,8 @@ Constructor from a `textx` parse object.
     @classmethod
     def celsius_to_fahrenheit (
         cls,
-        amount: float,
-        ) -> float:
+        amount: NonNegativeFloat,
+        ) -> NonNegativeFloat:
         """
 Convert from Celsius to Fahrenheit scale.
         """
@@ -542,8 +559,8 @@ Convert from Celsius to Fahrenheit scale.
     @classmethod
     def fahrenheit_to_celsius (
         cls,
-        amount: float,
-        ) -> float:
+        amount: NonNegativeFloat,
+        ) -> NonNegativeFloat:
         """
 Convert from Fahrenheit to Celsius scale.
         """
@@ -559,7 +576,7 @@ HTML representation.
         html: str = f"{self.amount} °{self.units}"
 
         if self.units == TemperatureUnits.CELSIUS.value:
-            fahr: float = self.celsius_to_fahrenheit(self.amount)
+            fahr: NonNegativeFloat = self.celsius_to_fahrenheit(self.amount)
 
             # round the converted temperature to the nearest 5 °F
             f_deg: int = int(round(fahr / 5.0) * 5.0)

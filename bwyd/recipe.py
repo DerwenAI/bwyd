@@ -322,27 +322,25 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
             )
 
         elif depend_class_name == "Ingredient":
-            # forward reference, to be resolved during this parsing pass
-            dep = Dependency(
+            # ingredient forward reference, to be resolved during this parsing pass
+            # FUCK: link to ingredient info in the KG -- now, from ontology
+            closure.ingredients[depend_parse.symbol] = Dependency(
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,
                 text = depend_parse.text,
                 note = note,
             )
 
-            closure.ingredients[depend_parse.symbol] = dep
-
         elif depend_class_name == "Prep":
-            # external forward reference, to be resolved on a subsequent pass
-            dep = Dependency(
+            # product forward reference, to be resolved on a subsequent pass
+            # FUCK: link to ingredient info in the KG -- after RDF generation
+            closure.ingredients[depend_parse.symbol] = Dependency(
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,
                 text = depend_parse.text,
                 external = True,
                 note = note,
             )
-
-            closure.ingredients[depend_parse.symbol] = dep
 
 
     def _interpret_activity (
@@ -478,7 +476,7 @@ Interpret the steps within an activity.
             )
 
         if op_class_name == "Add":
-            # resolve local reference
+            # resolve external local reference
             entity = None
 
             if op_parse.symbol in closure.ingredients:
@@ -739,11 +737,12 @@ Interpret the components within a ratio.
 
         for part in ratio_parse.parts:
             if len(part.components) < 1:
-                # resolve local reference
+                # resolve ingredient reference
                 if part.symbol in closure.ingredients:
                     entity: typing.Any = closure.ingredients[part.symbol]
                     entity.ref_count += 1
 
+                    # handle ingredient references in the ratios
                     if part.symbol not in closure.ratio.parts:
                         closure.ratio.parts[part.symbol] = []
 
@@ -1043,7 +1042,7 @@ Construct the local namespace.
         return global_ns, local_ns, local_names
 
 
-    def validate (
+    def validate_references (
         self,
         account: str,
         product_names: dict[ str, Product ],
@@ -1051,8 +1050,8 @@ Construct the local namespace.
         """
 Validate the forward references for one Bwyd module.
         """
-        # overlay the global product names into the local product
-        # names (i.e., include local intermediates)
+        # overlay the global product names into local product names
+        # i.e., include local intermediate products
 
         _, _, local_names = self.get_product_names(account)
 
@@ -1076,7 +1075,8 @@ Validate the forward references for one Bwyd module.
                     print(f"Ingredient defined but not used: {name}")
                     print(entity.loc)
 
-            # check for references outside this module
+            # check outside this module to make sure that all of the
+            # forward references have been resolved
             for symbol, entity in closure.ingredients.items():
                 if entity.external and symbol not in local_names:
                     raise BwydParserError(

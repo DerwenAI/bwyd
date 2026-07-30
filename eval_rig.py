@@ -16,17 +16,23 @@ import bwyd
 
 
 if __name__ == "__main__":
-    content_path: pathlib.Path = pathlib.Path("examples")
-    slug: str = sys.argv[1]
+    ic.configureOutput(
+        noColor = True,
+    )
 
+    account: str = "pacoid"
+
+    corpus: bwyd.Corpus = bwyd.Corpus(
+        account,
+    )
 
     ######################################################################
     # parse an example Bwyd module
-    dsl: bwyd.Bwyd = bwyd.Bwyd(
-        config_path = pathlib.Path("config.toml"),
-    )
 
-    recipe: bwyd.Recipe = dsl.parse(
+    slug: str = sys.argv[1]
+    content_path: pathlib.Path = pathlib.Path("../bwyd-editor/content")
+
+    recipe: bwyd.Recipe = corpus.dsl.parse(
         content_path / f"{slug}.bwyd",
         slug = slug,
         debug = False, # True

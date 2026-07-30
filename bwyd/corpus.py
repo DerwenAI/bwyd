@@ -10,6 +10,7 @@ import logging
 import os
 import pathlib
 import tempfile
+import tomllib
 import traceback
 
 from icecream import ic
@@ -37,27 +38,32 @@ Manage a corpus of Bwyd modules.
         account: str,
         *,
         config_path: pathlib.Path = pathlib.Path("config.toml"),
-        converter: Converter = Bwyd.UNIT_CONVERTER,  # pylint: disable=W0613
+        converter: Converter = Bwyd.UNIT_CONVERTER,
         lang: str = "en",
         ) -> None:
         """
 Constructor.
         """
-        self.lang: str = lang
-        self.account: str = account
-        self.bwyd_dict: dict[ str, Recipe ] = {}
-        self.product_names: dict[ str, Product ] = {}
-        self.errors: list[ str ] = []
-
-        self.dsl: Bwyd = Bwyd(
-            config_path = config_path,
-        )
-
-        self.config = self.dsl.config
+        with open(config_path, mode = "rb") as fp:
+            self.config: dict = tomllib.load(fp)
 
         logging.basicConfig(
             format = self.config["bwyd"]["log_format"],
         )
+
+        self.lang: str = lang
+        self.account: str = account
+        self.converter: Converter = converter
+
+        # init the parser and global namespaces
+        self.dsl: Bwyd = Bwyd(
+            self.config,
+            self.converter,
+        )
+
+        self.bwyd_dict: dict[ str, Recipe ] = {}
+        self.product_names: dict[ str, Product ] = {}
+        self.errors: list[ str ] = []
 
         # init the graph and load the OTTR templates
         self.kg: xg.KnowledgeGraph = xg.KnowledgeGraph(
@@ -115,6 +121,7 @@ Iterate through a directory of Bwyd content to parse the recipes.
 
             recipe: Recipe = self.dsl.parse(
                 recipe_path,
+                self.converter,
                 slug = slug,
                 debug = debug,
             )
@@ -165,7 +172,7 @@ Iterate through the parsed Bwyd modules to generate RDF.
 
         with open(tf.name, "w", encoding = "utf-8") as fp:
             for recipe in self.bwyd_dict.values():
-                recipe.validate(
+                recipe.validate_references(
                     self.account,
                     self.product_names,
                 )
@@ -279,7 +286,7 @@ corpus of recipes.
                 "recipes": [
                     {
                         "slug": recipe.slug,
-                        "thumb": recipe.get_thumbnail(self.get_cache()),
+                        "thumb": recipe.get_thumbnail(self.get_cache_session()),
                         "title": recipe.title,
                         "text": recipe.text,
                         "serves": recipe.total_yields(),

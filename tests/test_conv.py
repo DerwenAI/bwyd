@@ -23,11 +23,16 @@ def test_converter (
     """
 Test example conversions.
     """
-    dsl: bwyd.Bwyd = bwyd.Bwyd()
+    account: str = "pacoid"
 
+    corpus: bwyd.Corpus = bwyd.Corpus(
+        account,
+    )
+
+    ## test conversion:
     ## 25 g sugar == 2 tbsp
 
-    symbol: str = "sugar"
+    symbol: str = "granulated_sugar"
 
     measure: bwyd.Measure = bwyd.Measure(
         amount = 25.0,
@@ -37,7 +42,7 @@ Test example conversions.
     obs_conv: str = measure.humanize_convert(
         symbol,
         True,
-        dsl.converter,
+        corpus.converter,
     )
 
     if debug:

@@ -4,7 +4,7 @@
 """
 unit tests:
 
-  * parser
+  * parser loads a Bwyd module
 
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
@@ -15,6 +15,7 @@ import sys
 
 CONTENT_DIR: pathlib.Path = pathlib.Path(__file__).resolve().parent.parent / "examples"
 sys.path.insert(0, str(CONTENT_DIR))
+
 import bwyd  # pylint: disable=C0413,E0401
 
 
@@ -25,13 +26,18 @@ def test_parser (
     """
 Load a sample file to ensure the parser works correctly.
     """
+    account: str = "pacoid"
+
+    corpus: bwyd.Corpus = bwyd.Corpus(
+        account,
+    )
+
     slug: str = "frozen_gnocchi"
     bwyd_path: pathlib.Path = CONTENT_DIR / f"{slug}.bwyd"
 
-    dsl: bwyd.Bwyd = bwyd.Bwyd()
-
-    recipe: bwyd.Recipe = dsl.parse(
+    recipe: bwyd.Recipe = corpus.dsl.parse(
         bwyd_path,
+        corpus.converter,
         slug = slug,
         debug = False, # True
     )
