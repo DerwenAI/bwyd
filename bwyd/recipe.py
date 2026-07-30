@@ -322,8 +322,7 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
             )
 
         elif depend_class_name == "Ingredient":
-            # ingredient forward reference, to be resolved during this parsing pass
-            # FUCK: link to ingredient info in the KG -- now, from ontology
+            # ingredient forward reference, to be resolved on a subsequent pass
             closure.ingredients[depend_parse.symbol] = Dependency(
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,
@@ -333,7 +332,6 @@ Interpret and resolve each dependency: container, tool, ingredient, use.
 
         elif depend_class_name == "Prep":
             # product forward reference, to be resolved on a subsequent pass
-            # FUCK: link to ingredient info in the KG -- after RDF generation
             closure.ingredients[depend_parse.symbol] = Dependency(
                 loc = textx.get_location(depend_parse),
                 symbol = depend_parse.symbol,

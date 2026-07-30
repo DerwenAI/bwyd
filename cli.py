@@ -7,10 +7,16 @@ Convert a corpus of Bywd modules into HTML.
 
 import pathlib
 
+from icecream import ic
+
 import bwyd
 
 
 if __name__ == "__main__":
+    ic.configureOutput(
+        noColor = True,
+    )
+
     account: str = "pacoid"
     content_path: pathlib.Path = pathlib.Path("examples")
 

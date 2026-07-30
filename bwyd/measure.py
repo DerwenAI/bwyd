@@ -88,10 +88,9 @@ and vice versa.
         ) -> NonNegativeFloat:
         """
 Convert grams to cups, based on the mass density of the material.
+Use the `density` value from the graph, then convert to cups.
         """
-        # FUCK: needs to use actual `desity` from graph, then convert
-        # units using `MILLILITER_PER_CUP`
-        return amount / self.density
+        return amount / MILLILITER_PER_CUP / self.density
 
 
 Converter = typing.Dict[ str, Conversion ]
@@ -202,7 +201,6 @@ imperial conversion if available.
                 conv: Conversion = converter[symbol]
 
                 if self.units == conv.metric:
-                    # fuck
                     imper_amount: NonNegativeFloat = conv.grams_to_cups(self.amount)
                     human: Humanized = self._humanize_cup(imper_amount)
                     amount += human.denormalize()
@@ -258,7 +256,6 @@ Denormalize this measure into human-readable imperial conversion.
                 conv: Conversion = converter[symbol]
 
                 if self.units == conv.metric:
-                    # fuck
                     imper_amount: NonNegativeFloat = conv.grams_to_cups(self.amount)
                     human: Humanized = self._humanize_cup(imper_amount)
                     amount += human.denormalize(is_compound = True)
@@ -368,7 +365,7 @@ Private method to humanize imperial measurement ratios, for tablespoon.
         else:
             human = str(Fraction(round(amount, 2)).limit_denominator(denom_limit))
 
-        # plural for teaspoons is too easily confused with tablespoon
+        # NB: plural for teaspoons is *too easily* confused with tablespoon
 
         return Humanized(
             amount = amount,

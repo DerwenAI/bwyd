@@ -63,6 +63,7 @@
   skos:prefLabel "ricotta"@en , "ricotta"@fr ;
   skos:definition "an Italian soft cheese made from whey"@en ;
   skos:exactMatch foodon:03302908 , wd:Q216781 ;
+  bwyd:density "16.18"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:parmesan> a bwyd:Ingredient ;
@@ -347,6 +348,7 @@
   skos:prefLabel "potato"@en , "pomme de terre"@fr ;
   skos:definition "a shoot axis tuber of a potato plant, Solanum tuberosum"@en ;
   skos:exactMatch foodon:03315354 , wd:Q16587531 ;
+  bwyd:density "18.26"^^xsd:float ;
 .
 
 

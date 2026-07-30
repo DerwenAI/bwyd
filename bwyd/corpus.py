@@ -20,7 +20,7 @@ import requests_cache
 import xandergraph as xg  # type: ignore
 
 from .dsl import Bwyd
-from .measure import Converter, Product
+from .measure import Conversion, Converter, Product
 from .recipe import Recipe
 from .resources import BWYD_SVG, JINJA_INDEX_TEMPLATE
 
@@ -38,7 +38,6 @@ Manage a corpus of Bwyd modules.
         account: str,
         *,
         config_path: pathlib.Path = pathlib.Path("config.toml"),
-        converter: Converter = Bwyd.UNIT_CONVERTER,
         lang: str = "en",
         ) -> None:
         """
@@ -53,17 +52,6 @@ Constructor.
 
         self.lang: str = lang
         self.account: str = account
-        self.converter: Converter = converter
-
-        # init the parser and global namespaces
-        self.dsl: Bwyd = Bwyd(
-            self.config,
-            self.converter,
-        )
-
-        self.bwyd_dict: dict[ str, Recipe ] = {}
-        self.product_names: dict[ str, Product ] = {}
-        self.errors: list[ str ] = []
 
         # init the graph and load the OTTR templates
         self.kg: xg.KnowledgeGraph = xg.KnowledgeGraph(
@@ -79,11 +67,23 @@ Constructor.
         self.pantry_path: pathlib.Path = graph_dir / "pantry.ttl"
         self.corpus_path: pathlib.Path = graph_dir / "corpus.ttl"
 
-        self.load_ontology()
+        self._load_ontology()
         self.kg.load_stottr(graph_dir / "bwyd.stottr")
 
+        self.converter: Converter = self._build_pantry_namespace()
 
-    def load_ontology (
+        # init the parser and global namespaces
+        self.dsl: Bwyd = Bwyd(
+            self.config,
+            self.converter,
+        )
+
+        self.bwyd_dict: dict[ str, Recipe ] = {}
+        self.product_names: dict[ str, Product ] = {}
+        self.errors: list[ str ] = []
+
+
+    def _load_ontology (
         self,
         ) -> None:
         """
@@ -102,6 +102,33 @@ with exception handling to identify any errors.
             except Exception as ex:  # pylint: disable=W0612,W0718
                 ic(ttl_path)
                 traceback.print_exc()
+
+
+    def _build_pantry_namespace (
+        self,
+        ) -> Converter:
+        """
+Query the ontology to build a global namespace for ingredients,
+e.g., used for measurement conversions.
+        """
+        query: str = """
+SELECT DISTINCT ?ingr ?density
+WHERE {
+  ?ingr a bwyd:Ingredient .
+  ?ingr bwyd:density ?density .
+}""".strip()
+
+        converter: Converter = {}
+
+        for row in self.kg.graph.query(query):
+            conv: Conversion = Conversion(
+                symbol = str(row.ingr).rsplit(":", maxsplit = 1)[-1],
+                density = float(row.density),
+            )
+
+            converter[conv.symbol] = conv
+
+        return converter
 
 
     def parse_recipes (

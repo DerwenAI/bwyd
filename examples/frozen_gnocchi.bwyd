@@ -97,10 +97,10 @@ TEXT: "add layers of dumplings to fill depth of baking dish"
   TOOL board: "gnocchi board or a fork"
 
   PREP dumplings: "raw cut dumplings"
-  INGREDIENT parchment: "parchment paper, cut to line the baking dish"
+  INGREDIENT parchment_paper: "parchment paper, cut to line the baking dish"
 
   ACTIVITY dish: "prep container"
-    ADD parchment (1)
+    ADD parchment_paper (1)
 
     ACTION hand: "line dish with parchment paper"
       UNTIL: "each layer is fully lined"
