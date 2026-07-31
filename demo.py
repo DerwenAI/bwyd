@@ -25,9 +25,8 @@ if __name__ == "__main__":
     )
 
     corpus.parse_recipes(content_path)
-    corpus.build_namespace()
     corpus.gen_rdf()
-    corpus.shacl_rules()
+    corpus.apply_shacl_rules()
 
     ic(corpus.product_names.keys())
     ic(corpus.errors)

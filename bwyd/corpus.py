@@ -130,6 +130,31 @@ WHERE {
         return converter
 
 
+    def _build_product_namespace (
+        self,
+        ) -> None:
+        """
+Iterate through the parsed Bwyd modules to build a global namespace
+for products.
+        """
+        global_ns: str = f"urn:bwyd:{ self.account }"
+
+        for recipe in self.bwyd_dict.values():
+            for closure in recipe.closures.values():
+                for product in closure.products:
+                    if not product.intermediate and product.urn is None:
+                        product.urn = f"{ global_ns }:product:{ product.symbol }"
+
+                        if product.symbol in self.product_names:
+                            print(
+                                f"CONFLICT: product { product.symbol } overlaps:",
+                                self.product_names[product.symbol].urn,
+                                product.urn,
+                            )
+                        else:
+                            self.product_names[product.symbol] = product
+
+
     def parse_recipes (
         self,
         content_path: pathlib.Path,
@@ -159,30 +184,7 @@ Iterate through a directory of Bwyd content to parse the recipes.
                 debug = debug,
             )
 
-
-    def build_namespace (
-        self,
-        ) -> None:
-        """
-Iterate through the parsed Bwyd modules to build a global namespace
-for products.
-        """
-        global_ns: str = f"urn:bwyd:{ self.account }"
-
-        for recipe in self.bwyd_dict.values():
-            for closure in recipe.closures.values():
-                for product in closure.products:
-                    if not product.intermediate and product.urn is None:
-                        product.urn = f"{ global_ns }:product:{ product.symbol }"
-
-                        if product.symbol in self.product_names:
-                            print(
-                                f"CONFLICT: product { product.symbol } overlaps:",
-                                self.product_names[product.symbol].urn,
-                                product.urn,
-                            )
-                        else:
-                            self.product_names[product.symbol] = product
+        self._build_product_namespace()
 
 
     def gen_rdf (
@@ -234,7 +236,7 @@ Iterate through the parsed Bwyd modules to generate RDF.
             fp.write(ttl)
 
 
-    def shacl_rules (
+    def apply_shacl_rules (
         self,
         ) -> None:
         """
