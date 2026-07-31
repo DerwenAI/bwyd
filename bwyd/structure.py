@@ -10,6 +10,7 @@ from urllib.parse import urlparse
 import base64
 import io
 import logging
+import re
 import typing
 
 from icecream import ic  # pylint: disable=W0611
@@ -197,13 +198,17 @@ Accessor for the total, non-intermediate yields of one Closure object.
                     None,
                 )
 
-                portions: str = "portion"
+                # append the word "portions" when there aren't any measurement units
+                portions: str = ""
 
-                if amount != "1":
-                    portions = PLURAL.plural(portions)
+                if product.amount.units is None:
+                    portions = "portion"
 
-                html: str = f"{amount} {portions} {product.symbol}".replace("_", " ").strip()
-                yields_list.append(html)
+                    if amount != "1":
+                        portions = PLURAL.plural(portions)
+
+                html: str = f"{amount} {portions} {product.symbol}".replace("_", " ")
+                yields_list.append(re.sub(r"\s+", " ", html).strip() )
 
         return yields_list
 
