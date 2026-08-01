@@ -120,8 +120,8 @@
   skos:exactMatch wd:Q6950796 ;
 .
 
-<urn:bwyd:pacoid:keyword:entree> a bwyd:Keyword ;
-  skos:prefLabel "entree"@en , "plat principal"@fr ;
+<urn:bwyd:pacoid:keyword:mains> a bwyd:Keyword ;
+  skos:prefLabel "mains"@en , "plat principal"@fr ;
   skos:altLabel "main course"@en ;
   skos:definition "The primary and most substantial dish in a meal"@en ;
   skos:exactMatch wd:Q772630 ;
