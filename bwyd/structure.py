@@ -183,6 +183,7 @@ A data class representing one parsed Closure object.
     def total_yields (
         self,
         *,
+        name_product: bool = True,
         intermediaries: bool = False,
         ) -> typing.List[ str ]:
         """
@@ -207,7 +208,11 @@ Accessor for the total, non-intermediate yields of one Closure object.
                     if amount != "1":
                         portions = PLURAL.plural(portions)
 
-                html: str = f"{amount} {portions} {product.symbol}".replace("_", " ")
+                html: str = f"{amount} {portions}"
+
+                if name_product:
+                    html = f"{html} {product.symbol}".replace("_", " ")
+
                 yields_list.append(re.sub(r"\s+", " ", html).strip() )
 
         return yields_list

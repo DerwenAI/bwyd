@@ -84,7 +84,7 @@ TEXT: "divide dough into 4 pieces, rolling out one at a time"
     ACTION fork: "cut into 1.5 cm dumplings pieces, resembling little pillows"
       UNTIL: "entire rope is cut"
         TIME (30 second)
-      YIELDS dumplings (80) INTERMEDIATE
+      YIELDS uncooked_dumplings (80) INTERMEDIATE
 ;
 
 CLOSURE: "frozen gnocchi"
@@ -96,7 +96,7 @@ TEXT: "add layers of dumplings to fill depth of baking dish"
   TOOL hand: "clean hands"
   TOOL board: "gnocchi board or a fork"
 
-  PREP dumplings: "raw cut dumplings"
+  PREP uncooked_dumplings: "raw cut dumplings"
   INGREDIENT parchment_paper: "parchment paper, cut to line the baking dish"
 
   ACTIVITY dish: "prep container"
@@ -107,7 +107,7 @@ TEXT: "add layers of dumplings to fill depth of baking dish"
         TIME (30 second)
 
   ACTIVITY dish: "pack gnocchi"
-    ADD dumplings (80)
+    ADD uncooked_dumplings (80)
 
     ACTION board: "roll the cut dumplings onto parchment paper; arrange without touching other dumplings"
       UNTIL: "layer is filled"
@@ -117,5 +117,6 @@ TEXT: "add layers of dumplings to fill depth of baking dish"
     CHILL dish: "freeze"
       UNTIL: "dumplings are frozen solid"
         TIME (2 hour)
-      YIELDS frozen_gnocchi_dumplings (80)
+      YIELDS frozen_gnocchi_dumplings (16)
+      NOTE: "this assumes 5 gnocchi dumplings per serving"
 ;

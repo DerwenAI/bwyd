@@ -45,18 +45,9 @@ An enumeration class representing string literals for Duration units.
     MINUTE = enum.auto()
     HOUR = enum.auto()
     DAY = enum.auto()
+    WEEK = enum.auto()
     MONTH = enum.auto()
     YEAR = enum.auto()
-
-
-NORM_RATIO: typing.Dict[ str, int ] = OrderedDict({
-    DurationUnits.YEAR.value: 60 * 60 * 24 * 365,
-    DurationUnits.MONTH.value: 60 * 60 * 24 * 30,
-    DurationUnits.DAY.value: 60 * 60 * 24,
-    DurationUnits.HOUR.value: 60 * 60,
-    DurationUnits.MINUTE.value: 60,
-    DurationUnits.SECOND.value: 1,
-})
 
 
 class TemperatureUnits (enum.StrEnum):
@@ -93,7 +84,7 @@ Use the `density` value from the graph, then convert to cups.
         return amount / MILLILITER_PER_CUP / self.density
 
 
-Converter = typing.Dict[ str, Conversion ]
+Converter = dict[ str, Conversion ]
 
 
 class Humanized (BaseModel):  # pylint: disable=R0902
@@ -102,7 +93,7 @@ A data class representing one humanized Measure object.
     """
     amount: NonNegativeFloat
     human: str
-    units: typing.Optional[ MeasureUnits ]
+    units: MeasureUnits | None
 
 
     def denormalize (
@@ -136,7 +127,7 @@ class Measure (BaseModel):  # pylint: disable=R0902
 A data class representing one parsed Measure object.
     """
     amount: NonNegativeFloat
-    units: typing.Optional[ str ]
+    units: str | None
 
 
     @classmethod
@@ -147,7 +138,7 @@ A data class representing one parsed Measure object.
         """
 Constructor from a `textx` parse object.
         """
-        measure_units: typing.Optional[ str ] | None = None
+        measure_units: str | None = None
 
         if parse.units is not None:
             measure_units = MeasureUnits(parse.units).value
@@ -179,7 +170,7 @@ Denormalize this measure into human-readable form.
         self,
         symbol: str,
         external: bool,
-        converter: typing.Optional[ Converter ],
+        converter: Converter | None,
         *,
         humanize: bool = True,
         ) -> str:
@@ -244,7 +235,7 @@ imperial conversion if available.
         self,
         symbol: str,
         external: bool,
-        converter: typing.Optional[ Converter ],
+        converter: Converter | None,
         ) -> str:
         """
 Denormalize this measure into human-readable imperial conversion.
@@ -441,6 +432,15 @@ class Duration (Measure):  # pylint: disable=R0902
     """
 A data class representing one parsed Duration object.
     """
+    NORM_RATIO: typing.ClassVar[dict[ str, int ]] = OrderedDict({
+        DurationUnits.YEAR.value: 60 * 60 * 24 * 365,
+        DurationUnits.MONTH.value: 60 * 60 * 24 * 30,
+        DurationUnits.WEEK.value: 60 * 60 * 24 * 7,
+        DurationUnits.DAY.value: 60 * 60 * 24,
+        DurationUnits.HOUR.value: 60 * 60,
+        DurationUnits.MINUTE.value: 60,
+        DurationUnits.SECOND.value: 1,
+    })
 
 
     @classmethod
@@ -451,7 +451,7 @@ A data class representing one parsed Duration object.
         """
 Constructor from a `textx` parse object.
         """
-        duration_units: typing.Optional[ str ] | None = None
+        duration_units: str | None = None
 
         if parse.units is not None:
             duration_units = DurationUnits(parse.units).value
@@ -468,7 +468,7 @@ Constructor from a `textx` parse object.
         """
 Return this duration normalized into seconds.
         """
-        return self.amount * float(NORM_RATIO[self.units])  # type: ignore
+        return self.amount * float(self.NORM_RATIO[self.units])  # type: ignore
 
 
     def humanize (
@@ -480,14 +480,14 @@ Return this duration normalized into seconds.
 Adapted from:
 <https://stackoverflow.com/a/56499010/1698443>
         """
-        (years, remainder) = divmod(self.normalize(), NORM_RATIO[DurationUnits.YEAR.value])
-        (months, remainder) = divmod(remainder, NORM_RATIO[DurationUnits.MONTH.value])
-        (days, remainder) = divmod(remainder, NORM_RATIO[DurationUnits.DAY.value])
-        (hours, remainder) = divmod(remainder, NORM_RATIO[DurationUnits.HOUR.value])
-        (minutes, seconds) = divmod(remainder, NORM_RATIO[DurationUnits.MINUTE.value])
+        (years, remainder) = divmod(self.normalize(), self.NORM_RATIO[DurationUnits.YEAR.value])
+        (months, remainder) = divmod(remainder, self.NORM_RATIO[DurationUnits.MONTH.value])
+        (days, remainder) = divmod(remainder, self.NORM_RATIO[DurationUnits.DAY.value])
+        (hours, remainder) = divmod(remainder, self.NORM_RATIO[DurationUnits.HOUR.value])
+        (minutes, seconds) = divmod(remainder, self.NORM_RATIO[DurationUnits.MINUTE.value])
 
         cascade: zip = zip(
-            NORM_RATIO.keys(),
+            self.NORM_RATIO.keys(),
             ( years, months, days, hours, minutes, seconds, ),
         )
 
@@ -501,7 +501,32 @@ Adapted from:
                 units.append(f"{int(amount)} {label}")
 
         readable: str = ", ".join(units)
+
         return readable
+
+
+    def approximate (
+        self,
+        ) -> str:
+        """
+Approximate, rounding up to the nearest month, day, hour, ...
+        """
+        total_sec: int = round(self.normalize())
+
+        intervals: list[ DurationUnits ] = [
+            DurationUnits.MONTH,
+            DurationUnits.WEEK,
+            DurationUnits.DAY,
+            DurationUnits.HOUR,
+            DurationUnits.MINUTE,
+        ]
+
+        for interval in intervals:
+            if total_sec >= self.NORM_RATIO[interval.value]:
+                approx, _ = divmod(total_sec, self.NORM_RATIO[interval.value])
+                return f"{ round(approx) }+ { PLURAL.plural(interval) }"
+
+        return self.humanize()
 
 
     def get_model (
@@ -531,7 +556,7 @@ A data class representing one parsed Temperature object.
         """
 Constructor from a `textx` parse object.
         """
-        temperature_units: typing.Optional[ str ] | None = None
+        temperature_units: str | None = None
 
         if parse.units is not None:
             temperature_units = TemperatureUnits(parse.units).value

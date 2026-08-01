@@ -881,6 +881,8 @@ Interpret one Bwyd module.
 
     def total_duration (
         self,
+        *,
+        approximate: bool = False,
         ) -> str:
         """
 Accessor for the total duration of one Bwyd module.
@@ -892,14 +894,21 @@ Accessor for the total duration of one Bwyd module.
             for op in activity.ops
         ]))
 
-        return Duration(
+        duration: Duration = Duration(
             amount = total_sec,
             units = DurationUnits.SECOND.value,
-        ).humanize()
+        )
+
+        if approximate:
+            return duration.approximate()
+
+        return duration.humanize()
 
 
     def total_yields (
         self,
+        *,
+        name_product: bool = True,
         ) -> typing.List[ str ]:
         """
 Accessor for the total, non-intermediate yields of one Bwyd module.
@@ -907,7 +916,7 @@ Accessor for the total, non-intermediate yields of one Bwyd module.
         return [
             product
             for closure in self.closures.values()
-            for product in closure.total_yields()
+            for product in closure.total_yields(name_product = name_product)
         ]
 
 

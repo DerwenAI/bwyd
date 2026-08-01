@@ -30,7 +30,7 @@ Test example conversions.
     )
 
     ## test conversion:
-    ## 25 g sugar == 2 tbsp
+    ## 25 g sugar == 1.75 tbsp
 
     symbol: str = "granulated_sugar"
 
@@ -48,7 +48,7 @@ Test example conversions.
     if debug:
         print(obs_conv)
 
-    exp_conv: str = "25 g (2 tbsps)"
+    exp_conv: str = "25 g (1 3/4 tbsps)"
 
     # compare
     assert obs_conv == exp_conv
