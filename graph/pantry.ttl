@@ -44,7 +44,7 @@
   skos:prefLabel "butter"@en , "beurre"@fr ;
   skos:definition "unsalted butter, which may be substituted with plant-based butter"@en ;
   skos:exactMatch foodon:03301777 , wd:Q34172 ;
-  bwyd:density "0.955"^^xsd:float ;
+  bwyd:density "0.911"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:sour_cream> a bwyd:Ingredient ;
@@ -63,7 +63,7 @@
   skos:prefLabel "ricotta"@en , "ricotta"@fr ;
   skos:definition "an Italian soft cheese made from whey"@en ;
   skos:exactMatch foodon:03302908 , wd:Q216781 ;
-  bwyd:density "16.18"^^xsd:float ;
+  bwyd:density "0.53"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:parmesan> a bwyd:Ingredient ;
@@ -71,13 +71,14 @@
   skos:definition "Parmigiano-Reggiano is an Italian hard cheese made from cow milk"@en ;
   skos:exactMatch wd:Q155922 ;
   skos:closeMatch foodon:00003247 ;
-  bwyd:density "0.38"^^xsd:float ;
+  bwyd:density "0.44"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:pecorino> a bwyd:Ingredient ;
   skos:prefLabel "pecorino"@en , "pecorino"@fr ;
   skos:definition "an Italian hard cheese made from sheep milk"@en ;
   skos:exactMatch foodon:00001295 , wd:Q677640 ;
+  bwyd:density "0.34"^^xsd:float ;
 .
 
 
@@ -106,21 +107,21 @@
   skos:prefLabel "flour"@en , "farine"@fr ;
   skos:definition "a fine powder made from milled cereal grains or other starchy food sources"@en ;
   skos:exactMatch foodon:00004510 , wd:Q36465 ;
-  bwyd:density "0.719"^^xsd:float ;
+  bwyd:density "0.537"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:rolled_oats> a bwyd:Ingredient ;
   skos:prefLabel "rolled oats"@en , "flocons d'avoine"@fr ;
   skos:definition "A lightly processed whole-grain food made from husked, steamed oat groats rolled into flat flakes, optionally toasted"@en ;
   skos:exactMatch foodon:03307110 , wd:Q1208221 ;
-  bwyd:density "0.431"^^xsd:float ;
+  bwyd:density "0.34"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:chia_seeds> a bwyd:Ingredient ;
   skos:prefLabel "chia seeds"@en , "graines de chia"@fr ;
   skos:definition "edible seeds of the mint plants, Salvia hispanica and Salvia columbariae"@en ;
   skos:exactMatch foodon:00002961 , wd:Q27688832 ;
-  bwyd:density "0.693"^^xsd:float ;
+  bwyd:density "0.75"^^xsd:float ;
 .
 
 
@@ -141,27 +142,35 @@
   skos:prefLabel "granulated sugar"@en , "sucre semoule"@fr ;
   skos:definition "crystalline sugar, mostly sucrose, which appears white in color and has been refined to remove molasses"@en ;
   skos:exactMatch foodon:03420157 , wd:Q123425472 ;
-  bwyd:density "0.773"^^xsd:float ;
+  bwyd:density "0.95"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:honey> a bwyd:Ingredient ;
   skos:prefLabel "honey"@en , "miel"@fr ;
   skos:definition "a sweet food made by bees mostly using nectar from flowers, preferrably local/organic/raw"@en ;
   skos:exactMatch foodon:03301024 , wd:Q10987 ;
-  bwyd:density "1.344"^^xsd:float ;
+  bwyd:density "1.42"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:molasses> a bwyd:Ingredient ;
   skos:prefLabel "molasses"@en , "mélasse"@fr ;
   skos:definition "a viscous by-product of the refining of sugarcane, grapes, or sugar beets into sugar"@en ;
   skos:exactMatch foodon:03543001 , wd:Q154389 ;
-  bwyd:density "1.217"^^xsd:float ;
+  bwyd:density "1.4"^^xsd:float ;
+.
+
+<urn:bwyd:pacoid:ingredient:brown_sugar> a bwyd:Ingredient ;
+  skos:prefLabel "brown sugar"@en , "cassonade"@fr ;
+  skos:definition "soft sugar crystals covered by a film of refined dark syrup which imparts color, flavor, and moisture"@en ;
+  skos:exactMatch foodon:03420156 , wd:Q11190742 ;
+  bwyd:density "0.93"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:vinegar> a bwyd:Ingredient ;
   skos:prefLabel "vinegar"@en , "vinaigre"@fr ;
   skos:definition "a liquid consisting mainly of acetic acid and water"@en ;
   skos:exactMatch foodon:03301705 , wd:Q41354 ;
+  bwyd:density "1.01"^^xsd:float ;
 .
 
 
@@ -172,26 +181,28 @@
   skos:prefLabel "sea salt"@en , "sel de mer"@fr ;
   skos:definition "finely granulated salt produced from the evaporation of seawater"@en ;
   skos:exactMatch foodon:03544059 , wd:Q282694 ;
-  bwyd:density "1.217"^^xsd:float ;
+  bwyd:density "1.28"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:flake_salt> a bwyd:Ingredient ;
   skos:prefLabel "flake sea salt"@en , "fleur de sel"@fr ;
   skos:definition "hand-harvested sea salt, dried into flakes"@en ;
   skos:exactMatch foodon:03544059 , wd:Q2167413 ;
+  bwyd:density "0.81"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:pickling_salt> a bwyd:Ingredient ;
   skos:prefLabel "pickling salt"@en , "sel à marinade"@fr ;
   skos:definition "fine-grain salt used for manufacturing pickles, with no anti-caking additives"@en ;
   skos:exactMatch foodon:03544059 , wd:Q7190922 ;
+  bwyd:density "1.22"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:baking_soda> a bwyd:Ingredient ;
   skos:prefLabel "baking soda"@en , "bicarbonate de soude"@fr ;
   skos:definition "baking soda is sodium bicarbonate, often used as a dough raising agent or to soften pectinase in starches"@en ;
   skos:exactMatch foodon:00002385 , wd:Q179731 ;
-  bwyd:density "1.082"^^xsd:float ;
+  bwyd:density "2.2"^^xsd:float ;
 .
 
 
@@ -202,6 +213,7 @@
   skos:prefLabel "gelatin"@en , "gélatine"@fr ;
   skos:definition "powdered gelatin"@en ;
   skos:exactMatch foodon:03315281 , wd:Q179254 ;
+  bwyd:density "0.68"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:avocado_oil> a bwyd:Ingredient ;
@@ -215,38 +227,53 @@
 ######################################################################
 ## spices
 
+<urn:bwyd:pacoid:ingredient:chocolate> a bwyd:Ingredient ;
+  skos:prefLabel "chocolate"@en , "chocolat"@fr ;
+  skos:definition "nutritionally dense, sweet food product from the cocoa bean, seed of Theobroma cacao"@en ;
+  skos:exactMatch foodon:03307240 , wd:Q195 ;
+  bwyd:density "0.65"^^xsd:float ;
+.
+
 <urn:bwyd:pacoid:ingredient:vanilla_extract> a bwyd:Ingredient ;
   skos:prefLabel "vanilla extract"@en , "extrait de vanille"@fr ;
   skos:definition "a culinary flavoring liquid made from vanilla pods in ethanol solution"@en ;
   skos:exactMatch foodon:03316763 , wd:Q10749869 ;
-  bwyd:density "0.812"^^xsd:float ;
+  bwyd:density "1.014"^^xsd:float ;
+.
+
+<urn:bwyd:pacoid:ingredient:allspice> a bwyd:Ingredient ;
+  skos:prefLabel "allspice"@en , "quatre-épices"@fr ;
+  skos:definition "ground dried unripe berries of the Pimenta dioica tree"@en ;
+  skos:exactMatch foodon:00002667 , wd:Q158468 ;
+  bwyd:density "0.49"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:nutmeg> a bwyd:Ingredient ;
   skos:prefLabel "nutmeg"@en , "noix de muscade"@fr ;
   skos:definition "freshly grated seed of trees in the genus Myristica"@en ;
   skos:exactMatch foodon:03316426 , wd:Q83165 ;
-  bwyd:density "0.812"^^xsd:float ;
+  bwyd:density "0.473"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:black_pepper> a bwyd:Ingredient ;
   skos:prefLabel "black pepper"@en , "poivre noir"@fr ;
   skos:definition "freshly ground peppercorns from the plant Piper nigrum"@en ;
   skos:exactMatch foodon:00001650 , wd:Q43084 ;
-  bwyd:density "0.34"^^xsd:float ;
+  bwyd:density "0.566"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:dried_turmeric> a bwyd:Ingredient ;
   skos:prefLabel "dried turmeric"@en , "curcuma séché"@fr ;
   skos:definition "a yellow-orange-colored spice rich in curcumin, made from the powdered rhizome of the Curcuma longa (ginger) plant"@en ;
   skos:exactMatch foodon:03310841 , wd:Q20730193 ;
-  bwyd:density "1.04"^^xsd:float ;
+  bwyd:density "0.634"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:cumin> a bwyd:Ingredient ;
   skos:prefLabel "cumin"@en , "cumina"@fr ;
   skos:definition "a spice made from ground seeds of a cumin plant, Cuminum cyminum"@en ;
   skos:exactMatch foodon:00003396 , wd:Q57328174 ;
+  bwyd:density "0.566"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:dried_sumac> a bwyd:Ingredient ;
@@ -260,21 +287,21 @@
   skos:prefLabel "cinnamon"@en , "cannelle"@fr ;
   skos:definition "a spice made from the ground inner bark of trees in the genus Cinnamomum"@en ;
   skos:exactMatch foodon:03301175 , wd:Q28165 ;
-  bwyd:density "0.507"^^xsd:float ;
+  bwyd:density "0.651"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:dill> a bwyd:Ingredient ;
   skos:prefLabel "dill"@en , "aneth"@fr ;
   skos:definition "a spice made from the leaves of the Anethum graveolens plant"@en ;
   skos:exactMatch foodon:03411277 , wd:Q59659860 ;
-  bwyd:density "0.042"^^xsd:float ;
+  bwyd:density "0.211"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:thyme> a bwyd:Ingredient ;
   skos:prefLabel "thyme"@en , "thym"@fr ;
   skos:definition "a spice made from the leaves of plants in genus Thymus"@en ;
   skos:exactMatch foodon:03301562 , wd:Q3215980 ;
-  bwyd:density "0.291"^^xsd:float ;
+  bwyd:density "0.292"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:chilhuacle_negro> a bwyd:Ingredient ;
@@ -282,6 +309,7 @@
   skos:definition "a spice made from the smoked dried fruit of a black culivar of the chili pepper plant, Capsicum annuum"@en ;
   skos:exactMatch wd:Q16540939 ;
   skos:broadMatch foodon:00003744 ;
+  bwyd:density "0.156"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:celery_seeds> a bwyd:Ingredient ;
@@ -295,21 +323,21 @@
   skos:prefLabel "coriander seeds"@en , "graines de coriandre"@fr ;
   skos:definition "a spice made from the whole seeds of the coriander plant, Coriandrum sativum"@en ;
   skos:exactMatch foodon:03000224 , wd:Q20856764 ;
-  bwyd:density "0.338"^^xsd:float ;
+  bwyd:density "0.406"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:mustard_powder> a bwyd:Ingredient ;
   skos:prefLabel "mustard powder"@en , "moutarde en poudre"@fr ;
   skos:definition "a spice made from ground seeds of mustard plants in the Brassica genus"@en ;
   skos:exactMatch foodon:03306359 , wd:Q57655865 ;
-  bwyd:density "0.26"^^xsd:float ;
+  bwyd:density "0.406"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:garlic_powder> a bwyd:Ingredient ;
   skos:prefLabel "garlic powder"@en , "ail en poudre"@fr ;
   skos:definition "a spice made from ground dried cloves of the garlic plant, Allium sativum"@en ;
   skos:exactMatch foodon:03301844 , wd:Q10716334 ;
-  bwyd:density "0.998"^^xsd:float ;
+  bwyd:density "0.972"^^xsd:float ;
 .
 
 
@@ -359,34 +387,47 @@
   skos:prefLabel "walnut"@en , "noyer"@fr ;
   skos:definition "a drupe fruit from a walnut tree, Juglans genus"@en ;
   skos:exactMatch foodon:03301364 , wd:Q208021 ;
-  bwyd:density "0.49"^^xsd:float ;
+  bwyd:density "0.431"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:raisins> a bwyd:Ingredient ;
   skos:prefLabel "raisins"@en , "raisins"@fr ;
   skos:definition "dried grapes"@en ;
   skos:exactMatch foodon:03301283 , wd:Q13186 ;
-  bwyd:density "0.634"^^xsd:float ;
+  bwyd:density "0.613"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:applesauce> a bwyd:Ingredient ;
   skos:prefLabel "applesauce"@en , "compote de pommes"@fr ;
   skos:definition "a sauce made from heated puréed apples, potentially sweetened"@en ;
   skos:exactMatch foodon:03301126 , wd:Q618345 ;
-  bwyd:density "1.074"^^xsd:float ;
+  bwyd:density "1.078"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:coconut> a bwyd:Ingredient ;
   skos:prefLabel "coconut"@en , "noix de coco"@fr ;
   skos:definition "a drupe fruit of the coconut palm tree, Cocos nucifera"@en ;
   skos:exactMatch foodon:00003449 , wd:Q3342808 ;
-  bwyd:density "0.152"^^xsd:float ;
+  bwyd:density "0.352"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:tangerine> a bwyd:Ingredient ;
   skos:prefLabel "tangerine"@en , "tangerine"@fr ;
   skos:definition "an orange-colored hesperidium fruit of a tangerine tree, Citrus tangerina"@en ;
   skos:exactMatch foodon:00003488 , wd:Q516494 ;
+.
+
+<urn:bwyd:pacoid:ingredient:orange> a bwyd:Ingredient ;
+  skos:prefLabel "orange"@en , "orange"@fr ;
+  skos:definition "an orange-colored hesperidium fruit of an orange tree, Citrus sinensis"@en ;
+  skos:exactMatch foodon:03315106 , wd:Q13191 ;
+.
+
+<urn:bwyd:pacoid:ingredient:banana> a bwyd:Ingredient ;
+  skos:prefLabel "banana"@en , "banane"@fr ;
+  skos:definition "an elongated, edible fruit produced by several kinds of large herbaceous flowering plants in the genus Musa"@en ;
+  skos:exactMatch foodon:00004183 , wd:Q503 ;
+  bwyd:density "0.634"^^xsd:float ;
 .
 
 
@@ -411,7 +452,7 @@
 
 
 ######################################################################
-## booze
+## alcohol
 
 <urn:bwyd:pacoid:ingredient:wine> a bwyd:Ingredient ;
   skos:prefLabel "wine"@en , "vin"@fr ;
@@ -425,12 +466,27 @@
   skos:prefLabel "vermouth"@en , "vermouth"@fr ;
   skos:definition "an alcoholic beverage made from aromatized wine"@en ;
   skos:exactMatch foodon:03307808 , wd:Q231088 ;
+  bwyd:density "0.994"^^xsd:float ;
 .
 
 <urn:bwyd:pacoid:ingredient:vodka> a bwyd:Ingredient ;
   skos:prefLabel "vodka"@en , "vodka"@fr ;
   skos:definition "an alcoholic beverage made from distilling grapes, grains, and other starches"@en ;
   skos:exactMatch foodon:03305518 , wd:Q374 ;
-  bwyd:density "0.94"^^xsd:float ;
+  bwyd:density "0.938"^^xsd:float ;
+.
+
+<urn:bwyd:pacoid:ingredient:rum> a bwyd:Ingredient ;
+  skos:prefLabel "rum"@en , "rhum"@fr ;
+  skos:definition "an alcoholic beverage made from distilling sugarcane"@en ;
+  skos:exactMatch foodon:03301614 , wd:Q83376 ;
+  bwyd:density "0.947"^^xsd:float ;
+.
+
+<urn:bwyd:pacoid:ingredient:grand_marnier> a bwyd:Ingredient ;
+  skos:prefLabel "grand marnier"@en , "grand marnier"@fr ;
+  skos:definition "an orange-flavored brandy liqueur"@en ;
+  skos:exactMatch wd:Q651259 ;
+  bwyd:density "0.947"^^xsd:float ;
 .
 
