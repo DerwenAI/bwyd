@@ -38,7 +38,7 @@ Manage a corpus of Bwyd modules.
         account: str,
         *,
         config_path: pathlib.Path = pathlib.Path("config.toml"),
-        lang: str = "en",
+        language: str = "en",
         ) -> None:
         """
 Constructor.
@@ -50,7 +50,7 @@ Constructor.
             format = self.config["bwyd"]["log_format"],
         )
 
-        self.lang: str = lang
+        self.language: str = language
         self.account: str = account
 
         # init the parser and global namespaces
@@ -79,6 +79,7 @@ Constructor.
         self._load_ontology()
         self.kg.load_stottr(graph_dir / "bwyd.stottr")
 
+        self.keyword_namespace: dict[ str, dict ] = {}
         self.converter: Converter = self._build_pantry_namespace()
 
 
@@ -108,20 +109,48 @@ with exception handling to identify any errors.
         ) -> Converter:
         """
 Query the ontology to build a global namespace for ingredients,
-e.g., used for measurement conversions.
+e.g., used for measurement conversions, plus a cached namespace
+for keywords.
         """
-        query: str = """
-SELECT DISTINCT ?ingr ?density
+        # query for keyword definitions
+        query: str = f"""
+SELECT DISTINCT ?urn ?definition ?label
+WHERE {{
+  {{
+    ?urn a bwyd:Keyword .
+  }}
+  UNION
+  {{
+    ?urn a bwyd:Super .
+  }}
+  ?urn skos:definition ?definition .
+  ?urn skos:prefLabel ?label .
+  FILTER(langMatches(lang(?label), "{ self.language }")) .
+}}""".strip()
+
+        for row in self.kg.graph.query(query):
+            symbol: str = str(row.urn).rsplit(":", maxsplit = 1)[-1]
+
+            self.keyword_namespace[symbol] = {
+                "urn": row.urn.n3(),
+                "symbol": symbol,
+                "label": row.label.toPython(),
+                "definition": row.definition.toPython(),
+            }
+
+        # query for ingredient densities
+        query = """
+SELECT DISTINCT ?urn ?density
 WHERE {
-  ?ingr a bwyd:Ingredient .
-  ?ingr bwyd:density ?density .
+  ?urn a bwyd:Ingredient .
+  ?urn bwyd:density ?density .
 }""".strip()
 
         converter: Converter = {}
 
         for row in self.kg.graph.query(query):
             conv: Conversion = Conversion(
-                symbol = str(row.ingr).rsplit(":", maxsplit = 1)[-1],
+                symbol = str(row.urn).rsplit(":", maxsplit = 1)[-1],
                 density = float(row.density),
             )
 
@@ -291,6 +320,39 @@ previous serialized cache from disk.
         return session
 
 
+    def render_recipe (
+        self,
+        recipe: Recipe,
+        ) -> dict:
+        """
+Render one recipe in JSON representation.
+        """
+        keyword_struct: list[ dict[ str, str ] ] = []
+
+        for keyword in recipe.collect_keywords():
+            definition: str = ""
+
+            if keyword in self.keyword_namespace:
+                definition = self.keyword_namespace[keyword].get("definition")
+
+            keyword_struct.append({
+                "symbol": keyword,
+                "definition": definition,
+            })
+
+        model: dict = {
+            "slug": recipe.slug,
+            "thumb": recipe.get_thumbnail(self.get_cache_session()),
+            "title": recipe.title,
+            "text": recipe.text,
+            "serves": recipe.total_yields(name_product = False),
+            "duration": recipe.total_duration(approximate = True),
+            "keywords": keyword_struct,
+        }
+
+        return model
+
+
     def render_discovery (
         self,
         index_path: pathlib.Path,
@@ -312,16 +374,7 @@ corpus of recipes.
             "corpus": {
                 "icon": BWYD_SVG,
                 "recipes": [
-                    {
-                        "slug": recipe.slug,
-                        "thumb": recipe.get_thumbnail(self.get_cache_session()),
-                        "title": recipe.title,
-                        "text": recipe.text,
-                        "serves": recipe.total_yields(),
-                        "duration": recipe.total_duration(),
-                        "updated": recipe.updated,
-                        "keywords": recipe.collect_keywords(),
-                    }
+                    self._render_recipe(recipe)
                     for recipe in self.bwyd_dict.values()
                 ],
             },
