@@ -13,9 +13,18 @@
     ],
     "duration": "2 days, 5 hours, 40 minutes",
     "keywords": [
-      "dumpling",
-      "italian",
-      "starch"
+      {
+        "symbol": "dumpling",
+        "definition": ""
+      },
+      {
+        "symbol": "italian",
+        "definition": ""
+      },
+      {
+        "symbol": "starch",
+        "definition": ""
+      }
     ],
     "author": "Paco Nathan <a target=\"_blank\" href=\"https://derwen.ai/paco\">https://derwen.ai/paco</a>",
     "updated": "2023-04-10"
@@ -340,11 +349,20 @@
       ],
       "text": "add layers of dumplings to fill depth of baking dish",
       "supers": [
-        "dumpling"
+        {
+          "symbol": "dumpling",
+          "definition": ""
+        }
       ],
       "keywords": [
-        "italian",
-        "starch"
+        {
+          "symbol": "italian",
+          "definition": ""
+        },
+        {
+          "symbol": "starch",
+          "definition": ""
+        }
       ],
       "containers": [
         {

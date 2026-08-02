@@ -308,3 +308,51 @@ bwyd:Product(
                 """.strip())
 
         return rdf_data
+
+
+    def annotate_supers (  # pylint: disable=W0102
+        self,
+        *,
+        keyword_namespace: dict[ str, dict ] = {},
+        ) -> list[ dict[ str, str ] ]:
+        """
+Annotate supers in this context, using the global namespace.
+        """
+        keyword_struct: list[ dict[ str, str ] ] = []
+
+        for symbol in self.supers:
+            definition: str = ""
+
+            if symbol in keyword_namespace:
+                definition = keyword_namespace[symbol].get("definition")  # type: ignore
+
+            keyword_struct.append({
+                "symbol": symbol,
+                "definition": definition,
+            })
+
+        return keyword_struct
+
+
+    def annotate_keywords (  # pylint: disable=W0102
+        self,
+        *,
+        keyword_namespace: dict[ str, dict ] = {},
+        ) -> list[ dict[ str, str ] ]:
+        """
+Annotate keywords in this context, using the global namespace.
+        """
+        keyword_struct: list[ dict[ str, str ] ] = []
+
+        for symbol in self.keywords:
+            definition: str = ""
+
+            if symbol in keyword_namespace:
+                definition = keyword_namespace[symbol].get("definition")  # type: ignore
+
+            keyword_struct.append({
+                "symbol": symbol,
+                "definition": definition,
+            })
+
+        return keyword_struct

@@ -18,8 +18,6 @@ import typing
 from icecream import ic  # type: ignore  # pylint: disable=E0401
 from spdx_tools.spdx.validation.spdx_id_validators import is_valid_internal_spdx_id
 import dateutil
-import jinja2
-import minify_html
 import requests_cache
 import spdx_license_list
 import textx  # type: ignore  # pylint: disable=E0401
@@ -33,7 +31,7 @@ from .measure import Converter, \
 from .ops import Note, Dependency, \
     OpsTypes, OpAdd, OpTransfer, OpAction, OpWait, OpHeat, OpChill, OpBake
 
-from .resources import BWYD_SVG, JINJA_PAGE_TEMPLATE, URL_PATTERN
+from .resources import BWYD_SVG, URL_PATTERN
 
 from .structure import Activity, Closure, Post, Ratio
 
@@ -159,8 +157,10 @@ Accessor for composing Schema.org metadata in JSON-LD
         return frag
 
 
-    def get_model (
+    def get_model (  # pylint: disable=W0102
         self,
+        *,
+        keyword_namespace: dict[ str, dict ] = {},
         ) -> dict:
         """
 Return a list of JSON-friendly dictionary representations,
@@ -173,8 +173,8 @@ one for each parsed Closure.
                 "title": name,
                 "yields": closure.total_yields(intermediaries = True),
                 "text": closure.text,
-                "supers": closure.supers,
-                "keywords": closure.keywords,
+                "supers": closure.annotate_supers(keyword_namespace = keyword_namespace),
+                "keywords": closure.annotate_keywords(keyword_namespace = keyword_namespace),
                 "containers": [ dep.get_model() for dep in closure.containers.values() ],
                 "tools": [ dep.get_model() for dep in closure.tools.values() ],
                 "prep": [ dep.get_model() for dep in closure.ingredients.values() if dep.external ],
@@ -208,7 +208,7 @@ one for each parsed Closure.
             "details": {
                 "serves": self.total_yields(),
                 "duration": self.total_duration(),
-                "keywords": self.collect_keywords(),
+                "keywords": self.annotate_keywords(keyword_namespace = keyword_namespace),
                 "author": self.author,
                 "updated": updated,
             },
@@ -994,33 +994,28 @@ Accessor for the collected keywords in one Bwyd module.
         return sorted(sup_list) + sorted(key_list)
 
 
-######################################################################
-## Jinja2 template rendering
-
-    def render_template (
+    def annotate_keywords (  # pylint: disable=W0102
         self,
         *,
-        page_template: jinja2.Template = JINJA_PAGE_TEMPLATE,
-        minify: bool = True,
-        ) -> str:
+        keyword_namespace: dict[ str, dict ] = {},
+        ) -> list[ dict[ str, str ] ]:
         """
-Load a Jinja2 template and render the data model as HTML,
-which is by default minified.
+Annotate keywords in this context, using the global namespace.
         """
-        html: str = page_template.render(
-            recipe = self.get_model()
-        )
+        keyword_struct: list[ dict[ str, str ] ] = []
 
-        if minify:
-            return minify_html.minify(  # pylint: disable=E1101
-                html,
-                keep_html_and_head_opening_tags = True,
-                minify_css = True,
-                minify_js = True,
-                remove_processing_instructions = True,
-            )
+        for keyword in self.collect_keywords():
+            definition: str = ""
 
-        return html
+            if keyword in keyword_namespace:
+                definition = keyword_namespace[keyword].get("definition")  # type: ignore
+
+            keyword_struct.append({
+                "symbol": keyword,
+                "definition": definition,
+            })
+
+        return keyword_struct
 
 
 ######################################################################

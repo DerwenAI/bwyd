@@ -15,6 +15,7 @@ import traceback
 
 from icecream import ic
 import jinja2
+import minify_html
 import rdflib
 import requests_cache
 import xandergraph as xg  # type: ignore
@@ -22,7 +23,7 @@ import xandergraph as xg  # type: ignore
 from .dsl import Bwyd
 from .measure import Conversion, Converter, Product
 from .recipe import Recipe
-from .resources import BWYD_SVG, JINJA_INDEX_TEMPLATE
+from .resources import BWYD_SVG, JINJA_INDEX_TEMPLATE, JINJA_PAGE_TEMPLATE
 
 
 ######################################################################
@@ -320,26 +321,16 @@ previous serialized cache from disk.
         return session
 
 
-    def render_recipe (
+######################################################################
+## Jinja2 template rendering
+
+    def render_page_meta (
         self,
         recipe: Recipe,
         ) -> dict:
         """
-Render one recipe in JSON representation.
+Render metadata in JSON representation which is needed for search/discovery.
         """
-        keyword_struct: list[ dict[ str, str ] ] = []
-
-        for keyword in recipe.collect_keywords():
-            definition: str = ""
-
-            if keyword in self.keyword_namespace:
-                definition = self.keyword_namespace[keyword].get("definition")
-
-            keyword_struct.append({
-                "symbol": keyword,
-                "definition": definition,
-            })
-
         model: dict = {
             "slug": recipe.slug,
             "thumb": recipe.get_thumbnail(self.get_cache_session()),
@@ -347,10 +338,37 @@ Render one recipe in JSON representation.
             "text": recipe.text,
             "serves": recipe.total_yields(name_product = False),
             "duration": recipe.total_duration(approximate = True),
-            "keywords": keyword_struct,
+            "keywords": recipe.annotate_keywords(keyword_namespace = self.keyword_namespace),
         }
 
         return model
+
+
+    def render_page_html (
+        self,
+        recipe: Recipe,
+        *,
+        page_template: jinja2.Template = JINJA_PAGE_TEMPLATE,
+        minify: bool = True,
+        ) -> str:
+        """
+Load a Jinja2 template and render the data model as HTML,
+which is by default minified.
+        """
+        html: str = page_template.render(
+            recipe = recipe.get_model(keyword_namespace = self.keyword_namespace)
+        )
+
+        if minify:
+            return minify_html.minify(  # pylint: disable=E1101
+                html,
+                keep_html_and_head_opening_tags = True,
+                minify_css = True,
+                minify_js = True,
+                remove_processing_instructions = True,
+            )
+
+        return html
 
 
     def render_discovery (
@@ -367,14 +385,14 @@ corpus of recipes.
             html_path: pathlib.Path = recipe.path.with_suffix(".html")
 
             with open(html_path, "w", encoding = "utf-8") as fp:
-                fp.write(recipe.render_template())
+                fp.write(self.render_page_html(recipe))
 
         # render the index
         mod_data: dict = {
             "corpus": {
                 "icon": BWYD_SVG,
                 "recipes": [
-                    self._render_recipe(recipe)
+                    self.render_page_meta(recipe)
                     for recipe in self.bwyd_dict.values()
                 ],
             },

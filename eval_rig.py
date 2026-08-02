@@ -63,7 +63,3 @@ if __name__ == "__main__":
         expected: dict = json.load(fp)
 
     ic(DeepDiff(expected, observed))
-
-    # render the Jinja2 HTML template
-    with open(content_path / f"{slug}.html", "w", encoding = "utf-8") as fp:
-        fp.write(recipe.render_template())
