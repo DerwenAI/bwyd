@@ -6,6 +6,7 @@ Represent a corpus of parsed Bwyd modules.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
+from collections import defaultdict
 import logging
 import os
 import pathlib
@@ -60,8 +61,10 @@ Constructor.
         )
 
         self.bwyd_dict: dict[ str, Recipe ] = {}
-        self.product_names: dict[ str, Product ] = {}
         self.errors: list[ str ] = []
+
+        self.product_names: dict[ str, Product ] = {}
+        self.product_map: dict[ str, set[ tuple[ str, str ] ] ] = defaultdict(set)
 
         # init the graph and load the OTTR templates
         self.kg: xg.KnowledgeGraph = xg.KnowledgeGraph(
@@ -113,16 +116,16 @@ Query the ontology to build a global namespace for ingredients,
 e.g., used for measurement conversions, plus a cached namespace
 for keywords.
         """
-        # query for keyword definitions
+        # query for super+keyword definitions
         query: str = f"""
 SELECT DISTINCT ?urn ?definition ?label
 WHERE {{
   {{
-    ?urn a bwyd:Keyword .
+    ?urn a bwyd:Super .
   }}
   UNION
   {{
-    ?urn a bwyd:Super .
+    ?urn a bwyd:Keyword .
   }}
   ?urn skos:definition ?definition .
   ?urn skos:prefLabel ?label .
@@ -169,6 +172,7 @@ for products.
         """
         global_ns: str = f"urn:bwyd:{ self.account }"
 
+        # iterate through the corpus to build the product namespace
         for recipe in self.bwyd_dict.values():
             for closure in recipe.closures.values():
                 for product in closure.products:
@@ -296,6 +300,36 @@ WHERE {
             ])
 
 
+    def build_product_graph (
+        self,
+        ) -> None:
+        """
+Query the KG to build a subgraph for closures which produce products.
+        """
+        # query for product producers
+        query: str = """
+SELECT DISTINCT ?urn ?product
+WHERE {{
+  ?urn a bwyd:Closure .
+  ?urn bwyd:produces ?product .
+}}""".strip()
+
+        for row in self.kg.graph.query(query):
+            symbol: str = str(row.product).rsplit(":", maxsplit = 1)[-1]
+            path: list[ str ] = str(row.urn).split(":")
+
+            if self.product_names.get(symbol) is None:
+                slug: str = path[-2]
+                url: str = f"#{ path[-1] }"
+            else:
+                slug = path[-2]
+                url = f"/page/{ path[-2] }"
+
+            self.product_map[slug].add((symbol, url))
+
+        #ic(self.product_map)
+
+
     def get_cache_session (
         self,
         *,
@@ -356,7 +390,10 @@ Load a Jinja2 template and render the data model as HTML,
 which is by default minified.
         """
         html: str = page_template.render(
-            recipe = recipe.get_model(keyword_namespace = self.keyword_namespace)
+            recipe = recipe.get_model(
+                keyword_namespace = self.keyword_namespace,
+                product_map = self.product_map,
+            )
         )
 
         if minify:

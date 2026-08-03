@@ -142,10 +142,11 @@ ingredient into a Container within an Activity.
     entity: Dependency
 
 
-    def get_model (
+    def get_model (  # pylint: disable=W0102
         self,
         converter: Converter,
         *,
+        prep_map: dict[ str, str ] = {},
         humanize: bool = True,  # pylint: disable=W0613
         pluralize: bool = True,  # pylint: disable=W0613
         ) -> dict:
@@ -174,6 +175,9 @@ Serializable representation for JSON.
         if self.entity.external:
             dat["external"] = self.entity.external
 
+        if self.symbol in prep_map:
+            dat["url"] = prep_map[self.symbol]
+
         if self.note is not None:
             dat.update(self.note.get_model())
 
@@ -191,10 +195,11 @@ Container into the Container used in a subsequent Activity, both
     entity: Dependency
 
 
-    def get_model (
+    def get_model (  # pylint: disable=W0102
         self,
         converter: Converter,  # pylint: disable=W0613
         *,
+        prep_map: dict[ str, str ] = {},  # pylint: disable=W0613
         humanize: bool = True,  # pylint: disable=W0613
         pluralize: bool = True,  # pylint: disable=W0613
         ) -> dict:

@@ -75,6 +75,7 @@
   "closures": [
     {
       "title": "gnocchi dough",
+      "urn": "closure_1",
       "yields": [
         "900 g dough"
       ],
@@ -244,6 +245,7 @@
     },
     {
       "title": "cut dumplings",
+      "urn": "closure_2",
       "yields": [
         "80 portions uncooked dumplings"
       ],
@@ -344,6 +346,7 @@
     },
     {
       "title": "frozen gnocchi",
+      "urn": "closure_3",
       "yields": [
         "16 portions frozen gnocchi dumplings"
       ],

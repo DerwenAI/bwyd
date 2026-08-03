@@ -161,16 +161,23 @@ Accessor for composing Schema.org metadata in JSON-LD
         self,
         *,
         keyword_namespace: dict[ str, dict ] = {},
+        product_map: dict[ str, set[ tuple[ str, str ] ] ] = {},
         ) -> dict:
         """
 Return a list of JSON-friendly dictionary representations,
 one for each parsed Closure.
         """
         closure_list: typing.List[ dict ] = []
+        prep_map: dict[ str, str ] = {}
 
-        for name, closure in self.closures.items():
+        if self.slug in product_map:
+            for pair in product_map[self.slug]:
+                prep_map[pair[0]] = pair[1]
+
+        for num, (name, closure) in enumerate(self.closures.items()):
             dat: dict = {
                 "title": name,
+                "urn": f"closure_{ num + 1 }",
                 "yields": closure.total_yields(intermediaries = True),
                 "text": closure.text,
                 "supers": closure.annotate_supers(keyword_namespace = keyword_namespace),
@@ -179,7 +186,7 @@ one for each parsed Closure.
                 "tools": [ dep.get_model() for dep in closure.tools.values() ],
                 "prep": [ dep.get_model() for dep in closure.ingredients.values() if dep.external ],
                 "ingredients": [ dep.get_model() for dep in closure.ingredients.values() if not dep.external ],  # pylint: disable=C0301
-                "activities": [ activity.get_model(self.converter, pluralize = False) for activity in closure.activities ],  # pylint: disable=C0301
+                "activities": [ activity.get_model(self.converter, prep_map = prep_map, pluralize = False) for activity in closure.activities ],  # pylint: disable=C0301
             }
 
             if closure.ratio is not None:

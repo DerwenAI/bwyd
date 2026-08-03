@@ -137,10 +137,11 @@ A data class representing one Activity object.
     ops: typing.List[ OpsTypes ] = []
 
 
-    def get_model (
+    def get_model (  # pylint: disable=W0102
         self,
         converter: Converter,
         *,
+        prep_map: dict[ str, str ] = {},
         humanize: bool = True,
         pluralize: bool = True,
         ) -> dict:
@@ -151,7 +152,7 @@ Serializable representation for JSON.
             "container": self.container.symbol,
             "title": self.text,
             "uses": [
-                op.get_model(converter, pluralize = pluralize)  # type: ignore
+                op.get_model(converter, prep_map = prep_map, pluralize = pluralize)  # type: ignore
                 for op in self.inputs
             ],
             "ops": [

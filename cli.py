@@ -27,6 +27,7 @@ if __name__ == "__main__":
     corpus.parse_recipes(content_path)
     corpus.gen_rdf()
     corpus.apply_shacl_rules()
+    corpus.build_product_graph()
 
     corpus.render_discovery(
         content_path / "index.html",
