@@ -110,6 +110,20 @@ Accessor for a thumbnail URL.
         return img_url
 
 
+    def get_license (
+        self,
+        ) -> dict:
+        """
+Format the serialization of the license details.
+        """
+        spdx_license: dict = {
+            "id": self.spdx_id,
+            "name": self.spdx_name,
+        }
+
+        return spdx_license
+
+
     def get_schema_org (
         self,
         ) -> dict:
@@ -117,13 +131,19 @@ Accessor for a thumbnail URL.
 Accessor for composing Schema.org metadata in JSON-LD
 <https://schema.org/Recipe>
         """
+        total_yields: list = self.total_yields()
+        yields: str = ""
+
+        if len(total_yields) > 0:
+            yields = total_yields[0]
+
         frag: dict = {
             "@context": "https://schema.org",
             "@type": "Recipe",
             "name": self.title,
             "description": self.text,
             "keywords": self.collect_keywords(),
-            "recipeYield": self.total_yields()[0],
+            "recipeYield": yields,
             "recipeIngredient": [
                 measure.humanize_convert(entity.symbol, entity.external, self.converter) + " " + entity.text  # pylint: disable=C0301
                 for entity, measure in self.iter_ingredients()
@@ -194,14 +214,7 @@ one for each parsed Closure.
 
             closure_list.append(dat)
 
-        spdx_license: typing.Optional[ dict ] = None
         updated: typing.Optional[ str ] = None
-
-        if self.spdx_id is not None:
-            spdx_license = {
-                "id": self.spdx_id,
-                "name": self.spdx_name,
-            }
 
         if self.updated is not None:
             updated = self.updated.isoformat()
@@ -211,7 +224,7 @@ one for each parsed Closure.
             "icon": BWYD_SVG,
             "title": self.title,
             "text": self.text,
-            "license": spdx_license,
+            "license": self.get_license(),
             "details": {
                 "serves": self.total_yields(),
                 "duration": self.total_duration(),

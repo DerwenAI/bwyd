@@ -163,30 +163,55 @@ WHERE {
         return converter
 
 
-    def _build_product_namespace (
+    def parse_recipe (
         self,
+        recipe_path: pathlib.Path,
+        *,
+        debug: bool = False,
+        ) -> Recipe:
+        """
+Parse and interpret one recipe, typically after editing/saving.
+        """
+        slug: str = recipe_path.stem
+
+        recipe: Recipe = self.dsl.parse(
+            recipe_path,
+            self.converter,
+            slug = slug,
+            debug = debug,
+        )
+
+        # interpret the parsed module
+        recipe.interpret(
+            debug = debug,
+        )
+
+        self.bwyd_dict[slug] = recipe
+        return recipe
+
+
+    def update_product_namespace (
+        self,
+        recipe: Recipe,
         ) -> None:
         """
-Iterate through the parsed Bwyd modules to build a global namespace
-for products.
+Update the global namespace for products, based on the given Recipe.
         """
         global_ns: str = f"urn:bwyd:{ self.account }"
 
-        # iterate through the corpus to build the product namespace
-        for recipe in self.bwyd_dict.values():
-            for closure in recipe.closures.values():
-                for product in closure.products:
-                    if not product.intermediate and product.urn is None:
-                        product.urn = f"{ global_ns }:product:{ product.symbol }"
+        for closure in recipe.closures.values():
+            for product in closure.products:
+                if not product.intermediate and product.urn is None:
+                    product.urn = f"{ global_ns }:product:{ product.symbol }"
 
-                        if product.symbol in self.product_names:
-                            print(
-                                f"CONFLICT: product { product.symbol } overlaps:",
-                                self.product_names[product.symbol].urn,
-                                product.urn,
-                            )
-                        else:
-                            self.product_names[product.symbol] = product
+                    if product.symbol in self.product_names:
+                        print(
+                            f"CONFLICT: product { product.symbol } overlaps:",
+                            self.product_names[product.symbol].urn,
+                            product.urn,
+                        )
+                    else:
+                        self.product_names[product.symbol] = product
 
 
     def parse_recipes (
@@ -202,23 +227,14 @@ Iterate through a directory of Bwyd content to parse the recipes.
         self.bwyd_dict = {}
 
         for recipe_path in content_path.glob(glob):
-            slug: str = recipe_path.stem
-
-            recipe: Recipe = self.dsl.parse(
+            self.parse_recipe(
                 recipe_path,
-                self.converter,
-                slug = slug,
                 debug = debug,
             )
 
-            self.bwyd_dict[slug] = recipe
-
-            # interpret the parsed module
-            recipe.interpret(
-                debug = debug,
-            )
-
-        self._build_product_namespace()
+        # iterate through the corpus to build the product namespace
+        for recipe in self.bwyd_dict.values():
+            self.update_product_namespace(recipe)
 
 
     def gen_rdf (
