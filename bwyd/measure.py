@@ -466,7 +466,7 @@ Constructor from a `textx` parse object.
         self,
         ) -> NonNegativeFloat:
         """
-Return this duration normalized into seconds.
+Return this duration measure normalized into seconds.
         """
         return self.amount * float(self.NORM_RATIO[self.units])  # type: ignore
 
@@ -482,13 +482,14 @@ Adapted from:
         """
         (years, remainder) = divmod(self.normalize(), self.NORM_RATIO[DurationUnits.YEAR.value])
         (months, remainder) = divmod(remainder, self.NORM_RATIO[DurationUnits.MONTH.value])
+        (weeks, remainder) = divmod(remainder, self.NORM_RATIO[DurationUnits.WEEK.value])
         (days, remainder) = divmod(remainder, self.NORM_RATIO[DurationUnits.DAY.value])
         (hours, remainder) = divmod(remainder, self.NORM_RATIO[DurationUnits.HOUR.value])
         (minutes, seconds) = divmod(remainder, self.NORM_RATIO[DurationUnits.MINUTE.value])
 
         cascade: zip = zip(
             self.NORM_RATIO.keys(),
-            ( years, months, days, hours, minutes, seconds, ),
+            ( years, months, weeks, days, hours, minutes, seconds, ),
         )
 
         units: list = []

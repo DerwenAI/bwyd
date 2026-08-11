@@ -11,7 +11,7 @@
     "serves": [
       "16 portions frozen gnocchi dumplings"
     ],
-    "duration": "2 days, 5 hours, 40 minutes",
+    "duration": "2 hours, 5 minutes, 40 seconds",
     "keywords": [
       {
         "symbol": "dumpling",
@@ -143,7 +143,7 @@
               "subject": "fork",
               "text": "gently",
               "until": "lightly beaten",
-              "time": "30 minute"
+              "time": "30 second"
             }
           ]
         },
@@ -179,7 +179,7 @@
               "subject": "spatula",
               "text": "",
               "until": "well mixed",
-              "time": "30 minute"
+              "time": "30 second"
             }
           ]
         },
@@ -201,7 +201,7 @@
               "subject": "spatula",
               "text": "fold",
               "until": "lightly blended",
-              "time": "30 minute"
+              "time": "30 second"
             }
           ]
         },
@@ -223,7 +223,7 @@
               "subject": "spatula",
               "text": "mix",
               "until": "dough just becomes smooth",
-              "time": "1 hour, 30 minute",
+              "time": "1 minute, 30 second",
               "yields": {
                 "name": "dough",
                 "amount": "900 g",
@@ -303,7 +303,7 @@
               "subject": "spoon",
               "text": "spread",
               "until": "evenly floured",
-              "time": "30 minute"
+              "time": "30 second"
             }
           ]
         },
@@ -326,14 +326,14 @@
               "subject": "hand",
               "text": "roll carefully into a rope",
               "until": "2 cm diameter",
-              "time": "1 hour"
+              "time": "1 minute"
             },
             {
               "kind": "action",
               "subject": "fork",
               "text": "cut into 1.5 cm dumplings pieces, resembling little pillows",
               "until": "entire rope is cut",
-              "time": "30 minute",
+              "time": "30 second",
               "yields": {
                 "name": "uncooked_dumplings",
                 "amount": "80",
@@ -413,7 +413,7 @@
               "subject": "hand",
               "text": "line dish with parchment paper",
               "until": "each layer is fully lined",
-              "time": "30 minute"
+              "time": "30 second"
             }
           ]
         },
@@ -435,7 +435,7 @@
               "subject": "board",
               "text": "roll the cut dumplings onto parchment paper; arrange without touching other dumplings",
               "until": "layer is filled",
-              "time": "10 minute",
+              "time": "10 second",
               "note": {
                 "text": "depending on the size of the dish, you may need to add multiple layers of gnocchi dumplings"
               }
@@ -445,7 +445,7 @@
               "subject": "dish",
               "text": "freeze",
               "until": "dumplings are frozen solid",
-              "time": "2 day",
+              "time": "2 hour",
               "yields": {
                 "name": "frozen_gnocchi_dumplings",
                 "amount": "16",

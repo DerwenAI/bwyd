@@ -34,6 +34,7 @@ if __name__ == "__main__":
 
     recipe: bwyd.Recipe = corpus.dsl.parse(
         content_path / f"{slug}.bwyd",
+        corpus.converter,
         slug = slug,
         debug = False, # True
     )
