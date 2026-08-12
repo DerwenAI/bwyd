@@ -90,6 +90,12 @@
   skos:exactMatch wd:Q192786 ;
 .
 
+<urn:bwyd:pacoid:keyword:japanese> a bwyd:Keyword ;
+  skos:prefLabel "japanese cuisine"@en , "cuisine japonaise"@fr ;
+  skos:definition "Foods from Japan"@en ;
+  skos:exactMatch wd:Q234138 ;
+.
+
 <urn:bwyd:pacoid:keyword:american> a bwyd:Keyword ;
   skos:prefLabel "american cuisine"@en , "cuisine américaine"@fr ;
   skos:definition "Foods from the United States"@en ;

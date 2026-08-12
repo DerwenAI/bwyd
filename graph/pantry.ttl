@@ -483,6 +483,13 @@
   bwyd:density "0.947"^^xsd:float ;
 .
 
+<urn:bwyd:pacoid:ingredient:sake> a bwyd:Ingredient ;
+  skos:prefLabel "sake"@en , "saké"@fr ;
+  skos:definition "an alcoholic beverage of Japanese origin made by fermenting rice that has been polished to remove the bran"@en ;
+  skos:exactMatch foodon:03301670 , wd:Q170219 ;
+  bwyd:density "0.994"^^xsd:float ;
+.
+
 <urn:bwyd:pacoid:ingredient:grand_marnier> a bwyd:Ingredient ;
   skos:prefLabel "grand marnier"@en , "grand marnier"@fr ;
   skos:definition "an orange-flavored brandy liqueur"@en ;
