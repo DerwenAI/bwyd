@@ -205,11 +205,12 @@ Update the global namespace for products, based on the given Recipe.
                     product.urn = f"{ global_ns }:product:{ product.symbol }"
 
                     if product.symbol in self.products:
-                        print(
-                            f"CONFLICT: product { product.symbol } overlaps:",
-                            self.products[product.symbol].urn,
-                            product.urn,
-                        )
+                        if self.products.get(product.symbol) != product:
+                            print(
+                                f"CONFLICT: product { product.symbol } overlaps:",
+                                self.products[product.symbol].urn,
+                                product.urn,
+                            )
                     else:
                         self.products[product.symbol] = product
 
