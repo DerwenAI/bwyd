@@ -8,6 +8,12 @@
 ######################################################################
 ## superclass annotations
 
+<urn:bwyd:pacoid:keyword:starch> a bwyd:Super ;
+  skos:prefLabel "starch dish"@en , "amidon"@fr ;
+  skos:definition "Food consisiting largely of a carbohydrate with a large number of glucose units joined by glycosidic bond"@en ;
+  skos:exactMatch wd:Q41534 ;
+.
+
 <urn:bwyd:pacoid:subject:condiment> a bwyd:Super ;
   skos:prefLabel "condiment"@en , "condiment"@fr ;
   skos:definition "A relish, sauce, or seasoning added to food to impart a particular flavour or to complement the dish"@en ;
@@ -137,12 +143,6 @@
   skos:prefLabel "gluten-free"@en , "sans gluten"@fr ;
   skos:definition "A nutritional plan that strictly excludes gluten, which may cause gastrointestinal or other systemic symptoms"@en ;
   skos:exactMatch wd:Q20057042 ;
-.
-
-<urn:bwyd:pacoid:keyword:starch> a bwyd:Keyword ;
-  skos:prefLabel "starch dish"@en , "amidon"@fr ;
-  skos:definition "Food consisiting largely of a carbohydrate with a large number of glucose units joined by glycosidic bond"@en ;
-  skos:exactMatch wd:Q41534 ;
 .
 
 <urn:bwyd:pacoid:keyword:sweet_sour> a bwyd:Keyword ;

@@ -928,7 +928,7 @@ Accessor for the total duration of one Bwyd module.
     def total_yields (
         self,
         *,
-        name_product: bool = True,
+        mention_product: bool = True,
         ) -> typing.List[ str ]:
         """
 Accessor for the total, non-intermediate yields of one Bwyd module.
@@ -936,7 +936,7 @@ Accessor for the total, non-intermediate yields of one Bwyd module.
         return [
             product
             for closure in self.closures.values()
-            for product in closure.total_yields(name_product = name_product)
+            for product in closure.total_yields(mention_product = mention_product)
         ]
 
 
@@ -1041,7 +1041,7 @@ Annotate keywords in this context, using the global namespace.
 ######################################################################
 ## generate RDF
 
-    def get_product_names (
+    def _get_products (
         self,
         account: str,
         ) -> tuple[ str, str, dict[ str, Product ]]:
@@ -1067,7 +1067,7 @@ Construct the local namespace.
     def validate_references (
         self,
         account: str,
-        product_names: dict[ str, Product ],
+        products: dict[ str, Product ],
         ) -> None:
         """
 Validate the forward references for one Bwyd module.
@@ -1075,9 +1075,9 @@ Validate the forward references for one Bwyd module.
         # overlay the global product names into local product names
         # i.e., include local intermediate products
 
-        _, _, local_names = self.get_product_names(account)
+        _, _, local_names = self._get_products(account)
 
-        for symbol, product in product_names.items():
+        for symbol, product in products.items():
             local_names[symbol] = product
 
         for closure in self.closures.values():
@@ -1110,19 +1110,17 @@ Validate the forward references for one Bwyd module.
     def gen_rdf (  # pylint: disable=R0914
         self,
         account: str,
-        product_names: dict[ str, Product ],
+        products: dict[ str, Product ],
         ) -> list[ str ]:
         """
 Generate RDF modeling from OTTR templates.
         """
-        global_ns, local_ns, local_names = self.get_product_names(account)
+        global_ns, local_ns, local_names = self._get_products(account)
 
-        for symbol, product in product_names.items():
+        for symbol, product in products.items():
             local_names[symbol] = product
 
-
         author: str = self.author  # type: ignore
-
         match: re.Match | None = re.match(r"^.*(https\:[\w\.\/]+)\"", author)
 
         if match is not None:

@@ -184,7 +184,7 @@ A data class representing one parsed Closure object.
     def total_yields (
         self,
         *,
-        name_product: bool = True,
+        mention_product: bool = True,
         intermediaries: bool = False,
         ) -> typing.List[ str ]:
         """
@@ -211,7 +211,7 @@ Accessor for the total, non-intermediate yields of one Closure object.
 
                 html: str = f"{amount} {portions}"
 
-                if name_product:
+                if mention_product:
                     html = f"{html} {product.symbol}".replace("_", " ")
 
                 yields_list.append(re.sub(r"\s+", " ", html).strip() )
@@ -222,7 +222,7 @@ Accessor for the total, non-intermediate yields of one Closure object.
     def gen_rdf (
         self,
         global_ns: str,
-        product_names: dict[ str, Product ],
+        global_products: dict[ str, Product ],
         closure_urn: str,
         ) -> list[ str ]:
         """
@@ -267,8 +267,9 @@ bwyd:Keyword(
             """.strip())
 
         for ingr_symbol in self.ingredients:
-            if ingr_symbol in product_names:
-                consumes_urn: str = product_names[ingr_symbol].urn  # type: ignore
+            # local or global reference to a product?
+            if ingr_symbol in global_products:
+                consumes_urn: str = global_products[ingr_symbol].urn  # type: ignore
             else:
                 consumes_urn = f"{ global_ns }:ingredient:{ ingr_symbol }"
 

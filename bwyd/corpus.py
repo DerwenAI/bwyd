@@ -63,7 +63,7 @@ Constructor.
         self.bwyd_dict: dict[ str, Recipe ] = {}
         self.errors: list[ str ] = []
 
-        self.product_names: dict[ str, Product ] = {}
+        self.products: dict[ str, Product ] = {}
         self.product_map: dict[ str, set[ tuple[ str, str ] ] ] = defaultdict(set)
 
         # init the graph and load the OTTR templates
@@ -204,14 +204,14 @@ Update the global namespace for products, based on the given Recipe.
                 if not product.intermediate and product.urn is None:
                     product.urn = f"{ global_ns }:product:{ product.symbol }"
 
-                    if product.symbol in self.product_names:
+                    if product.symbol in self.products:
                         print(
                             f"CONFLICT: product { product.symbol } overlaps:",
-                            self.product_names[product.symbol].urn,
+                            self.products[product.symbol].urn,
                             product.urn,
                         )
                     else:
-                        self.product_names[product.symbol] = product
+                        self.products[product.symbol] = product
 
 
     def parse_recipes (
@@ -252,12 +252,12 @@ Iterate through the parsed Bwyd modules to generate RDF.
             for recipe in self.bwyd_dict.values():
                 recipe.validate_references(
                     self.account,
-                    self.product_names,
+                    self.products,
                 )
 
                 rdf_data: list[ str ] = recipe.gen_rdf(
                     self.account,
-                    self.product_names,
+                    self.products,
                 )
 
                 tmp_graph: rdflib.Graph = rdflib.Graph()
@@ -334,7 +334,7 @@ WHERE {{
             symbol: str = str(row.product).rsplit(":", maxsplit = 1)[-1]
             path: list[ str ] = str(row.urn).split(":")
 
-            if self.product_names.get(symbol) is None:
+            if self.products.get(symbol) is None:
                 slug: str = path[-2]
                 url: str = f"#{ path[-1] }"
             else:
@@ -386,7 +386,7 @@ Render metadata in JSON representation which is needed for search/discovery.
             "thumb": recipe.get_thumbnail(self.get_cache_session()),
             "title": recipe.title,
             "text": recipe.text,
-            "serves": recipe.total_yields(name_product = False),
+            "serves": recipe.total_yields(mention_product = False),
             "duration": recipe.total_duration(approximate = True),
             "keywords": recipe.annotate_keywords(keyword_namespace = self.keyword_namespace),
         }
