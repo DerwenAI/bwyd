@@ -987,7 +987,7 @@ Iterator for the serialization of aggregate ingredients in one Bwyd module.
         for entity, measure, needs_prep in self._iter_ingredients(account):
             dat: dict = {
                 "amount": measure.humanize(),
-                "name": entity.symbol,
+                "symbol": entity.symbol,
                 "text": entity.text,
                 "prep": needs_prep,
             }

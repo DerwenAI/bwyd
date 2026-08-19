@@ -32,48 +32,48 @@
   "ingredients": [
     {
       "amount": "1",
-      "name": "egg",
+      "symbol": "egg",
       "text": "large chicken egg",
       "prep": false
     },
     {
       "amount": "250 g",
-      "name": "ricotta",
+      "symbol": "ricotta",
       "text": "whole milk ricotta",
       "prep": false,
       "convert": "2 cups"
     },
     {
       "amount": "50 g",
-      "name": "parmesan",
+      "symbol": "parmesan",
       "text": "grated parmesan",
       "prep": false,
       "convert": "1/2 cup"
     },
     {
       "amount": "1 g",
-      "name": "nutmeg",
+      "symbol": "nutmeg",
       "text": "freshly grated nutmeg",
       "prep": false,
       "convert": "2/5 tsp"
     },
     {
       "amount": "250 g",
-      "name": "potato",
+      "symbol": "potato",
       "text": "reduced potato pur\u00e9e, or other root veggies",
       "prep": false,
       "convert": "2 3/4 tsp"
     },
     {
       "amount": "350 g",
-      "name": "flour",
+      "symbol": "flour",
       "text": "flour: rice, oat, etc.",
       "prep": false,
       "convert": "2 3/4 cups"
     },
     {
       "amount": "1",
-      "name": "parchment_paper",
+      "symbol": "parchment_paper",
       "text": "parchment paper, cut to line the baking dish",
       "prep": false
     }

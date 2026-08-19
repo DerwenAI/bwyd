@@ -350,7 +350,7 @@ div#footer-content p {
 			  {% endif %}
 			</td>
 			<td>
-			  <strong>{{ ingr.name }}</strong>
+			  <strong>{{ ingr.symbol | replace("_", " ") }}</strong>
 			  <br>
 			  {{ ingr.text }}
 			</td>
@@ -451,7 +451,7 @@ div#footer-content p {
 			    {% for product in closure.yields %}
 			    <br>
 			    <span class="closure_meta">
-			      <strong>{{ product }}</strong>
+			      <strong>{{ product | replace("_", " ") }}</strong>
 			    </span>
 			    {% endfor %}
 			  </p>
@@ -500,7 +500,7 @@ div#footer-content p {
 
 			{% for req in closure.prep %}
 			<dt>
-			  <strong>{{ req.name }}</strong>
+			  <strong>{{ req.name | replace("_", " ") }}</strong>
 			</dt>
 			<dd>
 			  <em>{{ req.text }}</em>
@@ -518,7 +518,7 @@ div#footer-content p {
 
 			{% for req in closure.ingredients %}
 			<dt>
-			  <strong>{{ req.name }}</strong>
+			  <strong>{{ req.name | replace("_", " ") }}</strong>
 			</dt>
 			<dd>
 			  <em>{{ req.text }}</em>
@@ -558,14 +558,14 @@ div#footer-content p {
 			      <li class="list-group-item">
 				<div class="activity_step">
 				{% if item.kind == "transfer" -%}
-				  transfer from <strong>{{ item.subject }}</strong>
+				  transfer from <strong>{{ item.subject | replace("_", " ") }}</strong>
 				{% else %}
 				  {% if item.external %}
 				  use
 				  {% else %}
   				  add
 				  {% endif %}
-				  <strong>{{ item.subject }}</strong>:
+				  <strong>{{ item.subject | replace("_", " ") }}</strong>:
   				  {{ item.amount }}
 
 				  {% if item.convert -%}
@@ -669,7 +669,7 @@ div#footer-content p {
 				  yields
 				  <span class="badge text-bg-yields action_span">
 				    {{ item.yields.amount }}
-				    {{ item.yields.name }}
+				    {{ item.yields.name | replace("_", " ") }}
 				  </span>
 
 				  {% if item.yields.store -%}
