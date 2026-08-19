@@ -317,7 +317,7 @@ div#footer-content p {
 			<th scope="row">keywords:</th>
 			<td>
 			  {% for keyword in recipe.details.keywords %}
-  			  {{ keyword }}{{ ", " if not loop.last else "" }}
+  			  {{ keyword.symbol }}{{ ", " if not loop.last else "" }}
 			  {% endfor %}
 			</td>
 		      </tr>
@@ -349,9 +349,11 @@ div#footer-content p {
 			  ({{ ingr.convert }})
 			  {% endif %}
 			</td>
-			<th>
+			<td>
+			  <strong>{{ ingr.name }}</strong>
+			  <br>
 			  {{ ingr.text }}
-			</th>
+			</td>
 		      </tr>
 		      {% endfor %}
 		    </tbody>
@@ -431,7 +433,7 @@ div#footer-content p {
 			  {% if closure.supers is defined and closure.supers|length > 0 -%}
 			    <em>supers:</em>
 			    {% for super in closure.supers %}
-  			    {{ super }}{{ ", " if not loop.last else "" }}
+  			    {{ super.symbol }}{{ ", " if not loop.last else "" }}
 			    {% endfor %}
 			    <br/>
 			  {% endif %}
@@ -439,7 +441,7 @@ div#footer-content p {
 			  {% if closure.keywords is defined and closure.keywords|length > 0 -%}
 			    <em>keywords:</em>
 			    {% for keyword in closure.keywords %}
-  			    {{ keyword }}{{ ", " if not loop.last else "" }}
+  			    {{ keyword.symbol }}{{ ", " if not loop.last else "" }}
 			    {% endfor %}
 			  {% endif %}
 			  </p>

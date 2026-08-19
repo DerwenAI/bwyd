@@ -100,7 +100,7 @@ a {
 	  </td>
 	  <td>
 	    {% for keyword in recipe.keywords %}
-  	    {{ keyword }}{{ ", " if not loop.last else "" }}
+  	    {{ keyword.symbol }}{{ ", " if not loop.last else "" }}
 	    {% endfor %}
 	  </td>
 	</tr>

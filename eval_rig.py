@@ -44,7 +44,7 @@ if __name__ == "__main__":
         debug = True, # False
     )
 
-    observed: dict = recipe.get_model()
+    observed: dict = recipe.get_model(account)
 
     # output a JSON model, for use in unit tests
     with open(content_path / f"{slug}.json", "w", encoding = "utf-8") as fp:

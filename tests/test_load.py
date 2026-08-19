@@ -46,7 +46,7 @@ Load a sample file to ensure the parser works correctly.
         debug = False, # True
     )
 
-    obs_data: list = recipe.get_model()
+    obs_data: list = recipe.get_model(account)
 
     if debug:
         print(json.dumps(obs_data, indent = 2, sort_keys = False,))

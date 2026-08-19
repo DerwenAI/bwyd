@@ -408,6 +408,7 @@ which is by default minified.
         """
         html: str = page_template.render(
             recipe = recipe.get_model(
+                self.account,
                 keyword_namespace = self.keyword_namespace,
                 product_map = self.product_map,
             )

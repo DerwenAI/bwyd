@@ -89,8 +89,8 @@ TEXT: "divide dough into 4 pieces, rolling out one at a time"
 
 CLOSURE: "frozen gnocchi"
 TEXT: "add layers of dumplings to fill depth of baking dish"
-  SUPER: dumpling
-  KEYWORD: italian, starch
+  SUPER: dumpling, starch
+  KEYWORD: italian
 
   CONTAINER dish: "baking dish"
   TOOL hand: "clean hands"

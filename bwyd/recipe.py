@@ -126,6 +126,7 @@ Format the serialization of the license details.
 
     def get_schema_org (
         self,
+        account: str,
         ) -> dict:
         """
 Accessor for composing Schema.org metadata in JSON-LD
@@ -146,7 +147,7 @@ Accessor for composing Schema.org metadata in JSON-LD
             "recipeYield": yields,
             "recipeIngredient": [
                 measure.humanize_convert(entity.symbol, entity.external, self.converter) + " " + entity.text  # pylint: disable=C0301
-                for entity, measure in self.iter_ingredients()
+                for entity, measure, _ in self._iter_ingredients(account)
             ],
         }
 
@@ -179,6 +180,7 @@ Accessor for composing Schema.org metadata in JSON-LD
 
     def get_model (  # pylint: disable=W0102
         self,
+        account: str,
         *,
         keyword_namespace: dict[ str, dict ] = {},
         product_map: dict[ str, set[ tuple[ str, str ] ] ] = {},
@@ -232,13 +234,16 @@ one for each parsed Closure.
                 "author": self.author,
                 "updated": updated,
             },
-            "ingredients": list(self.tally_ingredients(self.converter)),
+            "ingredients": list(self.tally_ingredients(
+                account,
+                self.converter,
+            )),
             "sources": self.cites,
             "gallery": [ post.url for post in self.posts],
             "image": self.get_image(),
 
             "closures": closure_list,
-            "schema_org": json.dumps(self.get_schema_org()),
+            "schema_org": json.dumps(self.get_schema_org(account)),
         }
 
 
@@ -925,32 +930,66 @@ Accessor for the total duration of one Bwyd module.
         return duration.humanize()
 
 
-    def total_yields (
+    def _iter_ingredients (
         self,
-        *,
-        mention_product: bool = True,
-        ) -> typing.List[ str ]:
+        account: str,
+        ) -> typing.Iterator[typing.Tuple[ Dependency, Measure, bool ]]:
         """
-Accessor for the total, non-intermediate yields of one Bwyd module.
+Iterator for the aggregate ingredients in one Bwyd module.
         """
-        return [
-            product
-            for closure in self.closures.values()
-            for product in closure.total_yields(mention_product = mention_product)
-        ]
+        ing: OrderedDict = OrderedDict()
+        _, _, local_names = self._get_products(account)
+
+        for closure in self.closures.values():  # pylint: disable=R1702
+            for activity in closure.activities:
+                for op in activity.inputs:
+                    needs_prep: bool = False
+
+                    if isinstance(op, OpAdd):
+                        if op.entity.external:
+                            if op.entity.symbol in local_names:
+                                # don't enumerate local intermediate products
+                                continue
+
+                            # flag global products for prep
+                            needs_prep = True
+
+                        name: str = op.entity.symbol
+                        measure: Measure = op.measure
+
+                        if name not in ing:
+                            ing[name] = [
+                                op.entity,
+                                Measure(
+                                    amount = measure.amount,
+                                    units = measure.units,
+                                ),
+                                needs_prep,
+                            ]
+                        elif measure.units == ing[name][1].units:
+                            ing[name][1].amount += measure.amount
+                        else:
+                            error_msg: str = f"wrong units for ingredient list: {measure.units}"
+                            logging.error(error_msg)
+
+        for entity, measure, needs_prep in ing.values():
+            yield entity, measure, needs_prep
 
 
     def tally_ingredients (
         self,
+        account: str,
         converter: Converter,
         ) -> typing.Iterator[dict[ str, str ]]:
         """
 Iterator for the serialization of aggregate ingredients in one Bwyd module.
         """
-        for entity, measure in self.iter_ingredients():
+        for entity, measure, needs_prep in self._iter_ingredients(account):
             dat: dict = {
                 "amount": measure.humanize(),
+                "name": entity.symbol,
                 "text": entity.text,
+                "prep": needs_prep,
             }
 
             conv: str = measure.convert(
@@ -965,37 +1004,19 @@ Iterator for the serialization of aggregate ingredients in one Bwyd module.
             yield dat
 
 
-    def iter_ingredients (
+    def total_yields (
         self,
-        ) -> typing.Iterator[typing.Tuple[ Dependency, Measure ]]:
+        *,
+        mention_product: bool = True,
+        ) -> typing.List[ str ]:
         """
-Iterator for the aggregate ingredients in one Bwyd module.
+Accessor for the total, non-intermediate yields of one Bwyd module.
         """
-        ing: OrderedDict = OrderedDict()
-
-        for closure in self.closures.values():  # pylint: disable=R1702
-            for activity in closure.activities:
-                for op in activity.inputs:
-                    if isinstance(op, OpAdd) and not op.entity.external:
-                        measure: Measure = op.measure
-                        name: str = op.entity.symbol
-
-                        if name not in ing:
-                            ing[name] = [
-                                op.entity,
-                                Measure(
-                                    amount = measure.amount,
-                                    units = measure.units,
-                                ),
-                            ]
-                        elif measure.units == ing[name][1].units:
-                            ing[name][1].amount += measure.amount
-                        else:
-                            error_msg: str = f"wrong units for ingredient list: {measure.units}"
-                            logging.error(error_msg)
-
-        for entity, measure in ing.values():
-            yield entity, measure
+        return [
+            product
+            for closure in self.closures.values()
+            for product in closure.total_yields(mention_product = mention_product)
+        ]
 
 
     def collect_keywords (

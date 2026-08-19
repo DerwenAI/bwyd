@@ -8,7 +8,7 @@
 ######################################################################
 ## superclass annotations
 
-<urn:bwyd:pacoid:keyword:starch> a bwyd:Super ;
+<urn:bwyd:pacoid:subject:starch> a bwyd:Super ;
   skos:prefLabel "starch dish"@en , "amidon"@fr ;
   skos:definition "Food consisiting largely of a carbohydrate with a large number of glucose units joined by glycosidic bond"@en ;
   skos:exactMatch wd:Q41534 ;
