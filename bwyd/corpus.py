@@ -395,7 +395,7 @@ WHERE {{
 
         for row in self.kg.graph.query(query):
             slug: str = row[0].toPython().split(":")[-1]
-            closure: str = row[1].toPython()
+            closure: str = row[1].toPython().split(":")[-1]
             yield slug, closure
 
 
@@ -405,12 +405,15 @@ WHERE {{
     def render_page_meta (
         self,
         recipe: Recipe,
+        *,
+        anchor: str = ""
         ) -> dict:
         """
 Render metadata in JSON representation which is needed for search/discovery.
         """
         model: dict = {
             "slug": recipe.slug,
+            "anchor": anchor,
             "thumb": recipe.get_thumbnail(self.get_cache_session()),
             "title": recipe.title,
             "text": recipe.text,
