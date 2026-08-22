@@ -13,6 +13,7 @@ import pathlib
 import tempfile
 import tomllib
 import traceback
+import typing
 
 from icecream import ic
 import jinja2
@@ -326,10 +327,10 @@ Query the KG to build a subgraph for closures which produce products.
         # query for product producers
         query: str = """
 SELECT DISTINCT ?urn ?product
-WHERE {{
+WHERE {
   ?urn a bwyd:Closure .
   ?urn bwyd:produces ?product .
-}}""".strip()
+}""".strip()
 
         for row in self.kg.graph.query(query):
             symbol: str = str(row.product).rsplit(":", maxsplit = 1)[-1]
@@ -370,6 +371,32 @@ previous serialized cache from disk.
         session.settings.expire_after = cache_expire
 
         return session
+
+
+######################################################################
+## graph usage
+
+    def iter_producers (
+        self,
+        product: str,
+        ) -> typing.Iterator[typing.Tuple[ str, str ]]:
+        """
+Iterator to enumerate the producers within the KG for a given product.
+        """
+        # query for product traversal
+        query: str = f"""
+SELECT DISTINCT ?urn ?closure
+WHERE {{
+  ?urn a bwyd:Recipe .
+  ?urn bwyd:dependsOn ?closure .
+  ?closure a bwyd:Closure .
+  ?closure bwyd:produces <urn:bwyd:pacoid:product:{ product }> .
+}}""".strip()
+
+        for row in self.kg.graph.query(query):
+            slug: str = row[0].toPython().split(":")[-1]
+            closure: str = row[1].toPython()
+            yield slug, closure
 
 
 ######################################################################

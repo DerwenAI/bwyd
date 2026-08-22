@@ -20,6 +20,7 @@ if __name__ == "__main__":
         noColor = True,
     )
 
+    content_path: pathlib.Path = pathlib.Path("../bwyd-editor/content")
     account: str = "pacoid"
 
     corpus: bwyd.Corpus = bwyd.Corpus(
@@ -27,10 +28,21 @@ if __name__ == "__main__":
     )
 
     ######################################################################
+    ## TESTING
+
+    corpus.parse_recipes(content_path)
+    corpus.gen_rdf()
+    corpus.build_product_graph()
+
+    for slug, closure in corpus.iter_producers("orange_zest"):
+        ic(slug, closure)
+
+    sys.exit(0)
+
+    ######################################################################
     # parse an example Bwyd module
 
     slug: str = sys.argv[1]
-    content_path: pathlib.Path = pathlib.Path("../bwyd-editor/content")
 
     recipe: bwyd.Recipe = corpus.dsl.parse(
         content_path / f"{slug}.bwyd",
