@@ -40,7 +40,7 @@ A data class representing one Post object.
         """
 Accessor for an embeddable URL.
         """
-        host: typing.Optional[ str ] = urlparse(self.url).hostname
+        host: str | None = urlparse(self.url).hostname
 
         if host and host.endswith(".instagram.com"):
             embed: UPath = UPath(self.url) / "embed"
@@ -68,7 +68,7 @@ Access an image by URL, resize to thumbnail, convert to a data URL.
 
             image: Image = Image.open(req.raw)  # type: ignore
 
-            max_size: typing.Tuple[ int, int ] = (50, 50,)
+            max_size: tuple[ int, int ] = (50, 50,)
             image.thumbnail(max_size)  # type: ignore
 
             buffered: io.BytesIO = io.BytesIO()
@@ -91,7 +91,7 @@ Access an image by URL, resize to thumbnail, convert to a data URL.
         """
 Accessor for a thumbnail URL.
         """
-        host: typing.Optional[ str ] = urlparse(self.url).hostname
+        host: str | None = urlparse(self.url).hostname
 
         if host and host.endswith(".instagram.com"):
             embed: UPath = UPath(self.url) / "media" / "?size=l"
@@ -109,7 +109,7 @@ A data class representing one Ratio object.
     """
     name: str
     formula: str
-    parts: typing.Dict[ str, typing.List[ str ] ] = {}
+    parts: dict[ str, list[ str ] ] = {}
 
 
     def get_model (
@@ -133,8 +133,8 @@ A data class representing one Activity object.
     """
     container: Dependency
     text: str
-    inputs: typing.List[ OpsTypes ] = []
-    ops: typing.List[ OpsTypes ] = []
+    inputs: list[ OpsTypes ] = []
+    ops: list[ OpsTypes ] = []
 
 
     def get_model (  # pylint: disable=W0102
@@ -171,13 +171,13 @@ A data class representing one parsed Closure object.
     name: str
     obj: typing.Any
     text: str = ""
-    supers: typing.List[ str ] = []
-    keywords: typing.List[ str ] = []
+    supers: list[ str ] = []
+    keywords: list[ str ] = []
     containers: DependencyDict = DependencyDict()
     tools: DependencyDict = DependencyDict()
     ingredients: DependencyDict = DependencyDict()
-    activities: typing.List[ Activity ] = []
-    products: typing.List[ Product ] = []
+    activities: list[ Activity ] = []
+    products: list[ Product ] = []
     ratio: Ratio | None = None
 
 
@@ -186,11 +186,11 @@ A data class representing one parsed Closure object.
         *,
         mention_product: bool = True,
         intermediaries: bool = False,
-        ) -> typing.List[ str ]:
+        ) -> list[ str ]:
         """
 Accessor for the total, non-intermediate yields of one Closure object.
         """
-        yields_list: typing.List[ str ] = []
+        yields_list: list[ str ] = []
 
         for product in self.products:
             if intermediaries or not product.intermediate:

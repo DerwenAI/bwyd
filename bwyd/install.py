@@ -12,7 +12,6 @@ import os
 import pathlib
 import shutil
 import sys
-import typing
 
 from jupyter_client.kernelspec import KernelSpecManager  # pylint: disable=E0401
 from IPython.utils.tempdir import TemporaryDirectory  # pylint: disable=E0401
@@ -32,7 +31,7 @@ KERNEL_JSON: dict = {
 def install_my_kernel_spec (
     *,
     user: bool = True,
-    prefix: typing.Optional[ str ] = None,
+    prefix: str | None = None,
     ) -> None:
     """
 Generate a `kernel.json` kernel spec file, then use it to invoke
