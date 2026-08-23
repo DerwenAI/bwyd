@@ -15,14 +15,17 @@
     "keywords": [
       {
         "symbol": "dumpling",
+        "kind": "super",
         "definition": ""
       },
       {
         "symbol": "starch",
+        "kind": "super",
         "definition": ""
       },
       {
         "symbol": "italian",
+        "kind": "keyword",
         "definition": ""
       }
     ],
@@ -368,17 +371,20 @@
       "supers": [
         {
           "symbol": "dumpling",
-          "definition": ""
+          "definition": "",
+          "kind": "super"
         },
         {
           "symbol": "starch",
-          "definition": ""
+          "definition": "",
+          "kind": "super"
         }
       ],
       "keywords": [
         {
           "symbol": "italian",
-          "definition": ""
+          "definition": "",
+          "kind": "keyword"
         }
       ],
       "containers": [

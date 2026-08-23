@@ -331,6 +331,7 @@ Annotate supers in this context, using the global namespace.
             keyword_struct.append({
                 "symbol": symbol,
                 "definition": definition,
+                "kind": "super",
             })
 
         return keyword_struct
@@ -355,6 +356,7 @@ Annotate keywords in this context, using the global namespace.
             keyword_struct.append({
                 "symbol": symbol,
                 "definition": definition,
+                "kind": "keyword",
             })
 
         return keyword_struct

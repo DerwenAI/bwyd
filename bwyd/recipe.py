@@ -49,7 +49,7 @@ One parsed Bwyd file, AKA "module" or "recipe"
         parse_tree: typing.Any,
         converter: Converter,
         *,
-        slug: typing.Optional[ str ] = None,
+        slug: str | None = None,
         ) -> None:
         """
 Constructor.
@@ -57,16 +57,16 @@ Constructor.
         self.path: pathlib.Path = path
         self.parse_tree: typing.Any = parse_tree
         self.converter: Converter = converter
-        self.slug: typing.Optional[ str ] = slug
+        self.slug: str | None = slug
         self.title: str = ""
         self.text: str = ""
-        self.cites: typing.List[ str ] = []
-        self.posts: typing.List[ Post ] = []
-        self.author: typing.Optional[ str ] = None
-        self.spdx_id: typing.Optional[ str ] = None
-        self.spdx_name: typing.Optional[ str ] = None
-        self.updated: typing.Optional[ datetime.date ] = None
-        self.closures: typing.Dict[ str, Closure ] = OrderedDict()
+        self.cites: list[ str ] = []
+        self.posts: list[ Post ] = []
+        self.author: str | None = None
+        self.spdx_id: str | None = None
+        self.spdx_name: str | None = None
+        self.updated: datetime.date | None = None
+        self.closures: dict[ str, Closure ] = OrderedDict()
 
 
     @classmethod
@@ -143,7 +143,10 @@ Accessor for composing Schema.org metadata in JSON-LD
             "@type": "Recipe",
             "name": self.title,
             "description": self.text,
-            "keywords": self.collect_keywords(),
+            "keywords": [
+                term["symbol"]
+                for term in self._discovery_terms()
+            ],
             "recipeYield": yields,
             "recipeIngredient": [
                 measure.humanize_convert(entity.symbol, entity.external, self.converter) + " " + entity.text  # pylint: disable=C0301
@@ -165,7 +168,7 @@ Accessor for composing Schema.org metadata in JSON-LD
 
         if self.author is not None:
             author: str = self.author
-            match: typing.Optional[ re.Match ] = re.match(r"^([\w\s]+).*$", author)
+            match: re.Match | None = re.match(r"^([\w\s]+).*$", author)
 
             if match is not None:
                 author = match.group(1).strip()
@@ -189,7 +192,7 @@ Accessor for composing Schema.org metadata in JSON-LD
 Return a list of JSON-friendly dictionary representations,
 one for each parsed Closure.
         """
-        closure_list: typing.List[ dict ] = []
+        closure_list: list[ dict ] = []
         prep_map: dict[ str, str ] = {}
 
         if self.slug in product_map:
@@ -216,7 +219,7 @@ one for each parsed Closure.
 
             closure_list.append(dat)
 
-        updated: typing.Optional[ str ] = None
+        updated: str | None = None
 
         if self.updated is not None:
             updated = self.updated.isoformat()
@@ -457,7 +460,7 @@ Interpret the parse of YIELDS and STORE.
         op_parse: typing.Any,
         *,
         debug: bool = False,
-        ) -> typing.Optional[ OpsTypes ]:
+        ) -> OpsTypes | None:
         """
 Interpret the steps within an activity.
         """
@@ -478,7 +481,7 @@ Interpret the steps within an activity.
                 )
 
             # resolve local reference
-            entity: typing.Optional[ typing.Any ] = None
+            entity: typing.Any | None = None
 
             if op_parse.symbol in closure.containers:
                 entity = closure.containers[op_parse.symbol]
@@ -543,7 +546,7 @@ Interpret the steps within an activity.
         op_parse: typing.Any,
         *,
         debug: bool = False,
-        ) -> typing.Optional[ OpsTypes ]:
+        ) -> OpsTypes | None:
         """
 Interpret the steps within an activity.
         """
@@ -933,7 +936,7 @@ Accessor for the total duration of one Bwyd module.
     def _iter_ingredients (
         self,
         account: str,
-        ) -> typing.Iterator[typing.Tuple[ Dependency, Measure, bool ]]:
+        ) -> typing.Iterator[tuple[ Dependency, Measure, bool ]]:
         """
 Iterator for the aggregate ingredients in one Bwyd module.
         """
@@ -1008,7 +1011,7 @@ Iterator for the serialization of aggregate ingredients in one Bwyd module.
         self,
         *,
         mention_product: bool = True,
-        ) -> typing.List[ str ]:
+        ) -> list[ str ]:
         """
 Accessor for the total, non-intermediate yields of one Bwyd module.
         """
@@ -1019,20 +1022,31 @@ Accessor for the total, non-intermediate yields of one Bwyd module.
         ]
 
 
-    def collect_keywords (
+    def _discovery_terms (
         self,
-        ) -> typing.List[ str ]:
+        ) -> list[dict[ str, str ]]:
         """
-Accessor for the collected keywords in one Bwyd module.
+Accessor for the supers and keywords in one Bwyd module.
         """
-        sup_list: list[ str ] = []
-        key_list: list[ str ] = []
+        sup_list: list[dict[ str, str ]] = []
+        key_list: list[dict[ str, str ]] = []
 
         for closure in self.closures.values():
-            sup_list.extend(closure.supers)
-            key_list.extend(closure.keywords)
+            for symbol in closure.supers:
+                sup_list.append({
+                    "symbol": symbol,
+                    "kind": "super",
+                })
 
-        return sorted(sup_list) + sorted(key_list)
+            for symbol in closure.keywords:
+                key_list.append({
+                    "symbol": symbol,
+                    "kind": "keyword",
+                })
+
+        sort_func: typing.Callable = lambda term: term["symbol"]
+
+        return sorted(sup_list, key = sort_func) + sorted(key_list, key = sort_func)
 
 
     def annotate_keywords (  # pylint: disable=W0102
@@ -1045,14 +1059,15 @@ Annotate keywords in this context, using the global namespace.
         """
         keyword_struct: list[ dict[ str, str ] ] = []
 
-        for keyword in self.collect_keywords():
+        for term in self._discovery_terms():
             definition: str = ""
 
-            if keyword in keyword_namespace:
-                definition = keyword_namespace[keyword].get("definition")  # type: ignore
+            if term["symbol"] in keyword_namespace:
+                definition = keyword_namespace.get(term["symbol"]).get("definition")  # type: ignore
 
             keyword_struct.append({
-                "symbol": keyword,
+                "symbol": term["symbol"],
+                "kind": term["kind"],
                 "definition": definition,
             })
 

@@ -378,6 +378,7 @@ previous serialized cache from disk.
 
     def iter_producers (
         self,
+        account: str,
         product: str,
         ) -> typing.Iterator[typing.Tuple[ str, str ]]:
         """
@@ -390,7 +391,31 @@ WHERE {{
   ?urn a bwyd:Recipe .
   ?urn bwyd:dependsOn ?closure .
   ?closure a bwyd:Closure .
-  ?closure bwyd:produces <urn:bwyd:pacoid:product:{ product }> .
+  ?closure bwyd:produces <urn:bwyd:{ account }:product:{ product }> .
+}}""".strip()
+
+        for row in self.kg.graph.query(query):
+            slug: str = row[0].toPython().split(":")[-1]
+            closure: str = row[1].toPython().split(":")[-1]
+            yield slug, closure
+
+
+    def iter_keywords (
+        self,
+        account: str,
+        keyword: str,
+        ) -> typing.Iterator[typing.Tuple[ str, str ]]:
+        """
+Iterator to enumerate the producers within the KG which have a given keyword.
+        """
+        # query for keyword lookup
+        query: str = f"""
+SELECT DISTINCT ?urn ?closure
+WHERE {{
+  ?urn a bwyd:Recipe .
+  ?urn bwyd:dependsOn ?closure .
+  ?closure a bwyd:Closure .
+  ?closure skos:related <urn:bwyd:{ account }:keyword:{ keyword }> .
 }}""".strip()
 
         for row in self.kg.graph.query(query):

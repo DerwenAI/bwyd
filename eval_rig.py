@@ -34,11 +34,6 @@ if __name__ == "__main__":
     corpus.gen_rdf()
     corpus.build_product_graph()
 
-    for slug, closure in corpus.iter_producers("orange_zest"):
-        ic(slug, closure)
-
-    sys.exit(0)
-
     ######################################################################
     # parse an example Bwyd module
 
@@ -56,7 +51,11 @@ if __name__ == "__main__":
         debug = True, # False
     )
 
-    observed: dict = recipe.get_model(account)
+    observed: dict = recipe.get_model(
+        account,
+        keyword_namespace = corpus.keyword_namespace,
+        product_map = corpus.product_map,
+    )
 
     # output a JSON model, for use in unit tests
     with open(content_path / f"{slug}.json", "w", encoding = "utf-8") as fp:
@@ -66,9 +65,11 @@ if __name__ == "__main__":
             sort_keys = False,
         ))
 
-
     ######################################################################
     # only go this far
+
+    ic(corpus.render_page_meta(recipe, anchor = ""))
+
     sys.exit(0)
 
     # compare with expected results
