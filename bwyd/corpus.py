@@ -380,7 +380,7 @@ previous serialized cache from disk.
         self,
         account: str,
         product: str,
-        ) -> typing.Iterator[typing.Tuple[ str, str ]]:
+        ) -> typing.Iterator[tuple[ str, str ]]:
         """
 Iterator to enumerate the producers within the KG for a given product.
         """
@@ -397,30 +397,57 @@ WHERE {{
         for row in self.kg.graph.query(query):
             slug: str = row[0].toPython().split(":")[-1]
             closure: str = row[1].toPython().split(":")[-1]
+
             yield slug, closure
 
 
     def iter_keywords (
         self,
         account: str,
-        keyword: str,
-        ) -> typing.Iterator[typing.Tuple[ str, str ]]:
+        term: str,
+        ) -> typing.Iterator[tuple[ str, str ]]:
         """
 Iterator to enumerate the producers within the KG which have a given keyword.
         """
-        # query for keyword lookup
+        # query for keywords lookup
         query: str = f"""
 SELECT DISTINCT ?urn ?closure
 WHERE {{
   ?urn a bwyd:Recipe .
   ?urn bwyd:dependsOn ?closure .
   ?closure a bwyd:Closure .
-  ?closure skos:related <urn:bwyd:{ account }:keyword:{ keyword }> .
+  ?closure skos:related <urn:bwyd:{ account }:keyword:{ term }> .
 }}""".strip()
 
         for row in self.kg.graph.query(query):
             slug: str = row[0].toPython().split(":")[-1]
             closure: str = row[1].toPython().split(":")[-1]
+
+            yield slug, closure
+
+
+    def iter_supers (
+        self,
+        account: str,
+        term: str,
+        ) -> typing.Iterator[tuple[ str, str ]]:
+        """
+Iterator to enumerate the producers within the KG which have a given superclass.
+        """
+        # query for supers lookup
+        query: str = f"""
+SELECT DISTINCT ?urn ?closure
+WHERE {{
+  ?urn a bwyd:Recipe .
+  ?urn bwyd:dependsOn ?closure .
+  ?closure a bwyd:Closure .
+  ?closure rdfs:subClassOf <urn:bwyd:{ account }:super:{ term }> .
+}}""".strip()
+
+        for row in self.kg.graph.query(query):
+            slug: str = row[0].toPython().split(":")[-1]
+            closure: str = row[1].toPython().split(":")[-1]
+
             yield slug, closure
 
 

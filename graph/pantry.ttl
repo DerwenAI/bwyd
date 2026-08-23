@@ -90,7 +90,7 @@
   skos:definition "large chicken egg"@en ;
   skos:exactMatch foodon:03316061 ;
   skos:closeMatch wd:Q93189 ;
-  skos:broader <urn:bwyd:pacoid:subject:eggs> ;
+  skos:broader <urn:bwyd:pacoid:super:eggs> ;
 .
 
 <urn:bwyd:pacoid:ingredient:hard_boiled_egg> rdfs:subClassOf <urn:bwyd:pacoid:ingredient:egg> ;

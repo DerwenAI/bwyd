@@ -34,6 +34,21 @@ if __name__ == "__main__":
     corpus.gen_rdf()
     corpus.build_product_graph()
 
+    query: str = """SELECT DISTINCT ?urn ?closure
+            WHERE {
+              ?urn a bwyd:Recipe .
+              ?urn bwyd:dependsOn ?closure .
+              ?closure a bwyd:Closure .
+              ?closure rdfs:subClassOf <urn:bwyd:pacoid:super:starch> .
+            }""".strip()
+
+    for row in corpus.kg.graph.query(query):
+        slug: str = row[0].toPython().split(":")[-1]
+        closure: str = row[1].toPython().split(":")[-1]
+        ic(slug, closure)
+
+    sys.exit(0)
+
     ######################################################################
     # parse an example Bwyd module
 
