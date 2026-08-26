@@ -10,7 +10,7 @@ include graph/bwyd.stottr
 include graph/domain.ttl
 include graph/pantry.ttl
 include graph/search.ttl
-include graph/shapes.ttl
+include graph/shacl_dom.ttl
 include pyproject.toml
 include tests/*
 prune .ipynb_checkpoints

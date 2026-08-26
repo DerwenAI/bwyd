@@ -13,8 +13,8 @@ import json
 import pathlib
 import sys
 
-CONTENT_DIR: pathlib.Path = pathlib.Path(__file__).resolve().parent.parent / "examples"
-sys.path.insert(0, str(CONTENT_DIR))
+CONTENT_PATH: pathlib.Path = pathlib.Path(__file__).resolve().parent.parent / "examples"
+sys.path.insert(0, str(CONTENT_PATH))
 
 import bwyd  # pylint: disable=C0413,E0401
 
@@ -33,7 +33,7 @@ Load a sample file to ensure the parser works correctly.
     )
 
     slug: str = "frozen_gnocchi"
-    bwyd_path: pathlib.Path = CONTENT_DIR / f"{slug}.bwyd"
+    bwyd_path: pathlib.Path = CONTENT_PATH / f"{slug}.bwyd"
 
     recipe: bwyd.Recipe = corpus.dsl.parse(
         bwyd_path,
@@ -51,7 +51,7 @@ Load a sample file to ensure the parser works correctly.
     if debug:
         print(json.dumps(obs_data, indent = 2, sort_keys = False,))
 
-    json_path: pathlib.Path = CONTENT_DIR / f"{slug}.json"
+    json_path: pathlib.Path = CONTENT_PATH / f"{slug}.json"
     exp_data: dict = json.load(open(json_path, "r", encoding = "utf-8"))  # pylint: disable=R1732
     identical: bool = sorted(obs_data.items()) == sorted(exp_data.items())
 

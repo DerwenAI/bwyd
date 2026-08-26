@@ -76,7 +76,7 @@ Constructor.
 
         graph_dir: pathlib.Path = pathlib.Path(self.config["graph"]["rdf_path"])
         self.domain_path: pathlib.Path = graph_dir / "domain.ttl"
-        self.shapes_path: pathlib.Path = graph_dir / "shapes.ttl"
+        self.shapes_path: pathlib.Path = graph_dir / "shacl_dom.ttl"
         self.search_path: pathlib.Path = graph_dir / "search.ttl"
         self.pantry_path: pathlib.Path = graph_dir / "pantry.ttl"
         self.corpus_path: pathlib.Path = graph_dir / "corpus.ttl"
@@ -312,6 +312,7 @@ WHERE {
   ?bnode sh:focusNode ?focus . 
   ?bnode sh:resultMessage ?message .
 }"""
+
             self.errors = sorted([
                 row.message
                 for row in error_graph.query(query)
