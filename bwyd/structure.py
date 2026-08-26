@@ -262,7 +262,6 @@ bwyd:ClosureKeyword(
 
 bwyd:Keyword(
   <{ tag_urn }> ,
-  "{ tag }"@en ,
 ) .
             """.strip())
 

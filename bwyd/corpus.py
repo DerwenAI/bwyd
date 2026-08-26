@@ -77,6 +77,7 @@ Constructor.
         graph_dir: pathlib.Path = pathlib.Path(self.config["graph"]["rdf_path"])
         self.domain_path: pathlib.Path = graph_dir / "domain.ttl"
         self.shapes_path: pathlib.Path = graph_dir / "shacl_dom.ttl"
+        self.misses_path: pathlib.Path = graph_dir / "shacl_usr.ttl"
         self.search_path: pathlib.Path = graph_dir / "search.ttl"
         self.pantry_path: pathlib.Path = graph_dir / "pantry.ttl"
         self.corpus_path: pathlib.Path = graph_dir / "corpus.ttl"

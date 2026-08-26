@@ -1,0 +1,65 @@
+@prefix bwyd:     <https://github.com/DerwenAI/bwyd/wiki/ns#> .
+
+@prefix dc:       <http://purl.org/dc/elements/1.1/> .
+@prefix dcmitype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:       <http://www.w3.org/ns/shacl#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+
+
+bwyd:Ingredient_Shape a sh:NodeShape ;
+  sh:targetClass bwyd:Ingredient ;
+  sh:property [
+    sh:path skos:definition ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    ] ; 
+.
+
+
+bwyd:Super_Shape a sh:NodeShape ;
+  sh:targetClass bwyd:Super ;
+  sh:property [
+    sh:path skos:prefLabel ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    ] ; 
+  sh:property [
+    sh:path skos:definition ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    ] ; 
+.
+
+
+bwyd:Keyword_Shape a sh:NodeShape ;
+  sh:targetClass bwyd:Keyword ;
+  sh:property [
+    sh:path skos:prefLabel ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    ] ; 
+  sh:property [
+    sh:path skos:definition ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:uniqueLang true ;
+    sh:languageIn ( "en" "fr" ) ;
+    sh:minCount 1 ;
+    ] ; 
+.
+
+

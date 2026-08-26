@@ -178,7 +178,7 @@ bwyd:Keyword_Shape a sh:NodeShape ;
     sh:datatype rdf:langString ;
     sh:uniqueLang true ;
     sh:languageIn ( "en" "fr" ) ;
-    sh:minCount 1 ;
+    sh:minCount 0 ;
     sh:maxCount 1 ;
     ] ; 
 .

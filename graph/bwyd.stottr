@@ -101,10 +101,8 @@ bwyd:Super[
 
 bwyd:Keyword[
     ! ottr:IRI ?keyword,
-    ?label,
 ] :: {
     ottr:Triple( ?keyword, rdf:type, bwyd:Keyword ),
-    ottr:Triple( ?keyword, skos:prefLabel, ?label ),
 } .
 
 
