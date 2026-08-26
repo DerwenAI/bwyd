@@ -11,6 +11,7 @@ include graph/domain.ttl
 include graph/pantry.ttl
 include graph/search.ttl
 include graph/shacl_dom.ttl
+include graph/shacl_usr.ttl
 include pyproject.toml
 include tests/*
 prune .ipynb_checkpoints
