@@ -47,7 +47,7 @@ if __name__ == "__main__":
         closure: str = row[1].toPython().split(":")[-1]
         ic(slug, closure)
 
-    sys.exit(0)
+    #sys.exit(0)
 
     ######################################################################
     # parse an example Bwyd module

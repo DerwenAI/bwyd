@@ -972,7 +972,7 @@ Iterator for the aggregate ingredients in one Bwyd module.
                         elif measure.units == ing[name][1].units:
                             ing[name][1].amount += measure.amount
                         else:
-                            error_msg: str = f"wrong units for ingredient list: {measure.units}"
+                            error_msg: str = f"wrong units for ingredient list: {measure.units} in {name}"
                             logging.error(error_msg)
 
         for entity, measure, needs_prep in ing.values():
