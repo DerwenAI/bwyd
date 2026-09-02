@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Interactive graph visualization.
+see copyright/license https://github.com/DerwenAI/bwyd/README.md
+"""
+
 from collections import Counter
 from enum import StrEnum
 import os
@@ -8,12 +13,15 @@ import pathlib
 import tempfile
 import typing
 
+from icecream import ic  # pylint: disable=W0611
 import rdflib
 
-import xandergraph as xg
+import xandergraph as xg  # type: ignore
 
 
 class Style(StrEnum):
+    """Represents style parameters for the `Vis.JS` library"""
+
     SUPER = "bwyd:Super"
     KEYWORD = "bwyd:Keyword"
     INGREDIENT = "bwyd:Ingredient"
@@ -34,48 +42,48 @@ search/pantry terms, recipes, and products.
     ## ellipse, circle, box, text
     ## diamond, dot, star, triangle, triangleDown, hexagon, square,
 
-    NODE_STYLES: dict[ Style, xg.NodeStyle ] = {
-        Style.SUPER: xg.NodeStyle(
+    NODE_STYLES: dict[ str, xg.NodeStyle ] = {
+        Style.SUPER.value: xg.NodeStyle(
             color = "#c45335",
             shape = "box",
             show_label = True,
         ),
 
-        Style.KEYWORD: xg.NodeStyle(
+        Style.KEYWORD.value: xg.NodeStyle(
             color = "#cc7a3d",
             shape = "box",
             show_label = True,
         ),
 
-        Style.INGREDIENT: xg.NodeStyle(
+        Style.INGREDIENT.value: xg.NodeStyle(
             color = "#e6c994",
             shape = "box",
             show_label = True,
         ),
 
-        Style.PRODUCT: xg.NodeStyle(
+        Style.PRODUCT.value: xg.NodeStyle(
             color = "#fbf2c4",
             shape = "box",
             show_label = True,
         ),
 
-        Style.RECIPE: xg.NodeStyle(
+        Style.RECIPE.value: xg.NodeStyle(
             color = "#74a892",
             shape = "box",
             show_label = True,
         ),
 
-        Style.CLOSURE: xg.NodeStyle(
+        Style.CLOSURE.value: xg.NodeStyle(
             color = "#008585",
             shape = "triangle",
         ),
 
-        Style.CQ: xg.NodeStyle(
+        Style.CQ.value: xg.NodeStyle(
             color = "#667762",
             shape = "star",
         ),
 
-        Style.OTHER: xg.NodeStyle(
+        Style.OTHER.value: xg.NodeStyle(
             color = "rgba(250, 250, 250, 0.1)",
             shape = "dot",
         ),
@@ -103,31 +111,29 @@ Iterator for the stylized nodes in the visualized graph.
         """
         for iri, attrs in self.kg.pg.nodes(data = True):
             if iri in thesaurus:
-                node: dict = {}
-
-                node["style"] = self.NODE_STYLES[thesaurus[iri]]
-                node["size"] = 2
                 show_label: bool = self.NODE_STYLES[thesaurus[iri]].show_label
 
-                node["label"] = ""
-                node["title"] = ""
+                node: dict = {
+                    "style": self.NODE_STYLES[thesaurus[iri]],
+                    "size": 2,
+                    "label": "",
+                    "title": iri,
+                }
 
-                if show_label or True:
+                if show_label:
                     node["size"] = 10
 
                     if "dcterms:title" in attrs:
                         node["label"] = attrs.get("dcterms:title")["en"]
                     elif "skos:prefLabel" in attrs:
                         node["label"] = attrs.get("skos:prefLabel")["en"]
-    
+
                     if "skos:definition" in attrs:
                         node["title"] = attrs.get("skos:definition")["en"]
-                    else:
-                        node["title"] = iri
 
                 if thesaurus[iri] == "bwyd:Closure":
-                    label: str = iri.replace("<", "").replace(">", "").split(":")[-1].replace("closure", "")
-                    node["label"] = label
+                    label: str = iri.replace("<", "").replace(">", "").split(":")[-1]
+                    node["label"] = label.replace("closure", "")
 
                 counter[thesaurus[iri]] += 1
                 yield iri, node
@@ -152,7 +158,7 @@ Iterator for the stylized edges in the visualized graph.
         """
 Generate optimized HTML for the given `Vis.JS` graph.
         """
-        query: str = f"""
+        query: str = """
 SELECT DISTINCT ?thing ?kind
 WHERE {{
     ?thing a ?kind .
@@ -166,7 +172,7 @@ WHERE {{
             if kind.n3(ns).startswith("bwyd:")
         }
 
-        temp_file: tempfile._TemporaryFileWrapper = tempfile.NamedTemporaryFile(
+        temp_file: tempfile._TemporaryFileWrapper = tempfile.NamedTemporaryFile(  # pylint: disable=R1732
             mode = "w",
             encoding = "utf-8",
             suffix = ".html",
@@ -210,7 +216,7 @@ WHERE {{
             edge_meta,
         )
 
-        html: str = html_path.read_text()
+        html: str = html_path.read_text(encoding = "utf-8")
         temp_file.close()
         os.unlink(temp_file.name)
 
