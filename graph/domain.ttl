@@ -153,8 +153,7 @@ bwyd:density rdfs:subPropertyOf rdf:Property ;
   rdfs:range xsd:float ;
   rdfs:label "mass density"@en ;
   skos:definition "Specifies the mass density of a Product in grams per milliliter"@en ;
-  skos:exactMatch: wd:Q29539 ;
-
+  skos:exactMatch wd:Q29539 ;
 .
 
 

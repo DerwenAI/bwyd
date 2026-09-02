@@ -4,6 +4,7 @@ graph/bbo.ttl
 graph/corpus.ttl
 bwyd.cache
 examples/*.html
+vis.html
 *.dot
 *~
 

@@ -34,3 +34,5 @@ from .resources import BWYD_NAMESPACE, BWYD_SVG, \
     URL_PATTERN
 
 from .structure import Activity, Closure, Post, Ratio
+
+from .vis import Visualization

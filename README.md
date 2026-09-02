@@ -97,3 +97,15 @@ TBD:
 ./venv/bin/jupyter kernelspec uninstall bwyd
 python3 -m pip uninstall bwyd
 ```
+
+
+<details>
+  <summary>License and Copyright</summary>
+&nbsp;
+
+Source code for **bwyd** plus its logo, documentation, and examples
+have an [MIT license](https://spdx.org/licenses/MIT.html) which is
+succinct and simplifies use in commercial applications.
+
+All materials herein are Copyright © 2024-2026 Derwen, Inc.
+</details>
