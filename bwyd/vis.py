@@ -6,7 +6,7 @@ Interactive graph visualization.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
-from collections import Counter
+from collections import Counter, OrderedDict
 from enum import StrEnum
 import os
 import pathlib
@@ -14,6 +14,7 @@ import tempfile
 import typing
 
 from icecream import ic  # pylint: disable=W0611
+import networkx as nx
 import rdflib
 
 import xandergraph as xg  # type: ignore
@@ -45,47 +46,50 @@ search/pantry terms, recipes, and products.
     NODE_STYLES: dict[ str, xg.NodeStyle ] = {
         Style.SUPER.value: xg.NodeStyle(
             color = "#c45335",
-            shape = "box",
+            shape = xg.NodeShape.DOT.value,
             show_label = True,
         ),
 
         Style.KEYWORD.value: xg.NodeStyle(
             color = "#cc7a3d",
-            shape = "box",
+            shape = xg.NodeShape.DOT.value,
             show_label = True,
         ),
 
         Style.INGREDIENT.value: xg.NodeStyle(
             color = "#e6c994",
-            shape = "box",
+            shape = xg.NodeShape.BOX.value,
             show_label = True,
         ),
 
         Style.PRODUCT.value: xg.NodeStyle(
             color = "#fbf2c4",
-            shape = "box",
+            shape = xg.NodeShape.BOX.value,
             show_label = True,
         ),
 
         Style.RECIPE.value: xg.NodeStyle(
             color = "#74a892",
-            shape = "box",
+            shape = xg.NodeShape.BOX.value,
+            font_color = "#fff",
             show_label = True,
         ),
 
         Style.CLOSURE.value: xg.NodeStyle(
             color = "#008585",
-            shape = "triangle",
+            shape = xg.NodeShape.TRIANGLE.value,
+            size = 3,
+            font_size = 6,
         ),
 
         Style.CQ.value: xg.NodeStyle(
             color = "#667762",
-            shape = "star",
+            shape = xg.NodeShape.STAR.value,
         ),
 
         Style.OTHER.value: xg.NodeStyle(
             color = "rgba(250, 250, 250, 0.1)",
-            shape = "dot",
+            shape = xg.NodeShape.DOT.value,
         ),
     }
 
@@ -93,12 +97,16 @@ search/pantry terms, recipes, and products.
     def __init__ (
         self,
         kg: xg.KnowledgeGraph,
+        radius_max: float = 100.0,
+        radius_min: float = 1.0,
         ) -> None:
         """
 Constructor.
         """
         self.kg: xg.KnowledgeGraph = kg
         self.vis: xg.VisHTML = xg.VisHTML()
+        self.radius_max = radius_max
+        self.radius_min = radius_min
 
 
     def iter_nodes (
@@ -109,20 +117,42 @@ Constructor.
         """
 Iterator for the stylized nodes in the visualized graph.
         """
+        # calculate centrality
+        # https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.centrality.load_centrality.html
+
+        rank_orig: OrderedDict = OrderedDict([
+            ( iri, cent, )
+            for iri, cent in sorted(
+                    nx.load_centrality(self.kg.pg).items(),  # type: ignore
+                    key = lambda x: x[1],
+                    reverse = True,
+            )
+            if cent > 0.0
+        ])
+
+        max_x: float = max(rank_orig.values())
+        min_x: float = min(rank_orig.values())
+        max_v: float = self.radius_max
+        min_v: float = self.radius_min
+
+        rank: OrderedDict = OrderedDict([
+            ( iri, (x - min_x) / (max_x - min_x) * (max_v - min_v) + min_v, )
+            for iri, x in rank_orig.items()
+        ])
+
         for iri, attrs in self.kg.pg.nodes(data = True):
             if iri in thesaurus:
                 show_label: bool = self.NODE_STYLES[thesaurus[iri]].show_label
 
                 node: dict = {
                     "style": self.NODE_STYLES[thesaurus[iri]],
-                    "size": 2,
+                    "size": self.NODE_STYLES[thesaurus[iri]].size,
+                    "value": self.radius_min,
                     "label": "",
                     "title": iri,
                 }
 
                 if show_label:
-                    node["size"] = 10
-
                     if "dcterms:title" in attrs:
                         node["label"] = attrs.get("dcterms:title")["en"]
                     elif "skos:prefLabel" in attrs:
@@ -130,6 +160,10 @@ Iterator for the stylized nodes in the visualized graph.
 
                     if "skos:definition" in attrs:
                         node["title"] = attrs.get("skos:definition")["en"]
+
+                if thesaurus[iri] in [ "bwyd:Super", "bwyd:Keyword" ]:
+                    if iri in rank:
+                        node["value"] = rank[iri]
 
                 if thesaurus[iri] == "bwyd:Closure":
                     label: str = iri.replace("<", "").replace(">", "").split(":")[-1]
