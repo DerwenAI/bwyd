@@ -80,6 +80,20 @@
   skos:exactMatch foodon:03311146 , wd:Q178359 ;
 .
 
+<urn:bwyd:pacoid:super:gelato> a bwyd:Super ;
+  skos:prefLabel "gelato"@en , "glace"@fr ;
+  skos:definition "An Italian style of dense, rich ice cream"@en ;
+  skos:exactMatch foodon:03305076 , wd:Q1362405 ;
+  skos:broader <urn:bwyd:pacoid:super:dessert> ;
+.
+
+<urn:bwyd:pacoid:super:citrus> a bwyd:Super ;
+  skos:prefLabel "citrus"@en , "agrumes"@fr ;
+  skos:definition "A hesperidium fruit of a plant, such as lemons and oranges, in the Citrus genus"@en ;
+  skos:exactMatch foodon:00003324 , wd:Q81513 ;
+  skos:related <urn:bwyd:pacoid:keyword:acid> ;
+.
+
 
 ######################################################################
 ## keyword annotations
@@ -145,10 +159,17 @@
   skos:exactMatch wd:Q20057042 ;
 .
 
+<urn:bwyd:pacoid:keyword:vegan> a bwyd:Keyword ;
+  skos:prefLabel "vegan"@en , "végétalien"@fr ;
+  skos:definition "The practice of avoiding all animal products"@en ;
+  skos:exactMatch wd:Q181138 ;
+.
+
 <urn:bwyd:pacoid:keyword:sweet_sour> a bwyd:Keyword ;
   skos:prefLabel "sweet and sour"@en , "aigre-doux"@fr ;
   skos:definition "Food combining sweet and sour flavors to provide a balanced and refreshing flavor profile"@en ;
   skos:exactMatch wd:Q104383007 ;
+  skos:narrower <urn:bwyd:pacoid:keyword:acid> ;
 .
 
 <urn:bwyd:pacoid:keyword:savory> a bwyd:Keyword ;
@@ -162,4 +183,10 @@
   skos:prefLabel "salty"@en , "salé"@fr ;
   skos:definition "Food featuring a low-salt signal (a sensation of deliciousness) or a high-salt signal (too much salt)"@en ;
   skos:closeMatch wd:Q11254 ;
+.
+
+<urn:bwyd:pacoid:keyword:acid> a bwyd:Keyword ;
+  skos:prefLabel "acid"@en , "aigre"@fr ;
+  skos:definition "Food featuring a sour flavor and acidic properties for cooking"@en ;
+  skos:closeMatch wd:Q131312692 ;
 .

@@ -6,7 +6,7 @@ Package definitions for the Bwyd DSL.
 see copyright/license https://github.com/DerwenAI/bwyd/README.md
 """
 
-from .corpus  import Corpus
+from .corpus import Corpus
 
 from .dsl import Bwyd
 

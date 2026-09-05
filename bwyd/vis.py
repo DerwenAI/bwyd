@@ -20,8 +20,10 @@ import rdflib
 import xandergraph as xg  # type: ignore
 
 
-class Style(StrEnum):
-    """Represents style parameters for the `Vis.JS` library"""
+class Clazz(StrEnum):
+    """
+Represents styles for the `Vis.JS` library based on the Bwyd taxonomy classes
+    """
 
     SUPER = "bwyd:Super"
     KEYWORD = "bwyd:Keyword"
@@ -44,50 +46,50 @@ search/pantry terms, recipes, and products.
     ## diamond, dot, star, triangle, triangleDown, hexagon, square,
 
     NODE_STYLES: dict[ str, xg.NodeStyle ] = {
-        Style.SUPER.value: xg.NodeStyle(
+        Clazz.SUPER.value: xg.NodeStyle(
             color = "#c45335",
             shape = xg.NodeShape.DOT.value,
             show_label = True,
         ),
 
-        Style.KEYWORD.value: xg.NodeStyle(
+        Clazz.KEYWORD.value: xg.NodeStyle(
             color = "#cc7a3d",
             shape = xg.NodeShape.DOT.value,
             show_label = True,
         ),
 
-        Style.INGREDIENT.value: xg.NodeStyle(
+        Clazz.INGREDIENT.value: xg.NodeStyle(
             color = "#e6c994",
             shape = xg.NodeShape.BOX.value,
             show_label = True,
         ),
 
-        Style.PRODUCT.value: xg.NodeStyle(
+        Clazz.PRODUCT.value: xg.NodeStyle(
             color = "#fbf2c4",
             shape = xg.NodeShape.BOX.value,
             show_label = True,
         ),
 
-        Style.RECIPE.value: xg.NodeStyle(
+        Clazz.RECIPE.value: xg.NodeStyle(
             color = "#74a892",
             shape = xg.NodeShape.BOX.value,
             font_color = "#fff",
             show_label = True,
         ),
 
-        Style.CLOSURE.value: xg.NodeStyle(
+        Clazz.CLOSURE.value: xg.NodeStyle(
             color = "#008585",
             shape = xg.NodeShape.TRIANGLE.value,
             size = 3,
             font_size = 6,
         ),
 
-        Style.CQ.value: xg.NodeStyle(
+        Clazz.CQ.value: xg.NodeStyle(
             color = "#667762",
             shape = xg.NodeShape.STAR.value,
         ),
 
-        Style.OTHER.value: xg.NodeStyle(
+        Clazz.OTHER.value: xg.NodeStyle(
             color = "rgba(250, 250, 250, 0.1)",
             shape = xg.NodeShape.DOT.value,
         ),
@@ -161,13 +163,16 @@ Iterator for the stylized nodes in the visualized graph.
                     if "skos:definition" in attrs:
                         node["title"] = attrs.get("skos:definition")["en"]
 
-                if thesaurus[iri] in [ "bwyd:Super", "bwyd:Keyword" ]:
+                if thesaurus[iri] in [ Clazz.CLOSURE.value ]:
+                    label: str = iri.replace("<", "").replace(">", "").split(":")[-1]
+                    node["label"] = label.replace("closure", "")
+
+                elif thesaurus[iri] in [ Clazz.SUPER.value, Clazz.KEYWORD.value ]:
                     if iri in rank:
                         node["value"] = rank[iri]
 
-                if thesaurus[iri] == "bwyd:Closure":
-                    label: str = iri.replace("<", "").replace(">", "").split(":")[-1]
-                    node["label"] = label.replace("closure", "")
+                elif thesaurus[iri] in [ Clazz.CQ.value ]:
+                    continue
 
                 counter[thesaurus[iri]] += 1
                 yield iri, node
